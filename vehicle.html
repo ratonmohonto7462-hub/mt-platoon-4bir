@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VEHICLE UPDATE</title>
+<style>
+body{margin:0;background:#f3f6fb;font-family:Arial}
+.top{background:#0f7a2f;padding:14px;display:flex;justify-content:space-between;align-items:center;color:#fff}
+.back{background:#dc2626;color:#fff;padding:8px 18px;border-radius:8px;font-weight:bold;text-decoration:none}
+.wrap{padding:14px}
+input,select{width:100%;padding:13px;margin-bottom:10px;border-radius:12px;border:1px solid #d1d5db;background:#fff;box-sizing:border-box;font-size:14px}
+.add{background:#0b7a2e;color:#fff;width:100%;padding:14px;border:none;border-radius:12px;font-weight:bold;font-size:18px}
+.title{text-align:center;font-size:22px;font-weight:900;margin:18px 0 2px}
+.sub{text-align:center;color:#0b7a2e;font-weight:bold;font-size:17px;margin-bottom:14px}
+.print{display:block;margin:0 auto 14px;background:#1d4ed8;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-weight:bold}
+table{width:100%;border-collapse:collapse;background:#fff}
+th{background:#0f7a2f;color:#fff;padding:10px 4px;font-size:13px}
+td{padding:9px 4px;border:1px solid #e5e7eb;text-align:center;font-size:13px;color:#000}
+@media print{.top,.no-print-form,.no-print,.print{display:none!important}}
+</style></head><body>
+<div class="top"><b>MT PLATOON 4 BIR<br>VEHICLE UPDATE</b><a href="index.html" class="back">Back</a></div>
+<div class="wrap">
+<div class="no-print-form">
+<input id="ba" placeholder="বিএ নং">
+<input id="type" placeholder="গাড়ির ধরণ">
+<input id="kpl" placeholder="কেপিএল">
+<input id="remark" placeholder="মন্তব্য">
+<button class="add" id="ab" onclick="save()">Add করুন</button>
+</div>
+
+<div style="text-align:center">
+<div class="title">যানবাহনের মেইক এন্ড মডেল</div>
+<div class="sub">এমটি প্লাটুন ৪ বীর</div>
+</div>
+
+<button class="print" id="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+
+<table><thead><tr><th>ক্র/নং</th><th>বিএ নং</th><th>গাড়ির ধরণ</th><th>কেপিএল</th><th>মন্তব্য</th><th class="no-print">একশন</th></tr></thead><tbody id="tb"></tbody></table>
+</div>
+<script>
+let role=localStorage.getItem('mt_role');if(!role)location.href='index.html';
+let data=JSON.parse(localStorage.getItem('mt_vehicle')||'[]');let ei=-1;
+if(role!=='admin'){
+ document.querySelector('.no-print-form').style.display='none';
+ document.getElementById('printBtn').style.display='none';
+}
+function bn(n){return n.toString().replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d]);}
+function save(){
+ let o={ba:ba.value.trim(),type:type.value.trim(),kpl:kpl.value.trim(),remark:remark.value.trim()};
+ if(!o.ba||!o.type||!o.kpl)return alert('বিএ নং, ধরণ, কেপিএল পূরণ করুন');
+ if(ei>=0){data[ei]=o;ei=-1;ab.innerText='Add করুন';}else data.push(o);
+ localStorage.setItem('mt_vehicle',JSON.stringify(data));ba.value='';type.value='';kpl.value='';remark.value='';rend();
+}
+function rend(){
+ tb.innerHTML='';data.forEach((d,i)=>{
+  tb.innerHTML+=`<tr><td>${bn(i+1)}</td><td>${bn(d.ba)}</td><td>${d.type}</td><td>${bn(d.kpl)}</td><td>${d.remark}</td>${role==='admin'?`<td class="no-print"><button onclick="editD(${i})" style="background:#2563eb;color:#fff;border:none;padding:4px 7px;border-radius:5px">Edit</button> <button onclick="delD(${i})" style="background:#dc2626;color:#fff;border:none;padding:4px 7px;border-radius:5px;margin-left:4px">X</button></td>`:''}</tr>`;
+ });
+}
+function editD(i){let d=data[i];ba.value=d.ba;type.value=d.type;kpl.value=d.kpl;remark.value=d.remark;ei=i;ab.innerText='Update করুন';window.scrollTo(0,0);}
+function delD(i){if(confirm('Delete করবেন?')){data.splice(i,1);localStorage.setItem('mt_vehicle',JSON.stringify(data));rend();}}
+rend();
+</script></body></html>
