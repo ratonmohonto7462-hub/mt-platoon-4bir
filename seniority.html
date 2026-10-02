@@ -1,0 +1,48 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MT PLATOON 4 BIR - SUTY SENIORITY</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,SolaimanLipi}
+body{background:#f1f5f9}
+.top{background:#0b7a2b;color:#fff;padding:14px 12px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:15px}
+.back{background:#ff0000;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:bold}
+.form{max-width:500px;margin:10px auto;padding:0 12px}
+.form input,.form select{width:100%;background:#fff;color:#000;border:1px solid #ccc;padding:14px;border-radius:12px;font-size:16px;margin:7px 0;outline:none}
+.btn-green{background:#0b7a2b;color:#fff;border:none;padding:14px;border-radius:12px;width:100%;font-size:18px;font-weight:bold;margin-top:6px}
+.title{text-align:center;margin-top:18px;font-size:22px;font-weight:bold}
+.sub{text-align:center;color:#0b7a2b;font-size:18px;font-weight:bold;margin-top:4px}
+.btn-print{background:#1a5bff;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;display:block;margin:12px auto}
+.tbl-wrap{overflow:auto;padding:0 6px}
+.tbl{width:100%;border-collapse:collapse;background:#fff;min-width:600px}
+.tbl th{background:#0b7a2b;color:#fff;padding:12px 5px;font-size:13px}
+.tbl td{padding:10px 5px;border-bottom:1px solid #ddd;text-align:center;font-size:13px}
+.edit{background:#1a7a3b;color:#fff;border:none;padding:5px 10px;border-radius:6px;margin:2px}
+.del{background:#d32f2f;color:#fff;border:none;padding:5px 10px;border-radius:6px;margin:2px}
+</style>
+</head>
+<body>
+
+<div class="top"><b>MT PLATOON 4 BIR - SUTY SENIORITY</b><button class="back" onclick="location.href='index.html'">Back</button></div>
+
+<div class="form">
+<input id="s_no" placeholder="সেনা নং">
+<select id="s_rank">
+<option value="">পদবি সিলেক্ট করুন</option>
+<option>সৈনিক</option>
+<option>ল্যান্স কর্পোরাল</option>
+<option>কর্পোরাল</option>
+<option>সার্জেন্ট</option>
+<option>ওয়ারেন্ট অফিসার</option>
+<option>সিনিয়র ওয়ারেন্ট অফিসার</option>
+</select>
+<input id="s_name" placeholder="নাম বাংলা/ইংরেজি লিখুন">
+<input id="s_date" type="date">
+<button class="btn-green" onclick="addSen()">Add করুন</button>
+</div>
+
+<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
+<div class="sub">এমটি প্ল
