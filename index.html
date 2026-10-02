@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT PLATOON 4 BIR</title>
-<style>body{margin:0;background:#051405;color:#fff;font-family:Arial}.box{max-width:380px;margin:60px auto;background:#0a2a0a;padding:22px;border-radius:16px;border:1px solid #145a14}input{width:100%;padding:12px;margin:8px 0 14px;border-radius:10px;background:#000;color:#fff;border:1px solid #333;box-sizing:border-box}.btn{width:100%;background:#22c55e;color:#000;padding:13px;border:none;border-radius:10px;font-weight:bold}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}.card{background:#0f3d0f;padding:18px;border-radius:12px;text-align:center;font-weight:bold;text-decoration:none;color:#fff;border:1px solid #1a5a1a;display:block}.hidden{display:none}</style>
-</head><body>
-<div id="loginPage"><div class="box"><h2>🛡️ MT PLATOON 4 BIR</h2><input id="oid" placeholder="ID: 4birmt or admin7462"><input id="pwd" type="password" placeholder="Password"><button class="btn" onclick="login()">LOGIN</button><p style="font-size:11px;color:#aaa;margin-top:10px">MT PLATOON: 4birmt / 4birmt = View Only<br>MT CLK: admin7462 / admin123 = Full Control</p></div></div>
-<div id="dash" class="hidden"><div style="background:#0b6e2f;padding:12px;display:flex;justify-content:space-between"><b>6 FOLDER</b><button onclick="logout()" style="background:red;color:#fff;border:none;padding:6px 12px;border-radius:6px">Logout</button></div><div class="grid">
-<a class="card" href="seniority.html">📋 SUTY SENIORITY</a><a class="card" href="store/">📦 STORE</a><a class="card" href="pol/">⛽ POL</a><a class="card" href="duty/">👨‍✈️ DUTY</a><a class="card" href="maintenance/">🔧 MAINT</a><a class="card" href="report/">📄 REPORT</a>
-</div></div>
 <script>
 let role=localStorage.getItem('mt_role')||'';
-function login(){let i=oid.value.trim(),p=pwd.value.trim();if(i==='4birmt'&&p==='4birmt'){localStorage.setItem('mt_role','viewer');role='viewer';show();}else if(i==='admin7462'&&p==='admin123'){localStorage.setItem('mt_role','admin');role='admin';show();}else alert('ID/Pass ভুল');}
+function login(){let i=oid.value.trim(),p=pwd.value.trim();if(i==='4birmt'&&p==='4-BIR-MT'){localStorage.setItem('mt_role','viewer');role='viewer';show();}else if(i==='admin7462'&&p==='Admin123'){localStorage.setItem('mt_role','admin');role='admin';show();}else alert('ID/Pass ভুল\nMT PLATOON: 4birmt / 4-BIR-MT\nMT CLK: admin7462 / Admin123');}
 function show(){loginPage.classList.add('hidden');dash.classList.remove('hidden');}
 function logout(){localStorage.removeItem('mt_role');location.reload();}
 if(role)show();
-</script></body></html>
+</script>
