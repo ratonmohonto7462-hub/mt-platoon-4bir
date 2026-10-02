@@ -1,70 +1,21 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>এমটি প্লাটুন ৪ বীর</title>
-<style>
-body{font-family: sans-serif; background:#f0f2f5; margin:0}
-.header{background:#0b6e2f; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center}
-.header h1{font-size:15px; margin:0; line-height:1.2}
-.back{background:#e11d48; color:white; padding:8px 16px; border-radius:8px; text-decoration:none; font-weight:bold}
-.container{padding:15px}
-input, select{width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ccc; font-size:16px; box-sizing:border-box; background:white}
-.addBtn{width:100%; background:#0b6e2f; color:white; padding:14px; border:none; border-radius:12px; font-size:18px; font-weight:bold}
-.card{background:white; padding:12px; border-radius:10px; margin-top:10px; display:flex; justify-content:space-between; box-shadow:0 2px 5px rgba(0,0,0,0.1)}
-.title{text-align:center; margin-top:20px; font-weight:bold; font-size:20px}
-.sub{text-align:center; color:#0b6e2f; font-weight:bold}
-</style>
-</head>
-<body>
-<div class="header">
-<h1>এমটি প্লাটুন ৪ বীর - সিনিয়রিটি</h1>
-<a class="back" href="/">Back</a>
+<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUTY SENIORITY</title>
+<style>body{margin:0;background:#051405;color:#fff;font-family:Arial}input,select{width:100%;padding:12px;margin-bottom:10px;border-radius:10px;background:#111;color:#fff;border:1px solid #333;box-sizing:border-box}table{width:100%;border-collapse:collapse;background:#fff;color:#000;margin-top:10px}th{background:#0b6e2f;color:#fff;padding:7px;font-size:11px}td{padding:7px;border:1px solid #ddd;text-align:center;font-size:11px}.hidden{display:none}</style>
+</head><body>
+<div style="background:#0b6e2f;padding:12px;display:flex;justify-content:space-between"><b>SUTY SENIORITY</b><a href="../" style="background:red;color:#fff;padding:6px 12px;border-radius:6px;text-decoration:none">Back</a></div>
+<div style="padding:12px">
+<div id="adminPanel" class="hidden"><input id="sno" placeholder="সেনা নং"><select id="pod"><option value="">পদবি</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select><input id="nm" placeholder="নাম"><input id="jd" type="date"><button id="ab" onclick="save()" style="width:100%;background:#0b6e2f;color:#fff;padding:12px;border:none;border-radius:10px;font-weight:bold">Add করুন</button></div>
+<div id="viewMsg" style="text-align:center;background:#450a0a;color:#fca5a5;padding:8px;border-radius:8px;margin-bottom:8px">View Only - Mt Platoon ID তে শুধু দেখতে পারবেন</div>
+<table><thead><tr><th>ক্রঃ</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="thA" class="hidden">একশন</th></tr></thead><tbody id="tb"></tbody></table>
 </div>
-<div class="container">
-<input id="senaNo" placeholder="সেনা নং লিখুন">
-<select id="podobi">
-<option value="">পদবি সিলেক্ট করুন</option>
-<option>সৈনিক</option>
-<option>ল্যান্স কর্পোরাল</option>
-<option>কর্পোরাল</option>
-<option>সার্জেন্ট</option>
-</select>
-<input id="name" placeholder="নাম বাংলা/ইংরেজি লিখুন">
-<!-- প্লাটুন ফিক্সড, তাই হাইড করে দিলাম -->
-<input type="hidden" id="platoon" value="এমটি প্লাটুন ৪ বীর">
-
-<button class="addBtn" onclick="addData()">Add করুন</button>
-
-<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
-<div class="sub">এমটি প্লাটুন ৪ বীর</div>
-<div id="list"></div>
-</div>
-
 <script>
-let data = JSON.parse(localStorage.getItem('mt4bir_final') || '[]');
-function addData(){
- let s = document.getElementById('senaNo').value.trim();
- let p = document.getElementById('podobi').value;
- let n = document.getElementById('name').value.trim();
- let pl = document.getElementById('platoon').value;
- if(!s || !p || !n){ alert('সেনা নং, পদবি, নাম পূরণ করুন ভাই'); return; }
- data.push({s,p,n,pl});
- localStorage.setItem('mt4bir_final', JSON.stringify(data));
- document.getElementById('senaNo').value=''; 
- document.getElementById('name').value='';
- render();
-}
-function render(){
- let l = document.getElementById('list'); l.innerHTML='';
- data.sort((a,b)=> a.s.localeCompare(b.s, undefined, {numeric:true}));
- data.forEach((d,i)=>{
-  l.innerHTML += `<div class="card"><div><b>${d.s}</b> - ${d.p}<br>${d.n}<br><small style="color:green">${d.pl}</small></div><div><button onclick="del(${i})" style="background:red;color:white;border:none;padding:6px 12px;border-radius:6px">X</button></div></div>`;
- });
-}
-function del(i){ if(confirm('ডিলিট করবেন?')){ data.splice(i,1); localStorage.setItem('mt4bir_final', JSON.stringify(data)); render(); } }
-render();
-</script>
-</body>
-</html>
+let role=localStorage.getItem('mt_role');
+if(!role){alert('Login করুন');location.href='../';}
+let data=JSON.parse(localStorage.getItem('mt_suty')||'[]');let ei=-1;
+function check(){if(role==='admin'){adminPanel.classList.remove('hidden');thA.classList.remove('hidden');viewMsg.classList.add('hidden');}else{adminPanel.classList.add('hidden');thA.classList.add('hidden');viewMsg.classList.remove('hidden');}}
+function save(){let s=sno.value.trim(),p=pod.value,n=nm.value.trim(),j=jd.value;if(!s||!p||!n||!j)return alert('সব পূরণ করুন');if(ei>=0){data[ei]={s,p,n,j};ei=-1;ab.innerText='Add করুন';}else data.push({s,p,n,j});localStorage.setItem('mt_suty',JSON.stringify(data));sno.value='';nm.value='';rend();}
+function calc(d){return Math.floor((new Date()-new Date(d))/86400000)+' দিন';}
+function rend(){tb.innerHTML='';data.sort((a,b)=>new Date(a.j)-new Date(b.j));data.forEach((d,i)=>{tb.innerHTML+=`<tr><td>${i+1}</td><td>${d.s}</td><td>${d.p}</td><td>${d.n}</td><td>${d.j}</td><td>${calc(d.j)}</td>${role==='admin'?`<td><button onclick="editD(${i})" style="background:blue;color:#fff;border:none;padding:3px 6px;border-radius:4px">Edit</button> <button onclick="delD(${i})" style="background:red;color:#fff;border:none;padding:3px 6px;border-radius:4px">X</button></td>`:''}</tr>`;});}
+function editD(i){let d=data[i];sno.value=d.s;pod.value=d.p;nm.value=d.n;jd.value=d.j;ei=i;ab.innerText='Update করুন';}
+function delD(i){if(confirm('Delete?')){data.splice(i,1);localStorage.setItem('mt_suty',JSON.stringify(data));rend();}}
+check();rend();
+</script></body></html>
