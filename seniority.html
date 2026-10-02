@@ -1,48 +1,70 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MT PLATOON 4 BIR - SUTY SENIORITY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>এমটি প্লাটুন ৪ বীর</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,SolaimanLipi}
-body{background:#f1f5f9}
-.top{background:#0b7a2b;color:#fff;padding:14px 12px;display:flex;justify-content:space-between;align-items:center}
-.top b{font-size:15px}
-.back{background:#ff0000;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:bold}
-.form{max-width:500px;margin:10px auto;padding:0 12px}
-.form input,.form select{width:100%;background:#fff;color:#000;border:1px solid #ccc;padding:14px;border-radius:12px;font-size:16px;margin:7px 0;outline:none}
-.btn-green{background:#0b7a2b;color:#fff;border:none;padding:14px;border-radius:12px;width:100%;font-size:18px;font-weight:bold;margin-top:6px}
-.title{text-align:center;margin-top:18px;font-size:22px;font-weight:bold}
-.sub{text-align:center;color:#0b7a2b;font-size:18px;font-weight:bold;margin-top:4px}
-.btn-print{background:#1a5bff;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;display:block;margin:12px auto}
-.tbl-wrap{overflow:auto;padding:0 6px}
-.tbl{width:100%;border-collapse:collapse;background:#fff;min-width:600px}
-.tbl th{background:#0b7a2b;color:#fff;padding:12px 5px;font-size:13px}
-.tbl td{padding:10px 5px;border-bottom:1px solid #ddd;text-align:center;font-size:13px}
-.edit{background:#1a7a3b;color:#fff;border:none;padding:5px 10px;border-radius:6px;margin:2px}
-.del{background:#d32f2f;color:#fff;border:none;padding:5px 10px;border-radius:6px;margin:2px}
+body{font-family: sans-serif; background:#f0f2f5; margin:0}
+.header{background:#0b6e2f; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center}
+.header h1{font-size:15px; margin:0; line-height:1.2}
+.back{background:#e11d48; color:white; padding:8px 16px; border-radius:8px; text-decoration:none; font-weight:bold}
+.container{padding:15px}
+input, select{width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ccc; font-size:16px; box-sizing:border-box; background:white}
+.addBtn{width:100%; background:#0b6e2f; color:white; padding:14px; border:none; border-radius:12px; font-size:18px; font-weight:bold}
+.card{background:white; padding:12px; border-radius:10px; margin-top:10px; display:flex; justify-content:space-between; box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+.title{text-align:center; margin-top:20px; font-weight:bold; font-size:20px}
+.sub{text-align:center; color:#0b6e2f; font-weight:bold}
 </style>
 </head>
 <body>
-
-<div class="top"><b>MT PLATOON 4 BIR - SUTY SENIORITY</b><button class="back" onclick="location.href='index.html'">Back</button></div>
-
-<div class="form">
-<input id="s_no" placeholder="সেনা নং">
-<select id="s_rank">
+<div class="header">
+<h1>এমটি প্লাটুন ৪ বীর - সিনিয়রিটি</h1>
+<a class="back" href="/">Back</a>
+</div>
+<div class="container">
+<input id="senaNo" placeholder="সেনা নং লিখুন">
+<select id="podobi">
 <option value="">পদবি সিলেক্ট করুন</option>
 <option>সৈনিক</option>
 <option>ল্যান্স কর্পোরাল</option>
 <option>কর্পোরাল</option>
 <option>সার্জেন্ট</option>
-<option>ওয়ারেন্ট অফিসার</option>
-<option>সিনিয়র ওয়ারেন্ট অফিসার</option>
 </select>
-<input id="s_name" placeholder="নাম বাংলা/ইংরেজি লিখুন">
-<input id="s_date" type="date">
-<button class="btn-green" onclick="addSen()">Add করুন</button>
+<input id="name" placeholder="নাম বাংলা/ইংরেজি লিখুন">
+<!-- প্লাটুন ফিক্সড, তাই হাইড করে দিলাম -->
+<input type="hidden" id="platoon" value="এমটি প্লাটুন ৪ বীর">
+
+<button class="addBtn" onclick="addData()">Add করুন</button>
+
+<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
+<div class="sub">এমটি প্লাটুন ৪ বীর</div>
+<div id="list"></div>
 </div>
 
-<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
-<div class="sub">এমটি প্ল
+<script>
+let data = JSON.parse(localStorage.getItem('mt4bir_final') || '[]');
+function addData(){
+ let s = document.getElementById('senaNo').value.trim();
+ let p = document.getElementById('podobi').value;
+ let n = document.getElementById('name').value.trim();
+ let pl = document.getElementById('platoon').value;
+ if(!s || !p || !n){ alert('সেনা নং, পদবি, নাম পূরণ করুন ভাই'); return; }
+ data.push({s,p,n,pl});
+ localStorage.setItem('mt4bir_final', JSON.stringify(data));
+ document.getElementById('senaNo').value=''; 
+ document.getElementById('name').value='';
+ render();
+}
+function render(){
+ let l = document.getElementById('list'); l.innerHTML='';
+ data.sort((a,b)=> a.s.localeCompare(b.s, undefined, {numeric:true}));
+ data.forEach((d,i)=>{
+  l.innerHTML += `<div class="card"><div><b>${d.s}</b> - ${d.p}<br>${d.n}<br><small style="color:green">${d.pl}</small></div><div><button onclick="del(${i})" style="background:red;color:white;border:none;padding:6px 12px;border-radius:6px">X</button></div></div>`;
+ });
+}
+function del(i){ if(confirm('ডিলিট করবেন?')){ data.splice(i,1); localStorage.setItem('mt4bir_final', JSON.stringify(data)); render(); } }
+render();
+</script>
+</body>
+</html>
