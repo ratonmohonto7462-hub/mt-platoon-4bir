@@ -2,29 +2,29 @@
 <style>
 body{margin:0;background:#f3f6fb;font-family:Arial}
 .top{background:#0f7a2f;padding:14px;display:flex;justify-content:space-between;align-items:center;color:#fff}
-.back{background:#dc2626;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:bold;text-decoration:none}
+.back{background:#dc2626;color:#fff;padding:8px 18px;border-radius:8px;font-weight:bold;text-decoration:none}
 .wrap{padding:14px}
 input,select{width:100%;padding:14px;margin-bottom:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;box-sizing:border-box;font-size:14px}
 .add{background:#0b7a2e;color:#fff;width:100%;padding:14px;border:none;border-radius:12px;font-weight:bold;font-size:18px}
-.title{text-align:center;margin:18px 0 4px;font-size:23px;font-weight:900;line-height:30px}
+.title{text-align:center;margin:18px 0 4px;font-size:19px;font-weight:900;white-space:nowrap}
 .sub{color:#0b7a2e;text-align:center;font-weight:bold;font-size:18px;margin-bottom:14px}
 .print{display:block;margin:0 auto 14px;background:#1d4ed8;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-weight:bold;font-size:15px}
 table{width:100%;border-collapse:collapse;background:#fff}
 th{background:#0f7a2f;color:#fff;padding:10px 4px;font-size:12px}
-td{padding:9px 4px;border:1px solid #e5e7eb;text-align:center;font-size:12px;color:#000}
+td{padding:9px 4px;border:1px solid #e5e7eb;text-align:center;font-size:13px;color:#000}
 @media print{.top,.no-print-form,.no-print,.print{display:none!important} body{background:#fff}}
 </style></head><body>
 <div class="top"><b>MT PLATOON 4 BIR - SUTY<br>SENIORITY</b><a href="index.html" class="back">Back</a></div>
 <div class="wrap">
 <div class="no-print-form">
 <input id="sno" placeholder="সেনা নং">
-<select id="pod"><option value="">পদবি সিলেক্ট করুন</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option><option>ল্যান্স কর্পোরাল (অস্থায়ী)</option></select>
+<select id="pod"><option value="">পদবি সিলেক্ট করুন</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select>
 <input id="nm" placeholder="নাম বাংলা/ইংরেজি লিখুন">
-<input id="jd" type="date" placeholder="যোগদানের তারিখ">
+<input id="jd" type="date">
 <button class="add" id="ab" onclick="save()">Add করুন</button>
 </div>
 
-<div class="title">সিনিয়ারিটি অনুযায়ী নামীয়<br>তালিকা</div>
+<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
 <div class="sub">এমটি প্লাটুন ৪ বীর</div>
 <button class="print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 
@@ -34,30 +34,28 @@ td{padding:9px 4px;border:1px solid #e5e7eb;text-align:center;font-size:12px;col
 let role=localStorage.getItem('mt_role');if(!role)location.href='index.html';
 let data=JSON.parse(localStorage.getItem('mt_suty')||'[]');let ei=-1;
 if(role!=='admin')document.querySelector('.no-print-form').style.display='none';
+
+function bn(n){return n.toString().replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d]);}
+function bnDate(d){let a=d.split('-');if(a.length!==3)return d;return bn(a[2]+'-'+a[1]+'-'+a[0]);}
+function calcDays(jd){
+ let diff=Math.floor((new Date(new Date().toDateString())-new Date(jd))/86400000);
+ diff=Math.abs(diff);
+ return bn(diff) + " দিন";
+}
 function save(){
- let s=document.getElementById('sno').value.trim();
- let p=document.getElementById('pod').value;
- let n=document.getElementById('nm').value.trim();
- let j=document.getElementById('jd').value;
- if(!s||!p||!n||!j)return alert('সব ঘর পূরণ করুন');
+ let s=sno.value.trim(),p=pod.value,n=nm.value.trim(),j=jd.value;
+ if(!s||!p||!n||!j)return alert('সব পূরণ করুন');
  if(ei>=0){data[ei]={s,p,n,j};ei=-1;ab.innerText='Add করুন';}else data.push({s,p,n,j});
  localStorage.setItem('mt_suty',JSON.stringify(data));
- sno.value='';nm.value='';jd.value='';
- rend();
-}
-function calc(jd){
- let diff=Math.floor((new Date()-new Date(jd))/86400000);
- if(diff<0)return Math.abs(diff)+' দিন বাকি';
- return diff+' দিন';
+ sno.value='';nm.value='';jd.value='';rend();
 }
 function rend(){
- let tb=document.getElementById('tb');tb.innerHTML='';
- data.sort((a,b)=>new Date(a.j)-new Date(b.j));
+ tb.innerHTML='';data.sort((a,b)=>new Date(a.j)-new Date(b.j));
  data.forEach((d,i)=>{
-  tb.innerHTML+=`<tr><td>${i+1}</td><td>${d.s}</td><td>${d.p}</td><td>${d.n}</td><td>${d.j}</td><td>${calc(d.j)}</td>${role==='admin'?`<td class="no-print"><button onclick="editD(${i})" style="background:#2563eb;color:#fff;border:none;padding:4px 7px;border-radius:5px">Edit</button> <button onclick="delD(${i})" style="background:#dc2626;color:#fff;border:none;padding:4px 7px;border-radius:5px">X</button></td>`:''}</tr>`;
+  tb.innerHTML+=`<tr><td>${bn(i+1)}</td><td>${bn(d.s)}</td><td>${d.p}</td><td>${d.n}</td><td>${bnDate(d.j)}</td><td>${calcDays(d.j)}</td>${role==='admin'?`<td class="no-print"><button onclick="editD(${i})" style="background:#2563eb;color:#fff;border:none;padding:4px 7px;border-radius:5px">Edit</button> <button onclick="delD(${i})" style="background:#dc2626;color:#fff;border:none;padding:4px 7px;border-radius:5px;margin-top:3px">X</button></td>`:''}</tr>`;
  });
 }
 function editD(i){let d=data[i];sno.value=d.s;pod.value=d.p;nm.value=d.n;jd.value=d.j;ei=i;ab.innerText='Update করুন';window.scrollTo(0,0);}
-function delD(i){if(confirm('Delete?')){data.splice(i,1);localStorage.setItem('mt_suty',JSON.stringify(data));rend();}}
+function delD(i){if(confirm('Delete করবেন?')){data.splice(i,1);localStorage.setItem('mt_suty',JSON.stringify(data));rend();}}
 rend();
 </script></body></html>
