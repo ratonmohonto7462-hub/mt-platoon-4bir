@@ -1,1 +1,58 @@
-<!DOCTYPE html> <html lang="bn"> <head> <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"> <title>MT PLATOON 4 BIR</title> <style> body{margin:0;background:#eef2f7;font-family:Arial} .header{background:#0f5132;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center} .logout{background:#dc2626;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:bold} .card{background:#fff;border-radius:20px;padding:22px 10px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.08);text-decoration:none;color:#0f5132;display:block} .card span{font-size:54px;display:block} .card b{font-size:17px;display:block;margin-top:8px} .card p{font-size:12px;color:#6b7280;margin:6px 0 0} .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px} .loginBox{max-width:360px;margin:70px auto;background:#fff;padding:22px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1)} input{width:100%;padding:12px;margin:8px 0 14px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box} .btn{width:100%;background:#0f5132;color:#fff;padding:13px;border:none;border-radius:10px;font-weight:bold;font-size:16px} .hidden{display:none} </style> </head> <body> <div id="loginPage"><div class="loginBox"><h2 style="text-align:center;color:#0f5132">MT PLATOON 4 BIR</h2><input id="oid" placeholder="ID: 4birmt / admin7462"><input id="pwd" type="password" placeholder="Password"><button class="btn" onclick="login()">LOGIN</button></div></div> <div id="dash" class="hidden"> <div class="header"><b style="font-size:20px">MT PLATOON 4 BIR</b><button class="logout" onclick="logout()">LOGOUT</button></div> <div style="text-align:center;padding:18px 10px 6px"><h1 style="margin:0">Welcome, <span id="roleName">Admin</span></h1><p style="color:#0f5132;font-weight:bold">📞 MT PLATOON Mobile: 01769013471</p></div> <div class="grid"> <a class="card" href="vehicle.html"><span>🚚</span><b>VEHICLE UPDATE</b><p>All Vehicle Information</p></a> <a class="card" href="fuel.html"><span>⛽</span><b>FUEL REPORT</b><p>Daily Fuel Status</p></a> <a class="card" href="duty.html"><span>👮</span><b>DUTY ROSTER</b><p>Platoon Duty List</p></a> <a class="card" href="seniority.html"><span>⭐</span><b>SUTY SENIORITY</b><p>Seniority List & Updates</p></a> <a class="card" href="general.html"><span>📝</span><b>GENERAL UPDATE</b><p>Other Updates</p></a> <a class="card" href="mobile.html"><span>📞</span><b>MT PLATOON MOBILE NUMBER</b><p>Contact List</p></a> </div> </div> <script> let r=localStorage.getItem('mt_role')||''; function login(){ let i=document.getElementById('oid').value.trim(); let p=document.getElementById('pwd').value.trim(); if(i==='4birmt' && p==='4-BIR-MT'){localStorage.setItem('mt_role','viewer');r='viewer';show();} else if(i==='admin7462' && p==='Admin123'){localStorage.setItem('mt_role','admin');r='admin';show();} else alert('ID/Pass ভুল'); } function show(){ document.getElementById('loginPage').classList.add('hidden'); document.getElementById('dash').classList.remove('hidden'); document.getElementById('roleName').innerText = (r==='admin'?'Admin':'Viewer'); } function logout(){localStorage.removeItem('mt_role');location.reload();} if(r)show(); </script> </body> </html>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT PLATOON 4 BIR</title>
+<style>
+ body{margin:0;background:#e8ecf1;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:Arial,sans-serif}
+.card{width:360px;background:white;border-radius:28px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
+.header{background:#0a7a00;color:white;text-align:center;padding:28px 20px 22px}
+.header h1{margin:0;font-size:26px;font-weight:900}
+.header p{margin:6px 0 0;font-size:13px;letter-spacing:1.5px;opacity:0.9}
+.body{padding:28px 22px 30px;text-align:center}
+.role-title{font-weight:900;font-size:20px;margin-bottom:18px}
+.role-wrap{display:flex;gap:12px;margin-bottom:24px}
+.role-btn{flex:1;padding:18px 10px;border-radius:18px;border:2px solid #ddd;background:#f1f1f1;font-weight:800;font-size:16px;cursor:pointer;transition:0.2s}
+.role-btn.active{background:#7d0a0a;color:white;border-color:#7d0a0a}
+.pass-title{font-weight:900;font-size:18px;margin-bottom:12px}
+.pass-input{width:100%;box-sizing:border-box;padding:16px;border-radius:14px;border:1px solid #cbd5e1;background:#e8f0fe;font-size:16px;outline:none;margin-bottom:18px;text-align:center}
+.login-btn{width:100%;padding:16px;background:#0a7a00;color:white;border:none;border-radius:14px;font-size:20px;font-weight:900;cursor:pointer}
+.msg{margin-top:12px;font-weight:700;font-size:14px;color:red;min-height:18px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header"><h1>MT PLATOON 4 BIR</h1><p>AUTHORISED ACCESS ONLY</p></div>
+  <div class="body">
+    <div class="role-title">ROLE SELECT করুন</div>
+    <div class="role-wrap">
+      <button id="btn1" class="role-btn" onclick="selectRole('mt','btn1')">MT PLATOON<br>4 BIR</button>
+      <button id="btn2" class="role-btn" onclick="selectRole('clk','btn2')">MT CLK<br>Admin</button>
+    </div>
+    <div class="pass-title">PASSWORD</div>
+    <input id="pass" type="password" class="pass-input" placeholder="••••••">
+    <button class="login-btn" onclick="doLogin()">LOGIN</button>
+    <div id="msg" class="msg"></div>
+  </div>
+</div>
+<script>
+const PASSWORDS = { mt: "mt4bir", clk: "admin7462" };
+let selectedRole = null;
+function selectRole(role, btnId){
+  selectedRole = role;
+  document.getElementById('btn1').classList.remove('active');
+  document.getElementById('btn2').classList.remove('active');
+  document.getElementById(btnId).classList.add('active');
+}
+function doLogin(){
+  const pass = document.getElementById('pass').value.trim();
+  if(!selectedRole){ document.getElementById('msg').innerText = "ROLE SELECT করুন"; return; }
+  if(pass === PASSWORDS[selectedRole]){
+    localStorage.setItem("role", selectedRole);
+    window.location.href = "dashboard.html";
+  } else { document.getElementById('msg').innerText = "ভুল পাসওয়ার্ড!"; }
+}
+</script>
+</body>
+</html>
