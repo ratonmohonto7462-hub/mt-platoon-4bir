@@ -1,183 +1,79 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MOBILE NAMIO TALIKA - MT PLATOON 4 BIR</title>
 <style>
-body{margin:0;font-family:'SolaimanLipi',Arial;background:#f5f5f5}
+body{margin:0;font-family:SolaimanLipi,Arial;background:#f5f5f5}
 .dashboard-header{background:green;color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
-.dashboard-header h1{margin:0;font-size:18px}
+.dashboard-header h1{margin:0;font-size:16px}
 .logout{background:red;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
-.container{padding:20px;max-width:1200px;margin:0 auto}
-input,select{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:10px;box-sizing:border-box;font-size:16px;font-family:'SolaimanLipi',Arial}
-.btn-add{width:100%;padding:15px;background:green;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer}
-.table-title{text-align:center;font-size:22px;font-weight:bold;margin:15px 0 5px;color:#333}
+.container{padding:15px;max-width:1200px;margin:0 auto}
+input,select{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:10px;box-sizing:border-box;font-size:16px}
+.btn-add{width:100%;padding:14px;background:green;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer}
+.table-title{text-align:center;font-size:22px;font-weight:bold;margin:20px 0 5px}
 .table-sub{text-align:center;font-size:18px;font-weight:bold;margin:0 0 15px;color:green}
-.btn-print{background:blue;color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:15px auto;display:block;font-size:16px}
-table{width:100%;border-collapse:collapse;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.1);font-size:14px}
-th{background:green;color:white;padding:10px;text-align:center;border:1px solid #ccc}
-td{padding:8px;text-align:center;border:1px solid #ddd;font-family:'SolaimanLipi',Arial}
-.btn-delete{background:red;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px;font-size:12px}
-.btn-edit{background:orange;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px;font-size:12px}
-.disabled{opacity:0.5;pointer-events:none}
-.print-footer{position:fixed;bottom:10px;left:10px;font-size:14px;font-weight:bold;display:none}
-a{color:blue;text-decoration:none}
-
-/* Print এর জন্য */
-@media print {
-.dashboard-header,
-.btn-print,
-.btn-add,
-input,
-select,
-.logout,
-#adminControls,
-.btn-edit,
-.btn-delete
-{display:none!important}
-
-.print-footer{display:block}
-body{background:white}
-table{box-shadow:none}
+.btn-print{background:blue;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:10px auto;display:block}
+table{width:100%;border-collapse:collapse;background:white}
+th{background:green;color:white;padding:10px;border:1px solid #ccc}
+td{padding:8px;text-align:center;border:1px solid #ddd}
+.btn-delete{background:red;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer}
+.btn-edit{background:orange;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer}
 </style>
 </head>
 <body>
-
 <div class="dashboard-header">
-<h1>MT PLATOON 4 BIR - MOBILE NAMIO TALIKA</h1>
-<button class="logout" onclick="goBack()">Back</button>
+<h1>MT PLATOON 4 BIR</h1>
+<button class="logout" onclick="location.href='index.html'">Back</button>
 </div>
 
 <div class="container">
 <div id="adminControls">
 <input type="text" id="senaNo" placeholder="সেনা নং">
-<select id="podobi">
-<option value="">পদবি সিলেক্ট করুন</option>
-<option>সৈনিক</option>
-<option>ল্যান্স কর্পোরাল</option>
-<option>কর্পোরাল</option>
-<option>সার্জেন্ট</option>
-<option>কর্পোরাল (টিবিভি)</option>
-<option>সৈনিক (টিবিভি)</option>
-</select>
-<input type="text" id="name" placeholder="নাম লিখুন">
-<input type="text" id="mobile" placeholder="মোবাইল নাম্বার 01XXXXXXXXX">
+<select id="podobi"><option value="">পদবি সিলেক্ট করুন</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select>
+<input type="text" id="name" placeholder="নাম">
+<input type="text" id="mobile" placeholder="মোবাইল 01XXXXXXXXX">
 <button class="btn-add" onclick="addData()">Add করুন</button>
 </div>
 
 <div class="table-title">এমটি প্লাটুনের নামীয় তালিকা</div>
 <div class="table-sub">৪ বীর (এমটি)</div>
-
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 
 <table>
-<thead><tr>
-<th>ক্র/নং</th>
-<th>সেনা নং</th>
-<th>পদবী</th>
-<th>নাম</th>
-<th>মোবাইল নম্বর</th>
-<th id="actionHead">একশন</th>
-</tr></thead>
+<thead><tr><th>ক্র/নং</th><th>সেনা নং</th><th>পদবী</th><th>নাম</th><th>মোবাইল</th><th>একশন</th></tr></thead>
 <tbody id="dataTable"></tbody>
 </table>
-
 </div>
 
-<div class="print-footer">Create By Snk Raton</div>
-
 <script>
-let selectedRole = localStorage.getItem('role');
 let data = JSON.parse(localStorage.getItem('namioData')) || [];
 let editIndex = -1;
 
-function goBack(){
-    window.location.href = 'index.html';
-}
-
 function addData(){
-    if(selectedRole!== 'clk'){ alert('আপনার Permission নাই'); return; }
-    let sena = document.getElementById('senaNo').value;
-    let podo = document.getElementById('podobi').value;
-    let name = document.getElementById('name').value;
-    let mobile = document.getElementById('mobile').value;
-    if(!sena ||!podo ||!name ||!mobile){ alert('সব ঘর পূরণ করুন'); return; }
+  let sena=document.getElementById('senaNo').value;
+  let podo=document.getElementById('podobi').value;
+  let name=document.getElementById('name').value;
+  let mobile=document.getElementById('mobile').value;
+  if(!sena||!podo||!name||!mobile){alert('সব ঘর পূরণ করুন');return;}
 
-    if(editIndex === -1){
-        data.push({sena, podo, name, mobile});
-    } else {
-        data[editIndex] = {sena, podo, name, mobile};
-        editIndex = -1;
-        document.querySelector('.btn-add').innerText = 'Add করুন';
-    }
+  if(editIndex==-1) data.push({sena,podo,name,mobile});
+  else{ data[editIndex]={sena,podo,name,mobile}; editIndex=-1; document.querySelector('.btn-add').innerText='Add করুন'; }
 
-    localStorage.setItem('namioData', JSON.stringify(data));
-    clearForm();
-    loadData();
+  localStorage.setItem('namioData', JSON.stringify(data));
+  clearForm(); loadData();
 }
-
-function clearForm(){
-    document.getElementById('senaNo').value = '';
-    document.getElementById('podobi').value = '';
-    document.getElementById('name').value = '';
-    document.getElementById('mobile').value = '';
-}
-
-function editData(index){
-    if(selectedRole!== 'clk'){ alert('আপনার Permission নাই'); return; }
-    editIndex = index;
-    let item = data[index];
-    document.getElementById('senaNo').value = item.sena;
-    document.getElementById('podobi').value = item.podo;
-    document.getElementById('name').value = item.name;
-    document.getElementById('mobile').value = item.mobile;
-    document.querySelector('.btn-add').innerText = 'Update করুন';
-    window.scrollTo(0,0);
-}
-
-function deleteData(index){
-    if(selectedRole!== 'clk'){ alert('আপনার Permission নাই'); return; }
-    if(confirm('Delete করবেন?')){
-        data.splice(index,1);
-        localStorage.setItem('namioData', JSON.stringify(data));
-        loadData();
-    }
-}
-
+function clearForm(){ senaNo.value=''; podobi.value=''; name.value=''; mobile.value=''; }
+function editData(i){ editIndex=i; senaNo.value=data[i].sena; podobi.value=data[i].podo; name.value=data[i].name; mobile.value=data[i].mobile; document.querySelector('.btn-add').innerText='Update করুন'; }
+function deleteData(i){ if(confirm('Delete করবেন?')){ data.splice(i,1); localStorage.setItem('namioData', JSON.stringify(data)); loadData(); } }
 function loadData(){
-    let tbody = document.getElementById('dataTable');
-    tbody.innerHTML = '';
-    data.forEach((item, index) => {
-        let actionBtn = '';
-        if(selectedRole === 'clk'){
-            actionBtn = `<button class="btn-edit" onclick="editData(${index})">Edit</button>
-                         <button class="btn-delete" onclick="deleteData(${index})">Delete</button>`;
-        } else {
-            actionBtn = `View Only`;
-        }
-        tbody.innerHTML += `<tr>
-        <td>${index + 1}</td>
-        <td>${item.sena}</td>
-        <td>${item.podo}</td>
-        <td>${item.name}</td>
-        <td><a href="tel:${item.mobile}">${item.mobile}</a></td>
-        <td>${actionBtn}</td>
-        </tr>`;
-    });
+  let tbody=document.getElementById('dataTable'); tbody.innerHTML='';
+  data.forEach((item,i)=>{
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${item.sena}</td><td>${item.podo}</td><td>${item.name}</td><td><a href="tel:${item.mobile}">${item.mobile}</a></td><td><button class="btn-edit" onclick="editData(${i})">Edit</button> <button class="btn-delete" onclick="deleteData(${i})">Del</button></td></tr>`;
+  });
 }
-
-window.onload = function(){
-    if(selectedRole === 'platoon'){
-        document.getElementById('adminControls').classList.add('disabled');
-        document.getElementById('actionHead').innerText = 'Status';
-    } else {
-        document.getElementById('adminControls').classList.remove('disabled');
-        document.getElementById('actionHead').innerText = 'একশন';
-    }
-    loadData();
-}
+loadData();
 </script>
-
 </body>
 </html>
