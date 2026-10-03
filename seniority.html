@@ -1,150 +1,49 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seniority - MT PLATOON 4 BIR</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MT 4 BIR Seniority</title>
 <style>
-body{margin:0;background:#eef2f7;font-family:Arial, sans-serif}
-.head{background:white;text-align:center;padding:18px 12px;box-shadow:0 2px 8px #0001}
+body{margin:0;background:#eef2f7;font-family:Arial}
+.head{background:white;text-align:center;padding:18px 12px}
 .head h1{margin:0;font-size:23px;font-weight:900}
-.head h2{color:#0a7e07;margin:8px 0 12px 0;font-size:22px;font-weight:900}
-.print{background:#1a4dff;color:white;border:none;padding:11px 34px;border-radius:12px;font-weight:900;font-size:17px;cursor:pointer}
-.box{background:white;margin:12px;padding:14px;border-radius:18px;box-shadow:0 2px 8px #0001}
-.inp{width:100%;padding:14px;border:1.5px solid #ccc;border-radius:12px;margin-bottom:11px;box-sizing:border-box;font-size:16px;outline:none}
-.inp:focus{border-color:#0a7e07}
-.save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px;cursor:pointer}
-table{width:100%;border-collapse:collapse;background:white;margin-top:8px}
-th{background:#0a4d0a;color:white;padding:10px 4px;font-size:14px;position:sticky;top:0}
-td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13.5px;word-break:break-word}
-.act button{padding:6px 10px;margin:2px;border:none;border-radius:7px;font-weight:900;cursor:pointer;font-size:13px}
-.edit{background:#ffc107;color:black}.del{background:#f1f1f1;border:1px solid #ccc!important}
+.head h2{color:#0a7e07;margin:8px 0 12px 0}
+.print{background:#1a4dff;color:white;border:none;padding:11px 34px;border-radius:12px;font-weight:900;font-size:17px}
+.box{background:white;margin:12px;padding:14px;border-radius:18px}
+.inp{width:100%;padding:14px;border:1.5px solid #ccc;border-radius:12px;margin-bottom:11px;box-sizing:border-box;font-size:16px}
+.save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px}
+table{width:100%;border-collapse:collapse;background:white}
+th{background:#0a4d0a;color:white;padding:10px 4px;font-size:14px}
+td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
+.act button{padding:6px 10px;margin:2px;border:none;border-radius:7px;font-weight:900}
+.edit{background:#ffc107}.del{background:#eee;border:1px solid #ccc!important}
 .hidden{display:none!important}
-.back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;box-shadow:0 2px 6px #0003;text-decoration:none;color:black;font-weight:900;z-index:10}
+.back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;text-decoration:none;color:black;font-weight:900;box-shadow:0 2px 6px #0003}
 
-/* প্রিন্টে এইগুলো থাকবে না */
 @media print{
- .no-print{display:none!important}
-  body{background:white}
- .head{box-shadow:none;padding-top:0}
-  table{margin-top:20px;border:1px solid black}
-  th{background:#0a4d0a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .back,.print,.box, #addBox,.act, #actHead{display:none!important; height:0!important; margin:0!important; padding:0!important; border:none!important;}
+  body{background:white!important; margin:0!important; padding:0!important;}
+ .head{box-shadow:none!important; margin:0!important; padding:10px 0!important;}
+  table{margin-top:10px!important; width:100%!important;}
 }
 </style>
 </head>
 <body>
-
-<a class="back no-print" href="dashboard.html">← Back</a>
-
-<div class="head">
-<h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1>
-<h2>এমটি প্লাটুন ৪ বীর</h2>
-<button class="print no-print" onclick="window.print()">🖨️ প্রিন্ট</button>
-</div>
-
-<div id="addBox" class="box no-print">
-<input id="s" class="inp" placeholder="সেনা নং (যেমন: 4521328)">
-<input id="p" class="inp" placeholder="পদবি (যেমন: সৈনিক)">
-<input id="n" class="inp" placeholder="নাম (যেমন: রতন চন্দ্র মহন্ত)">
-<input id="d" class="inp" type="date">
+<a class="back" href="dashboard.html">← Back</a>
+<div class="head"><h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1><h2>এমটি প্লাটুন ৪ বীর</h2><button class="print" onclick="window.print()">🖨️ প্রিন্ট</button></div>
+<div id="addBox" class="box">
+<input id="s" class="inp" placeholder="সেনা নং"><input id="p" class="inp" placeholder="পদবি"><input id="n" class="inp" placeholder="নাম"><input id="d" class="inp" type="date">
 <button id="saveBtn" class="save" onclick="saveData()">SAVE</button>
 </div>
-
-<table>
-<thead>
-<tr>
-<th>ক্রমিক</th>
-<th>সেনা নং</th>
-<th>পদবি</th>
-<th>নাম</th>
-<th>তারিখ</th>
-<th>দিন</th>
-<th id="actHead" class="no-print">একশন</th>
-</tr>
-</thead>
-<tbody id="tb"></tbody>
-</table>
-
+<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="actHead">একশন</th></tr></thead><tbody id="tb"></tbody></table>
 <script>
-let db = JSON.parse(localStorage.getItem("suty") || "[]");
-let role = localStorage.getItem("role");
-let editIndex = -1;
-
-// যদি সাধারণ ভিউয়ার (mt4bir) দিয়ে ঢুকে, তাহলে এড/এডিট বন্ধ
-if(role === "mt"){
-  document.getElementById("addBox").classList.add("hidden");
-  document.getElementById("actHead").classList.add("hidden");
-}
-
-function saveData(){
-  let S = document.getElementById("s").value.trim();
-  let P = document.getElementById("p").value.trim();
-  let N = document.getElementById("n").value.trim();
-  let D = document.getElementById("d").value;
-  if(!S ||!N ||!D) return alert("সেনা নং, নাম, তারিখ পূরণ করুন");
-
-  if(editIndex >= 0){
-    db[editIndex] = {S,P,N,D};
-    editIndex = -1;
-    document.getElementById("saveBtn").innerText = "SAVE";
-    document.getElementById("saveBtn").style.background = "#1db954";
-  } else {
-    db.push({S,P,N,D});
-  }
-  localStorage.setItem("suty", JSON.stringify(db));
-  document.getElementById("s").value = "";
-  document.getElementById("p").value = "";
-  document.getElementById("n").value = "";
-  document.getElementById("d").value = "";
-  render();
-}
-
-function render(){
-  let tb = document.getElementById("tb");
-  tb.innerHTML = "";
-  // যোগদানের তারিখ অনুযায়ী অটোমেটিক সিনিয়রিটি সাজানো - পুরাতন তারিখ উপরে
-  db.sort((a,b) => new Date(a.D) - new Date(b.D));
-
-  db.forEach((r,i)=>{
-    let diff = Math.floor((new Date() - new Date(r.D)) / (1000*60*60*24));
-    if(diff < 0) diff = 0;
-    tb.innerHTML += `<tr>
-      <td>${i+1}</td>
-      <td>${r.S}</td>
-      <td>${r.P}</td>
-      <td>${r.N}</td>
-      <td>${r.D}</td>
-      <td>${diff} দিন</td>
-      <td class="act no-print ${role==='mt'?'hidden':''}">
-        <button class="edit" onclick="editRow(${i})">Edit</button>
-        <button class="del" onclick="delRow(${i})">Del</button>
-      </td>
-    </tr>`;
-  });
-}
-
-function editRow(i){
-  let r = db[i];
-  document.getElementById("s").value = r.S;
-  document.getElementById("p").value = r.P;
-  document.getElementById("n").value = r.N;
-  document.getElementById("d").value = r.D;
-  editIndex = i;
-  document.getElementById("saveBtn").innerText = "UPDATE করুন";
-  document.getElementById("saveBtn").style.background = "#ffc107";
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function delRow(i){
-  if(confirm("এই এন্ট্রি ডিলিট করবে?")){
-    db.splice(i,1);
-    localStorage.setItem("suty", JSON.stringify(db));
-    render();
-  }
-}
-
+let db=JSON.parse(localStorage.getItem("suty")||"[]"),role=localStorage.getItem("role"),editIndex=-1;
+if(role==="mt"){document.getElementById("addBox").classList.add("hidden");document.getElementById("actHead").classList.add("hidden");}
+function saveData(){let S=s.value.trim(),P=p.value.trim(),N=n.value.trim(),D=d.value;if(!S||!N||!D)return alert("পূরণ করুন");if(editIndex>=0){db[editIndex]={S,P,N,D};editIndex=-1;saveBtn.innerText="SAVE";saveBtn.style.background="#1db954";}else db.push({S,P,N,D});localStorage.setItem("suty",JSON.stringify(db));s.value=p.value=n.value=d.value="";render();}
+function render(){tb.innerHTML="";db.sort((a,b)=>new Date(a.D)-new Date(b.D));db.forEach((r,i)=>{let diff=Math.floor((new Date()-new Date(r.D))/86400000);if(diff<0)diff=0;tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${diff} দিন</td><td class="act ${role==='mt'?'hidden':''}"><button class="edit" onclick="editRow(${i})">Edit</button><button class="del" onclick="delRow(${i})">Del</button></td></tr>`;});}
+function editRow(i){let r=db[i];s.value=r.S;p.value=r.P;n.value=r.N;d.value=r.D;editIndex=i;saveBtn.innerText="UPDATE করুন";saveBtn.style.background="#ffc107";scrollTo(0,0);}
+function delRow(i){if(confirm("ডিলিট করবে?")){db.splice(i,1);localStorage.setItem("suty",JSON.stringify(db));render();}}
 render();
 </script>
-
 </body>
 </html>
