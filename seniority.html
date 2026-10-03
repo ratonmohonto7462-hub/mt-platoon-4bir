@@ -15,8 +15,6 @@ body{margin:0;background:#eef2f7;font-family:Arial}
 table{width:100%;border-collapse:collapse;background:white}
 th{background:#0a4d0a;color:white;padding:10px 4px;font-size:13px}
 td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
-.act button{padding:6px 10px;margin:2px;border:none;border-radius:7px;font-weight:900}
-.edit{background:#ffc107}.del{background:#eee;border:1px solid #ccc!important}
 .hidden{display:none!important}
 .back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;text-decoration:none;color:black;font-weight:900;box-shadow:0 2px 6px #0003;z-index:10}
 .status{text-align:center;padding:10px;font-weight:900;color:#0a7e07}
@@ -35,7 +33,7 @@ td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
 </div>
 <table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="actHead">একশন</th></tr></thead><tbody id="tb"></tbody></table>
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbw3nJP1RBA_nqqpY3gCslzGTd7326bTuZE0lVA28bNdiFLOVdCxHx-IlIjSaAvexSxnbA/exec";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbySVBLv6GoNLoo-M2Ok48cP_8YOWrhWg5REcldYfh1jF1hEW70N-SC82zZfaJE1xgNGtw/exec";
 let db=[],role=localStorage.getItem("role");
 if(role==="mt"){document.getElementById("addBox").classList.add("hidden");document.getElementById("actHead").classList.add("hidden");}
 async function loadData(){
@@ -43,30 +41,28 @@ async function loadData(){
  try{
    let res=await fetch(SHEET_URL);
    db=await res.json();
-   st.innerText=db.length==0?"কোনো ডাটা নেই - নতুন SAVE দিন":db.length+" জনের তালিকা লোড হয়েছে";
+   st.innerText=db.length==0?"কোনো ডাটা নেই - প্রথম SAVE দিন":db.length+" জনের তালিকা লোড হয়েছে";
    render();
  }catch(e){st.innerText="Load Fail"; console.log(e);}
- document.getElementById("saveBtn").innerText="SAVE";
 }
 async function saveData(){
  let S=s.value.trim(),P=p.value.trim(),N=n.value.trim(),D=d.value;
  if(!S||!N||!D) return alert("সেনা নং, নাম, তারিখ পূরণ করুন");
- let btn=saveBtn; btn.innerText="SAVE হচ্ছে...";
+ saveBtn.innerText="SAVE হচ্ছে...";
  await fetch(SHEET_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({S,P,N,D})});
  alert("✅ Sheet এ Save হয়েছে!");
- s.value=p.value=n.value=d.value=""; btn.innerText="SAVE";
+ s.value=p.value=n.value=d.value=""; saveBtn.innerText="SAVE";
  setTimeout(loadData,1500);
 }
 function render(){
- let tb=document.getElementById("tb"); tb.innerHTML="";
+ tb.innerHTML="";
  db.sort((a,b)=>new Date(a.D)-new Date(b.D));
  db.forEach((r,i)=>{
   let diff=Math.floor((new Date()-new Date(r.D))/86400000); if(diff<0)diff=0;
-  tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${diff} দিন</td><td class="act ${role==='mt'?'hidden':''}"><button class="edit" onclick="editRow(${i})">Edit</button><button class="del" onclick="delRow(${i})">Del</button></td></tr>`;
+  tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${diff} দিন</td><td class="act ${role==='mt'?'hidden':''}"><button onclick="editRow(${i})">Edit</button></td></tr>`;
  });
 }
-function editRow(i){let r=db[i];s.value=r.S;p.value=r.P;n.value=r.N;d.value=r.D;saveBtn.innerText="UPDATE";saveBtn.style.background="#ffc107";scrollTo(0,0);}
-function delRow(i){alert("ডিলিট করতে Google Sheet এ গিয়ে Row ডিলিট করুন");}
+function editRow(i){let r=db[i];s.value=r.S;p.value=r.P;n.value=r.N;d.value=r.D;saveBtn.innerText="UPDATE";scrollTo(0,0);}
 loadData();
 </script>
 </body>
