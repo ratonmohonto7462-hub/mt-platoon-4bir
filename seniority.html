@@ -1,61 +1,49 @@
-<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUTY SENIORITY</title>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT 4 BIR SUTY SENIORITY - Online</title>
 <style>
-body{margin:0;background:#f3f6fb;font-family:Arial}
-.top{background:#0f7a2f;padding:14px;display:flex;justify-content:space-between;align-items:center;color:#fff}
-.back{background:#dc2626;color:#fff;padding:8px 18px;border-radius:8px;font-weight:bold;text-decoration:none}
-.wrap{padding:14px}
-input,select{width:100%;padding:14px;margin-bottom:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;box-sizing:border-box;font-size:14px}
-.add{background:#0b7a2e;color:#fff;width:100%;padding:14px;border:none;border-radius:12px;font-weight:bold;font-size:18px}
-.title{text-align:center;margin:18px 0 4px;font-size:19px;font-weight:900;white-space:nowrap}
-.sub{color:#0b7a2e;text-align:center;font-weight:bold;font-size:18px;margin-bottom:14px}
-.print{display:block;margin:0 auto 14px;background:#1d4ed8;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-weight:bold;font-size:15px}
-table{width:100%;border-collapse:collapse;background:#fff}
-th{background:#0f7a2f;color:#fff;padding:10px 4px;font-size:12px}
-td{padding:9px 4px;border:1px solid #e5e7eb;text-align:center;font-size:13px;color:#000}
-@media print{.top,.no-print-form,.no-print,.print{display:none!important} body{background:#fff}}
-</style></head><body>
-<div class="top"><b>MT PLATOON 4 BIR - SUTY<br>SENIORITY</b><a href="index.html" class="back">Back</a></div>
-<div class="wrap">
-<div class="no-print-form">
-<input id="sno" placeholder="সেনা নং">
-<select id="pod"><option value="">পদবি সিলেক্ট করুন</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select>
-<input id="nm" placeholder="নাম বাংলা/ইংরেজি লিখুন">
-<input id="jd" type="date">
-<button class="add" id="ab" onclick="save()">Add করুন</button>
+ body{font-family:Arial;background:#0f172a;color:#fff;padding:10px}
+ .card{background:#1e293b;padding:12px;border-radius:10px;margin-bottom:10px}
+ input,select,button{width:100%;padding:10px;margin:5px 0;border-radius:6px;border:none}
+ button{background:#22c55e;color:#000;font-weight:bold}
+ table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff;color:#000}
+ th,td{border:1px solid #ccc;padding:6px;font-size:12px;text-align:center}
+ th{background:#0f172a;color:#fff}
+ .online{color:#22c55e;font-weight:bold}
+</style>
+</head>
+<body>
+<h2>MT 4 BIR - SUTY SENIORITY <span class="online">● ONLINE SHEET</span></h2>
+<div class="card">
+<input id="soinik" placeholder="সৈনিক নং">
+<input id="podobi" placeholder="পদবী">
+<input id="nam" placeholder="নাম">
+<input id="suty" type="date">
+<select id="bodli"><option>বদলী হ্যাঁ</option><option>বদলী না</option></select>
+<input id="jogdan" type="date">
+<button onclick="save()">SAVE TO SHEET</button>
+<button onclick="load()" style="background:#38bdf8">RELOAD</button>
 </div>
-
-<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
-<div class="sub">এমটি প্লাটুন ৪ বীর</div>
-<button class="print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-
-<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th class="no-print">একশন</th></tr></thead><tbody id="tb"></tbody></table>
-</div>
+<table><thead><tr><th>সৈনিক</th><th>পদবী</th><th>নাম</th><th>সুটি</th><th>বদলী</th><th>যোগদান</th></tr></thead><tbody id="tb"></tbody></table>
 <script>
-let role=localStorage.getItem('mt_role');if(!role)location.href='index.html';
-let data=JSON.parse(localStorage.getItem('mt_suty')||'[]');let ei=-1;
-if(role!=='admin')document.querySelector('.no-print-form').style.display='none';
-
-function bn(n){return n.toString().replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d]);}
-function bnDate(d){let a=d.split('-');if(a.length!==3)return d;return bn(a[2]+'-'+a[1]+'-'+a[0]);}
-function calcDays(jd){
- let diff=Math.floor((new Date(new Date().toDateString())-new Date(jd))/86400000);
- diff=Math.abs(diff);
- return bn(diff) + " দিন";
-}
+const URL="https://script.google.com/macros/s/AKfycby5H3t7wx8RgyUhQLGN2uk4KA4uM03JyiHW7lmiFEDm-7GyFMf6o2DFO6HLQhqEy1ibEQ/exec";
 function save(){
- let s=sno.value.trim(),p=pod.value,n=nm.value.trim(),j=jd.value;
- if(!s||!p||!n||!j)return alert('সব পূরণ করুন');
- if(ei>=0){data[ei]={s,p,n,j};ei=-1;ab.innerText='Add করুন';}else data.push({s,p,n,j});
- localStorage.setItem('mt_suty',JSON.stringify(data));
- sno.value='';nm.value='';jd.value='';rend();
+ let d={soinik:soinik.value,podobi:podobi.value,nam:nam.value,suty:suty.value,bodli:bodli.value,jogdan:jogdan.value};
+ if(!d.soinik||!d.nam){alert("সৈনিক নং ও নাম লিখো ভাই");return;}
+ fetch(URL,{method:"POST",body:JSON.stringify(d)}).then(r=>{alert("Sheet এ Save হইছে ভাই!");load();});
 }
-function rend(){
- tb.innerHTML='';data.sort((a,b)=>new Date(a.j)-new Date(b.j));
- data.forEach((d,i)=>{
-  tb.innerHTML+=`<tr><td>${bn(i+1)}</td><td>${bn(d.s)}</td><td>${d.p}</td><td>${d.n}</td><td>${bnDate(d.j)}</td><td>${calcDays(d.j)}</td>${role==='admin'?`<td class="no-print"><button onclick="editD(${i})" style="background:#2563eb;color:#fff;border:none;padding:4px 7px;border-radius:5px">Edit</button> <button onclick="delD(${i})" style="background:#dc2626;color:#fff;border:none;padding:4px 7px;border-radius:5px;margin-top:3px">X</button></td>`:''}</tr>`;
+function load(){
+ tb.innerHTML="<tr><td colspan=6>Loading...</td></tr>";
+ fetch(URL).then(r=>r.json()).then(data=>{
+  tb.innerHTML="";
+  data.reverse().forEach(r=>{
+   tb.innerHTML+=`<tr><td>${r.soinik}</td><td>${r.podobi}</td><td>${r.nam}</td><td>${r.suty}</td><td>${r.bodli}</td><td>${r.jogdan}</td></tr>`;
+  });
  });
 }
-function editD(i){let d=data[i];sno.value=d.s;pod.value=d.p;nm.value=d.n;jd.value=d.j;ei=i;ab.innerText='Update করুন';window.scrollTo(0,0);}
-function delD(i){if(confirm('Delete করবেন?')){data.splice(i,1);localStorage.setItem('mt_suty',JSON.stringify(data));rend();}}
-rend();
-</script></body></html>
+load();
+</script>
+</body>
+</html>
