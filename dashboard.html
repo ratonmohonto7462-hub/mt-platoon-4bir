@@ -1,40 +1,15 @@
 <!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
-<style>
- body{margin:0;background:#eef2f7;font-family:Arial,sans-serif}
-.topbar{background:#0a4a1f;color:white;display:flex;justify-content:space-between;align-items:center;padding:14px 16px}
-.topbar h1{margin:0;font-size:20px;font-weight:900}
-.logout{background:#d32f2f;color:white;border:none;padding:10px 18px;border-radius:10px;font-weight:900;cursor:pointer}
-.content{padding:18px 14px;text-align:center}
-.welcome{font-size:32px;font-weight:900;margin:10px 0 8px}
-.mobile{font-weight:800;color:#0a4a1f;font-size:17px;margin-bottom:22px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{background:white;border-radius:26px;padding:20px 12px;box-shadow:0 4px 15px rgba(0,0,0,0.08)}
-.icon{font-size:58px}
-.title{font-weight:900;color:#0a4a1f;font-size:16px;margin-top:12px}
-.sub{font-size:13px;color:gray;margin-top:4px}
-</style>
-</head>
-<body>
-<div class="topbar"><h1>MT PLATOON 4 BIR</h1><button class="logout" onclick="logout()">LOGOUT</button></div>
-<div class="content">
-  <div class="welcome">Welcome, Viewer</div>
-  <div class="mobile">📞 MT PLATOON Mobile: 01769013471</div>
-  <div class="grid">
-    <div class="card"><div class="icon">🚚</div><div class="title">VEHICLE UPDATE</div><div class="sub">All Vehicle Information</div></div>
-    <div class="card"><div class="icon">⛽</div><div class="title">FUEL REPORT</div><div class="sub">Daily Fuel Status</div></div>
-    <div class="card"><div class="icon">👮</div><div class="title">DUTY ROSTER</div><div class="sub">Platoon Duty List</div></div>
-    <div class="card"><div class="icon">⭐</div><div class="title">SUTY SENIORITY</div><div class="sub">Seniority List & Updates</div></div>
-    <div class="card"><div class="icon">📝</div><div class="title">GENERAL UPDATE</div><div class="sub">Other Updates</div></div>
-    <div class="card"><div class="icon">📞</div><div class="title">MT PLATOON MOBILE NUMBER</div><div class="sub">Contact List</div></div>
-  </div>
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title>
+<style>body{margin:0;background:#f1f3f6;font-family:Arial}.head{background:#0a4d0a;color:white;padding:14px;display:flex;justify-content:space-between;align-items:center}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}.card{background:white;border-radius:14px;padding:18px;text-align:center;font-weight:900;box-shadow:0 2px 6px #0001;cursor:pointer}.card span{font-size:32px;display:block}</style>
+</head><body>
+<div class="head"><b>MT PLATOON 4 BIR</b><button onclick="localStorage.clear();location.href='index.html'" style="background:red;color:white;border:none;padding:6px 12px;border-radius:8px">LOGOUT</button></div>
+<div class="grid">
+<div class="card" onclick="location.href='seniority.html'"><span>📜</span>SUTY SENIORITY</div>
+<div class="card"><span>🛢️</span>FUEL</div>
+<div class="card"><span>🚛</span>VEHICLE</div>
+<div class="card"><span>👤</span>DRIVER</div>
+<div class="card"><span>📦</span>STORE</div>
+<div class="card"><span>📝</span>DUTY</div>
 </div>
-<script>
-function logout(){ localStorage.clear(); window.location.href = "index.html"; }
-</script>
-</body>
-</html>
+<script>if(!localStorage.getItem("role")) location.href="index.html";</script>
+</body></html>
