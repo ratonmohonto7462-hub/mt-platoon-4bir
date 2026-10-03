@@ -11,7 +11,7 @@ body{margin:0;background:#eef2f7;font-family:Arial}
 .print{background:#1a4dff;color:white;border:none;padding:11px 34px;border-radius:12px;font-weight:900;font-size:17px}
 .box{background:white;margin:12px;padding:14px;border-radius:18px;box-shadow:0 2px 8px #0001}
 .inp{width:100%;padding:14px;border:1.5px solid #ccc;border-radius:12px;margin-bottom:11px;box-sizing:border-box;font-size:16px}
-.save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px}
+.save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px;cursor:pointer}
 table{width:100%;border-collapse:collapse;background:white}
 th{background:#0a4d0a;color:white;padding:10px 4px;font-size:13px}
 td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
@@ -19,7 +19,7 @@ td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
 .edit{background:#ffc107}.del{background:#eee;border:1px solid #ccc!important}
 .hidden{display:none!important}
 .back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;text-decoration:none;color:black;font-weight:900;box-shadow:0 2px 6px #0003;z-index:10}
-.status{text-align:center;padding:10px;font-weight:900;color:#555}
+.status{text-align:center;padding:10px;font-weight:900;color:#0a7e07}
 @media print{.back,.print,.box,#addBox,.act,#actHead,.status{display:none!important} body{background:white!important}}
 </style>
 </head>
@@ -35,7 +35,7 @@ td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
 </div>
 <table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="actHead">একশন</th></tr></thead><tbody id="tb"></tbody></table>
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbwDUyuX9D2awgytDGci416mUMNLbogHYYXqe0ntmCGVn0S19fVMj9ZGqzbEwMnTu539vw/exec";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbykjNFKzTWIC8VJ-UlAaxmy15eGOV75M5M1esFig0A-EMFZ-Xq2XMMdJ-bqADGNjRap_Q/exec";
 let db=[],role=localStorage.getItem("role");
 if(role==="mt"){document.getElementById("addBox").classList.add("hidden");document.getElementById("actHead").classList.add("hidden");}
 async function loadData(){
@@ -43,20 +43,15 @@ async function loadData(){
  st.innerText="Sheet থেকে লোড হচ্ছে...";
  try{
    let res=await fetch(SHEET_URL);
-   let txt=await res.text();
-   console.log(txt);
-   db=JSON.parse(txt);
-   if(db.length==0){st.innerText="কোনো ডাটা পাওয়া যায়নি, Sheet খালি";}else{st.innerText=db.length+" জনের তালিকা লোড হয়েছে";}
+   db=await res.json();
+   st.innerText=db.length==0? "কোনো ডাটা নেই - নতুন SAVE দিন" : db.length+" জনের তালিকা লোড হয়েছে";
    render();
- }catch(e){
-   st.innerText="Sheet লোড Fail: "+e;
-   console.log(e);
- }
+ }catch(e){st.innerText="Load Fail - Apps Script Anyone করা আছে কিনা চেক করুন"; console.log(e);}
  document.getElementById("saveBtn").innerText="SAVE";
 }
 async function saveData(){
  let S=s.value.trim(),P=p.value.trim(),N=n.value.trim(),D=d.value;
- if(!S||!N||!D) return alert("পূরণ করুন");
+ if(!S||!N||!D) return alert("সেনা নং, নাম, তারিখ পূরণ করুন");
  let btn=saveBtn; btn.innerText="SAVE হচ্ছে...";
  try{
   await fetch(SHEET_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({S,P,N,D})});
