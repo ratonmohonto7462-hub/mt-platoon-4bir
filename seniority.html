@@ -1,82 +1,70 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>সিনিয়রিটি অনুযায়ী নামীয় তালিকা - এমটি প্লাটুন ৪ বীর</title>
 <style>
- body{font-family:Arial;background:#f5f5f5;margin:0;padding:10px}
-.title{text-align:center;margin:15px 0}
-.title h1{font-size:22px;margin:0;line-height:1.2;white-space:nowrap} /* এক লাইনে হবে */
-.title h2{color:#15803d;font-size:20px;margin:5px 0}
-.role-box{background:#1e293b;color:#fff;padding:12px;border-radius:10px;text-align:center}
-.role-box button{width:48%;padding:12px;border:none;border-radius:8px;font-weight:bold;margin:2px;cursor:pointer}
-.form-box{background:#fff;padding:12px;border-radius:10px;margin-top:10px}
-.form-box input{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box}
-.print-btn{background:#0000ff;color:#fff;padding:12px 30px;border:none;border-radius:10px;font-size:18px;font-weight:bold;display:block;margin:15px auto;cursor:pointer}
- table{width:100%;border-collapse:collapse;background:#fff}
- th{background:#15803d;color:#fff;padding:10px 4px;font-size:14px;border:1px solid #0f6d2f}
- td{border:1px solid #ccc;padding:8px 4px;text-align:center;font-size:13px}
- @media print{.no-print{display:none}}
+  body{font-family:'Noto Sans Bengali',sans-serif;background:#0f172a;color:#fff;margin:0;padding:15px}
+ .container{max-width:1100px;margin:auto;background:#1e293b;padding:20px;border-radius:16px}
+  h1{text-align:center;color:#facc15;font-size:22px;margin-bottom:20px}
+ .form-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:15px}
+  input,select{padding:10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;width:100%}
+  button{padding:10px 15px;border-radius:8px;border:none;cursor:pointer;font-weight:bold}
+ .btn-save{background:#22c55e;color:#000;width:100%;margin-top:10px}
+ .btn-print{background:#3b82f6;color:#fff;margin-bottom:15px}
+  table{width:100%;border-collapse:collapse;margin-top:15px;background:#0f172a;border-radius:10px;overflow:hidden}
+  th,td{border:1px solid #334155;padding:8px;text-align:center;font-size:14px}
+  th{background:#334155;color:#facc15}
+ .action-btn{padding:5px 8px;font-size:12px;margin:2px}
+ .del{background:#ef4444;color:#fff}
+ .edit{background:#eab308;color:#000}
+  @media print{.form-grid,.btn-save,.btn-print,.action-col{display:none!important} body{background:#fff;color:#000}.container{background:#fff} th{background:#ddd!important;color:#000!important}}
 </style>
 </head>
 <body>
+<div class="container">
+  <h1>সিনিয়রিটি অনুযায়ী নামীয় তালিকা - এমটি প্লাটুন ৪ বীর</h1>
+  <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 
-<div class="title">
-<h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1>
-<h2>এমটি প্লাটুন ৪ বীর</h2>
-<button class="print-btn no-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+  <div class="form-grid">
+    <input type="text" id="senaNo" placeholder="সেনা নং">
+    <select id="rank">
+      <option value="">পদবি</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option>
+    </select>
+    <input type="text" id="name" placeholder="নাম">
+    <input type="date" id="joinDate">
+  </div>
+  <button class="btn-save" onclick="saveData()">সেভ করুন</button>
+
+  <table id="seniorityTable">
+    <thead><tr><th>ক্রঃ নং</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th class="action-col">অ্যাকশন</th></tr></thead>
+    <tbody></tbody>
+  </table>
 </div>
-
-<div class="role-box no-print">
-<button style="background:#22c55e" onclick="setRole('platoon')">এমটি প্লাটুন (শুধু দেখবে)</button>
-<button style="background:#facc15" onclick="askClerk()">এমটি ক্লার্ক (এডিট করবে)</button>
-<p id="roleText" style="display:none">বর্তমান: প্লাটুন - View Mode</p>
-</div>
-
-<div id="formBox" class="form-box no-print" style="display:none">
-<input id="soinik" placeholder="সেনা নং">
-<input id="podobi" placeholder="পদবি">
-<input id="nam" placeholder="নাম">
-<label style="font-size:13px">যোগদানের তারিখ</label><input id="jogdan" type="date">
-<input type="hidden" id="editRow">
-<button style="background:#22c55e;padding:12px;width:100%;border:none;border-radius:8px;font-weight:bold;cursor:pointer" onclick="save()" id="saveBtn">SAVE</button>
-</div>
-
-<table>
-<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th class="no-print">একশন</th></tr></thead>
-<tbody id="tb"></tbody>
-</table>
 
 <script>
-const URL="https://script.google.com/macros/s/AKfycbyDMkXQ_D-vMfLOzgnYTurbj1N5PlaROgAjORIYXwirRg--9mENS9IzCxAi1UqR6Km1Fg/exec";
-let ROLE="platoon";
-const CLERK_PASS="MTclk123";
-function setRole(r){ ROLE=r; document.getElementById("formBox").style.display=r=="clerk"?"block":"none"; load(); }
-function askClerk(){ let p=prompt("পাসওয়ার্ড দাও দোস্ত:"); if(p==CLERK_PASS){setRole('clerk')}else{alert("ভুল পাসওয়ার্ড")} }
-function save(){
- let d={soinik:soinik.value,podobi:podobi.value,nam:nam.value,suty:jogdan.value,jogdan:jogdan.value,bodli:""};
- if(!d.soinik||!d.nam||!d.jogdan){alert("সব ঘর পূরণ করো");return;}
- if(new Date(jogdan.value) > new Date()){ alert("ভবিষ্যতের তারিখ দেওয়া যাবে না দোস্ত!"); return; }
- if(editRow.value){d.action="edit";d.row=editRow.value;}
- fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify(d)}).then(()=>{alert("Save হইছে");editRow.value="";saveBtn.innerText="SAVE";load();});
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDMkXQ_D-vMfLOzgnYTurbj1N5PlaROgAjORIYXwirRg--9mENS9IzCxAi1UqR6Km1Fg/exec";
+let data = []; let editIndex = -1;
+
+async function loadData(){
+  try{
+    const res = await fetch(SCRIPT_URL);
+    data = await res.json();
+    render();
+  }catch(e){ console.log(e); }
 }
-function calcDays(s){ let d=Math.floor((new Date()-new Date(s))/(1000*60*60*24)); return d<0?0:d; }
-function editData(enc){ if(ROLE!="clerk"){return;} let o=JSON.parse(decodeURIComponent(enc)); soinik.value=o.soinik; podobi.value=o.podobi; nam.value=o.nam; jogdan.value=(o.jogdan||o.suty).split("T")[0]; editRow.value=o.row; saveBtn.innerText="UPDATE NOW"; window.scrollTo(0,0); }
-function del(row){ if(ROLE!="clerk"){return;} if(!confirm("ডিলিট করবা?"))return; fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:row})}).then(()=>load()); }
-function load(){
- fetch(URL).then(r=>r.json()).then(data=>{
-  data.sort((a,b)=> new Date(a.jogdan||a.suty)-new Date(b.jogdan||b.suty));
-  tb.innerHTML="";
-  data.forEach((r,i)=>{
-   let jd=(r.jogdan||r.suty).split("T")[0]; let mot=calcDays(jd);
-   let enc=encodeURIComponent(JSON.stringify(r));
-   let act=ROLE=="clerk"? `<button onclick="editData('${enc}')" style="background:#facc15;border:none;padding:4px 8px;border-radius:4px">Edit</button> <button onclick="del(${r.row})" style="background:#ef4444;color:#fff;border:none;padding:4px 8px;border-radius:4px">Del</button>` : `View Only`;
-   tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.soinik}</td><td>${r.podobi}</td><td>${r.nam}</td><td>${jd}</td><td>${mot} দিন</td><td class="no-print">${act}</td></tr>`;
+function render(){
+  data.sort((a,b)=> new Date(a.joinDate) - new Date(b.joinDate));
+  const tbody = document.querySelector("#seniorityTable tbody");
+  tbody.innerHTML = "";
+  data.forEach((row,i)=>{
+    tbody.innerHTML += `<tr><td>${i+1}</td><td>${row.senaNo}</td><td>${row.rank}</td><td>${row.name}</td><td>${row.joinDate}</td><td class="action-col"><button class="action-btn edit" onclick="editData(${i})">এডিট</button><button class="action-btn del" onclick="deleteData(${i})">ডিলিট</button></td></tr>`;
   });
- });
 }
-load();
-setInterval(load, 30000);
-</script>
-</body>
-</html>
+async function saveData(){
+  const obj = { senaNo: document.getElementById("senaNo").value, rank: document.getElementById("rank").value, name: document.getElementById("name").value, joinDate: document.getElementById("joinDate").value };
+  if(!obj.senaNo ||!obj.name ||!obj.joinDate){ alert("সব তথ্য পূরণ করুন"); return; }
+  if(editIndex > -1){ data[editIndex]=obj; editIndex=-1; } else { data.push(obj); }
+  await fetch(SCRIPT_URL, {method:"POST", mode:"no-cors", body: JSON.stringify(data)});
+  document.getElementById
