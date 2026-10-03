@@ -5,17 +5,17 @@
 <title>MT 4 BIR Seniority</title>
 <style>
 body{margin:0;background:#eef2f7;font-family:Arial}
-.head{background:white;text-align:center;padding:18px 12px}
+.head{background:white;text-align:center;padding:18px 12px;box-shadow:0 2px 8px #0001}
 .head h1{margin:0;font-size:23px;font-weight:900}
-.head h2{color:#0a7e07;margin:8px 0 12px 0}
-.print{background:#1a4dff;color:white;border:none;padding:11px 34px;border-radius:12px;font-weight:900;font-size:17px}
-.box{background:white;margin:12px;padding:14px;border-radius:18px;box-shadow:0 2px 6px #0001}
+.head h2{color:#0a7e07;margin:8px 0 12px 0;font-size:22px;font-weight:900}
+.print{background:#1a4dff;color:white;border:none;padding:11px 34px;border-radius:12px;font-weight:900;font-size:17px;cursor:pointer}
+.box{background:white;margin:12px;padding:14px;border-radius:18px;box-shadow:0 2px 8px #0001}
 .inp{width:100%;padding:14px;border:1.5px solid #ccc;border-radius:12px;margin-bottom:11px;box-sizing:border-box;font-size:16px}
 .save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px;cursor:pointer}
 table{width:100%;border-collapse:collapse;background:white}
 th{background:#0a4d0a;color:white;padding:10px 4px;font-size:14px}
 td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
-.act button{padding:6px 10px;margin:2px;border:none;border-radius:7px;font-weight:900}
+.act button{padding:6px 10px;margin:2px;border:none;border-radius:7px;font-weight:900;cursor:pointer}
 .edit{background:#ffc107}.del{background:#eee;border:1px solid #ccc!important}
 .hidden{display:none!important}
 .back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;text-decoration:none;color:black;font-weight:900;box-shadow:0 2px 6px #0003;z-index:10}
@@ -41,32 +41,43 @@ let db=[],role=localStorage.getItem("role"),editIndex=-1;
 if(role==="mt"){document.getElementById("addBox").classList.add("hidden");document.getElementById("actHead").classList.add("hidden");}
 
 async function loadData(){
- document.getElementById("saveBtn").innerText="লোড হচ্ছে...";
+ let btn=document.getElementById("saveBtn");
+ btn.innerText="লোড হচ্ছে...";
  try{
    let res = await fetch(SHEET_URL);
    db = await res.json();
    render();
  }catch(e){
-   console.log(e);
    db=JSON.parse(localStorage.getItem("suty")||"[]");
    render();
  }
- document.getElementById("saveBtn").innerText="SAVE";
+ btn.innerText="SAVE";
 }
 
 async function saveData(){
- let S=document.getElementById("s").value.trim(),P=document.getElementById("p").value.trim(),N=document.getElementById("n").value.trim(),D=document.getElementById("d").value;
+ let S=document.getElementById("s").value.trim();
+ let P=document.getElementById("p").value.trim();
+ let N=document.getElementById("n").value.trim();
+ let D=document.getElementById("d").value;
  if(!S||!N||!D) return alert("সেনা নং, নাম, তারিখ পূরণ করুন");
  let obj={S,P,N,D};
- document.getElementById("saveBtn").innerText="SAVE হচ্ছে...";
- // Edit হলে পুরাতন ডিলিট করে নতুন এড হবে
+ let btn=document.getElementById("saveBtn");
+ btn.innerText="SAVE হচ্ছে...";
  try{
    await fetch(SHEET_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(obj)});
    alert("✅ Sheet এ Save হয়েছে!");
-   document.getElementById("s").value="";document.getElementById("p").value="";document.getElementById("n").value="";document.getElementById("d").value="";
+   document.getElementById("s").value="";
+   document.getElementById("p").value="";
+   document.getElementById("n").value="";
+   document.getElementById("d").value="";
+   btn.innerText="SAVE";
    editIndex=-1;
+   btn.style.background="#1db954";
    setTimeout(loadData,1200);
- }catch(err){alert("Sheet সমস্যা"); document.getElementById("saveBtn").innerText="SAVE";}
+ }catch(err){
+   btn.innerText="SAVE";
+   alert("Sheet সমস্যা");
+ }
 }
 
 function render(){
@@ -78,8 +89,7 @@ function render(){
  });
 }
 function editRow(i){let r=db[i];s.value=r.S;p.value=r.P;n.value=r.N;d.value=r.D;editIndex=i;saveBtn.innerText="UPDATE করুন";saveBtn.style.background="#ffc107";scrollTo(0,0);}
-function delRow(i){if(confirm("Sheet থেকে ডিলিট করতে হলে Sheet এ গিয়ে ডিলিট করতে হবে। এখন ফোন থেকে মুছবে?")){db.splice(i,1);render();}}
-
+function delRow(i){if(confirm("Sheet থেকে ডিলিট করতে হলে Sheet এ গিয়ে ডিলিট করতে হবে।")){}}
 loadData();
 </script>
 </body>
