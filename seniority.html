@@ -1,13 +1,97 @@
-<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Seniority</title>
-<style>body{margin:0;background:#f1f3f6;font-family:Arial}.h{text-align:center;background:white;padding:16px}.h h1{margin:0;font-size:22px}.h h2{color:green}.pr{background:blue;color:white;padding:10px 22px;border:none;border-radius:10px;font-weight:900}.b{background:white;margin:12px;padding:12px;border-radius:12px}.i{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:8px;box-sizing:border-box}.sv{width:100%;background:#1db954;border:none;padding:12px;border-radius:10px;font-weight:900}table{width:100%;border-collapse:collapse;background:white}th{background:#0a6b2e;color:white;padding:6px}td{border:1px solid #ddd;padding:6px;text-align:center;font-size:13px}.hd{display:none!important}</style>
-</head><body>
-<div class="h"><h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1><h2>এমটি প্লাটুন ৪ বীর</h2><button class="pr" onclick="window.print()">🖨️ প্রিন্ট</button></div>
-<div id="ab" class="b"><input id="s" class="i" placeholder="সেনা নং"><input id="p" class="i" placeholder="পদবি"><input id="n" class="i" placeholder="নাম"><input id="d" class="i" type="date"><button class="sv" onclick="sv()">SAVE</button></div>
-<table><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="ah">একশন</th></tr><tbody id="tb"></tbody></table>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seniority - MT 4 BIR</title>
+<style>
+body{margin:0;background:#eef2f7;font-family:Arial}
+.head{background:white;text-align:center;padding:16px}
+.head h1{margin:0;font-size:22px}
+.head h2{color:#0a7e07;margin:6px 0}
+.print{background:#1a4dff;color:white;border:none;padding:10px 28px;border-radius:12px;font-weight:900;font-size:16px}
+.box{background:white;margin:12px;padding:12px;border-radius:16px}
+.inp{width:100%;padding:13px;border:1px solid #ccc;border-radius:12px;margin-bottom:10px;box-sizing:border-box;font-size:16px}
+.save{width:100%;background:#1db954;border:none;padding:14px;border-radius:12px;font-weight:900;font-size:18px}
+table{width:100%;border-collapse:collapse;background:white}
+th{background:#0a4d0a;color:white;padding:8px 4px;font-size:14px}
+td{border:1px solid #ddd;padding:7px 4px;text-align:center;font-size:13px}
+.act button{padding:5px 9px;margin:2px;border:none;border-radius:6px;font-weight:900;cursor:pointer}
+.edit{background:#ffc107}.del{background:#eee;border:1px solid #ccc!important}
+.hidden{display:none!important}
+.back{position:fixed;top:10px;left:10px;background:white;padding:6px 12px;border-radius:20px;box-shadow:0 2px 6px #0002;text-decoration:none;color:black;font-weight:900}
+</style>
+</head>
+<body>
+<a class="back" href="dashboard.html">← Back</a>
+<div class="head"><h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1><h2>এমটি প্লাটুন ৪ বীর</h2><button class="print" onclick="window.print()">🖨️ প্রিন্ট</button></div>
+<div id="addBox" class="box">
+<input id="s" class="inp" placeholder="সেনা নং">
+<input id="p" class="inp" placeholder="পদবি (যেমন: সৈনিক)">
+<input id="n" class="inp" placeholder="নাম">
+<input id="d" class="inp" type="date">
+<button id="saveBtn" class="save" onclick="saveData()">SAVE</button>
+</div>
+<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="actHead">একশন</th></tr></thead><tbody id="tb"></tbody></table>
+
 <script>
-let db=JSON.parse(localStorage.getItem("suty")||"[]"); let role=localStorage.getItem("role");
-if(role==="mt"){document.getElementById("ab").classList.add("hd");document.getElementById("ah").classList.add("hd");}
-function sv(){let S=s.value,P=p.value,N=n.value,D=d.value;if(!S||!N||!D)return alert("পূরণ করুন");db.push({S,P,N,D});localStorage.setItem("suty",JSON.stringify(db));render();}
-function render(){tb.innerHTML="";db.sort((a,b)=>new Date(a.D)-new Date(b.D));db.forEach((r,i)=>{let dy=Math.floor((new Date()-new Date(r.D))/86400000);tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${dy} দিন</td><td class="${role==='mt'?'hd':''}"><button onclick="dl(${i})">Del</button></td></tr>`});}
-function dl(i){db.splice(i,1);localStorage.setItem("suty",JSON.stringify(db));render();}render();
-</script></body></html>
+let db = JSON.parse(localStorage.getItem("suty")||"[]");
+let role = localStorage.getItem("role");
+let editIndex = -1;
+
+if(role==="mt"){
+  document.getElementById("addBox").classList.add("hidden");
+  document.getElementById("actHead").classList.add("hidden");
+}
+
+function saveData(){
+  let S=s.value.trim(), P=p.value.trim(), N=n.value.trim(), D=d.value;
+  if(!S||!N||!D) return alert("সব পূরণ করুন");
+  if(editIndex>=0){
+    db[editIndex]={S,P,N,D};
+    editIndex=-1;
+    saveBtn.innerText="SAVE";
+    saveBtn.style.background="#1db954";
+  }else{
+    db.push({S,P,N,D});
+  }
+  localStorage.setItem("suty",JSON.stringify(db));
+  s.value=p.value=n.value=d.value="";
+  render();
+}
+
+function render(){
+  tb.innerHTML="";
+  // তারিখ অনুযায়ী অটো সর্ট - পুরাতন তারিখ আগে = বেশি সিনিয়র
+  db.sort((a,b)=> new Date(a.D) - new Date(b.D));
+  db.forEach((r,i)=>{
+    let diff=Math.floor((new Date()-new Date(r.D))/(1000*60*60*24));
+    if(diff<0) diff=0;
+    tb.innerHTML+=`<tr>
+      <td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${diff} দিন</td>
+      <td class="act ${role==='mt'?'hidden':''}">
+        <button class="edit" onclick="editRow(${i})">Edit</button>
+        <button class="del" onclick="delRow(${i})">Del</button>
+      </td></tr>`;
+  });
+}
+
+function editRow(i){
+  let r=db[i];
+  s.value=r.S; p.value=r.P; n.value=r.N; d.value=r.D;
+  editIndex=i;
+  saveBtn.innerText="UPDATE করুন";
+  saveBtn.style.background="#ffc107";
+  window.scrollTo(0,0);
+}
+
+function delRow(i){
+  if(confirm("ডিলিট করবে?")){
+    db.splice(i,1);
+    localStorage.setItem("suty",JSON.stringify(db));
+    render();
+  }
+}
+render();
+</script>
+</body>
+</html>
