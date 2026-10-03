@@ -3,28 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>যানবাহনের মেইক এবং মডেল - ৪ বীর</title>
+<title>MOBILE NAMIO TALIKA - MT PLATOON 4 BIR</title>
 <style>
 body{margin:0;font-family:'SolaimanLipi',Arial;background:#f5f5f5}
 .dashboard-header{background:green;color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
 .dashboard-header h1{margin:0;font-size:18px}
 .logout{background:red;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
-.container{padding:20px;max-width:1300px;margin:0 auto}
+.container{padding:20px;max-width:1200px;margin:0 auto}
 input,select{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:10px;box-sizing:border-box;font-size:16px;font-family:'SolaimanLipi',Arial}
 .btn-add{width:100%;padding:15px;background:green;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer}
-.table-title{text-align:center;font-size:22px;font-weight:bold;margin:15px 0 5px;color:#333;text-decoration:underline}
-.table-sub{text-align:center;font-size:18px;font-weight:bold;margin:0 0 15px;color:#333;text-decoration:underline}
+.table-title{text-align:center;font-size:22px;font-weight:bold;margin:15px 0 5px;color:#333}
+.table-sub{text-align:center;font-size:18px;font-weight:bold;margin:0 0 15px;color:green}
 .btn-print{background:blue;color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:15px auto;display:block;font-size:16px}
-table{width:100%;border-collapse:collapse;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.1);font-size:13px}
-th{background:green;color:white;padding:10px;text-align:center;border:1px solid #000;font-weight:bold}
-td{padding:8px;text-align:center;border:1px solid #000;font-family:'SolaimanLipi',Arial}
+table{width:100%;border-collapse:collapse;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.1);font-size:14px}
+th{background:green;color:white;padding:10px;text-align:center;border:1px solid #ccc}
+td{padding:8px;text-align:center;border:1px solid #ddd;font-family:'SolaimanLipi',Arial}
 .btn-delete{background:red;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px;font-size:12px}
 .btn-edit{background:orange;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px;font-size:12px}
 .disabled{opacity:0.5;pointer-events:none}
 .print-footer{position:fixed;bottom:10px;left:10px;font-size:14px;font-weight:bold;display:none}
+a{color:blue;text-decoration:none}
 
+/* Print এর জন্য */
 @media print {
-.dashboard-header,.btn-print,.btn-add,input,select,.logout,#adminControls,.btn-edit,.btn-delete{display:none!important}
+.dashboard-header,
+.btn-print,
+.btn-add,
+input,
+select,
+.logout,
+#adminControls,
+.btn-edit,
+.btn-delete
+{display:none!important}
+
 .print-footer{display:block}
 body{background:white}
 table{box-shadow:none}
@@ -33,38 +45,39 @@ table{box-shadow:none}
 <body>
 
 <div class="dashboard-header">
-<h1>MT PLATOON 4 BIR - VEHICLE UPDATE</h1>
+<h1>MT PLATOON 4 BIR - MOBILE NAMIO TALIKA</h1>
 <button class="logout" onclick="goBack()">Back</button>
 </div>
 
 <div class="container">
 <div id="adminControls">
-<input type="text" id="baNo" placeholder="বিএ নং">
-<input type="text" id="model" placeholder="মডেল ও নামমালা">
-<select id="class">
-<option value="">বর্তমান শ্রেনী বিন্যাস</option>
-<option>১ম শ্রেনী ক</option>
-<option>১ম শ্রেনী খ</option>
-<option>২য় শ্রেনী</option>
+<input type="text" id="senaNo" placeholder="সেনা নং">
+<select id="podobi">
+<option value="">পদবি সিলেক্ট করুন</option>
+<option>সৈনিক</option>
+<option>ল্যান্স কর্পোরাল</option>
+<option>কর্পোরাল</option>
+<option>সার্জেন্ট</option>
+<option>কর্পোরাল (টিবিভি)</option>
+<option>সৈনিক (টিবিভি)</option>
 </select>
-<input type="date" id="issueDate" placeholder="ইস্যু তারিখ">
-<input type="text" id="remarks" placeholder="মন্তব্য">
+<input type="text" id="name" placeholder="নাম লিখুন">
+<input type="text" id="mobile" placeholder="মোবাইল নাম্বার 01XXXXXXXXX">
 <button class="btn-add" onclick="addData()">Add করুন</button>
 </div>
 
-<div class="table-title">যানবাহনের মেইক এবং মডেল</div>
-<div class="table-sub">ইউনিটঃ ৪ বীর</div>
+<div class="table-title">এমটি প্লাটুনের নামীয় তালিকা</div>
+<div class="table-sub">৪ বীর (এমটি)</div>
 
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 
 <table>
 <thead><tr>
 <th>ক্র/নং</th>
-<th>বিএ নং</th>
-<th>মডেল ও নামমালা</th>
-<th>বর্তমান শ্রেনী<br>বিন্যাস</th>
-<th>ইস্যু তারিখ</th>
-<th>মন্তব্য</th>
+<th>সেনা নং</th>
+<th>পদবী</th>
+<th>নাম</th>
+<th>মোবাইল নম্বর</th>
 <th id="actionHead">একশন</th>
 </tr></thead>
 <tbody id="dataTable"></tbody>
@@ -76,61 +89,49 @@ table{box-shadow:none}
 
 <script>
 let selectedRole = localStorage.getItem('role');
-let data = JSON.parse(localStorage.getItem('vehicleData')) || [];
+let data = JSON.parse(localStorage.getItem('namioData')) || [];
 let editIndex = -1;
 
 function goBack(){
     window.location.href = 'index.html';
 }
 
-function formatDate(dateStr){
-    if(!dateStr) return '';
-    let d = new Date(dateStr);
-    let day = String(d.getDate()).padStart(2,'0');
-    let month = String(d.getMonth()+1).padStart(2,'0');
-    let year = String(d.getFullYear()).slice(-2);
-    return `${day}-${month}-${year}`;
-}
-
 function addData(){
     if(selectedRole!== 'clk'){ alert('আপনার Permission নাই'); return; }
-    let baNo = document.getElementById('baNo').value;
-    let model = document.getElementById('model').value;
-    let cls = document.getElementById('class').value;
-    let issueDate = document.getElementById('issueDate').value;
-    let remarks = document.getElementById('remarks').value;
-    if(!baNo ||!model ||!cls){ alert('বিএ নং, মডেল, শ্রেনী পূরণ করুন'); return; }
+    let sena = document.getElementById('senaNo').value;
+    let podo = document.getElementById('podobi').value;
+    let name = document.getElementById('name').value;
+    let mobile = document.getElementById('mobile').value;
+    if(!sena ||!podo ||!name ||!mobile){ alert('সব ঘর পূরণ করুন'); return; }
 
     if(editIndex === -1){
-        data.push({baNo, model, cls, issueDate, remarks});
+        data.push({sena, podo, name, mobile});
     } else {
-        data[editIndex] = {baNo, model, cls, issueDate, remarks};
+        data[editIndex] = {sena, podo, name, mobile};
         editIndex = -1;
         document.querySelector('.btn-add').innerText = 'Add করুন';
     }
 
-    localStorage.setItem('vehicleData', JSON.stringify(data));
+    localStorage.setItem('namioData', JSON.stringify(data));
     clearForm();
     loadData();
 }
 
 function clearForm(){
-    document.getElementById('baNo').value = '';
-    document.getElementById('model').value = '';
-    document.getElementById('class').value = '';
-    document.getElementById('issueDate').value = '';
-    document.getElementById('remarks').value = '';
+    document.getElementById('senaNo').value = '';
+    document.getElementById('podobi').value = '';
+    document.getElementById('name').value = '';
+    document.getElementById('mobile').value = '';
 }
 
 function editData(index){
     if(selectedRole!== 'clk'){ alert('আপনার Permission নাই'); return; }
     editIndex = index;
     let item = data[index];
-    document.getElementById('baNo').value = item.baNo;
-    document.getElementById('model').value = item.model;
-    document.getElementById('class').value = item.cls;
-    document.getElementById('issueDate').value = item.issueDate;
-    document.getElementById('remarks').value = item.remarks;
+    document.getElementById('senaNo').value = item.sena;
+    document.getElementById('podobi').value = item.podo;
+    document.getElementById('name').value = item.name;
+    document.getElementById('mobile').value = item.mobile;
     document.querySelector('.btn-add').innerText = 'Update করুন';
     window.scrollTo(0,0);
 }
@@ -139,7 +140,7 @@ function deleteData(index){
     if(selectedRole!== 'clk'){ alert('আপনার Permission নাই'); return; }
     if(confirm('Delete করবেন?')){
         data.splice(index,1);
-        localStorage.setItem('vehicleData', JSON.stringify(data));
+        localStorage.setItem('namioData', JSON.stringify(data));
         loadData();
     }
 }
@@ -157,11 +158,10 @@ function loadData(){
         }
         tbody.innerHTML += `<tr>
         <td>${index + 1}</td>
-        <td>${item.baNo}</td>
-        <td style="text-align:left">${item.model}</td>
-        <td>${item.cls}</td>
-        <td>${formatDate(item.issueDate)}</td>
-        <td>${item.remarks}</td>
+        <td>${item.sena}</td>
+        <td>${item.podo}</td>
+        <td>${item.name}</td>
+        <td><a href="tel:${item.mobile}">${item.mobile}</a></td>
         <td>${actionBtn}</td>
         </tr>`;
     });
