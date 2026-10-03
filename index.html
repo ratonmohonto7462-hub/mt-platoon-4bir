@@ -1,18 +1,65 @@
 <!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT 4 BIR Login</title>
-<style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#0b2e0b;font-family:Arial} .box{background:white;padding:22px;border-radius:18px;width:90%;max-width:360px;text-align:center} select,input{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box} button{width:100%;padding:12px;background:#0a6b2e;color:white;border:none;border-radius:10px;font-weight:900}</style>
-</head><body><div class="box">
-<h2>MT PLATOON 4 BIR</h2>
-<select id="role"><option value="mt">MT PLATOON 4 BIR</option><option value="clk">MT CLK Admin</option></select>
-<input id="pass" type="password" placeholder="Password দিন">
-<button onclick="login()">LOGIN</button>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MT PLATOON 4 BIR</title>
+<style>
+body{margin:0;min-height:100vh;background:#eef2f5;display:flex;align-items:center;justify-content:center;font-family:Arial}
+.box{width:90%;max-width:380px;background:white;border-radius:28px;overflow:hidden;box-shadow:0 10px 30px #0002;text-align:center}
+.top{background:#0a7e07;color:white;padding:22px 10px}
+.top h1{margin:0;font-size:26px;font-weight:900;letter-spacing:1px}
+.top p{margin:6px 0 0 0;letter-spacing:2px;font-size:13px;opacity:.9}
+.body{padding:22px 18px}
+.title{font-size:22px;font-weight:900;margin:10px 0 16px 0}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rbtn{padding:16px 8px;border-radius:16px;border:2px solid #ddd;font-weight:900;font-size:16px;cursor:pointer;background:#f3f3f3;transition:.2s}
+.rbtn.active{background:#7d0000;color:white;border-color:#7d0000}
+.label{margin:20px 0 8px 0;font-weight:900;font-size:16px}
+.inp{width:100%;padding:14px;border:2px solid #d0d7e2;border-radius:14px;background:#eaf2ff;font-size:18px;box-sizing:border-box;outline:none;text-align:center}
+.login{width:100%;margin-top:18px;padding:14px;background:#0a7e07;color:white;border:none;border-radius:14px;font-size:20px;font-weight:900;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="top">
+<h1>MT PLATOON 4 BIR</h1>
+<p>AUTHORISED ACCESS ONLY</p>
+</div>
+<div class="body">
+<div class="title">ROLE SELECT করুন</div>
+<div class="roles">
+<button id="btn-mt" class="rbtn active" onclick="setRole('mt')">MT PLATOON<br>4 BIR</button>
+<button id="btn-clk" class="rbtn" onclick="setRole('clk')">MT CLK<br>Admin</button>
+</div>
+<div class="label">PASSWORD</div>
+<input id="pass" class="inp" type="password" placeholder="••••••">
+<button class="login" onclick="doLogin()">LOGIN</button>
+</div>
 </div>
 <script>
-function login(){
-let r=document.getElementById("role").value;
-let p=document.getElementById("pass").value;
-if(r==="mt" && p==="mt4bir"){localStorage.setItem("role","mt"); location.href="dashboard.html"; return;}
-if(r==="clk" && p==="admin7462"){localStorage.setItem("role","clk"); location.href="dashboard.html"; return;}
-alert("ভুল পাসওয়ার্ড!");
+let selectedRole = "mt";
+function setRole(r){
+ selectedRole = r;
+ document.getElementById("btn-mt").classList.remove("active");
+ document.getElementById("btn-clk").classList.remove("active");
+ if(r==="mt") document.getElementById("btn-mt").classList.add("active");
+ else document.getElementById("btn-clk").classList.add("active");
 }
-</script></body></html>
+function doLogin(){
+ let p = document.getElementById("pass").value;
+ if(selectedRole==="mt" && p==="mt4bir"){
+   localStorage.setItem("role","mt");
+   location.href="dashboard.html";
+   return;
+ }
+ if(selectedRole==="clk" && p==="admin7462"){
+   localStorage.setItem("role","clk");
+   location.href="dashboard.html";
+   return;
+ }
+ alert("ভুল পাসওয়ার্ড!");
+}
+</script>
+</body>
+</html>
