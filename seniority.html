@@ -2,48 +2,81 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MT 4 BIR SUTY SENIORITY - Online</title>
+<title>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</title>
 <style>
- body{font-family:Arial;background:#0f172a;color:#fff;padding:10px}
- .card{background:#1e293b;padding:12px;border-radius:10px;margin-bottom:10px}
- input,select,button{width:100%;padding:10px;margin:5px 0;border-radius:6px;border:none}
- button{background:#22c55e;color:#000;font-weight:bold}
- table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff;color:#000}
- th,td{border:1px solid #ccc;padding:6px;font-size:12px;text-align:center}
- th{background:#0f172a;color:#fff}
- .online{color:#22c55e;font-weight:bold}
+ body{font-family:Arial;background:#f5f5f5;margin:0;padding:10px}
+.title{text-align:center;margin:15px 0}
+.title h1{font-size:26px;margin:0;line-height:1.2}
+.title h2{color:#15803d;font-size:20px;margin:5px 0}
+.role-box{background:#1e293b;color:#fff;padding:12px;border-radius:10px;text-align:center}
+.role-box button{width:48%;padding:12px;border:none;border-radius:8px;font-weight:bold;margin:2px;cursor:pointer}
+.form-box{background:#fff;padding:12px;border-radius:10px;margin-top:10px}
+.form-box input{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box}
+.print-btn{background:#0000ff;color:#fff;padding:12px 30px;border:none;border-radius:10px;font-size:18px;font-weight:bold;display:block;margin:15px auto;cursor:pointer}
+ table{width:100%;border-collapse:collapse;background:#fff}
+ th{background:#15803d;color:#fff;padding:10px 4px;font-size:14px;border:1px solid #0f6d2f}
+ td{border:1px solid #ccc;padding:8px 4px;text-align:center;font-size:13px}
+ @media print{.no-print{display:none}}
 </style>
 </head>
 <body>
-<h2>MT 4 BIR - SUTY SENIORITY <span class="online">● ONLINE SHEET</span></h2>
-<div class="card">
-<input id="soinik" placeholder="সৈনিক নং">
-<input id="podobi" placeholder="পদবী">
-<input id="nam" placeholder="নাম">
-<input id="suty" type="date">
-<select id="bodli"><option>বদলী হ্যাঁ</option><option>বদলী না</option></select>
-<input id="jogdan" type="date">
-<button onclick="save()">SAVE TO SHEET</button>
-<button onclick="load()" style="background:#38bdf8">RELOAD</button>
+
+<div class="title">
+<h1>সিনিয়ারিটি অনুযায়ী নামীয়<br>তালিকা</h1>
+<h2>এমটি প্লাটুন ৪ বীর</h2>
+<button class="print-btn no-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 </div>
-<table><thead><tr><th>সৈনিক</th><th>পদবী</th><th>নাম</th><th>সুটি</th><th>বদলী</th><th>যোগদান</th></tr></thead><tbody id="tb"></tbody></table>
+
+<div class="role-box no-print">
+<button style="background:#22c55e" onclick="setRole('platoon')">এমটি প্লাটুন (শুধু দেখবে)</button>
+<button style="background:#facc15" onclick="askClerk()">এমটি ক্লার্ক (এডিট করবে)</button>
+<p id="roleText" style="margin-top:8px;color:#38bdf8">বর্তমান: প্লাটুন - View Mode | অটো সিনিয়রিটি চালু</p>
+</div>
+
+<div id="formBox" class="form-box no-print" style="display:none">
+<input id="soinik" placeholder="সেনা নং">
+<input id="podobi" placeholder="পদবি">
+<input id="nam" placeholder="নাম">
+<label style="font-size:13px">যোগদানের তারিখ</label><input id="jogdan" type="date">
+<input type="hidden" id="editRow">
+<button style="background:#22c55e;padding:12px;width:100%;border:none;border-radius:8px;font-weight:bold;cursor:pointer" onclick="save()" id="saveBtn">SAVE</button>
+</div>
+
+<table>
+<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th class="no-print">একশন</th></tr></thead>
+<tbody id="tb"></tbody>
+</table>
+
 <script>
-const URL="https://script.google.com/macros/s/AKfycby5H3t7wx8RgyUhQLGN2uk4KA4uM03JyiHW7lmiFEDm-7GyFMf6o2DFO6HLQhqEy1ibEQ/exec";
+const URL="https://script.google.com/macros/s/AKfycbyDMkXQ_D-vMfLOzgnYTurbj1N5PlaROgAjORIYXwirRg--9mENS9IzCxAi1UqR6Km1Fg/exec";
+let ROLE="platoon";
+const CLERK_PASS="MTclk123";
+
+function setRole(r){ ROLE=r; document.getElementById("formBox").style.display=r=="clerk"?"block":"none"; document.getElementById("roleText").innerText=r=="clerk"?"বর্তমান: এমটি ক্লার্ক - এডিট মোড | অটো সিনিয়রিটি চালু":"বর্তমান: এমটি প্লাটুন - View Mode | অটো সিনিয়রিটি চালু"; load(); }
+function askClerk(){ let p=prompt("পাসওয়ার্ড দাও ভাই:"); if(p==CLERK_PASS){setRole('clerk')}else{alert("ভুল পাসওয়ার্ড")} }
 function save(){
- let d={soinik:soinik.value,podobi:podobi.value,nam:nam.value,suty:suty.value,bodli:bodli.value,jogdan:jogdan.value};
- if(!d.soinik||!d.nam){alert("সৈনিক নং ও নাম লিখো ভাই");return;}
- fetch(URL,{method:"POST",body:JSON.stringify(d)}).then(r=>{alert("Sheet এ Save হইছে ভাই!");load();});
+ let d={soinik:soinik.value,podobi:podobi.value,nam:nam.value,suty:jogdan.value,jogdan:jogdan.value,bodli:""};
+ if(!d.soinik||!d.nam||!d.jogdan){alert("সব ঘর পূরণ করো ভাই");return;}
+ if(editRow.value){d.action="edit";d.row=editRow.value;}
+ fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify(d)}).then(()=>{alert("Save হইছে ভাই");editRow.value="";saveBtn.innerText="SAVE";load();});
 }
+function calcDays(s){return Math.floor((new Date()-new Date(s))/(1000*60*60*24));}
+function editData(enc){ if(ROLE!="clerk"){alert("View Only");return;} let o=JSON.parse(decodeURIComponent(enc)); soinik.value=o.soinik; podobi.value=o.podobi; nam.value=o.nam; jogdan.value=(o.jogdan||o.suty).split("T")[0]; editRow.value=o.row; saveBtn.innerText="UPDATE NOW"; window.scrollTo(0,0); }
+function del(row){ if(ROLE!="clerk"){alert("View Only");return;} if(!confirm("ডিলিট করবা?"))return; fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:row})}).then(()=>load()); }
 function load(){
- tb.innerHTML="<tr><td colspan=6>Loading...</td></tr>";
  fetch(URL).then(r=>r.json()).then(data=>{
+  data.sort((a,b)=> new Date(a.jogdan||a.suty)-new Date(b.jogdan||b.suty));
   tb.innerHTML="";
-  data.reverse().forEach(r=>{
-   tb.innerHTML+=`<tr><td>${r.soinik}</td><td>${r.podobi}</td><td>${r.nam}</td><td>${r.suty}</td><td>${r.bodli}</td><td>${r.jogdan}</td></tr>`;
+  data.forEach((r,i)=>{
+   let jd=(r.jogdan||r.suty).split("T")[0]; let mot=calcDays(jd);
+   let enc=encodeURIComponent(JSON.stringify(r));
+   let act=ROLE=="clerk"? `<button onclick="editData('${enc}')" style="background:#facc15;border:none;padding:4px 8px;border-radius:4px">Edit</button> <button onclick="del(${r.row})" style="background:#ef4444;color:#fff;border:none;padding:4px 8px;border-radius:4px">Del</button>` : `View Only`;
+   tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.soinik}</td><td>${r.podobi}</td><td>${r.nam}</td><td>${jd}</td><td>${mot} দিন</td><td class="no-print">${act}</td></tr>`;
   });
  });
 }
 load();
+setInterval(load, 30000);
 </script>
 </body>
 </html>
