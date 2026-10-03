@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT PLATOON MOBILE NUMBER - 4 BIR</title>
+<style>
+body{margin:0;font-family:'SolaimanLipi',Arial,sans-serif;background:#eef2f5}
+.header{background:#0a5c0a;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.header h1{margin:0;font-size:16px}
+.back{background:#c0392b;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:bold;cursor:pointer}
+.container{padding:12px;max-width:900px;margin:0 auto}
+.box{background:white;padding:15px;border-radius:12px;box-shadow:0 2px 10px #0001;margin-bottom:15px}
+input,select{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:10px;font-size:16px;box-sizing:border-box}
+.btn-add{width:100%;padding:14px;background:#0a7e07;color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer}
+.btn-print{background:#1a56db;color:white;border:none;padding:10px 18px;border-radius:8px;font-weight:bold;cursor:pointer;margin:10px auto;display:block}
+table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px #0001}
+th{background:#0a7e07;color:white;padding:10px;font-size:14px}
+td{padding:8px;border-bottom:1px solid #eee;font-size:14px;text-align:center}
+.btn-e{background:orange;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer}
+.btn-d{background:red;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer}
+a{color:#0a7e07;font-weight:bold;text-decoration:none}
+.search{margin:10px 0}
+.title{text-align:center;font-weight:900;font-size:20px;margin:15px 0 2px}
+.sub{text-align:center;color:#0a7e07;font-weight:bold;margin-bottom:10px}
+@media print{.header,.box,.btn-print,.search{display:none} body{background:white}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>MT PLATOON 4 BIR - MOBILE LIST</h1>
+<button class="back" onclick="location.href='dashboard.html'">BACK</button>
+</div>
+
+<div class="container">
+<div class="box" id="adminBox">
+<input type="text" id="senaNo" placeholder="সেনা নং - যেমন: 1234567">
+<select id="podobi">
+<option value="">পদবি সিলেক্ট করুন</option>
+<option>সৈনিক</option>
+<option>ল্যান্স কর্পোরাল</option>
+<option>কর্পোরাল</option>
+<option>সার্জেন্ট</option>
+<option>ওয়ারেন্ট অফিসার</option>
+</select>
+<input type="text" id="name" placeholder="নাম লিখুন">
+<input type="text" id="mobile" placeholder="মোবাইল 01XXXXXXXXX">
+<button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button>
+</div>
+
+<div class="title">এমটি প্লাটুনের নামীয় তালিকা</div>
+<div class="sub">৪ বীর (এমটি) - কন্টাক্ট লিস্ট</div>
+
+<input type="text" id="search" class="search" placeholder="🔍 নাম / সেনা নং / মোবাইল দিয়ে খুঁজুন..." onkeyup="loadData()">
+
+<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+
+<table>
+<thead><tr><th>ক্রঃ</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>মোবাইল</th><th>একশন</th></tr></thead>
+<tbody id="dataTable"></tbody>
+</table>
+</div>
+
+<script>
+let role = localStorage.getItem('role') || 'mt';
+let data = JSON.parse(localStorage.getItem('mt_mobile_data')) || [];
+let editIndex = -1;
+
+function addData(){
+  if(role!== 'clk'){ alert('আপনার Permission নাই! শুধু CLK Add করতে পারবে।'); return; }
+  let sena = document.getElementById('senaNo').value.trim();
+  let podo = document.getElementById('podobi').value;
+  let name = document.getElementById('name').value.trim();
+  let mobile = document.getElementById('mobile').value.trim();
+  if(!sena ||!podo ||!name ||!mobile){ alert('সব ঘর পূরণ করুন'); return; }
+
+  if(editIndex === -1) data.push({sena, podo, name, mobile});
+  else { data[editIndex] = {sena, podo, name, mobile}; editIndex = -1; document.getElementById('mainBtn').innerText='Add করুন'; }
+
+  localStorage.setItem('mt_mobile_data', JSON.stringify(data));
+  clearForm(); loadData();
+}
+function clearForm(){ document.getElementById('senaNo').value=''; document.getElementById('podobi').value=''; document.getElementById('name').value=''; document.getElementById('mobile').value=''; }
+function editData(i){ if(role!== 'clk'){ alert('Permission নাই'); return; } editIndex=i; document.getElementById('senaNo').value=data[i].sena; document.getElementById('podobi').value=data[i].podo; document.getElementById('name').value=data[i].name; document.getElementById('mobile').value=data[i].mobile; document.getElementById('mainBtn').innerText='Update করুন'; window.scrollTo(0,0); }
+function deleteData(i){ if(role!== 'clk'){ alert('Permission নাই'); return; } if(confirm('Delete করবেন?')){ data.splice(i,1); localStorage.setItem('mt_mobile_data', JSON.stringify(data)); loadData(); } }
+
+function loadData(){
+  let q = document.getElementById('search').value.toLowerCase();
+  let tbody = document.getElementById('dataTable'); tbody.innerHTML='';
+  let filtered = data.filter(d => d.sena.toLowerCase().includes(q) || d.name.toLowerCase().includes(q) || d.mobile.includes(q));
+
+  if(filtered.length==0){ tbody.innerHTML='<tr><td colspan="6">কোনো ডাটা নাই</td></tr>'; return; }
+
+  filtered.forEach((item, idx)=>{
+    let realIndex = data.indexOf(item);
+    let btns = (role==='clk')? `<button class="btn-e" onclick="editData(${realIndex})">Edit</button> <button class="btn-d" onclick="deleteData(${realIndex})">Del</button>` : 'View';
+    tbody.innerHTML += `<tr><td>${idx+1}</td><td>${item.sena}</td><td>${item.podo}</td><td>${item.name}</td><td><a href="tel:${item.mobile}">${item.mobile}</a></td><td>${btns}</td></tr>`;
+  });
+
+  if(role!== 'clk') document.getElementById('adminBox').style.display='none';
+}
+loadData();
+</script>
+</body>
+</html>
