@@ -1,3 +1,70 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MT 4 BIR Seniority</title>
+<style>
+body{margin:0;background:#eef2f7;font-family:Arial}
+.head{background:white;text-align:center;padding:18px 12px}
+.head h1{margin:0;font-size:23px;font-weight:900}
+.head h2{color:#0a7e07;margin:8px 0 12px 0}
+.print{background:#1a4dff;color:white;border:none;padding:11px 34px;border-radius:12px;font-weight:900}
+.box{background:white;margin:12px;padding:14px;border-radius:18px}
+.inp{width:100%;padding:14px;border:1.5px solid #ccc;border-radius:12px;margin-bottom:11px;box-sizing:border-box;font-size:16px}
+.save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px}
+table{width:100%;border-collapse:collapse;background:white}
+th{background:#0a4d0a;color:white;padding:10px 4px;font-size:14px}
+td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
+.act button{padding:6px 10px;margin:2px;border:none;border-radius:7px;font-weight:900}
+.edit{background:#ffc107}.del{background:#eee;border:1px solid #ccc!important}
+.hidden{display:none!important}
+.back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;text-decoration:none;color:black;font-weight:900;box-shadow:0 2px 6px #0003}
+@media print{.back,.print,.box,#addBox,.act,#actHead{display:none!important} body{background:white}}
+</style>
+</head>
+<body>
+<a class="back" href="dashboard.html">← Back</a>
+<div class="head"><h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1><h2>এমটি প্লাটুন ৪ বীর</h2><button class="print" onclick="window.print()">🖨️ প্রিন্ট</button></div>
+<div id="addBox" class="box">
+<input id="s" class="inp" placeholder="সেনা নং"><input id="p" class="inp" placeholder="পদবি"><input id="n" class="inp" placeholder="নাম"><input id="d" class="inp" type="date">
+<button id="saveBtn" class="save" onclick="saveData()">SAVE হচ্ছে...</button>
+</div>
+<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="actHead">একশন</th></tr></thead><tbody id="tb"></tbody></table>
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycby319oZL5vMTKKKHVWjZ42PEBJJmFMOUoBsH5EqQX3NJW_ahBJVyo4n_DnH_rs90Xa7-Q/exec";
+const SHEET_URL = "এখানে_তোমার_Google_Apps_Script_এর_লিংক_বসাও";
+
+let db=[],role=localStorage.getItem("role"),editIndex=-1;
+if(role==="mt"){document.getElementById("addBox").classList.add("hidden");document.getElementById("actHead").classList.add("hidden");}
+
+async function loadData(){
+ saveBtn.innerText="লোড হচ্ছে...";
+ try{
+   let res = await fetch(SHEET_URL);
+   db = await res.json();
+   render();
+ }catch(e){ console.log("Sheet load fail, local backup"); db=JSON.parse(localStorage.getItem("suty")||"[]"); render(); }
+ saveBtn.innerText="SAVE";
+}
+
+function saveData(){
+ let S=s.value.trim(),P=p.value.trim(),N=n.value.trim(),D=d.value;
+ if(!S||!N||!D) return alert("পূরণ করুন");
+ let obj={S,P,N,D};
+ saveBtn.innerText="SAVE হচ্ছে...";
+ fetch(SHEET_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(obj)}).then(()=>{
+   alert("Sheet এ Save হয়েছে!");
+   s.value=p.value=n.value=d.value="";
+   loadData();
+ }).catch(()=>{alert("Sheet এ সমস্যা, ফোনে Save হলো"); db.push(obj); localStorage.setItem("suty",JSON.stringify(db)); render();});
+}
+
+function render(){
+ tb.innerHTML=""; db.sort((a,b)=>new Date(a.D)-new Date(b.D));
+ db.forEach((r,i)=>{let diff=Math.floor((new Date()-new Date(r.D))/86400000);if(diff<0)diff=0; tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${diff} দিন</td><td class="act ${role==='mt'?'hidden':''}"><button class="edit" onclick="editRow(${i})">Edit</button><button class="del" onclick="delRow(${i})">Del</button></td></tr>`;});
+}
+function editRow(i){let r=db[i];s.value=r.S;p.value=r.P;n.value=r.N;d.value=r.D;editIndex=i;saveBtn.innerText="UPDATE করুন";saveBtn.style.background="#ffc107";scrollTo(0,0);}
+function delRow(i){if(confirm("ডিলিট করবে?")){alert("ডিলিট করতে Sheet থেকে ডিলিট করতে হবে");}}
+loadData();
 </script>
+</body>
+</html>
