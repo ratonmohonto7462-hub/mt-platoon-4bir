@@ -6,7 +6,7 @@
 <style>
  body{font-family:Arial;background:#f5f5f5;margin:0;padding:10px}
 .title{text-align:center;margin:15px 0}
-.title h1{font-size:26px;margin:0;line-height:1.2}
+.title h1{font-size:22px;margin:0;line-height:1.2;white-space:nowrap} /* এক লাইনে হবে */
 .title h2{color:#15803d;font-size:20px;margin:5px 0}
 .role-box{background:#1e293b;color:#fff;padding:12px;border-radius:10px;text-align:center}
 .role-box button{width:48%;padding:12px;border:none;border-radius:8px;font-weight:bold;margin:2px;cursor:pointer}
@@ -22,7 +22,7 @@
 <body>
 
 <div class="title">
-<h1>সিনিয়ারিটি অনুযায়ী নামীয়<br>তালিকা</h1>
+<h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1>
 <h2>এমটি প্লাটুন ৪ বীর</h2>
 <button class="print-btn no-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 </div>
@@ -30,7 +30,7 @@
 <div class="role-box no-print">
 <button style="background:#22c55e" onclick="setRole('platoon')">এমটি প্লাটুন (শুধু দেখবে)</button>
 <button style="background:#facc15" onclick="askClerk()">এমটি ক্লার্ক (এডিট করবে)</button>
-<p id="roleText" style="margin-top:8px;color:#38bdf8">বর্তমান: প্লাটুন - View Mode | অটো সিনিয়রিটি চালু</p>
+<p id="roleText" style="display:none">বর্তমান: প্লাটুন - View Mode</p>
 </div>
 
 <div id="formBox" class="form-box no-print" style="display:none">
@@ -51,18 +51,18 @@
 const URL="https://script.google.com/macros/s/AKfycbyDMkXQ_D-vMfLOzgnYTurbj1N5PlaROgAjORIYXwirRg--9mENS9IzCxAi1UqR6Km1Fg/exec";
 let ROLE="platoon";
 const CLERK_PASS="MTclk123";
-
-function setRole(r){ ROLE=r; document.getElementById("formBox").style.display=r=="clerk"?"block":"none"; document.getElementById("roleText").innerText=r=="clerk"?"বর্তমান: এমটি ক্লার্ক - এডিট মোড | অটো সিনিয়রিটি চালু":"বর্তমান: এমটি প্লাটুন - View Mode | অটো সিনিয়রিটি চালু"; load(); }
-function askClerk(){ let p=prompt("পাসওয়ার্ড দাও ভাই:"); if(p==CLERK_PASS){setRole('clerk')}else{alert("ভুল পাসওয়ার্ড")} }
+function setRole(r){ ROLE=r; document.getElementById("formBox").style.display=r=="clerk"?"block":"none"; load(); }
+function askClerk(){ let p=prompt("পাসওয়ার্ড দাও দোস্ত:"); if(p==CLERK_PASS){setRole('clerk')}else{alert("ভুল পাসওয়ার্ড")} }
 function save(){
  let d={soinik:soinik.value,podobi:podobi.value,nam:nam.value,suty:jogdan.value,jogdan:jogdan.value,bodli:""};
- if(!d.soinik||!d.nam||!d.jogdan){alert("সব ঘর পূরণ করো ভাই");return;}
+ if(!d.soinik||!d.nam||!d.jogdan){alert("সব ঘর পূরণ করো");return;}
+ if(new Date(jogdan.value) > new Date()){ alert("ভবিষ্যতের তারিখ দেওয়া যাবে না দোস্ত!"); return; }
  if(editRow.value){d.action="edit";d.row=editRow.value;}
- fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify(d)}).then(()=>{alert("Save হইছে ভাই");editRow.value="";saveBtn.innerText="SAVE";load();});
+ fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify(d)}).then(()=>{alert("Save হইছে");editRow.value="";saveBtn.innerText="SAVE";load();});
 }
-function calcDays(s){return Math.floor((new Date()-new Date(s))/(1000*60*60*24));}
-function editData(enc){ if(ROLE!="clerk"){alert("View Only");return;} let o=JSON.parse(decodeURIComponent(enc)); soinik.value=o.soinik; podobi.value=o.podobi; nam.value=o.nam; jogdan.value=(o.jogdan||o.suty).split("T")[0]; editRow.value=o.row; saveBtn.innerText="UPDATE NOW"; window.scrollTo(0,0); }
-function del(row){ if(ROLE!="clerk"){alert("View Only");return;} if(!confirm("ডিলিট করবা?"))return; fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:row})}).then(()=>load()); }
+function calcDays(s){ let d=Math.floor((new Date()-new Date(s))/(1000*60*60*24)); return d<0?0:d; }
+function editData(enc){ if(ROLE!="clerk"){return;} let o=JSON.parse(decodeURIComponent(enc)); soinik.value=o.soinik; podobi.value=o.podobi; nam.value=o.nam; jogdan.value=(o.jogdan||o.suty).split("T")[0]; editRow.value=o.row; saveBtn.innerText="UPDATE NOW"; window.scrollTo(0,0); }
+function del(row){ if(ROLE!="clerk"){return;} if(!confirm("ডিলিট করবা?"))return; fetch(URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:row})}).then(()=>load()); }
 function load(){
  fetch(URL).then(r=>r.json()).then(data=>{
   data.sort((a,b)=> new Date(a.jogdan||a.suty)-new Date(b.jogdan||b.suty));
