@@ -9,41 +9,78 @@ body{margin:0;background:#eef2f7;font-family:Arial}
 .head h1{margin:0;font-size:23px;font-weight:900}
 .head h2{color:#0a7e07;margin:8px 0 12px 0}
 .print{background:#1a4dff;color:white;border:none;padding:11px 34px;border-radius:12px;font-weight:900;font-size:17px}
-.box{background:white;margin:12px;padding:14px;border-radius:18px}
+.box{background:white;margin:12px;padding:14px;border-radius:18px;box-shadow:0 2px 6px #0001}
 .inp{width:100%;padding:14px;border:1.5px solid #ccc;border-radius:12px;margin-bottom:11px;box-sizing:border-box;font-size:16px}
-.save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px}
+.save{width:100%;background:#1db954;border:none;padding:15px;border-radius:12px;font-weight:900;font-size:18px;cursor:pointer}
 table{width:100%;border-collapse:collapse;background:white}
 th{background:#0a4d0a;color:white;padding:10px 4px;font-size:14px}
 td{border:1px solid #ddd;padding:8px 4px;text-align:center;font-size:13px}
 .act button{padding:6px 10px;margin:2px;border:none;border-radius:7px;font-weight:900}
 .edit{background:#ffc107}.del{background:#eee;border:1px solid #ccc!important}
 .hidden{display:none!important}
-.back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;text-decoration:none;color:black;font-weight:900;box-shadow:0 2px 6px #0003}
-
-@media print{
- .back,.print,.box, #addBox,.act, #actHead{display:none!important; height:0!important; margin:0!important; padding:0!important; border:none!important;}
-  body{background:white!important; margin:0!important; padding:0!important;}
- .head{box-shadow:none!important; margin:0!important; padding:10px 0!important;}
-  table{margin-top:10px!important; width:100%!important;}
-}
+.back{position:fixed;top:10px;left:10px;background:white;padding:7px 13px;border-radius:20px;text-decoration:none;color:black;font-weight:900;box-shadow:0 2px 6px #0003;z-index:10}
+@media print{.back,.print,.box,#addBox,.act,#actHead{display:none!important} body{background:white!important} table{margin-top:10px!important}}
 </style>
 </head>
 <body>
 <a class="back" href="dashboard.html">← Back</a>
 <div class="head"><h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1><h2>এমটি প্লাটুন ৪ বীর</h2><button class="print" onclick="window.print()">🖨️ প্রিন্ট</button></div>
 <div id="addBox" class="box">
-<input id="s" class="inp" placeholder="সেনা নং"><input id="p" class="inp" placeholder="পদবি"><input id="n" class="inp" placeholder="নাম"><input id="d" class="inp" type="date">
+<input id="s" class="inp" placeholder="সেনা নং">
+<input id="p" class="inp" placeholder="পদবি">
+<input id="n" class="inp" placeholder="নাম">
+<input id="d" class="inp" type="date">
 <button id="saveBtn" class="save" onclick="saveData()">SAVE</button>
 </div>
 <table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="actHead">একশন</th></tr></thead><tbody id="tb"></tbody></table>
+
 <script>
-let db=JSON.parse(localStorage.getItem("suty")||"[]"),role=localStorage.getItem("role"),editIndex=-1;
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbyc0HtOqUxRxw6LBqIqHTllm3zHm9MkUsnlQTtBh9Sy/exec";
+
+let db=[],role=localStorage.getItem("role"),editIndex=-1;
 if(role==="mt"){document.getElementById("addBox").classList.add("hidden");document.getElementById("actHead").classList.add("hidden");}
-function saveData(){let S=s.value.trim(),P=p.value.trim(),N=n.value.trim(),D=d.value;if(!S||!N||!D)return alert("পূরণ করুন");if(editIndex>=0){db[editIndex]={S,P,N,D};editIndex=-1;saveBtn.innerText="SAVE";saveBtn.style.background="#1db954";}else db.push({S,P,N,D});localStorage.setItem("suty",JSON.stringify(db));s.value=p.value=n.value=d.value="";render();}
-function render(){tb.innerHTML="";db.sort((a,b)=>new Date(a.D)-new Date(b.D));db.forEach((r,i)=>{let diff=Math.floor((new Date()-new Date(r.D))/86400000);if(diff<0)diff=0;tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${diff} দিন</td><td class="act ${role==='mt'?'hidden':''}"><button class="edit" onclick="editRow(${i})">Edit</button><button class="del" onclick="delRow(${i})">Del</button></td></tr>`;});}
+
+async function loadData(){
+ document.getElementById("saveBtn").innerText="লোড হচ্ছে...";
+ try{
+   let res = await fetch(SHEET_URL);
+   db = await res.json();
+   render();
+ }catch(e){
+   console.log(e);
+   db=JSON.parse(localStorage.getItem("suty")||"[]");
+   render();
+ }
+ document.getElementById("saveBtn").innerText="SAVE";
+}
+
+async function saveData(){
+ let S=document.getElementById("s").value.trim(),P=document.getElementById("p").value.trim(),N=document.getElementById("n").value.trim(),D=document.getElementById("d").value;
+ if(!S||!N||!D) return alert("সেনা নং, নাম, তারিখ পূরণ করুন");
+ let obj={S,P,N,D};
+ document.getElementById("saveBtn").innerText="SAVE হচ্ছে...";
+ // Edit হলে পুরাতন ডিলিট করে নতুন এড হবে
+ try{
+   await fetch(SHEET_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(obj)});
+   alert("✅ Sheet এ Save হয়েছে!");
+   document.getElementById("s").value="";document.getElementById("p").value="";document.getElementById("n").value="";document.getElementById("d").value="";
+   editIndex=-1;
+   setTimeout(loadData,1200);
+ }catch(err){alert("Sheet সমস্যা"); document.getElementById("saveBtn").innerText="SAVE";}
+}
+
+function render(){
+ let tb=document.getElementById("tb"); tb.innerHTML="";
+ db.sort((a,b)=>new Date(a.D)-new Date(b.D));
+ db.forEach((r,i)=>{
+   let diff=Math.floor((new Date()-new Date(r.D))/86400000); if(diff<0)diff=0;
+   tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${diff} দিন</td><td class="act ${role==='mt'?'hidden':''}"><button class="edit" onclick="editRow(${i})">Edit</button><button class="del" onclick="delRow(${i})">Del</button></td></tr>`;
+ });
+}
 function editRow(i){let r=db[i];s.value=r.S;p.value=r.P;n.value=r.N;d.value=r.D;editIndex=i;saveBtn.innerText="UPDATE করুন";saveBtn.style.background="#ffc107";scrollTo(0,0);}
-function delRow(i){if(confirm("ডিলিট করবে?")){db.splice(i,1);localStorage.setItem("suty",JSON.stringify(db));render();}}
-render();
+function delRow(i){if(confirm("Sheet থেকে ডিলিট করতে হলে Sheet এ গিয়ে ডিলিট করতে হবে। এখন ফোন থেকে মুছবে?")){db.splice(i,1);render();}}
+
+loadData();
 </script>
 </body>
 </html>
