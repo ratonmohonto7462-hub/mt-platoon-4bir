@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4 BIR - Seniority</title>
+<style>
+body{font-family:system-ui;background:#0f172a;color:#fff;padding:15px}
+.card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.badge{background:#334155;padding:3px 8px;border-radius:20px;font-size:12px}
+input,button{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:none;box-sizing:border-box}
+button{background:#22c55e;color:#000;font-weight:bold;cursor:pointer}
+#list{margin-top:15px}
+.header{font-size:22px;font-weight:bold;text-align:center;margin:15px 0}
+</style>
+</head>
+<body>
+<div class="header">4 BIR - Seniority List</div>
+
+<div style="background:#1e293b;padding:15px;border-radius:12px">
+<h3>Add New</h3>
+<input id="S" placeholder="Seniority No (e.g. 101)">
+<input id="P" placeholder="Rank (e.g. Sepoy)">
+<input id="N" placeholder="Name">
+<input id="D" type="date">
+<button onclick="addData()">Add to Sheet</button>
+<p id="msg"></p>
+</div>
+
+<div id="list">Loading...</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzqXLo2R0miX8pVp0IJ3N4kyuahPjsNcEscoQnstc7FmWF1AhsI-jn-6t3bH8us2Hbkgg/exec";
+
+async function loadData(){
+  try{
+    document.getElementById('list').innerHTML = "Loading...";
+    let res = await fetch(SHEET_URL);
+    let data = await res.json();
+    // Sort by Seniority
+    data.sort((a,b)=> (parseInt(a.S)||9999) - (parseInt(b.S)||9999));
+    let html = "";
+    data.forEach(r=>{
+      html += `<div class="card"><div><b>${r.S}. ${r.N}</b><br><span class="badge">${r.P} | ${r.D}</span></div></div>`;
+    });
+    document
