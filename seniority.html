@@ -1,63 +1,13 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Suty Seniority</title>
-<style>
-body{margin:0;background:#f1f3f6;font-family:Arial}
-.head{text-align:center;background:white;padding:18px}
-.head h1{margin:0;font-size:24px;font-weight:900}
-.head h2{color:#0a7a00;margin:4px 0}
-.print{background:blue;color:white;border:none;padding:12px 26px;border-radius:12px;font-weight:900;margin-top:10px}
-.box{background:white;margin:12px;padding:14px;border-radius:14px}
-.in{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:10px;box-sizing:border-box}
-.save{width:100%;background:#1db954;border:none;padding:12px;border-radius:10px;font-weight:900;font-size:18px}
-table{width:100%;border-collapse:collapse;background:white}
-th{background:#0a6b2e;color:white;padding:8px 4px;font-size:13px}
-td{border:1px solid #ddd;padding:6px 4px;text-align:center;font-size:13px}
-.hide{display:none!important}
-</style>
-</head>
-<body>
-<div class="head">
-<h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1>
-<h2>এমটি প্লাটুন ৪ বীর</h2>
-<button class="print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-</div>
-
-<div id="adminBox" class="box">
-<input id="sena" class="in" placeholder="সেনা নং">
-<input id="podobi" class="in" placeholder="পদবি">
-<input id="nam" class="in" placeholder="নাম">
-<label style="font-weight:700">যোগদানের তারিখ</label>
-<input id="tarik" class="in" type="date">
-<button class="save" onclick="saveData()">SAVE</button>
-</div>
-
-<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>মোট দিন</th><th id="ah">একশন</th></tr></thead><tbody id="tb"></tbody></table>
-
+<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Seniority</title>
+<style>body{margin:0;background:#f1f3f6;font-family:Arial}.h{text-align:center;background:white;padding:16px}.h h1{margin:0;font-size:22px}.h h2{color:green}.pr{background:blue;color:white;padding:10px 22px;border:none;border-radius:10px;font-weight:900}.b{background:white;margin:12px;padding:12px;border-radius:12px}.i{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:8px;box-sizing:border-box}.sv{width:100%;background:#1db954;border:none;padding:12px;border-radius:10px;font-weight:900}table{width:100%;border-collapse:collapse;background:white}th{background:#0a6b2e;color:white;padding:6px}td{border:1px solid #ddd;padding:6px;text-align:center;font-size:13px}.hd{display:none!important}</style>
+</head><body>
+<div class="h"><h1>সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</h1><h2>এমটি প্লাটুন ৪ বীর</h2><button class="pr" onclick="window.print()">🖨️ প্রিন্ট</button></div>
+<div id="ab" class="b"><input id="s" class="i" placeholder="সেনা নং"><input id="p" class="i" placeholder="পদবি"><input id="n" class="i" placeholder="নাম"><input id="d" class="i" type="date"><button class="sv" onclick="sv()">SAVE</button></div>
+<table><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>তারিখ</th><th>দিন</th><th id="ah">একশন</th></tr><tbody id="tb"></tbody></table>
 <script>
-let data=JSON.parse(localStorage.getItem("suty")||"[]");
-let role=localStorage.getItem("role");
-if(role==="mt"){
- document.getElementById("adminBox").classList.add("hide");
- document.getElementById("ah").classList.add("hide");
-}
-function saveData(){
- let s=sena.value,p=podobi.value,n=nam.value,d=tarik.value;
- if(!s||!n||!d){alert("পূরণ করুন");return;}
- data.push({s,p,n,d});localStorage.setItem("suty",JSON.stringify(data));render();
-}
-function render(){
- tb.innerHTML="";data.sort((a,b)=>new Date(a.d)-new Date(b.d));
- data.forEach((r,i)=>{
-  let day=Math.floor((new Date()-new Date(r.d))/86400000);
-  tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.s}</td><td>${r.p}</td><td>${r.n}</td><td>${r.d}</td><td>${day} দিন</td><td class="${role==='mt'?'hide':''}"><button onclick="edit(${i})">Edit</button> <button onclick="del(${i})">Del</button></td></tr>`;
- });
-}
-function del(i){data.splice(i,1);localStorage.setItem("suty",JSON.stringify(data));render();}
-function edit(i){let r=data[i];let nn=prompt("নাম:",r.n);if(nn){r.n=nn;localStorage.setItem("suty",JSON.stringify(data));render();}}
-render();
-</script>
-</body>
-</html>
+let db=JSON.parse(localStorage.getItem("suty")||"[]"); let role=localStorage.getItem("role");
+if(role==="mt"){document.getElementById("ab").classList.add("hd");document.getElementById("ah").classList.add("hd");}
+function sv(){let S=s.value,P=p.value,N=n.value,D=d.value;if(!S||!N||!D)return alert("পূরণ করুন");db.push({S,P,N,D});localStorage.setItem("suty",JSON.stringify(db));render();}
+function render(){tb.innerHTML="";db.sort((a,b)=>new Date(a.D)-new Date(b.D));db.forEach((r,i)=>{let dy=Math.floor((new Date()-new Date(r.D))/86400000);tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${dy} দিন</td><td class="${role==='mt'?'hd':''}"><button onclick="dl(${i})">Del</button></td></tr>`});}
+function dl(i){db.splice(i,1);localStorage.setItem("suty",JSON.stringify(db));render();}render();
+</script></body></html>
