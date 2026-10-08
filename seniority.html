@@ -18,13 +18,14 @@ th{background:#0a6b2e;color:white;padding:10px 4px;border:1px solid #fff;font-si
 td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px;word-break:break-word}
 .btn-e{background:#2a7bff;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
 .btn-d{background:#ff1a1a;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
-@media print{.header,#adminBox,.btn-print{display:none!important}table th:last-child,table td:last-child{display:none!important}body{background:white}@page{size:A4;margin:10mm}}
+.view-only{color:#0a5c2f;text-align:center;font-weight:900;background:#d4edda;padding:10px;border-radius:10px;margin-bottom:12px}
+@media print{.header,#adminBox,.btn-print,.view-only{display:none!important}table th:last-child,table td:last-child{display:none!important}body{background:white}@page{size:A4;margin:10mm}}
 </style>
 </head>
 <body>
-<div class="header"><h1 style="margin:0;font-size:28px">SENIORITY</h1><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
+<div class="header"><h1 style="margin:0;font-size:22px">SENIORITY - MT PLATOON</h1><button class="back" onclick="location.href='index.html'">BACK</button></div>
 <div class="container">
-<div id="adminBox">
+<div id="adminBox" style="display:none">
 <input id="s" class="inp" placeholder="সেনা নং">
 <select id="p" class="inp"><option value="সৈনিক">সৈনিক</option><option value="ল্যান্স কর্পোরাল">ল্যান্স কর্পোরাল</option><option value="কর্পোরাল">কর্পোরাল</option><option value="সার্জেন্ট">সার্জেন্ট</option></select>
 <input id="n" class="inp" placeholder="নাম বাংলা/ইংরেজি">
@@ -33,43 +34,57 @@ td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px;word-b
 <button id="mainBtn" class="btn-add" onclick="saveData()">Add করুন</button>
 <p id="msg" style="text-align:center;font-weight:bold;color:green"></p>
 </div>
+<div id="viewBox" class="view-only" style="display:none">👁️ আপনি View Mode এ আছেন (MT PLATOON) - শুধু দেখতে পারবেন</div>
 <div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
 <div class="sub">এমটি প্লাটুন ৪ বীর</div>
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 <table>
-<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead>
+<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th id="thAction">একশন</th></tr></thead>
 <tbody id="tb"><tr><td colspan="8">Loading...</td></tr></tbody>
 </table>
 </div>
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyWj8lhVMk29PqJAkLr5BTARjyhNTc4WJgVmCrWXh6miVsiaB6Rty729Nk22kmP8XmiBA/exec";
 let editRowNum=-1;
+let isAdmin = false;
+
+// ROLE CHECK - তোর Login পেজ থেকে role নিবে
+function checkRole(){
+  let role = (localStorage.getItem('role') || localStorage.getItem('mt_role') || localStorage.getItem('userRole') || "").toLowerCase();
+  // তোর ছবি অনুযায়ী MT CLK Admin হলে Admin
+  if(role.includes('clk') || role.includes('admin')){
+    isAdmin = true;
+    document.getElementById('adminBox').style.display = 'block';
+    document.getElementById('viewBox').style.display = 'none';
+  } else {
+    isAdmin = false;
+    document.getElementById('adminBox').style.display = 'none';
+    document.getElementById('viewBox').style.display = 'block';
+    document.getElementById('thAction').style.display = 'none';
+  }
+}
+
 function formatDate(s){if(!s)return'';let d=new Date(s);if(isNaN(d))return s;return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear()}
 async function loadData(){
  try{
   let res=await fetch(SHEET_URL+"?t="+Date.now());
   let data=await res.json();
   let tb=document.getElementById('tb');tb.innerHTML='';
-  if(!data||data.length==0){tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই - উপরে Add করুন</td></tr>';return}
+  if(!data||data.length==0){tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই</td></tr>';return}
   data.sort((a,b)=>new Date(a.D)-new Date(b.D));
   data.forEach((r,i)=>{
    let today=new Date();today.setHours(0,0,0,0);
    let jd=new Date(r.D);jd.setHours(0,0,0,0);
    let diff=Math.floor((today-jd)/86400000);if(diff<0)diff=0;
-   tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td><td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','${r.D}','${r.M||''}')">Edit</button><button class="btn-d" onclick="deleteData(${r.row})">X</button></td></tr>`;
+   let actionBtns = isAdmin? `<td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','${r.D}','${r.M||''}')">Edit</button><button class="btn-d" onclick="deleteData(${r.row})">X</button></td>` : `<td style="display:none"></td>`;
+   tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td>${actionBtns}</tr>`;
   });
  }catch(e){document.getElementById('tb').innerHTML='<tr><td colspan="8">Error: '+e.message+'</td></tr>'}
 }
-function startEdit(row,S,P,N,D,M){document.getElementById('s').value=S;document.getElementById('p').value=P;document.getElementById('n').value=N;document.getElementById('m').value=M;try{document.getElementById('d').value=new Date(D).toISOString().split('T')[0]}catch(e){document.getElementById('d').value=D}editRowNum=row;document.getElementById('mainBtn').innerText='Update করুন';window.scrollTo(0,0)}
-async function deleteData(row){if(!confirm('ডিলিট করবে?'))return;await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row})});alert('ডিলিট হয়েছে');setTimeout(loadData,2000)}
-async function saveData(){
- let S=document.getElementById('s').value.trim(),P=document.getElementById('p').value,N=document.getElementById('n').value.trim(),D=document.getElementById('d').value,M=document.getElementById('m').value.trim();
- if(!S||!N||!D){alert('সব পূরণ করো');return}
- let payload=editRowNum==-1?{S,P,N,D,M}:{action:"edit",row:editRowNum,S,P,N,D,M};
- document.getElementById('msg').innerText='পাঠানো হচ্ছে...';
- await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
- document.getElementById('msg').innerText='✅ Done!';document.getElementById('s').value=document.getElementById('n').value=document.getElementById('d').value=document.getElementById('m').value='';editRowNum=-1;document.getElementById('mainBtn').innerText='Add করুন';setTimeout(loadData,2000);
-}
+function startEdit(row,S,P,N,D,M){if(!isAdmin){alert('আপনার Edit করার অনুমতি নাই');return}document.getElementById('s').value=S;document.getElementById('p').value=P;document.getElementById('n').value=N;document.getElementById('m').value=M;try{document.getElementById('d').value=new Date(D).toISOString().split('T')[0]}catch(e){document.getElementById('d').value=D}editRowNum=row;document.getElementById('mainBtn').innerText='Update করুন';window.scrollTo(0,0)}
+async function deleteData(row){if(!isAdmin){alert('আপনার Delete করার অনুমতি নাই');return}if(!confirm('ডিলিট করবে?'))return;await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row})});alert('ডিলিট হয়েছে');setTimeout(loadData,2000)}
+async function saveData(){if(!isAdmin){alert('আপনার Add করার অনুমতি নাই');return}let S=document.getElementById('s').value.trim(),P=document.getElementById('p').value,N=document.getElementById('n').value.trim(),D=document.getElementById('d').value,M=document.getElementById('m').value.trim();if(!S||!N||!D){alert('সব পূরণ করো');return}let payload=editRowNum==-1?{S,P,N,D,M}:{action:"edit",row:editRowNum,S,P,N,D,M};document.getElementById('msg').innerText='পাঠানো হচ্ছে...';await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});document.getElementById('msg').innerText='✅ Done!';document.getElementById('s').value=document.getElementById('n').value=document.getElementById('d').value=document.getElementById('m').value='';editRowNum=-1;document.getElementById('mainBtn').innerText='Add করুন';setTimeout(loadData,2000);}
+checkRole();
 loadData();
 </script>
 </body>
