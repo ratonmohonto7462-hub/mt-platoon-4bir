@@ -23,5 +23,5 @@ function doPost(e){
     if(d.sheet=="Vehicle") sheet.appendRow([d.BA,d.MODEL,d.SRENI,d.DATE,d.MONTOBBO]);
     else if(d.sheet=="Mobile") sheet.appendRow([d.PADOBI,d.NAME,d.NUMBER,d.MONTOBBO]);
   }
-  return ContentService.createTextOutput("ok");
+ return ContentService.createTextOutput("ok");
 }
