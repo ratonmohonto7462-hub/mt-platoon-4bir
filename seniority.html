@@ -1,72 +1,8 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seniority - 4 BIR</title>
-<style>
-body{margin:0;background:#eef2f7;font-family:Arial}
-.header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-.back{background:#c0392b;color:white;border:none;padding:10px 16px;border-radius:10px;font-weight:bold}
-.container{padding:12px;max-width:950px;margin:0 auto}
-.inp{width:100%;padding:16px;border:2px solid #ddd;border-radius:18px;margin-bottom:12px;box-sizing:border-box;font-size:17px;background:white}
-.btn-add{width:100%;padding:16px;background:#0a7a3a;color:white;border:none;border-radius:18px;font-size:20px;font-weight:900}
-.title{font-size:24px;font-weight:900;text-align:center;margin:20px 0 5px}
-.sub{color:#0a7a3a;text-align:center;font-size:19px;font-weight:900;margin-bottom:15px}
-.btn-print{background:#1a4ee8;color:white;border:none;padding:10px 28px;border-radius:12px;font-weight:900;display:block;margin:0 auto 15px auto}
-table{width:100%;border-collapse:collapse;background:white;margin-top:10px}
-th{background:#0a6b2e;color:white;padding:10px 4px;border:1px solid #fff;font-size:13px}
-td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px}
-.btn-e{background:#2a7bff;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
-.btn-d{background:#ff1a1a;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
-
-/* PRINT FIX */
+<!DOCTYPE html> <html lang="bn"> <head> <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Seniority - 4 BIR</title> <style> body{margin:0;background:#eef2f7;font-family:Arial} .header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center} .back{background:#c0392b;color:white;border:none;padding:10px 16px;border-radius:10px;font-weight:bold} .container{padding:12px;max-width:950px;margin:0 auto} .inp{width:100%;padding:16px;border:2px solid #ddd;border-radius:18px;margin-bottom:12px;box-sizing:border-box;font-size:17px;background:white} .btn-add{width:100%;padding:16px;background:#0a7a3a;color:white;border:none;border-radius:18px;font-size:20px;font-weight:900} .title{font-size:24px;font-weight:900;text-align:center;margin:20px 0 5px} .sub{color:#0a7a3a;text-align:center;font-size:19px;font-weight:900;margin-bottom:15px} .btn-print{background:#1a4ee8;color:white;border:none;padding:10px 28px;border-radius:12px;font-weight:900;display:block;margin:0 auto 15px auto} table{width:100%;border-collapse:collapse;background:white;margin-top:10px} th{background:#0a6b2e;color:white;padding:10px 4px;border:1px solid #fff;font-size:13px} td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px} .btn-e{background:#2a7bff;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px} .btn-d{background:#ff1a1a;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px} 
 @media print{
-  .header, #adminBox, .btn-print, #err { display:none !important; }
+  .header, #adminBox, .btn-print { display:none !important; }
   body{background:white}
-  .container{padding:0;max-width:100%}
-  table th:last-child, table td:last-child { display:none !important; } /* Edit/X print e asbe na */
-  .title{font-size:28px}
-  @page { size: A4; margin: 10mm; }
+  table th:last-child, table td:last-child{ display:none !important; }
+  @page{ size:A4; margin:10mm; }
 }
-</style>
-</head>
-<body>
-<div class="header"><h1 style="margin:0;font-size:28px">SENIORITY</h1><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
-<div class="container">
-<div id="adminBox">
-<input id="s" class="inp" placeholder="সেনা নং">
-<select id="p" class="inp"><option value="সৈনিক">সৈনিক</option><option value="ল্যান্স কর্পোরাল">ল্যান্স কর্পোরাল</option><option value="কর্পোরাল">কর্পোরাল</option><option value="সার্জেন্ট">সার্জেন্ট</option></select>
-<input id="n" class="inp" placeholder="নাম বাংলা/ইংরেজি লিখুন">
-<input id="d" class="inp" type="date">
-<input id="m" class="inp" placeholder="মন্তব্য">
-<button id="mainBtn" class="btn-add" onclick="saveData()">Add করুন</button>
-<p id="msg" style="text-align:center;font-weight:bold;color:green"></p>
-</div>
-
-<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
-<div class="sub">এমটি প্লাটুন ৪ বীর</div>
-<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-
-<table>
-<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead>
-<tbody id="tb"><tr><td colspan="8">Loading...</td></tr></tbody>
-</table>
-<p id="err" style="text-align:center;color:red;font-weight:bold"></p>
-</div>
-
-<script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbwNLHhUSnMCi4t3tswfKSAvCzRQC7Hf54rwjiiyzN6YSpYhDemXQ6YP2YKFgSoH9xUayg/exec";
-let editRowNum = -1;
-function formatDate(s){ if(!s) return ''; let d=new Date(s); if(isNaN(d)) return s; return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear(); }
-async function loadData(){
-  try{
-    let res=await fetch(SHEET_URL+"?t="+Date.now());
-    let data=await res.json();
-    let tb=document.getElementById('tb'); tb.innerHTML='';
-    if(!data||data.length==0){ tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই</td></tr>'; return; }
-    data.sort((a,b)=> new Date(a.D)-new Date(b.D));
-    data.forEach((r,i)=>{
-      let today=new Date(); today.setHours(0,0,0,0);
-      let jd=new Date(r.D); jd.setHours(0,0,0,0);
-      let diff=Math.floor((today-jd)/86400000); if(diff<0) diff=0;
-      tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td><td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','
+</style> </head> <body> <div class="header"><h1 style="margin:0;font-size:28px">SENIORITY</h1><button class="back" onclick="location.href='dashboard.html'">BACK</button></div> <div class="container"> <div id="adminBox"> <input id="s" class="inp" placeholder="সেনা নং"> <select id="p" class="inp"><option value="সৈনিক">সৈনিক</option><option value="ল্যান্স কর্পোরাল">ল্যান্স কর্পোরাল</option><option value="কর্পোরাল">কর্পোরাল</option><option value="সার্জেন্ট">সার্জেন্ট</option></select> <input id="n" class="inp" placeholder="নাম বাংলা/ইংরেজি লিখুন"> <input id="d" class="inp" type="date"> <input id="m" class="inp" placeholder="মন্তব্য"> <button id="mainBtn" class="btn-add" onclick="saveData()">Add করুন</button> <p id="msg" style="text-align:center;font-weight:bold;color:green"></p> </div> <div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div> <div class="sub">এমটি প্লাটুন ৪ বীর</div> <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button> <table> <thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead> <tbody id="tb"><tr><td colspan="8">Loading...</td></tr></tbody> </table> <p id="err" style="text-align:center;color:red;font-weight:bold"></p> </div> <script> const
