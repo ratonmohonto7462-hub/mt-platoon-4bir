@@ -18,6 +18,16 @@ th{background:#0a6b2e;color:white;padding:10px 4px;border:1px solid #fff;font-si
 td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px}
 .btn-e{background:#2a7bff;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
 .btn-d{background:#ff1a1a;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
+
+/* PRINT FIX */
+@media print{
+  .header, #adminBox, .btn-print, #err { display:none !important; }
+  body{background:white}
+  .container{padding:0;max-width:100%}
+  table th:last-child, table td:last-child { display:none !important; } /* Edit/X print e asbe na */
+  .title{font-size:28px}
+  @page { size: A4; margin: 10mm; }
+}
 </style>
 </head>
 <body>
@@ -47,71 +57,16 @@ td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px}
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwNLHhUSnMCi4t3tswfKSAvCzRQC7Hf54rwjiiyzN6YSpYhDemXQ6YP2YKFgSoH9xUayg/exec";
 let editRowNum = -1;
-
-function formatDate(s){
-  if(!s) return '';
-  let d = new Date(s); if(isNaN(d)) return s;
-  return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();
-}
-
+function formatDate(s){ if(!s) return ''; let d=new Date(s); if(isNaN(d)) return s; return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear(); }
 async function loadData(){
   try{
-    let res = await fetch(SHEET_URL + "?t=" + Date.now());
-    let data = await res.json();
-    let tb = document.getElementById('tb');
-    tb.innerHTML = '';
-    if(!data || data.length==0){ tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই, উপরে Add করুন</td></tr>'; return; }
+    let res=await fetch(SHEET_URL+"?t="+Date.now());
+    let data=await res.json();
+    let tb=document.getElementById('tb'); tb.innerHTML='';
+    if(!data||data.length==0){ tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই</td></tr>'; return; }
     data.sort((a,b)=> new Date(a.D)-new Date(b.D));
     data.forEach((r,i)=>{
-      let today = new Date(); today.setHours(0,0,0,0);
-      let jd = new Date(r.D); jd.setHours(0,0,0,0);
-      let diff = Math.floor((today-jd)/86400000); if(diff<0) diff=0;
-      tb.innerHTML += `<tr>
-        <td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td>
-        <td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td>
-        <td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','${r.D}','${r.M||''}')">Edit</button><button class="btn-d" onclick="deleteData(${r.row})">X</button></td>
-      </tr>`;
-    });
-  }catch(e){
-    document.getElementById('tb').innerHTML = '<tr><td colspan="8">Sheet থেকে ডাটা আসছে না, Sheet এ ডাটা আছে কিনা দেখো</td></tr>';
-    document.getElementById('err').innerText = 'Error: ' + e.message;
-  }
-}
-
-function startEdit(row,S,P,N,D,M){
-  document.getElementById('s').value=S;
-  document.getElementById('p').value=P;
-  document.getElementById('n').value=N;
-  document.getElementById('m').value=M;
-  try{ document.getElementById('d').value = new Date(D).toISOString().split('T')[0]; }catch(e){ document.getElementById('d').value=D; }
-  editRowNum=row;
-  document.getElementById('mainBtn').innerText='Update করুন';
-  window.scrollTo(0,0);
-}
-
-async function deleteData(row){
-  if(!confirm('ডিলিট করবে?')) return;
-  await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row:row})});
-  alert('ডিলিট হয়েছে, 2 সেকেন্ড পর আসবে');
-  setTimeout(loadData,2000);
-}
-
-async function saveData(){
-  let S=document.getElementById('s').value.trim();
-  let P=document.getElementById('p').value;
-  let N=document.getElementById('n').value.trim();
-  let D=document.getElementById('d').value;
-  let M=document.getElementById('m').value.trim();
-  if(!S||!N||!D){ alert('সব পূরণ করো'); return; }
-  let payload = editRowNum==-1? {S,P,N,D,M} : {action:"edit",row:editRowNum,S,P,N,D,M};
-  document.getElementById('msg').innerText='পাঠানো হচ্ছে...';
-  await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
-  document.getElementById('msg').innerText='✅ Done!';
-  document.getElementById('s').value=''; document.getElementById('n').value=''; document.getElementById('d').value=''; document.getElementById('m').value='';
-  editRowNum=-1; document.getElementById('mainBtn').innerText='Add করুন';
-  setTimeout(loadData,2000);
-}
-loadData();
-</script>
-</body>
-</html>
+      let today=new Date(); today.setHours(0,0,0,0);
+      let jd=new Date(r.D); jd.setHours(0,0,0,0);
+      let diff=Math.floor((today-jd)/86400000); if(diff<0) diff=0;
+      tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td><td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','
