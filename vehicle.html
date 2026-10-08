@@ -2,107 +2,68 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>যানবাহনের মেইক এবং মডেল - ৪ বীর</title>
+<title>MT PLATOON MOBILE NUMBER - 4 BIR</title>
 <style>
 body{margin:0;font-family:'SolaimanLipi',Arial;background:#f5f5f5}
 .dashboard-header{background:green;color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
 .dashboard-header h1{margin:0;font-size:18px}.logout{background:red;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
 .container{padding:20px;max-width:1300px;margin:0 auto}
-input,select{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:10px;box-sizing:border-box;font-size:16px;font-family:'SolaimanLipi',Arial}
+input{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:10px;box-sizing:border-box;font-size:16px}
 .btn-add{width:100%;padding:15px;background:green;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer}
 .table-title{text-align:center;font-size:22px;font-weight:bold;margin:15px 0 5px;color:#333;text-decoration:underline}
-.table-sub{text-align:center;font-size:18px;font-weight:bold;margin:0 0 15px;color:#333;text-decoration:underline}
 .btn-print{background:blue;color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:15px auto;display:block;font-size:16px}
-table{width:100%;border-collapse:collapse;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.1);font-size:13px}
-th{background:green;color:white;padding:10px;text-align:center;border:1px solid #000;font-weight:bold}
-td{padding:8px;text-align:center;border:1px solid #000;font-family:'SolaimanLipi',Arial}
-.btn-delete{background:red;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px;font-size:12px}
-.btn-edit{background:orange;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px;font-size:12px}
+table{width:100%;border-collapse:collapse;background:white;font-size:14px}
+th{background:green;color:white;padding:10px;text-align:center;border:1px solid #000}
+td{padding:8px;text-align:center;border:1px solid #000}
+.btn-delete{background:red;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px}
+.btn-edit{background:orange;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px}
 .disabled{opacity:0.5;pointer-events:none}
-.print-footer{position:fixed;bottom:10px;left:10px;font-size:14px;font-weight:bold;display:none}
-@media print{.dashboard-header,.btn-print,.btn-add,input,select,.logout,#adminControls,.btn-edit,.btn-delete{display:none!important}.print-footer{display:block}body{background:white}table{box-shadow:none}}
 </style>
 </head>
 <body>
-<div class="dashboard-header"><h1>MT PLATOON 4 BIR - VEHICLE UPDATE</h1><button class="logout" onclick="goBack()">Back</button></div>
+<div class="dashboard-header"><h1>MT PLATOON 4 BIR - MOBILE NUMBER</h1><button class="logout" onclick="location.href='dashboard.html'">Back</button></div>
 <div class="container">
 <div id="adminControls">
-<input type="text" id="baNo" placeholder="বিএ নং">
-<input type="text" id="model" placeholder="মডেল ও নামমালা">
-<select id="class"><option value="">বর্তমান শ্রেনী বিন্যাস</option><option>১ম শ্রেনী ক</option><option>১ম শ্রেনী খ</option><option>২য় শ্রেনী</option><option>৩য় শ্রেনী</option></select>
-<input type="date" id="issueDate"><input type="text" id="remarks" placeholder="মন্তব্য">
+<input type="text" id="padobi" placeholder="পদবী">
+<input type="text" id="name" placeholder="নাম">
+<input type="text" id="number" placeholder="মোবাইল নম্বর">
+<input type="text" id="remarks" placeholder="মন্তব্য">
 <button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button><p id="msg" style="text-align:center;color:green;font-weight:bold"></p>
 </div>
-<div class="table-title">যানবাহনের মেইক এবং মডেল</div><div class="table-sub">ইউনিটঃ ৪ বীর</div>
+<div class="table-title">MT PLATOON MOBILE NUMBER - 4 BIR</div>
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-<table><thead><tr><th>ক্র/নং</th><th>বিএ নং</th><th>মডেল ও নামমালা</th><th>বর্তমান শ্রেনী<br>বিন্যাস</th><th>ইস্যু তারিখ</th><th>মন্তব্য</th><th id="actionHead">একশন</th></tr></thead><tbody id="dataTable"><tr><td colspan="7">Loading...</td></tr></tbody></table>
+<table><thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>মোবাইল নম্বর</th><th>মন্তব্য</th><th id="actionHead">একশন</th></tr></thead>
+<tbody id="dataTable"><tr><td colspan="6">Loading...</td></tr></tbody></table>
 </div>
-<div class="print-footer">Create By Snk Raton</div>
 <script>
-const SHEET_URL="https://script.google.com/macros/s/AKfycbxFAPTURXneT17NcCyDHu1Bd5d5fTUn-mglZjOAGm4iAiybq7xFaeT6utXwuCQSEmltYw/exec";
-let selectedRole = localStorage.getItem('role');
-let editRowNum = -1;
-function goBack(){ window.location.href = 'dashboard.html'; }
-function formatDate(dateStr){ if(!dateStr) return ''; let d=new Date(dateStr); if(isNaN(d)) return dateStr; let day=String(d.getDate()).padStart(2,'0'); let month=String(d.getMonth()+1).padStart(2,'0'); let year=String(d.getFullYear()).slice(-2); return `${day}-${month}-${year}`; }
+const SHEET_URL="https://script.google.com/macros/s/AKfycbwPXKd8ecRThPwF0wVTg4id88ru0RZtpWKrk6Jb6oFp-Xq8KuzwZVM_Zmw05gaevpZT/exec";
+let selectedRole=localStorage.getItem('role'); let editRowNum=-1;
 async function loadData(){
  let tbody=document.getElementById('dataTable');
  try{
-  let res=await fetch(SHEET_URL+"?sheet=Vehicle&t="+Date.now());
+  let res=await fetch(SHEET_URL+"?sheet=Mobile&t="+Date.now());
   let data=await res.json();
   tbody.innerHTML='';
-  if(!data.length){tbody.innerHTML='<tr><td colspan="7">কোনো ডাটা নাই</td></tr>';return}
+  if(!data.length){tbody.innerHTML='<tr><td colspan="6">কোনো ডাটা নাই</td></tr>';return}
   data.forEach((item,index)=>{
-   let actionBtn='';
-   if(selectedRole && selectedRole.toLowerCase().includes('clk')){
-    actionBtn=`<button class="btn-edit" onclick="editData(${item.row},'${item.BA}','${item.MODEL}','${item.SRENI}','${item.DATE}','${item.MONTOBBO||''}')">Edit</button><button class="btn-delete" onclick="deleteData(${item.row})">Delete</button>`;
-   }else{ actionBtn=`View Only`; }
-   tbody.innerHTML+=`<tr><td>${index+1}</td><td>${item.BA}</td><td style="text-align:left">${item.MODEL}</td><td>${item.SRENI}</td><td>${formatDate(item.DATE)}</td><td>${item.MONTOBBO||''}</td><td>${actionBtn}</td></tr>`;
+   let btn=(selectedRole && selectedRole.toLowerCase().includes('clk'))? `<button class="btn-edit" onclick="editData(${item.row},'${item.PADOBI}','${item.NAME}','${item.NUMBER}','${item.MONTOBBO||''}')">Edit</button><button class="btn-delete" onclick="deleteData(${item.row})">Delete</button>` : `View Only`;
+   tbody.innerHTML+=`<tr><td>${index+1}</td><td>${item.PADOBI}</td><td style="text-align:left">${item.NAME}</td><td><a href="tel:${item.NUMBER}">${item.NUMBER}</a></td><td>${item.MONTOBBO||''}</td><td>${btn}</td></tr>`;
   });
- }catch(e){ tbody.innerHTML=`<tr><td colspan="7">Error: ${e.message}</td></tr>`; }
+ }catch(e){tbody.innerHTML=`<tr><td colspan="6">Error: ${e.message}</td></tr>`;}
 }
-function editData(row,BA,MODEL,SRENI,DATE,MONTOBBO){
- if(!selectedRole ||!selectedRole.toLowerCase().includes('clk')){alert('আপনার Permission নাই');return}
- editRowNum=row;
- document.getElementById('baNo').value=BA;
- document.getElementById('model').value=MODEL;
- document.getElementById('class').value=SRENI;
- document.getElementById('remarks').value=MONTOBBO;
- try{document.getElementById('issueDate').value=new Date(DATE).toISOString().split('T')[0];}catch(e){document.getElementById('issueDate').value=DATE}
- document.getElementById('mainBtn').innerText='Update করুন';
- window.scrollTo(0,0);
+function editData(row,PADOBI,NAME,NUMBER,MONTOBBO){
+ editRowNum=row; padobi.value=PADOBI; name.value=NAME; number.value=NUMBER; remarks.value=MONTOBBO;
+ mainBtn.innerText='Update করুন'; window.scrollTo(0,0);
 }
-async function deleteData(row){
- if(!selectedRole ||!selectedRole.toLowerCase().includes('clk')){alert('আপনার Permission নাই');return}
- if(!confirm('Delete করবেন?'))return;
- await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({sheet:"Vehicle",action:"delete",row})});
- alert('ডিলিট হয়েছে'); setTimeout(loadData,2000);
-}
+async function deleteData(row){ if(!confirm('Delete করবেন?'))return; await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({sheet:"Mobile",action:"delete",row})}); alert('ডিলিট হয়েছে'); setTimeout(loadData,2000); }
 async function addData(){
- if(!selectedRole ||!selectedRole.toLowerCase().includes('clk')){alert('আপনার Permission নাই');return}
- let BA=document.getElementById('baNo').value.trim();
- let MODEL=document.getElementById('model').value.trim();
- let SRENI=document.getElementById('class').value;
- let DATE=document.getElementById('issueDate').value;
- let MONTOBBO=document.getElementById('remarks').value.trim();
- if(!BA||!MODEL||!SRENI){alert('বিএ নং, মডেল, শ্রেনী পূরণ করুন');return}
- let payload = editRowNum==-1? {sheet:"Vehicle",BA,MODEL,SRENI,DATE,MONTOBBO} : {sheet:"Vehicle",action:"edit",row:editRowNum,BA,MODEL,SRENI,DATE,MONTOBBO};
- document.getElementById('msg').innerText='পাঠানো হচ্ছে...';
- await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
- document.getElementById('msg').innerText='✅ Done!';
- document.getElementById('baNo').value='';document.getElementById('model').value='';document.getElementById('class').value='';document.getElementById('issueDate').value='';document.getElementById('remarks').value='';
- editRowNum=-1; document.getElementById('mainBtn').innerText='Add করুন';
- setTimeout(loadData,2000);
+ let PADOBI=padobi.value.trim(), NAME=name.value.trim(), NUMBER=number.value.trim(), MONTOBBO=remarks.value.trim();
+ if(!PADOBI||!NAME||!NUMBER){alert('পদবী, নাম, নম্বর পূরণ করুন');return}
+ let payload=editRowNum==-1? {sheet:"Mobile",PADOBI,NAME,NUMBER,MONTOBBO} : {sheet:"Mobile",action:"edit",row:editRowNum,PADOBI,NAME,NUMBER,MONTOBBO};
+ msg.innerText='পাঠানো হচ্ছে...'; await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
+ msg.innerText='✅ Done!'; padobi.value=name.value=number.value=remarks.value=''; editRowNum=-1; mainBtn.innerText='Add করুন'; setTimeout(loadData,2000);
 }
-window.onload=function(){
- if(selectedRole && selectedRole.toLowerCase().includes('clk')){
-  document.getElementById('adminControls').classList.remove('disabled');
-  document.getElementById('actionHead').innerText='একশন';
- }else{
-  document.getElementById('adminControls').classList.add('disabled');
-  document.getElementById('actionHead').innerText='Status';
- }
- loadData();
-}
+window.onload=function(){ if(selectedRole && selectedRole.toLowerCase().includes('clk')){adminControls.classList.remove('disabled');} else{adminControls.classList.add('disabled'); actionHead.innerText='Status';} loadData(); }
 </script>
 </body>
 </html>
