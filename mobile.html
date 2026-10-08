@@ -6,7 +6,7 @@
 <style>
 body{margin:0;font-family:'SolaimanLipi',Arial;background:#f5f5f5}
 .dashboard-header{background:green;color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
-.dashboard-header h1{margin:0;font-size:18px}.logout{background:red;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
+.dashboard-header h1{margin:0;font-size:16px}.logout{background:red;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
 .container{padding:20px;max-width:1300px;margin:0 auto}
 input{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:10px;box-sizing:border-box;font-size:16px}
 .btn-add{width:100%;padding:15px;background:green;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer}
@@ -18,17 +18,7 @@ td{padding:8px;text-align:center;border:1px solid #000}
 .btn-delete{background:red;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px}
 .btn-edit{background:orange;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px}
 .disabled{opacity:0.5;pointer-events:none}
-.print-footer{position:fixed;bottom:10px;left:10px;font-size:14px;font-weight:bold;display:none}
-/* PRINT FIX - এখানেই সব ঠিক করা */
-@media print{
-  .dashboard-header, #adminControls, .btn-print, .logout, #msg, #mainBtn, input, select {display:none !important;}
-  body{background:white; margin:0; padding:10px}
-  .container{padding:0; max-width:100%}
-  table{box-shadow:none; border:1px solid #000}
-  th{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  #actionHead, td:last-child, th:last-child {display:none !important;}
-  .print-footer{display:block}
-}
+@media print{ .dashboard-header,#adminControls,.btn-print,.logout,#msg {display:none !important} #actionHead, td:last-child, th:last-child {display:none !important} body{background:white} }
 </style>
 </head>
 <body>
@@ -46,10 +36,10 @@ td{padding:8px;text-align:center;border:1px solid #000}
 <table><thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>মোবাইল নম্বর</th><th>মন্তব্য</th><th id="actionHead">একশন</th></tr></thead>
 <tbody id="dataTable"><tr><td colspan="6">Loading...</td></tr></tbody></table>
 </div>
-<div class="print-footer">Create By Snk Raton - 4 BIR</div>
 <script>
 const SHEET_URL="https://script.google.com/macros/s/AKfycbwPXKd8ecRThPwF0wVTg4id88ru0RZtpWKrk6Jb6oFp-Xq8KuzwZVM_Zmw05gaevpZT/exec";
-let selectedRole=localStorage.getItem('role'); let editRowNum=-1;
+let selectedRole = localStorage.getItem('role') || 'mt platoon';
+let editRowNum=-1;
 async function loadData(){
  let tbody=document.getElementById('dataTable');
  try{
@@ -58,21 +48,21 @@ async function loadData(){
   tbody.innerHTML='';
   if(!data.length){tbody.innerHTML='<tr><td colspan="6">কোনো ডাটা নাই</td></tr>';return}
   data.forEach((item,index)=>{
-   let btn=(selectedRole && selectedRole.toLowerCase().includes('clk'))? `<button class="btn-edit" onclick="editData(${item.row},'${item.PADOBI}','${item.NAME}','${item.NUMBER}','${item.MONTOBBO||''}')">Edit</button><button class="btn-delete" onclick="deleteData(${item.row})">Delete</button>` : `View Only`;
-   tbody.innerHTML+=`<tr><td>${index+1}</td><td>${item.PADOBI}</td><td style="text-align:left">${item.NAME}</td><td>${item.NUMBER}</td><td>${item.MONTOBBO||''}</td><td>${btn}</td></tr>`;
+   let btn=(selectedRole.toLowerCase().includes('clk'))? `<button class="btn-edit" onclick="editData(${item.row},'${item.PADOBI}','${item.NAME}','${item.NUMBER}','${item.MONTOBBO||''}')">Edit</button><button class="btn-delete" onclick="deleteData(${item.row})">Delete</button>` : `View Only`;
+   tbody.innerHTML+=`<tr><td>${index+1}</td><td>${item.PADOBI}</td><td>${item.NAME}</td><td>${item.NUMBER}</td><td>${item.MONTOBBO||''}</td><td>${btn}</td></tr>`;
   });
- }catch(e){tbody.innerHTML=`<tr><td colspan="6">Error: Failed to fetch - Deploy Anyone করুন</td></tr>`;}
+ }catch(e){tbody.innerHTML=`<tr><td colspan="6">Error: Failed to fetch</td></tr>`;}
 }
-function editData(row,PADOBI,NAME,NUMBER,MONTOBBO){ editRowNum=row; padobi.value=PADOBI; name.value=NAME; number.value=NUMBER; remarks.value=MONTOBBO; mainBtn.innerText='Update করুন'; window.scrollTo(0,0); }
-async function deleteData(row){ if(!confirm('Delete করবেন?'))return; await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({sheet:"Mobile",action:"delete",row})}); alert('ডিলিট হয়েছে'); setTimeout(loadData,2000); }
+function editData(row,PADOBI,NAME,NUMBER,MONTOBBO){ if(!selectedRole.toLowerCase().includes('clk')){alert('Permission নাই');return} editRowNum=row; padobi.value=PADOBI; name.value=NAME; number.value=NUMBER; remarks.value=MONTOBBO; mainBtn.innerText='Update করুন'; }
+async function deleteData(row){ if(!confirm('Delete?'))return; await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({sheet:"Mobile",action:"delete",row})}); alert('ডিলিট'); setTimeout(loadData,2000); }
 async function addData(){
  let PADOBI=padobi.value.trim(), NAME=name.value.trim(), NUMBER=number.value.trim(), MONTOBBO=remarks.value.trim();
- if(!PADOBI||!NAME||!NUMBER){alert('পদবী, নাম, নম্বর পূরণ করুন');return}
+ if(!PADOBI||!NAME||!NUMBER){alert('পূরণ করুন');return}
  let payload=editRowNum==-1? {sheet:"Mobile",PADOBI,NAME,NUMBER,MONTOBBO} : {sheet:"Mobile",action:"edit",row:editRowNum,PADOBI,NAME,NUMBER,MONTOBBO};
  msg.innerText='পাঠানো হচ্ছে...'; await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
  msg.innerText='✅ Done!'; padobi.value=name.value=number.value=remarks.value=''; editRowNum=-1; mainBtn.innerText='Add করুন'; setTimeout(loadData,2000);
 }
-window.onload=function(){ if(selectedRole && selectedRole.toLowerCase().includes('clk')){adminControls.classList.remove('disabled');} else{adminControls.classList.add('disabled'); actionHead.innerText='Status';} loadData(); }
+window.onload=function(){ if(selectedRole.toLowerCase().includes('clk')){adminControls.classList.remove('disabled');} else{adminControls.classList.add('disabled'); actionHead.innerText='Status';} loadData(); }
 </script>
 </body>
 </html>
