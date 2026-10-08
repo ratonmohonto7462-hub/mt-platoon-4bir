@@ -1,68 +1,37 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MT PLATOON MOBILE NUMBER - 4 BIR</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MT PLATOON 4 BIR</title>
 <style>
-body{margin:0;font-family:'SolaimanLipi',Arial;background:#f5f5f5}
-.dashboard-header{background:green;color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
-.dashboard-header h1{margin:0;font-size:16px}.logout{background:red;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
-.container{padding:20px;max-width:1300px;margin:0 auto}
-input{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:10px;box-sizing:border-box;font-size:16px}
-.btn-add{width:100%;padding:15px;background:green;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer}
-.table-title{text-align:center;font-size:22px;font-weight:bold;margin:15px 0 5px;color:#333;text-decoration:underline}
-.btn-print{background:blue;color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:15px auto;display:block;font-size:16px}
-table{width:100%;border-collapse:collapse;background:white;font-size:14px}
-th{background:green;color:white;padding:10px;text-align:center;border:1px solid #000}
-td{padding:8px;text-align:center;border:1px solid #000}
-.btn-delete{background:red;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px}
-.btn-edit{background:orange;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;margin:2px}
-.disabled{opacity:0.5;pointer-events:none}
-@media print{ .dashboard-header,#adminControls,.btn-print,.logout,#msg {display:none !important} #actionHead, td:last-child, th:last-child {display:none !important} body{background:white} }
+body{margin:0;background:#eef2f7;font-family:Arial}
+.top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:18px;font-weight:900;letter-spacing:.5px}
+.logout{background:#d50000;color:white;border:none;padding:10px 18px;border-radius:12px;font-weight:900}
+.wrap{padding:14px}
+.welcome{font-size:34px;font-weight:900;text-align:center;margin:14px 0 6px 0}
+.mobile{text-align:center;font-weight:900;color:#0a4d0a;font-size:17px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:white;border-radius:26px;padding:22px 10px;text-align:center;box-shadow:0 6px 18px #0001;cursor:pointer}
+.icon{font-size:56px;display:block}
+.t1{font-weight:900;color:#0a4d0a;font-size:15px;margin-top:10px;line-height:1.2}
+.t2{font-size:12.5px;color:#777;margin-top:5px}
 </style>
 </head>
 <body>
-<div class="dashboard-header"><h1>MT PLATOON 4 BIR - MOBILE NUMBER</h1><button class="logout" onclick="location.href='dashboard.html'">Back</button></div>
-<div class="container">
-<div id="adminControls">
-<input type="text" id="padobi" placeholder="পদবী">
-<input type="text" id="name" placeholder="নাম">
-<input type="text" id="number" placeholder="মোবাইল নম্বর">
-<input type="text" id="remarks" placeholder="মন্তব্য">
-<button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button><p id="msg" style="text-align:center;color:green;font-weight:bold"></p>
+<div class="top"><b>MT PLATOON 4 BIR</b><button class="logout" onclick="localStorage.clear();location.href='index.html'">LOGOUT</button></div>
+<div class="wrap">
+<div class="welcome">Welcome, Viewer</div>
+<div class="mobile">📞 MT PLATOON Mobile: 01769013471</div>
+<div class="grid">
+<div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div><div class="t2">All Vehicle Information</div></div>
+<div class="card" onclick="location.href='fuel.html'"><span class="icon">⛽</span><div class="t1">FUEL REPORT</div><div class="t2">Daily Fuel Status</div></div>
+<div class="card" onclick="location.href='duty.html'"><span class="icon">👮‍♂️</span><div class="t1">DUTY ROSTER</div><div class="t2">Platoon Duty List</div></div>
+<div class="card" onclick="location.href='seniority.html'"><span class="icon">⭐</span><div class="t1">SUTY SENIORITY</div><div class="t2">Seniority List & Updates</div></div>
+<div class="card" onclick="location.href='general.html'"><span class="icon">📝</span><div class="t1">GENERAL<br>UPDATE</div><div class="t2">Other Updates</div></div>
+<div class="card" onclick="location.href='contact.html'"><span class="icon">📞</span><div class="t1">MT PLATOON<br>MOBILE NUMBER</div><div class="t2">Contact List</div></div>
 </div>
-<div class="table-title">MT PLATOON MOBILE NUMBER - 4 BIR</div>
-<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-<table><thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>মোবাইল নম্বর</th><th>মন্তব্য</th><th id="actionHead">একশন</th></tr></thead>
-<tbody id="dataTable"><tr><td colspan="6">Loading...</td></tr></tbody></table>
 </div>
-<script>
-const SHEET_URL="https://script.google.com/macros/s/AKfycbwPXKd8ecRThPwF0wVTg4id88ru0RZtpWKrk6Jb6oFp-Xq8KuzwZVM_Zmw05gaevpZT/exec";
-let selectedRole = localStorage.getItem('role') || 'mt platoon';
-let editRowNum=-1;
-async function loadData(){
- let tbody=document.getElementById('dataTable');
- try{
-  let res=await fetch(SHEET_URL+"?sheet=Mobile&t="+Date.now());
-  let data=await res.json();
-  tbody.innerHTML='';
-  if(!data.length){tbody.innerHTML='<tr><td colspan="6">কোনো ডাটা নাই</td></tr>';return}
-  data.forEach((item,index)=>{
-   let btn=(selectedRole.toLowerCase().includes('clk'))? `<button class="btn-edit" onclick="editData(${item.row},'${item.PADOBI}','${item.NAME}','${item.NUMBER}','${item.MONTOBBO||''}')">Edit</button><button class="btn-delete" onclick="deleteData(${item.row})">Delete</button>` : `View Only`;
-   tbody.innerHTML+=`<tr><td>${index+1}</td><td>${item.PADOBI}</td><td>${item.NAME}</td><td>${item.NUMBER}</td><td>${item.MONTOBBO||''}</td><td>${btn}</td></tr>`;
-  });
- }catch(e){tbody.innerHTML=`<tr><td colspan="6">Error: Failed to fetch</td></tr>`;}
-}
-function editData(row,PADOBI,NAME,NUMBER,MONTOBBO){ if(!selectedRole.toLowerCase().includes('clk')){alert('Permission নাই');return} editRowNum=row; padobi.value=PADOBI; name.value=NAME; number.value=NUMBER; remarks.value=MONTOBBO; mainBtn.innerText='Update করুন'; }
-async function deleteData(row){ if(!confirm('Delete?'))return; await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({sheet:"Mobile",action:"delete",row})}); alert('ডিলিট'); setTimeout(loadData,2000); }
-async function addData(){
- let PADOBI=padobi.value.trim(), NAME=name.value.trim(), NUMBER=number.value.trim(), MONTOBBO=remarks.value.trim();
- if(!PADOBI||!NAME||!NUMBER){alert('পূরণ করুন');return}
- let payload=editRowNum==-1? {sheet:"Mobile",PADOBI,NAME,NUMBER,MONTOBBO} : {sheet:"Mobile",action:"edit",row:editRowNum,PADOBI,NAME,NUMBER,MONTOBBO};
- msg.innerText='পাঠানো হচ্ছে...'; await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
- msg.innerText='✅ Done!'; padobi.value=name.value=number.value=remarks.value=''; editRowNum=-1; mainBtn.innerText='Add করুন'; setTimeout(loadData,2000);
-}
-window.onload=function(){ if(selectedRole.toLowerCase().includes('clk')){adminControls.classList.remove('disabled');} else{adminControls.classList.add('disabled'); actionHead.innerText='Status';} loadData(); }
-</script>
 </body>
 </html>
