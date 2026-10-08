@@ -1,46 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>4 BIR - Seniority</title>
 <style>
-body{font-family:system-ui;background:#0f172a;color:#fff;padding:15px}
+body{font-family:system-ui;background:#0f172a;color:#fff;padding:15px;margin:0}
 .card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .badge{background:#334155;padding:3px 8px;border-radius:20px;font-size:12px}
-input,button{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:none;box-sizing:border-box}
+input,button{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:none;box-sizing:border-box;font-size:16px}
 button{background:#22c55e;color:#000;font-weight:bold;cursor:pointer}
 #list{margin-top:15px}
 .header{font-size:22px;font-weight:bold;text-align:center;margin:15px 0}
+.topbar{display:flex;justify-content:space-between;align-items:center}
+.back{background:#334155;color:white;width:auto;padding:8px 14px}
+.act{display:flex;gap:6px}
+.e{background:#facc15;width:auto;padding:8px 12px}
+.d{background:#ef4444;color:white;width:auto;padding:8px 12px}
+.hidden{display:none!important}
+.search{background:#1e293b;color:white;border:1px solid #334155}
 </style>
 </head>
 <body>
+<div class="topbar">
+<button class="back" onclick="location.href='dashboard.html'">← BACK</button>
 <div class="header">4 BIR - Seniority List</div>
-
-<div style="background:#1e293b;padding:15px;border-radius:12px">
-<h3>Add New</h3>
-<input id="S" placeholder="Seniority No (e.g. 101)">
-<input id="P" placeholder="Rank (e.g. Sepoy)">
-<input id="N" placeholder="Name">
-<input id="D" type="date">
-<button onclick="addData()">Add to Sheet</button>
-<p id="msg"></p>
+<div style="width:70px"></div>
 </div>
 
-<div id="list">Loading...</div>
+<div id="adminBox" style="background:#1e293b;padding:15px;border-radius:12px">
+<h3 style="margin:0 0 10px 0">Add New</h3>
+<input id="S" placeholder="সেনা নং (e.g. 101)">
+<input id="P" placeholder="পদবি (e.g. সৈনিক)">
+<input id="N" placeholder="নাম">
+<input id="D" type="date">
+<button id="saveBtn" onclick="addData()">SAVE</button>
+</div>
+
+<input id="q" class="search" placeholder="🔍 Search করুন..." onkeyup="loadData()">
+
+<div id="list"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzqXLo2R0miX8pVp0IJ3N4kyuahPjsNcEscoQnstc7FmWF1AhsI-jn-6t3bH8us2Hbkgg/exec";
+let db = JSON.parse(localStorage.getItem('suty')||'[]');
+let editIndex = -1;
+let role = localStorage.getItem('role')||'mt';
 
-async function loadData(){
-  try{
-    document.getElementById('list').innerHTML = "Loading...";
-    let res = await fetch(SHEET_URL);
-    let data = await res.json();
-    // Sort by Seniority
-    data.sort((a,b)=> (parseInt(a.S)||9999) - (parseInt(b.S)||9999));
-    let html = "";
-    data.forEach(r=>{
-      html += `<div class="card"><div><b>${r.S}. ${r.N}</b><br><span class="badge">${r.P} | ${r.D}</span></div></div>`;
-    });
-    document
+if(role=='mt' || role=='viewer'){
+  document.getElementById('adminBox').classList.add('hidden');
+}
+
+function addData(){
+  let S=document.getElementById('S').value.trim();
+  let P=document.getElementById('P').value.trim();
+  let N=document.getElementById('N').value.trim();
+  let D=document.getElementById('D').value;
+  if(!S||!N||!D) return alert('সেনা নং, নাম, তারিখ দিন');
+
+  if(editIndex>=0){
+    db[editIndex]={S,P,N,D};
+    editIndex=-1;
+    document.getElementById('saveBtn').innerText='SAVE';
+  }else{
+    db.push({S,P,N,D});
+  }
+  localStorage.setItem('suty',JSON.stringify(db));
+  S=document.getElementById('S').value='';
+  document.getElementById('P').value='';
+  document.getElementById('N').value='';
+  document.getElementById('D').value='';
+  loadData();
+}
+
+function loadData(){
+  let q=(document.getElementById('q').value||'').toLowerCase();
+  let list=document.getElementById('list');
+  db.sort((a,b)=> new Date(a.D) - new Date(b.D));
+  let filtered = db.filter(x=> x.N.toLowerCase().includes(q) || x.S.toLowerCase().includes(q));
+
+  if(filtered.length==0){ list.innerHTML='<p style="text-align:center;opacity:0.6">কোনো ডাটা নাই</p>'; return; }
+
+  let html='';
+  filtered.forEach((r)=>{
+    let realIdx = db.indexOf(r);
+    let diff = Math.floor((new Date() - new Date(r.D))/(1000*60*60*24));
+    let action = (role=='clk'||role=='admin')? `<div class="act"><button class="e" onclick="editRow(${realIdx})">Edit</button><button class="d" onclick="delRow(${realIdx})">Del</button></div>` : '';
+    html+=`<div class="card"><div><b>${r.S}. ${r.N}</b><br><span class="badge">${r.P} | ${r.D} | ${diff} দিন</span></div>${action}</div>`;
+  });
+  list.innerHTML=html;
+}
+
+function editRow(i){
+  let r=db[i];
+  document.getElementById('S').value=r.S;
+  document.getElementById('P').value=r.P;
+  document.getElementById('N').value=r.N;
+  document.getElementById('D').value=r.D;
+  editIndex=i;
+  document.getElementById('saveBtn').innerText='UPDATE করুন';
+  window.scrollTo(0,0);
+}
+function delRow(i){
+  if(confirm('ডিলিট করবে?')){
+    db.splice(i,1);
+    localStorage.setItem('suty',JSON.stringify(db));
+    loadData();
+  }
+}
+loadData();
+</script>
+</body>
+</html>
