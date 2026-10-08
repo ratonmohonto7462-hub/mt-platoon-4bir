@@ -2,7 +2,7 @@
 <html lang="bn">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Seniority - 4 BIR</title>
 <style>body{margin:0;background:#eef2f7;font-family:Arial}.header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between}.back{background:#c0392b;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:bold}.container{padding:12px;max-width:900px;margin:0 auto}.inp{width:100%;padding:16px;border:2px solid #ddd;border-radius:18px;margin-bottom:12px;box-sizing:border-box;font-size:17px;background:white}.btn-add{width:100%;padding:16px;background:#0a7a3a;color:white;border:none;border-radius:18px;font-size:20px;font-weight:900}.title{font-size:26px;font-weight:900;text-align:center;margin:18px 0 5px}.sub{color:#0a7a3a;text-align:center;font-size:20px;font-weight:900;margin-bottom:15px}.btn-print{background:#1a4ee8;color:white;border:none;padding:12px 30px;border-radius:14px;font-size:18px;font-weight:900;display:block;margin:0 auto 15px auto}table{width:100%;border-collapse:collapse;background:white}th{background:#0a6b2e;color:white;padding:8px 4px;border:1px solid #fff;font-size:13px}td{border:1px solid #999;padding:6px 3px;text-align:center;font-size:13px}.btn-e{background:#2a7bff;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}.btn-d{background:#ff1a1a;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}.hidden{display:none!important}
-@media print{.header,#adminBox,.btn-print,.btn-e,.btn-d{display:none!important} body{background:white}}
+@media print{.header,#adminBox,.btn-print{display:none!important}}
 </style>
 </head><body>
 <div class="header"><h1>SENIORITY</h1><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
@@ -16,50 +16,4 @@
 <button id="mainBtn" class="btn-add" onclick="saveData()">Add করুন</button>
 <p id="msg" style="text-align:center;color:green;font-weight:bold"></p>
 </div>
-<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div><div class="sub">এমটি প্লাটুন ৪ বীর</div>
-<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead><tbody id="tb"><tr><td colspan="8">Loading...</td></tr></tbody></table>
-</div>
-<script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbxZtN_fEUiA9ubNFbrXFR3PKUXdM8RuiR63tv1rpQxi2Ti2Fmmo11IHy9zp7HGuRY-g-w/exec";
-let role = localStorage.getItem('role')||'';
-let editRowNum = -1;
-if(role==='mt' || role==='platoon' || role==='viewer'){ document.getElementById('adminBox').classList.add('hidden'); }
-
-function formatDate(dateStr){
-  let d = new Date(dateStr); if(isNaN(d)) return dateStr;
-  return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();
-}
-
-async function loadData(){
-  try{
-    let res = await fetch(SHEET_URL);
-    let data = await res.json();
-    data.sort((a,b)=> new Date(a.D)-new Date(b.D));
-    let tb=document.getElementById('tb'); tb.innerHTML='';
-    if(data.length==0){tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই</td></tr>'; return;}
-    data.forEach((r,i)=>{
-      let today=new Date(); today.setHours(0,0,0,0);
-      let jd=new Date(r.D); jd.setHours(0,0,0,0);
-      let diff = Math.floor((today-jd)/(1000*60*60*24)); if(diff<0) diff=0;
-      let btns = (role==='clk'||role==='admin')? `<button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','${r.D}','${r.M||''}')">Edit</button><button class="btn-d" onclick="deleteData(${r.row})">X</button>` : 'View';
-      tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td><td>${btns}</td></tr>`;
-    });
-  }catch(e){ document.getElementById('tb').innerHTML='<tr><td colspan="8">Sheet Error - Anyone access দিন</td></tr>'; }
-}
-
-function startEdit(row,S,P,N,D,M){
-  document.getElementById('s').value=S; document.getElementById('p').value=P; document.getElementById('n').value=N; document.getElementById('m').value=M;
-  let d=new Date(D); document.getElementById('d').value=d.toISOString().split('T')[0];
-  editRowNum=row; document.getElementById('mainBtn').innerText='Update করুন'; window.scrollTo(0,0);
-}
-
-async function deleteData(row){
-  if(!confirm('ডিলিট করবে?')) return;
-  await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row:row})});
-  alert('ডিলিট হয়েছে'); setTimeout(loadData,2000);
-}
-
-async function saveData(){
-  let S=s.value.trim(), P=p.value, N=n.value.trim(), D=d.value, M=m.value.trim();
-  if(!S||!N||!D) return alert('পূরণ করুন
+<div
