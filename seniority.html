@@ -31,4 +31,15 @@ body{background:white}
 <div class="container">
 <div id="adminBox">
 <input id="s" class="inp" placeholder="সেনা নং">
-<select id="p" class="inp"><option value="সৈনিক">সৈনিক</option><option value="ল্যান্স কর্পোরাল">ল্যান্স কর্পোরাল</option><option value="কর্পোরাল">কর্পোরাল</option><option value="
+<select id="p" class="inp"><option value="সৈনিক">সৈনিক</option><option value="ল্যান্স কর্পোরাল">ল্যান্স কর্পোরাল</option><option value="কর্পোরাল">কর্পোরাল</option><option value="সার্জেন্ট">সার্জেন্ট</option></select>
+<input id="n" class="inp" placeholder="নাম বাংলা/ইংরেজি">
+<input id="d" class="inp" type="date">
+<input id="m" class="inp" placeholder="মন্তব্য">
+<button id="mainBtn" class="btn-add" onclick="saveData()">Add করুন</button>
+<p id="msg" style="text-align:center;font-weight:bold;color:green"></p>
+</div>
+<div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
+<div class="sub">এমটি প্লাটুন ৪ বীর</div>
+<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+<table>
+<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr
