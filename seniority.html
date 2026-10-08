@@ -5,7 +5,7 @@
 <title>Seniority - 4 BIR</title>
 <style>
 body{margin:0;background:#eef2f7;font-family:Arial}
-.header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
 .back{background:#c0392b;color:white;border:none;padding:10px 16px;border-radius:10px;font-weight:bold}
 .container{padding:12px;max-width:950px;margin:0 auto}
 .inp{width:100%;padding:16px;border:2px solid #ddd;border-radius:18px;margin-bottom:12px;box-sizing:border-box;font-size:17px;background:white}
@@ -42,4 +42,40 @@ body{background:white}
 <div class="sub">এমটি প্লাটুন ৪ বীর</div>
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 <table>
-<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr
+<thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead>
+<tbody id="tb"><tr><td colspan="8">Loading...</td></tr></tbody>
+</table>
+</div>
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzeDYbuNtGZ9oWoeRZmwpgx5oosEN2nByqbKgyYGAfdIyP-ySp1YCMcxaaANWfzQqLqew/exec";
+let editRowNum=-1;
+function formatDate(s){if(!s)return'';let d=new Date(s);if(isNaN(d))return s;return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear()}
+async function loadData(){
+ try{
+  let res=await fetch(SHEET_URL+"?t="+Date.now());
+  let data=await res.json();
+  let tb=document.getElementById('tb');tb.innerHTML='';
+  if(!data||data.length==0){tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই - উপরে Add করুন</td></tr>';return}
+  data.sort((a,b)=>new Date(a.D)-new Date(b.D));
+  data.forEach((r,i)=>{
+   let today=new Date();today.setHours(0,0,0,0);
+   let jd=new Date(r.D);jd.setHours(0,0,0,0);
+   let diff=Math.floor((today-jd)/86400000);if(diff<0)diff=0;
+   tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td><td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','${r.D}','${r.M||''}')">Edit</button><button class="btn-d" onclick="deleteData(${r.row})">X</button></td></tr>`;
+  });
+ }catch(e){document.getElementById('tb').innerHTML='<tr><td colspan="8">Error: '+e.message+' - Apps Script এ Anyone করুন</td></tr>'}
+}
+function startEdit(row,S,P,N,D,M){s.value=S;p.value=P;n.value=N;m.value=M;try{d.value=new Date(D).toISOString().split('T')[0]}catch(e){d.value=D}editRowNum=row;mainBtn.innerText='Update করুন';scrollTo(0,0)}
+async function deleteData(row){if(!confirm('ডিলিট করবে?'))return;await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row})});alert('ডিলিট হয়েছে');setTimeout(loadData,2000)}
+async function saveData(){
+ let S=s.value.trim(),P=p.value,N=n.value.trim(),D=d.value,M=m.value.trim();
+ if(!S||!N||!D){alert('সব পূরণ করো');return}
+ let payload=editRowNum==-1?{S,P,N,D,M}:{action:"edit",row:editRowNum,S,P,N,D,M};
+ msg.innerText='পাঠানো হচ্ছে...';
+ await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
+ msg.innerText='✅ Done! 2 সেকেন্ড পর তালিকায় আসবে';s.value=n.value=d.value=m.value='';editRowNum=-1;mainBtn.innerText='Add করুন';setTimeout(loadData,2000);
+}
+loadData();
+</script>
+</body>
+</html>
