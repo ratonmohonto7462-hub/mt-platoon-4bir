@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Seniority - 4 BIR</title>
-<style>body{margin:0;background:#eef2f7;font-family:Arial}.header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}.back{background:#c0392b;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:bold}.container{padding:12px;max-width:900px;margin:0 auto}.inp{width:100%;padding:16px;border:2px solid #ddd;border-radius:18px;margin-bottom:12px;box-sizing:border-box;font-size:17px;background:white}.btn-add{width:100%;padding:16px;background:#0a7a3a;color:white;border:none;border-radius:18px;font-size:20px;font-weight:900}.title{font-size:26px;font-weight:900;text-align:center;margin:18px 0 5px}.sub{color:#0a7a3a;text-align:center;font-size:20px;font-weight:900;margin-bottom:15px}.btn-print{background:#1a4ee8;color:white;border:none;padding:12px 30px;border-radius:14px;font-size:18px;font-weight:900;display:block;margin:0 auto 15px auto}table{width:100%;border-collapse:collapse;background:white}th{background:#0a6b2e;color:white;padding:10px 4px;border:1px solid #fff;font-size:14px}td{border:1px solid #999;padding:8px 4px;text-align:center;font-size:14px}.btn-edit{background:#2a7bff;color:white;border:none;padding:7px 12px;border-radius:10px;font-weight:900}.btn-del{background:#ff1a1a;color:white;border:none;padding:6px 10px;border-radius:10px;font-weight:900}.hidden{display:none!important}</style>
+<style>
+body{margin:0;background:#eef2f7;font-family:Arial}
+.header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.back{background:#c0392b;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:bold}
+.container{padding:12px;max-width:900px;margin:0 auto}
+.inp{width:100%;padding:16px;border:2px solid #ddd;border-radius:18px;margin-bottom:12px;box-sizing:border-box;font-size:17px;background:white}
+.btn-add{width:100%;padding:16px;background:#0a7a3a;color:white;border:none;border-radius:18px;font-size:20px;font-weight:900}
+.title{font-size:26px;font-weight:900;text-align:center;margin:18px 0 5px}
+.sub{color:#0a7a3a;text-align:center;font-size:20px;font-weight:900;margin-bottom:15px}
+.btn-print{background:#1a4ee8;color:white;border:none;padding:12px 30px;border-radius:14px;font-size:18px;font-weight:900;display:block;margin:0 auto 15px auto}
+table{width:100%;border-collapse:collapse;background:white}
+th{background:#0a6b2e;color:white;padding:10px 4px;border:1px solid #fff;font-size:14px}
+td{border:1px solid #999;padding:8px 4px;text-align:center;font-size:14px}
+.hidden{display:none!important}
+@media print{ .header, #adminBox, .btn-print {display:none!important} body{background:white} table{box-shadow:none} }
+</style>
 </head><body>
 <div class="header"><h1>SENIORITY</h1><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
 <div class="container">
@@ -16,14 +31,22 @@
 </div>
 <div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div><div class="sub">এমটি প্লাটুন ৪ বীর</div>
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead><tbody id="tb"><tr><td colspan="8">Loading from Sheet...</td></tr></tbody></table>
+<table><thead><tr><th>ক্রমিক</th><th>সেনা নং</th><th>পদবি</th><th>নাম</th><th>যোগদানের তারিখ</th><th>মোট দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead><tbody id="tb"><tr><td colspan="8">Loading...</td></tr></tbody></table>
 </div>
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxolgAsqJPwu24tQK6iZ1usICQ8e4WhJqK-fuovsMKC_RMvK-110rpm1CbvY-ZG1GjCIA/exec";
 
 let role = localStorage.getItem('role')||'';
-if(role==='mt' || role==='platoon' || role==='viewer'){
-  document.getElementById('adminBox').classList.add('hidden');
+if(role==='mt' || role==='platoon' || role==='viewer'){ document.getElementById('adminBox').classList.add('hidden'); }
+
+function formatDate(dateStr){
+  if(!dateStr) return '';
+  let d = new Date(dateStr);
+  if(isNaN(d)) return dateStr;
+  let day = String(d.getDate()).padStart(2,'0');
+  let month = String(d.getMonth()+1).padStart(2,'0');
+  let year = d.getFullYear();
+  return day+'-'+month+'-'+year;
 }
 
 async function loadData(){
@@ -35,12 +58,15 @@ async function loadData(){
     if(data.length==0){tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই</td></tr>'; return;}
     data.forEach((r,i)=>{
       let today=new Date(); today.setHours(0,0,0,0);
-      let jd=new Date(r.D); let diff=Math.ceil((jd-today)/(1000*60*60*24));
-      let dayText = diff>0? diff+'<br>দিন<br>বাকি' : Math.abs(diff)+' দিন';
+      let jd=new Date(r.D); jd.setHours(0,0,0,0);
+      let diffDays = Math.floor((today - jd)/(1000*60*60*24));
+      if(diffDays<0) diffDays=0;
+      let dayText = diffDays + ' দিন';
+      let dateShow = formatDate(r.D);
       let action = (role==='clk'||role==='admin')? `Admin` : 'View';
-      tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${r.D}</td><td>${dayText}</td><td>${r.M||''}</td><td>${action}</td></tr>`;
+      tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${dateShow}</td><td>${dayText}</td><td>${r.M||''}</td><td>${action}</td></tr>`;
     });
-  }catch(e){ document.getElementById('tb').innerHTML='<tr><td colspan="8">Sheet থেকে আনতে পারছে না - Apps Script টা Deploy: Anyone করা আছে কিনা চেক করুন</td></tr>'; }
+  }catch(e){ document.getElementById('tb').innerHTML='<tr><td colspan="8">Sheet Error</td></tr>'; }
 }
 
 async function saveData(){
@@ -48,7 +74,7 @@ async function saveData(){
   if(!S||!N||!D) return alert('সব পূরণ করুন');
   document.getElementById('msg').innerText='Sheet এ পাঠানো হচ্ছে...';
   await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({S,P,N,D,M})});
-  document.getElementById('msg').innerText='✅ Google Sheet এ Save হয়েছে! 3 সেকেন্ড পর আসবে';
+  document.getElementById('msg').innerText='✅ Save হয়েছে!';
   document.getElementById('s').value=''; document.getElementById('n').value=''; document.getElementById('d').value=''; document.getElementById('m').value='';
   setTimeout(loadData,2000);
 }
