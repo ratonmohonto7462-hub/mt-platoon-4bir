@@ -6,24 +6,19 @@
 <style>
 body{margin:0;background:#eef2f7;font-family:Arial}
 .header{background:#0a5c2f;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.back{background:#c0392b;color:white;border:none;padding:10px 16px;border-radius:10px;font-weight:bold}
+.back{background:#c0392b;color:white;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;cursor:pointer}
 .container{padding:12px;max-width:950px;margin:0 auto}
 .inp{width:100%;padding:16px;border:2px solid #ddd;border-radius:18px;margin-bottom:12px;box-sizing:border-box;font-size:17px;background:white}
-.btn-add{width:100%;padding:16px;background:#0a7a3a;color:white;border:none;border-radius:18px;font-size:20px;font-weight:900}
+.btn-add{width:100%;padding:16px;background:#0a7a3a;color:white;border:none;border-radius:18px;font-size:20px;font-weight:900;cursor:pointer}
 .title{font-size:24px;font-weight:900;text-align:center;margin:20px 0 5px}
 .sub{color:#0a7a3a;text-align:center;font-size:19px;font-weight:900;margin-bottom:15px}
-.btn-print{background:#1a4ee8;color:white;border:none;padding:10px 28px;border-radius:12px;font-weight:900;display:block;margin:0 auto 15px auto}
+.btn-print{background:#1a4ee8;color:white;border:none;padding:10px 28px;border-radius:12px;font-weight:900;display:block;margin:0 auto 15px auto;cursor:pointer}
 table{width:100%;border-collapse:collapse;background:white;margin-top:10px}
 th{background:#0a6b2e;color:white;padding:10px 4px;border:1px solid #fff;font-size:13px}
-td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px}
+td{border:1px solid #999;padding:8px 3px;text-align:center;font-size:13px;word-break:break-word}
 .btn-e{background:#2a7bff;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
 .btn-d{background:#ff1a1a;color:white;border:none;padding:6px 10px;border-radius:8px;font-weight:bold;margin:2px}
-@media print{
-.header,#adminBox,.btn-print{display:none!important}
-table th:last-child,table td:last-child{display:none!important}
-body{background:white}
-@page{size:A4;margin:10mm}
-}
+@media print{.header,#adminBox,.btn-print{display:none!important}table th:last-child,table td:last-child{display:none!important}body{background:white}@page{size:A4;margin:10mm}}
 </style>
 </head>
 <body>
@@ -47,7 +42,7 @@ body{background:white}
 </table>
 </div>
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzeDYbuNtGZ9oWoeRZmwpgx5oosEN2nByqbKgyYGAfdIyP-ySp1YCMcxaaANWfzQqLqew/exec";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbyWj8lhVMk29PqJAkLr5BTARjyhNTc4WJgVmCrWXh6miVsiaB6Rty729Nk22kmP8XmiBA/exec";
 let editRowNum=-1;
 function formatDate(s){if(!s)return'';let d=new Date(s);if(isNaN(d))return s;return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear()}
 async function loadData(){
@@ -63,17 +58,17 @@ async function loadData(){
    let diff=Math.floor((today-jd)/86400000);if(diff<0)diff=0;
    tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td><td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','${r.D}','${r.M||''}')">Edit</button><button class="btn-d" onclick="deleteData(${r.row})">X</button></td></tr>`;
   });
- }catch(e){document.getElementById('tb').innerHTML='<tr><td colspan="8">Error: '+e.message+' - Apps Script এ Anyone করুন</td></tr>'}
+ }catch(e){document.getElementById('tb').innerHTML='<tr><td colspan="8">Error: '+e.message+'</td></tr>'}
 }
-function startEdit(row,S,P,N,D,M){s.value=S;p.value=P;n.value=N;m.value=M;try{d.value=new Date(D).toISOString().split('T')[0]}catch(e){d.value=D}editRowNum=row;mainBtn.innerText='Update করুন';scrollTo(0,0)}
+function startEdit(row,S,P,N,D,M){document.getElementById('s').value=S;document.getElementById('p').value=P;document.getElementById('n').value=N;document.getElementById('m').value=M;try{document.getElementById('d').value=new Date(D).toISOString().split('T')[0]}catch(e){document.getElementById('d').value=D}editRowNum=row;document.getElementById('mainBtn').innerText='Update করুন';window.scrollTo(0,0)}
 async function deleteData(row){if(!confirm('ডিলিট করবে?'))return;await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row})});alert('ডিলিট হয়েছে');setTimeout(loadData,2000)}
 async function saveData(){
- let S=s.value.trim(),P=p.value,N=n.value.trim(),D=d.value,M=m.value.trim();
+ let S=document.getElementById('s').value.trim(),P=document.getElementById('p').value,N=document.getElementById('n').value.trim(),D=document.getElementById('d').value,M=document.getElementById('m').value.trim();
  if(!S||!N||!D){alert('সব পূরণ করো');return}
  let payload=editRowNum==-1?{S,P,N,D,M}:{action:"edit",row:editRowNum,S,P,N,D,M};
- msg.innerText='পাঠানো হচ্ছে...';
+ document.getElementById('msg').innerText='পাঠানো হচ্ছে...';
  await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});
- msg.innerText='✅ Done! 2 সেকেন্ড পর তালিকায় আসবে';s.value=n.value=d.value=m.value='';editRowNum=-1;mainBtn.innerText='Add করুন';setTimeout(loadData,2000);
+ document.getElementById('msg').innerText='✅ Done!';document.getElementById('s').value=document.getElementById('n').value=document.getElementById('d').value=document.getElementById('m').value='';editRowNum=-1;document.getElementById('mainBtn').innerText='Add করুন';setTimeout(loadData,2000);
 }
 loadData();
 </script>
