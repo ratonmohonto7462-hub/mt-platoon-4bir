@@ -39,14 +39,11 @@ td{padding:8px;text-align:center;border:1px solid #000;font-family:'SolaimanLipi
 </div>
 <div class="print-footer">Create By Snk Raton</div>
 <script>
-const SHEET_URL="https://script.google.com/macros/s/AKfycbyWj8lhVMk29PqJAkLr5BTARjyhNTc4WJgVmCrWXh6miVsiaB6Rty729Nk22kmP8XmiBA/exec";
+const SHEET_URL="https://script.google.com/macros/s/AKfycbxFAPTURXneT17NcCyDHu1Bd5d5fTUn-mglZjOAGm4iAiybq7xFaeT6utXwuCQSEmltYw/exec";
 let selectedRole = localStorage.getItem('role');
 let editRowNum = -1;
-
 function goBack(){ window.location.href = 'dashboard.html'; }
 function formatDate(dateStr){ if(!dateStr) return ''; let d=new Date(dateStr); if(isNaN(d)) return dateStr; let day=String(d.getDate()).padStart(2,'0'); let month=String(d.getMonth()+1).padStart(2,'0'); let year=String(d.getFullYear()).slice(-2); return `${day}-${month}-${year}`; }
-
-// SHEET থেকে লোড - NO AUTO SORT
 async function loadData(){
  let tbody=document.getElementById('dataTable');
  try{
@@ -63,7 +60,6 @@ async function loadData(){
   });
  }catch(e){ tbody.innerHTML=`<tr><td colspan="7">Error: ${e.message}</td></tr>`; }
 }
-
 function editData(row,BA,MODEL,SRENI,DATE,MONTOBBO){
  if(!selectedRole ||!selectedRole.toLowerCase().includes('clk')){alert('আপনার Permission নাই');return}
  editRowNum=row;
@@ -75,14 +71,12 @@ function editData(row,BA,MODEL,SRENI,DATE,MONTOBBO){
  document.getElementById('mainBtn').innerText='Update করুন';
  window.scrollTo(0,0);
 }
-
 async function deleteData(row){
  if(!selectedRole ||!selectedRole.toLowerCase().includes('clk')){alert('আপনার Permission নাই');return}
  if(!confirm('Delete করবেন?'))return;
  await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({sheet:"Vehicle",action:"delete",row})});
  alert('ডিলিট হয়েছে'); setTimeout(loadData,2000);
 }
-
 async function addData(){
  if(!selectedRole ||!selectedRole.toLowerCase().includes('clk')){alert('আপনার Permission নাই');return}
  let BA=document.getElementById('baNo').value.trim();
@@ -99,7 +93,6 @@ async function addData(){
  editRowNum=-1; document.getElementById('mainBtn').innerText='Add করুন';
  setTimeout(loadData,2000);
 }
-
 window.onload=function(){
  if(selectedRole && selectedRole.toLowerCase().includes('clk')){
   document.getElementById('adminControls').classList.remove('disabled');
