@@ -78,21 +78,4 @@ function load(){
   d.forEach((x,i)=>{
     let days=calcDays(x.nextdate);
     let dayTxt=days>0?days+' দিন বাকি':days==0?'আজকেই':Math.abs(days)+' দিন Over';
-    let cls=days<=7?'over':'ok';
-    let act=role==='clk'? `<button onclick="editD(${i})" style="background:orange;color:white;border:none;padding:4px 7px;border-radius:6px">Edit</button> <button onclick="delD(${i})" style="background:red;color:white;border:none;padding:4px 7px;border-radius:6px">Del</button>`:'-';
-    tb.innerHTML+=`<tr><td>${x.date}</td><td>${x.vehicle}</td><td>${x.qty}</td><td>${x.km}</td><td>${x.nextkm}</td><td>${x.nextdate}</td><td class="${cls}">${dayTxt}</td><td>${x.remarks||''}</td><td>${act}</td></tr>`;
-  });
-}
-function editD(i){if(role!=='clk') return alert('শুধু CLK Edit পারবে'); let x=getData()[i]; editIdx=i; fdate.value=x.date; vehicle.value=x.vehicle; qty.value=x.qty; km.value=x.km; nextkm.value=x.nextkm; nextdate.value=x.nextdate; remarks.value=x.remarks; mainBtn.innerText='Update করুন'; window.scrollTo(0,0);}
-function delD(i){if(role!=='clk') return alert('শুধু CLK Delete পারবে'); if(!confirm('Delete করবেন?')) return; let d=getData(); d.splice(i,1); saveData(d); load();}
-function addData(){
-  if(role!=='clk') return alert('শুধু CLK Add পারবে');
-  let dt=fdate.value, ve=vehicle.value.trim(), qt=qty.value||0, k=km.value||0, nk=nextkm.value||0, ndt=nextdate.value, re=remarks.value.trim();
-  if(!dt||!ve||!ndt){alert('তারিখ, গাড়ী নং, পরবর্তী তারিখ লাগবে'); return;}
-  let d=getData(); let obj={date:dt, vehicle:ve, qty:qt, km:k, nextkm:nk, nextdate:ndt, remarks:re};
-  if(editIdx==-1){d.push(obj); msg.innerText='✅ Add হয়েছে';}else{d[editIdx]=obj; editIdx=-1; mainBtn.innerText='Add করুন'; msg.innerText='✅ Update হয়েছে';}
-  saveData(d); vehicle.value=qty.value=km.value=nextkm.value=remarks.value=''; load();
-}
-</script>
-</body>
-</html>
+    let cls
