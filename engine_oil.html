@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ইঞ্জিন অয়েল বদলি - 4 BIR</title>
+<style>
+body{margin:0;font-family:Arial;background:#eef2f5}
+.top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:16px;font-weight:900}
+.logout{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer}
+.wrap{padding:14px;max-width:1100px;margin:0 auto}
+.card{background:white;padding:16px;border-radius:16px;box-shadow:0 4px 12px #0001;margin-bottom:14px}
+input{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:10px;box-sizing:border-box;font-size:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-add{width:100%;padding:14px;background:#0a4d0a;color:white;border:none;border-radius:12px;font-size:17px;font-weight:900;cursor:pointer}
+.tit{text-align:center;font-size:19px;font-weight:900;margin:14px 0;color:#0a4d0a;text-decoration:underline}
+.btn-print{background:blue;color:white;border:none;padding:10px 18px;border-radius:10px;font-weight:900;margin:10px auto;display:block;cursor:pointer}
+table{width:100%;border-collapse:collapse;background:white;font-size:13px}
+th{background:#0a4d0a;color:white;padding:10px;border:1px solid #000}
+td{padding:8px;border:1px solid #000;text-align:center}
+@media print{
+ .top,#box,.btn-print{display:none!important}
+  th:last-child,td:last-child{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="top"><b>ইঞ্জিন অয়েল বদলি - 4 BIR</b><button class="logout" onclick="location.href='oil.html'">BACK</button></div>
+
+<div class="wrap">
+<div id="box" class="card">
+<div class="grid2">
+<input type="date" id="fdate">
+<input id="vehicle" placeholder="গাড়ী নং (যেমন: BA-1234)">
+</div>
+<div class="grid2">
+<input id="qty" type="number" placeholder="পরিমাণ (লিটার)">
+<input id="km" type="number" placeholder="বর্তমান KM">
+</div>
+<div class="grid2">
+<input id="nextkm" type="number" placeholder="Next Change KM">
+<input id="cost" type="number" placeholder="খরচ (টাকা)">
+</div>
+<input id="remarks" placeholder="মন্তব্য / কোন ব্র্যান্ড">
+<button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button>
+</div>
+
+<div class="tit">ইঞ্জিন অয়েল বদলি রিপোর্ট</div>
+<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+
+<div class="card" style="overflow:auto">
+<table>
+<thead><tr><th>তারিখ</th><th>গাড়ী নং</th><th>লিটার</th><th>KM</th><th>Next KM</th><th>টাকা</th><th>মন্তব্য</th><th>একশন</th></tr></thead>
+<tbody id="tbl"></tbody>
+</table>
+</div>
+</div>
+
+<script>
+const KEY="EngineOilData";
+let role=(localStorage.getItem('role')||'').toLowerCase();
+let editIdx=-1;
+
+window.onload=function(){
+  if(role!=='clk') document.getElementById('box').style.display='none';
+  document.getElementById('fdate').valueAsDate=new Date();
+  load();
+};
+
+function getData(){ return JSON.parse(localStorage.getItem(KEY)||"[]"); }
+function saveData(d){ localStorage.setItem(KEY, JSON.stringify(d)); }
+
+function load(){
+  let d=getData();
+  let tb=document.getElementById('tbl');
+  tb.innerHTML='';
+  if(!d.length){ tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই</td></tr>'; return; }
+  d.forEach((x,i)=>{
+    let act = role==='clk'? `<button onclick="editD(${i})" style="background:orange;color:white;border:none;padding:5px 8px;border-radius:5px">Edit</button> <button onclick="delD(${i})" style="background:red;color:white;border:none;padding:5px 8px;border-radius:5px">Del</button>` : `-`;
+    tb.innerHTML+=`<tr><td>${x.date}</td><td>${x.vehicle}</td><td>${x.qty}</td><td>${x.km}</td><td>${x.nextkm}</td><td>${x.cost}</td><td>${x.remarks}</td><td>${act}</td></tr>`;
+  });
+}
+
+function editD(i){
+  let x=getData()[i];
+  editIdx=i;
+  fdate.value=x.date; vehicle.value=x.vehicle; qty.value=x.qty;
+  km.value=x.km; nextkm.value=x.nextkm; cost.value=x.cost; remarks.value=x.remarks;
+  mainBtn.innerText='Update করুন';
+  window.scrollTo(0,0);
+}
+
+function delD(i){
+  if(!confirm('Delete করবেন?')) return;
+  let d=getData(); d.splice(i,1); saveData(d); load();
+}
+
+function addData(){
+  let dt=fdate.value, ve=vehicle.value.trim(), qt=qty.value||0, k=km.value||0, nk=nextkm.value||0, co=cost.value||0, re=remarks.value.trim();
+  if(!dt||!ve){ alert('তারিখ ও গাড়ী নং লাগবে'); return; }
+  let d=getData();
+  let obj={date:dt, vehicle:ve, qty:qt, km:k, nextkm:nk, cost:co, remarks:re};
+  if(editIdx==-1) d.push(obj);
+  else{ d[editIdx]=obj; editIdx=-1; mainBtn.innerText='Add করুন'; }
+  saveData(d);
+  vehicle.value=qty.value=km.value=nextkm.value=cost.value=remarks.value='';
+  load();
+}
+</script>
+</body>
+</html>
