@@ -3,63 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ইঞ্জিন অয়েল বদলি - 4 BIR</title>
+<title>ইঞ্জিন অয়েল - 4 BIR</title>
 <style>
-body{margin:0;font-family:Arial,SolaimanLipi;background:#eef3f7}
+body{margin:0;font-family:Arial;background:#eef3f7}
 .top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
-.back{background:#d50000;color:white;border:none;padding:8px 18px;border-radius:12px;font-weight:900;cursor:pointer}
-.wrap{max-width:1100px;margin:12px auto;padding:10px}
-.box{background:white;border-radius:16px;padding:14px;border:1px solid #cbd5d0}
-h2{margin:0 0 10px 0;color:#0a4d0a;text-align:center}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:700px){.row{grid-template-columns:1fr}}
-input,button,select{padding:10px;border-radius:10px;border:1px solid #aaa;width:100%;box-sizing:border-box}
-.btn{background:#0a4d0a;color:white;font-weight:900;border:none;cursor:pointer}
-.btn-red{background:#d50000;color:white;font-weight:900;border:none;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}
-th,td{border:1px solid #333;padding:6px;text-align:center}
-th{background:#e8f5e9}
-#loginBox{max-width:400px;margin:80px auto;background:white;padding:20px;border-radius:16px;text-align:center;border:2px solid #0a4d0a}
-.hide{display:none}
-#printTitle{text-align:center;color:#0a4d0a;font-weight:900;margin:10px 0}
-@media print{
-  .no-print{display:none !important}
-  body{background:white}
-  .wrap{margin:0;padding:0}
-}
+.back{background:#d50000;color:white;border:none;padding:8px 18px;border-radius:12px;font-weight:900}
+.wrap{max-width:1100px;margin:10px auto;padding:10px}
+.box{background:white;border-radius:14px;padding:12px;border:1px solid #ccc}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media(max-width:700px){.row{grid-template-columns:1fr 1fr}}
+input,button{padding:9px;border-radius:8px;border:1px solid #888;width:100%;box-sizing:border-box}
+.btn{background:#0a4d0a;color:white;font-weight:900;border:none}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}
+th,td{border:1px solid #333;padding:5px;text-align:center}
+th{background:#d6e9d8;font-size:12px}
+#printHead{text-align:center;color:#0a4d0a;font-weight:900;margin-bottom:8px}
+@media print{.no-print{display:none}}
 </style>
 </head>
 <body>
 <div class="top no-print"><b>ইঞ্জিন অয়েল বদলি - 4 BIR</b><button class="back" onclick="location.href='lube_oil.html'">BACK</button></div>
-
-<div id="loginBox" class="no-print">
-<b>পিন দিন</b><br><br>
-<input id="pinInput" type="password" placeholder="MT Platoon / MT Clerk PIN">
-<br><br>
-<button class="btn" onclick="checkPin()">প্রবেশ করুন</button>
-<p style="font-size:12px;margin-top:10px">MT Platoon PIN: 1111 (শুধু দেখবে)<br>MT Clerk PIN: 9999 (Add/Edit/Delete)</p>
-</div>
-
-<div id="main" class="wrap hide">
-<div class="box no-print" id="entryBox">
-<h2>নতুন এন্ট্রি</h2>
+<div class="wrap">
+<div class="box no-print">
 <div class="row">
-<input id="ba" placeholder="বিএ নং (যেমন: BA-1234)">
-<input id="model" placeholder="গাড়ির মডেল (যেমন: Hilux)">
+<input id="ba" placeholder="বিএ নং">
+<input id="model" placeholder="গাড়ির মডেল">
 <input id="date" type="date">
-<input id="km" type="number" placeholder="KM - বর্তমান কিলোমিটার">
-<input id="nextkm" type="number" placeholder="Next KM - পরবর্তী কিমি">
-<input id="qty" type="number" placeholder="তেলের পরিমাণ (লিটার)">
-<input id="days" type="number" placeholder="দিন (যেমন: 90)">
+<input id="km" type="number" placeholder="KM">
+<input id="nextkm" type="number" placeholder="Next KM">
+<input id="qty" type="number" placeholder="তেলের পরিমাণ (L)">
+<input id="days" type="number" placeholder="দিন">
 </div>
 <br>
-<button class="btn" onclick="addData()">Save করুন</button>
+<button class="btn" onclick="addData()">Save</button>
 </div>
 
-<div class="box" style="margin-top:14px">
-<div id="printTitle">ইঞ্জিন অয়েল বদলি রিপোর্ট - 4 BIR</div>
+<div class="box" style="margin-top:12px">
+<div id="printHead">ইঞ্জিন অয়েল বদলি রিপোর্ট - 4 BIR</div>
 <div style="overflow:auto">
-<table id="tbl">
+<table>
 <thead>
 <tr>
 <th>বিএ নং</th>
@@ -69,97 +51,37 @@ th{background:#e8f5e9}
 <th>Next KM</th>
 <th>তেলের পরিমাণ</th>
 <th>দিন</th>
-<th class="no-print action-col">অ্যাকশন</th>
+<th class="no-print">অ্যাকশন</th>
 </tr>
 </thead>
 <tbody id="tbody"></tbody>
 </table>
 </div>
 <br>
-<div class="no-print" style="display:flex;gap:10px">
-<button class="btn" onclick="window.print()">PDF / Print</button>
-<button class="btn-red" id="clearBtn" onclick="clearAll()">সব ডিলেট</button>
-</div>
-<p id="roleText" class="no-print" style="text-align:center;font-size:12px;color:green;font-weight:bold"></p>
+<div class="no-print"><button class="btn" onclick="window.print()">PDF / Print</button></div>
 </div>
 </div>
 
 <script>
-let role = "";
 let data = JSON.parse(localStorage.getItem("engine_oil_4bir") || "[]");
-
-function checkPin(){
-  let pin = document.getElementById("pinInput").value;
-  if(pin === "1111"){ role = "MT Platoon"; }
-  else if(pin === "9999"){ role = "MT Clerk"; }
-  else { alert("ভুল পিন!"); return; }
-  
-  document.getElementById("loginBox").classList.add("hide");
-  document.getElementById("main").classList.remove("hide");
-  document.getElementById("roleText").innerText = role + " হিসেবে লগইন করেছেন";
-  
-  if(role === "MT Platoon"){
-    document.getElementById("entryBox").classList.add("hide");
-    document.getElementById("clearBtn").classList.add("hide");
-  }
-  render();
-}
-
 function addData(){
-  if(role !== "MT Clerk"){ alert("শুধু MT Clerk এড করতে পারবে"); return; }
-  let obj = {
-    ba: document.getElementById("ba").value,
-    model: document.getElementById("model").value,
-    date: document.getElementById("date").value,
-    km: document.getElementById("km").value,
-    nextkm: document.getElementById("nextkm").value,
-    qty: document.getElementById("qty").value,
-    days: document.getElementById("days").value,
-  };
-  if(!obj.ba || !obj.date){ alert("বিএ নং ও তারিখ দিন"); return; }
-  data.push(obj);
-  localStorage.setItem("engine_oil_4bir", JSON.stringify(data));
-  render();
-  // clear
-  document.querySelectorAll("#entryBox input").forEach(i=>i.value="");
+ let r={ba:ba.value,model:model.value,date:date.value,km:km.value,nextkm:nextkm.value,qty:qty.value,days:days.value};
+ if(!r.ba) return alert("বিএ নং দিন");
+ data.push(r); localStorage.setItem("engine_oil_4bir", JSON.stringify(data)); render();
+ ba.value=model.value=date.value=km.value=nextkm.value=qty.value=days.value="";
 }
-
 function render(){
-  let tbody = document.getElementById("tbody");
-  tbody.innerHTML = "";
-  data.forEach((r,i)=>{
-    let tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.ba}</td>
-      <td>${r.model}</td>
-      <td>${r.date}</td>
-      <td>${r.km}</td>
-      <td>${r.nextkm}</td>
-      <td>${r.qty} L</td>
-      <td>${r.days}</td>
-      ${role==="MT Clerk" ? `<td class="no-print"><button onclick="del(${i})" style="background:red;color:white;border:none;padding:4px 8px;border-radius:6px">X</button></td>` : `<td class="no-print action-col"></td>`}
-    `;
-    tbody.appendChild(tr);
-  });
-  // hide action col for platoon
-  if(role==="MT Platoon"){
-    document.querySelectorAll(".action-col").forEach(e=>e.classList.add("hide"));
-  }
+ tbody.innerHTML="";
+ data.forEach((r,i)=>{
+  tbody.innerHTML+=`<tr><td>${r.ba}</td><td>${r.model}</td><td>${r.date}</td><td>${r.km}</td><td>${r.nextkm}</td><td>${r.qty} L</td><td>${r.days}</td><td class="no-print"><button onclick="data.splice(${i},1);localStorage.setItem('engine_oil_4bir',JSON.stringify(data));render()" style="background:red;color:white;border:none;padding:3px 7px;border-radius:5px">X</button></td></tr>`;
+ });
 }
+render();
 
-function del(i){
-  if(role !== "MT Clerk") return;
-  if(confirm("ডিলেট করবেন?")){
-    data.splice(i,1);
-    localStorage.setItem("engine_oil_4bir", JSON.stringify(data));
-    render();
-  }
-}
-function clearAll(){
-  if(role !== "MT Clerk") return;
-  if(confirm("সব ডাটা ডিলেট হবে!")){
-    data=[]; localStorage.removeItem("engine_oil_4bir"); render();
-  }
+// MT Platoon হলে Add/Delete লুকিয়ে যাবে - যদি Dashboard থেকে role আসে
+let userRole = localStorage.getItem("userRole"); // dashboard এ MT Platoon / MT Clerk সেট থাকলে
+if(userRole === "MT Platoon"){
+  document.querySelector(".box.no-print").style.display="none";
 }
 </script>
 </body>
