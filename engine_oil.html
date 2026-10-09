@@ -8,15 +8,15 @@
 body{margin:0;font-family:Arial;background:#eef3f7}
 .top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
 .back{background:#d50000;color:white;border:none;padding:8px 18px;border-radius:12px;font-weight:900}
-.wrap{max-width:1100px;margin:10px auto;padding:10px}
+.wrap{max-width:1150px;margin:10px auto;padding:10px}
 .box{background:white;border-radius:14px;padding:12px;border:1px solid #ccc}
 .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 @media(max-width:700px){.row{grid-template-columns:1fr 1fr}}
 input,button{padding:9px;border-radius:8px;border:1px solid #888;width:100%;box-sizing:border-box}
-.btn{background:#0a4d0a;color:white;font-weight:900;border:none}
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}
+.btn{background:#0a4d0a;color:white;font-weight:900;border:none;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:11px}
 th,td{border:1px solid #333;padding:5px;text-align:center}
-th{background:#d6e9d8;font-size:12px}
+th{background:#d6e9d8;font-size:11px;line-height:1.2}
 #printHead{text-align:center;color:#0a4d0a;font-weight:900;margin-bottom:8px}
 @media print{.no-print{display:none}}
 </style>
@@ -30,6 +30,7 @@ th{background:#d6e9d8;font-size:12px}
 <input id="model" placeholder="গাড়ির মডেল">
 <input id="date" type="date">
 <input id="km" type="number" placeholder="KM">
+<input id="nextdate" type="date">
 <input id="nextkm" type="number" placeholder="Next KM">
 <input id="qty" type="number" placeholder="তেলের পরিমাণ (L)">
 <input id="days" type="number" placeholder="দিন">
@@ -48,6 +49,7 @@ th{background:#d6e9d8;font-size:12px}
 <th>গাড়ির মডেল</th>
 <th>বদলির তারিখ</th>
 <th>KM</th>
+<th>পরবর্তী বদলির তারিখ</th>
 <th>Next KM</th>
 <th>তেলের পরিমাণ</th>
 <th>দিন</th>
@@ -65,24 +67,10 @@ th{background:#d6e9d8;font-size:12px}
 <script>
 let data = JSON.parse(localStorage.getItem("engine_oil_4bir") || "[]");
 function addData(){
- let r={ba:ba.value,model:model.value,date:date.value,km:km.value,nextkm:nextkm.value,qty:qty.value,days:days.value};
+ let r={
+  ba:ba.value, model:model.value, date:date.value,
+  km:km.value, nextdate:nextdate.value, nextkm:nextkm.value,
+  qty:qty.value, days:days.value
+ };
  if(!r.ba) return alert("বিএ নং দিন");
- data.push(r); localStorage.setItem("engine_oil_4bir", JSON.stringify(data)); render();
- ba.value=model.value=date.value=km.value=nextkm.value=qty.value=days.value="";
-}
-function render(){
- tbody.innerHTML="";
- data.forEach((r,i)=>{
-  tbody.innerHTML+=`<tr><td>${r.ba}</td><td>${r.model}</td><td>${r.date}</td><td>${r.km}</td><td>${r.nextkm}</td><td>${r.qty} L</td><td>${r.days}</td><td class="no-print"><button onclick="data.splice(${i},1);localStorage.setItem('engine_oil_4bir',JSON.stringify(data));render()" style="background:red;color:white;border:none;padding:3px 7px;border-radius:5px">X</button></td></tr>`;
- });
-}
-render();
-
-// MT Platoon হলে Add/Delete লুকিয়ে যাবে - যদি Dashboard থেকে role আসে
-let userRole = localStorage.getItem("userRole"); // dashboard এ MT Platoon / MT Clerk সেট থাকলে
-if(userRole === "MT Platoon"){
-  document.querySelector(".box.no-print").style.display="none";
-}
-</script>
-</body>
-</html>
+ data.push(r); localStorage.setItem("engine_oil_4bir", JSON
