@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATF বদলি - 4 BIR</title>
+<style>
+body{margin:0;font-family:Arial;background:#e8eef3}
+.top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:17px;font-weight:900}
+.logout{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer}
+.wrap{padding:14px;max-width:980px;margin:0 auto}
+.card{background:white;padding:18px;border-radius:22px;box-shadow:0 4px 14px #0001;margin-bottom:16px}
+input{width:100%;padding:13px 14px;border:1.5px solid #bbb;border-radius:14px;margin-bottom:12px;box-sizing:border-box;font-size:14px;outline:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-add{width:100%;padding:15px;background:#0a4d0a;color:white;border:none;border-radius:14px;font-size:17px;font-weight:900;cursor:pointer}
+.tit{text-align:center;font-size:20px;font-weight:900;margin:18px 0 10px;color:#0a4d0a}
+.btn-print{background:#1a73e8;color:white;border:none;padding:10px 22px;border-radius:10px;font-weight:900;display:block;margin:12px auto;cursor:pointer;font-size:15px}
+table{width:100%;border-collapse:collapse;background:white;font-size:13px}
+th{background:#0a4d0a;color:white;padding:9px 5px;border:1px solid #000;font-size:12px}
+td{padding:8px 5px;border:1px solid #000;text-align:center;word-break:break-word}
+.over{color:red;font-weight:900}.ok{color:green;font-weight:700}
+.view-only{color:#b00000;font-weight:900;text-align:center;padding:10px}
+@media print{
+.top,#box,.btn-print,.logout{display:none!important}
+  th:last-child,td:last-child{display:none!important}
+  body{background:white}.wrap{padding:0}.card{box-shadow:none;border:none;border-radius:0;padding:0}
+}
+</style>
+</head>
+<body>
+<div class="top"><b>ATF বদলি - 4 BIR</b><button class="logout" onclick="location.href='oil.html'">BACK TO FUEL</button></div>
+
+<div class="wrap">
+<div id="box" class="card">
+<div class="grid2">
+<input type="date" id="fdate"><input id="vehicle" placeholder="গাড়ী নং">
+</div>
+<div class="grid2">
+<input id="qty" type="number" placeholder="পরিমাণ (L)"><input id="km" type="number" placeholder="KM">
+</div>
+<div class="grid2">
+<input id="nextkm" type="number" placeholder="Next KM"><input type="date" id="nextdate">
+</div>
+<input id="remarks" placeholder="মন্তব্য">
+<button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button>
+<p id="msg" style="text-align:center;font-weight:900;color:green;margin:10px 0 0"></p>
+</div>
+
+<div class="tit">ATF বদলি রিপোর্ট</div>
+<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+
+<div class="card" style="overflow:auto;padding:10px">
+<table>
+<thead><tr><th>তারিখ</th><th>গাড়ী</th><th>L</th><th>KM</th><th>Next KM</th><th>পরবর্তী বদলির তারিখ</th><th>দিন</th><th>মন্তব্য</th><th>একশন</th></tr></thead>
+<tbody id="tbl"></tbody>
+</table>
+<p id="roleMsg" class="view-only" style="display:none">MT Platoon - শুধু দেখতে পারবে</p>
+</div>
+</div>
+
+<script>
+const KEY="ATF_MTCLK";
+let role=(localStorage.getItem('role')||'').toLowerCase();
+let editIdx=-1;
+window.onload=function(){
+  document.getElementById('fdate').valueAsDate=new Date();
+  let nd=new Date(); nd.setMonth(nd.getMonth()+3); document.getElementById('nextdate').valueAsDate=nd;
+  if(role==='mt'){ document.getElementById('box').style.display='none'; document.getElementById('roleMsg').style.display='block'; }
+  load();
+};
+function getData(){return JSON.parse(localStorage.getItem(KEY)||"[]");}
+function saveData(d){localStorage.setItem(KEY,JSON.stringify(d));}
+function calcDays(s){let t=new Date();t.setHours(0,0,0,0);let n=new Date(s);n.setHours(0,0,0,0);return Math.ceil((n-t)/86400000);}
+function load(){
+  let d=getData(); let tb=document.getElementById('tbl'); tb.innerHTML='';
+  if(!d.length){tb.innerHTML='<tr><td colspan="9">কোনো ডাটা নাই</td></tr>'; return;}
+  d.forEach((x,i)=>{
+    let days=calcDays(x.nextdate);
+    let dayTxt=days>0?days+' দিন বাকি':days==0?'আজকেই':Math.abs(days)+' দিন Over';
+    let cls=days<=7?'over':'ok';
+    let act=role==='clk'? `<button onclick="editD(${i})" style="background:orange;color:white;border:none;padding:4px 7px;border-radius:6px">Edit</button> <button onclick="delD(${i})" style="background:red;color:white;border:none;padding:4px 7px;border-radius:6px">Del</button>`:'-';
+    tb.innerHTML+=`<tr><td>${x.date}</td><td>${x.vehicle}</td><td>${x.qty}</td><td>${x.km}</td><td>${x.nextkm}</td><td>${x.nextdate}</td><td class="${cls}">${dayTxt}</td><td>${x.remarks||''}</td><td>${act}</td></tr>`;
+  });
+}
+function editD(i){if(role!=='clk') return alert('শুধু CLK Edit পারবে'); let x=getData()[i]; editIdx=i; fdate.value=x.date; vehicle.value=x.vehicle; qty.value=x.qty; km.value=x.km; nextkm.value=x.nextkm; nextdate.value=x.nextdate; remarks.value=x.remarks; mainBtn.innerText='Update করুন'; window.scrollTo(0,0);}
+function delD(i){if(role!=='clk') return alert('শুধু CLK Delete পারবে'); if(!confirm('Delete করবেন?')) return; let d=getData(); d.splice(i,1); saveData(d); load();}
+function addData(){
+  if(role!=='clk') return alert('শুধু CLK Add পারবে');
+  let dt=fdate.value, ve=vehicle.value.trim(), qt=qty.value||0, k=km.value||0, nk=nextkm.value||0, ndt=nextdate.value, re=remarks.value.trim();
+  if(!dt||!ve||!ndt){alert('তারিখ, গাড়ী নং, পরবর্তী তারিখ লাগবে'); return;}
+  let d=getData(); let obj={date:dt, vehicle:ve, qty:qt, km:k, nextkm:nk, nextdate:ndt, remarks:re};
+  if(editIdx==-1){d.push(obj); msg.innerText='✅ Add হয়েছে';}else{d[editIdx]=obj; editIdx=-1; mainBtn.innerText='Add করুন'; msg.innerText='✅ Update হয়েছে';}
+  saveData(d); vehicle.value=qty.value=km.value=nextkm.value=remarks.value=''; load();
+}
+</script>
+</body>
+</html>
