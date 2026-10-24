@@ -1,4 +1,4 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Fix Colour</title><style>
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Full Fix</title><style>
 body{margin:0;background:#dbeafe;font-family:sans-serif}
 .card{margin:10px;padding:0;border-radius:12px;overflow:hidden;border:3px solid #000;background:#fff}
 .card-head{padding:10px;text-align:center;font-weight:800;font-size:18px;border-bottom:3px solid #000}
@@ -6,26 +6,27 @@ body{margin:0;background:#dbeafe;font-family:sans-serif}
 button{background:#0a5c26;color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer}
 input,select{padding:10px;border:2px solid #000;border-radius:8px;font-size:15px;margin:3px;font-weight:700}
 table{border-collapse:collapse;width:100%;min-width:950px}th,td{border:2px solid #000;padding:8px;text-align:center;font-size:13px;font-weight:800}
-.name{background:#fef08a !important;color:#000 !important;text-align:left;min-width:170px;position:sticky;left:0;z-index:2}
+.name{background:#fef08a !important;color:#000 !important;text-align:left;min-width:170px;position:sticky;left:0;z-index:2;border-bottom:3px solid #000 !important}
 .th-green{background:#14532d !important;color:#fff !important}
 .th-yellow{background:#facc15 !important;color:#000 !important}
 .note{border:2px dashed #000;padding:8px;text-align:center;font-weight:700;margin-top:8px;background:#fff}
-.c-SB{background:#fecaca !important;color:#7f1d1d !important}
-.c-MT1{background:#bbf7d0 !important;color:#14532d !important}
-.c-MT2{background:#bfdbfe !important;color:#1e3a8a !important}
-.c-MT3{background:#fed7aa !important;color:#7c2d12 !important}
-.c-MP1{background:#e9d5ff !important;color:#581c87 !important}
-.c-MP2{background:#99f6e0 !important;color:#134e4a !important}
-.c-MP3{background:#fef08a !important;color:#713f12 !important}
+.c-SB{background:#fecaca !important}.c-MT1{background:#bbf7d0 !important}.c-MT2{background:#bfdbfe !important}.c-MT3{background:#fed7aa !important}.c-MP1{background:#e9d5ff !important}.c-MP2{background:#99f6e0 !important}.c-MP3{background:#fef08a !important}
 .top-card .card-head{background:#facc15 !important}
 .top-card .card-body{background:#fffbeb !important}
 .bottom-card .card-head{background:#14532d !important;color:#fff !important}
 .bottom-card .card-body{background:#eff6ff !important}
+
 @media print{
+  @page{size:A4 landscape;margin:8mm}
   .no-print{display:none !important}
   body{background:#fff !important}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
-  .card{page-break-inside:avoid}
+  .card{border:2px solid #000 !important;margin:5px !important}
+  .card-body{overflow:visible !important}
+  table{min-width:100% !important;width:100% !important}
+  th,td{font-size:10px !important;padding:4px !important;border:1.5px solid #000 !important}
+  .name{position:static !important;min-width:110px !important;background:#fef08a !important;border-right:3px solid #000 !important;border-bottom:2px solid #000 !important}
+  .bottom-card .card-body{padding:5px !important}
 }
 </style></head><body>
 <div class="card no-print" style="padding:12px;background:#fff !important;border:2px solid #000">
@@ -48,7 +49,7 @@ table{border-collapse:collapse;width:100%;min-width:950px}th,td{border:2px solid
 <div class="card-head">মাসিক ডিউটি সামারি</div>
 <div class="card-body">
 <table id="main"></table>
-<div style="margin-top:8px;font-size:12px;border:2px solid #000;display:inline-block;padding:5px;background:#fff">S/B=স্টান বাই <span style="background:#fecaca;padding:2px 6px;border:1px solid #000">লাল</span> | M/T=মোবাইল টহল <span style="background:#bbf7d0;padding:2px 6px;border:1px solid #000">সবুজ</span> | M/P=এমটি পার্ক <span style="background:#bfdbfe;padding:2px 6px;border:1px solid #000">নীল</span></div>
+<div style="margin-top:8px;font-size:11px;border:2px solid #000;display:inline-block;padding:5px;background:#fff">S/B=স্টান বাই | M/T=মোবাইল টহল | M/P=এমটি পার্ক</div>
 </div>
 </div>
 
@@ -70,7 +71,7 @@ function getColor(duty){var map={"স্টান বাই":"c-SB","মোব�
 function addMember(){var r=document.getElementById('rank').value;var n=document.getElementById('mName').value.trim();if(!n)return;members.push({id:Date.now(),rank:r,name:n});document.getElementById('mName').value='';saveStore();render();}
 function render(){
   document.getElementById('cnt').innerText=' মোট: '+members.length;
-  var h='<tr><th class="name">নাম / তারিখ</th>';for(var i=0;i<dates.length;i++){h+='<th class="th-green">'+dates[i].slice(8)+'</th>';}h+='</tr>';
+  var h='<tr><th class="name" style="border-bottom:3px solid #000">নাম / তারিখ</th>';for(var i=0;i<dates.length;i++){h+='<th class="th-green">'+dates[i].slice(8)+'</th>';}h+='</tr>';
   for(var j=0;j<members.length;j++){var mm=members[j];h+='<tr><td class="name">'+mm.rank+' '+mm.name+'</td>';for(var k=0;k<dates.length;k++){var dt=dates[k];var val=roster[mm.id+'_'+dt]||'';var code=val?shortCode(val):'';var cls=val?getColor(val):'';h+='<td onclick="openDuty('+mm.id+',\''+dt+'\')" class="'+cls+'" style="cursor:pointer">'+code+'</td>';}h+='</tr>';}
   document.getElementById('main').innerHTML=h;renderNight();
 }
