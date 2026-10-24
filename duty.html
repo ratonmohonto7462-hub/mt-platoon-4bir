@@ -2,104 +2,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT Platoon - Final</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Duty Final Fix</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#eef2f7}
-.header{background:#0a5c26;color:#fff;padding:12px;display:flex;justify-content:space-between}
+body{margin:0;background:#eef2f7;font-family:sans-serif}
 .card{background:#fff;margin:10px;padding:12px;border-radius:12px;overflow:auto}
-input,select{padding:10px;border:1px solid #888;border-radius:8px;margin:2px}
-button{background:#0a5c26;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold}
-table{border-collapse:collapse;width:100%;min-width:1000px}
-th,td{border:1px solid #555;padding:7px;text-align:center;font-size:14px}
-td.name-col{text-align:left;min-width:170px;background:#f0f0f0;position:sticky;left:0;font-weight:bold}
-th{background:#0a5c26;color:white;position:sticky;top:0}
-.summary-table{min-width:100% !important}
-.summary-table td{text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.duty-row-title{background:#e8f5e9;font-weight:bold;width:140px}
-@media print{.no-print{display:none}}
+button{padding:12px 16px;background:#0a5c26;color:#fff;border:none;border-radius:8px;font-weight:bold}
+input,select{padding:12px;border:1px solid #888;border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{border:1px solid #444;padding:8px;text-align:center}
+.name-col{background:#eee;position:sticky;left:0;text-align:left;min-width:170px;font-weight:bold}
+th{background:#0a5c26;color:#fff}
 </style>
 </head>
 <body>
-<div class="header no-print">
-  <b onclick="location.href='dashboard.html'">← BACK</b>
-  <b>MT PLATOON 4 BIR</b>
-  <button onclick="window.print()">PRINT</button>
-</div>
-
-<div class="card no-print">
-  <select id="rank">
-    <option value="">Rank বাছাই করো</option>
-    <option>সার্জেন্ট</option>
-    <option>কর্পোরাল</option>
-    <option>ল্যান্স কর্পোরাল</option>
-    <option>সৈনিক</option>
-  </select>
-  <input id="mName" placeholder="নাম">
-  <button type="button" onclick="addMember()">Add Member</button>
-  <button type="button" onclick="resetAll()" style="background:#a00">Reset</button>
-
-  <div id="editBox" style="display:none;margin-top:12px;background:#d4edda;padding:12px;border-radius:10px;border:2px solid #0a5c26">
-    <b id="editInfo"></b><br><br>
-    <select id="dutyType" style="width:80%;font-size:16px">
-      <option value="">-- No Duty --</option>
-      <option>স্টান বাই</option>
-      <option>মোবাইল টহল (১ম)</option>
-      <option>মোবাইল টহল (২য়)</option>
-      <option>মোবাইল টহল (৩য়)</option>
-      <option>এমটি পার্ক (১ম)</option>
-      <option>এমটি পার্ক (২য়)</option>
-      <option>এমটি পার্ক (৩য়)</option>
-    </select>
-    <button onclick="saveDuty()">SAVE</button>
-    <button onclick="document.getElementById('editBox').style.display='none'" style="background:gray">X</button>
-  </div>
-</div>
-
 <div class="card">
-  <b>ডিউটি অনুযায়ী সামারি (এক লাইনে)</b>
-  <table id="summary" class="summary-table" style="margin-top:8px"></table>
-</div>
-
-<div class="card"><div style="overflow:auto"><table id="main"></table></div></div>
-
-<script>
-var members=JSON.parse(localStorage.getItem('mt_m3')||'[]');
-var roster=JSON.parse(localStorage.getItem('mt_r3')||'{}');
-var curDates=[]; var selMid=null, selDate=null;
-
-function makeDates(){
-  var d=new Date(); var y=d.getFullYear(); var m=d.getMonth();
-  var days=new Date(y,m+1,0).getDate();
-  curDates=[];
-  for(var i=1;i<=days;i++){ var mm=String(m+1).padStart(2,'0'); var dd=String(i).padStart(2,'0'); curDates.push(y+'-'+mm+'-'+dd); }
-}
-function addMember(){
-  var r=document.getElementById('rank').value; if(!r) r='সৈনিক';
-  var n=document.getElementById('mName').value.trim(); if(!n){alert('নাম লেখো');return;}
-  members.push({id:'m'+Date.now(), rank:r, name:n});
-  localStorage.setItem('mt_m3', JSON.stringify(members));
-  document.getElementById('mName').value='';
-  render();
-}
-function render(){
-  var main=document.getElementById('main');
-  var h='<tr><th class="name-col">নাম / তারিখ</th>'; curDates.forEach(function(dt){ h+='<th>'+dt.slice(8)+'</th>'; }); h+='</tr>';
-  members.forEach(function(mem){
-    h+='<tr><td class="name-col">'+mem.rank+' '+mem.name+'</td>';
-    curDates.forEach(function(dt){
-      var key=mem.id+'_'+dt; var v=roster[key]||'';
-      h+='<td style="cursor:pointer" onclick="openEdit(\''+mem.id+'\',\''+dt+'\')">'+v+'</td>';
-    }); h+='</tr>';
-  });
-  main.innerHTML=h;
-
-  // সামারি - ডিউটি অনুযায়ী
-  var duties = ["স্টান বাই","মোবাইল টহল (১ম)","মোবাইল টহল (২য়)","মোবাইল টহল (৩য়)","এমটি পার্ক (১ম)","এমটি পার্ক (২য়)","এমটি পার্ক (৩য়)"];
-  var s=document.getElementById('summary');
-  var sh='';
-  duties.forEach(function(duty){
-    var list=[];
-    curDates.forEach(function(dt){
-      members.forEach(function(mem){
-        var k=mem
