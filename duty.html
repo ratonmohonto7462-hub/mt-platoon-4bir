@@ -1,4 +1,4 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Full Fix</title><style>
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Red Note</title><style>
 body{margin:0;background:#dbeafe;font-family:sans-serif}
 .card{margin:10px;padding:0;border-radius:12px;overflow:hidden;border:3px solid #000;background:#fff}
 .card-head{padding:10px;text-align:center;font-weight:800;font-size:18px;border-bottom:3px solid #000}
@@ -9,82 +9,34 @@ table{border-collapse:collapse;width:100%;min-width:950px}th,td{border:2px solid
 .name{background:#fef08a !important;color:#000 !important;text-align:left;min-width:170px;position:sticky;left:0;z-index:2;border-bottom:3px solid #000 !important}
 .th-green{background:#14532d !important;color:#fff !important}
 .th-yellow{background:#facc15 !important;color:#000 !important}
-.note{border:2px dashed #000;padding:8px;text-align:center;font-weight:700;margin-top:8px;background:#fff}
 .c-SB{background:#fecaca !important}.c-MT1{background:#bbf7d0 !important}.c-MT2{background:#bfdbfe !important}.c-MT3{background:#fed7aa !important}.c-MP1{background:#e9d5ff !important}.c-MP2{background:#99f6e0 !important}.c-MP3{background:#fef08a !important}
-.top-card .card-head{background:#facc15 !important}
-.top-card .card-body{background:#fffbeb !important}
-.bottom-card .card-head{background:#14532d !important;color:#fff !important}
-.bottom-card .card-body{background:#eff6ff !important}
-
-@media print{
-  @page{size:A4 landscape;margin:8mm}
-  .no-print{display:none !important}
-  body{background:#fff !important}
-  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
-  .card{border:2px solid #000 !important;margin:5px !important}
-  .card-body{overflow:visible !important}
-  table{min-width:100% !important;width:100% !important}
-  th,td{font-size:10px !important;padding:4px !important;border:1.5px solid #000 !important}
-  .name{position:static !important;min-width:110px !important;background:#fef08a !important;border-right:3px solid #000 !important;border-bottom:2px solid #000 !important}
-  .bottom-card .card-body{padding:5px !important}
-}
+.red-note{border:3px solid #cc0000 !important;padding:10px;text-align:center;font-weight:800;margin-top:10px;background:#ffe6e6 !important;color:#cc0000 !important;font-size:15px}
+@media print{@page{size:A4 landscape;margin:8mm}.no-print{display:none !important}body{background:#fff !important}*{ -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}table{min-width:100% !important}th,td{font-size:10px !important;padding:4px !important}.name{position:static !important}}
 </style></head><body>
-<div class="card no-print" style="padding:12px;background:#fff !important;border:2px solid #000">
-<select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select>
-<input id="mName" placeholder="নাম লেখো">
-<button onclick="addMember()">Add Member</button> <b id="cnt"></b>
-<button onclick="window.print()" style="background:#1e40af;float:right">🖨️ Print</button>
-</div>
-
-<div class="card top-card">
-<div class="card-head">রাত্রিকালীন কর্তব্য</div>
-<div class="card-body">
-<div>তারিখ: <input type="text" id="nightDate" style="width:150px;text-align:center"></div>
-<table id="nightTable" style="min-width:100%;margin-top:12px;background:#fff"></table>
-<div class="note">ডিউটিতে কারো কষ্ট থাকলে কর্পোরাল মোঃ মেহেদী হাসান (এমটি এনসিএ) সাথে যোগাযোগ করুন।</div>
-</div>
-</div>
-
-<div class="card bottom-card">
-<div class="card-head">মাসিক ডিউটি সামারি</div>
-<div class="card-body">
-<table id="main"></table>
-<div style="margin-top:8px;font-size:11px;border:2px solid #000;display:inline-block;padding:5px;background:#fff">S/B=স্টান বাই | M/T=মোবাইল টহল | M/P=এমটি পার্ক</div>
-</div>
-</div>
-
+<div class="card no-print" style="padding:12px"><select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select><input id="mName" placeholder="নাম লেখো"><button onclick="addMember()">Add Member</button> <b id="cnt"></b><button onclick="window.print()" style="background:#1e40af;float:right">🖨️ Print</button></div>
+<div class="card no-print" style="padding:12px;background:#fffbeb !important"><b>মাস:</b> <select id="monthSel" onchange="changeMonth()"></select> <select id="yearSel" onchange="changeMonth()"></select></div>
+<div class="card"><div class="card-head" style="background:#facc15 !important">রাত্রিকালীন কর্তব্য</div><div class="card-body" style="background:#fffbeb !important">তারিখ: <input type="text" id="nightDate" style="width:150px;text-align:center"><table id="nightTable" style="min-width:100%;margin-top:12px;background:#fff"></table>
+<div class="red-note">ডিউটিতে কারো কষ্ট থাকলে কর্পোরাল মোঃ মেহেদী হাসান (এমটি এনসিএ) সাথে যোগাযোগ করুন।</div>
+</div></div>
+<div class="card"><div class="card-head" style="background:#14532d !important;color:#fff !important">মাসিক ডিউটি সামারি - <span id="monthLabel"></span></div><div class="card-body" style="background:#eff6ff !important"><table id="main"></table></div></div>
 <div id="pop" style="display:none;position:fixed;top:20%;left:5%;right:5%;background:#fff;border:3px solid #000;padding:15px;border-radius:12px;z-index:99"><b id="info"></b><br><br><select id="duty" style="width:100%;font-size:16px;border:2px solid #000"><option value="">No Duty</option><option>স্টান বাই</option><option>মোবাইল টহল (১ম)</option><option>মোবাইল টহল (২য়)</option><option>মোবাইল টহল (৩য়)</option><option>এমটি পার্ক (১ম)</option><option>এমটি পার্ক (২য়)</option><option>এমটি পার্ক (৩য়)</option></select><br><br><button onclick="saveDuty()">SAVE</button> <button onclick="document.getElementById('pop').style.display='none'" style="background:gray">Close</button></div>
-
 <script>
-var members=JSON.parse(localStorage.getItem('mt_members')||'[]');
-var roster=JSON.parse(localStorage.getItem('mt_roster')||'{}');
-var dates=[],sid=null,sdate=null;
+var members=JSON.parse(localStorage.getItem('mt_members')||'[]');var roster=JSON.parse(localStorage.getItem('mt_roster')||'{}');var dates=[],sid=null,sdate=null,curY,curM;
 function todayDMY(){var d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
 function dmyToYmd(dmy){if(!dmy||!dmy.includes('/'))return null;var p=dmy.split('/');return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');}
 function ymdToDmy(ymd){var p=ymd.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
-var now=new Date(),y=now.getFullYear(),m=now.getMonth(),total=new Date(y,m+1,0).getDate();
-for(var i=1;i<=total;i++){dates.push(y+'-'+String(m+1).padStart(2,'0')+'-'+String(i).padStart(2,'0'))}
+function buildMonths(){var ms=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];var mSel=document.getElementById('monthSel');var ySel=document.getElementById('yearSel');ms.forEach((n,i)=>{var o=document.createElement('option');o.value=i;o.text=n;mSel.appendChild(o);});for(var y=2025;y<=2030;y++){var o=document.createElement('option');o.value=y;o.text=y;ySel.appendChild(o);}var now=new Date();mSel.value=now.getMonth();ySel.value=now.getFullYear();curY=now.getFullYear();curM=now.getMonth();}
+function changeMonth(){curM=parseInt(document.getElementById('monthSel').value);curY=parseInt(document.getElementById('yearSel').value);genDates();render();}
+function genDates(){dates=[];var total=new Date(curY,curM+1,0).getDate();for(var i=1;i<=total;i++){dates.push(curY+'-'+String(curM+1).padStart(2,'0')+'-'+String(i).padStart(2,'0'))}document.getElementById('monthLabel').innerText=(curM+1)+'/'+curY;}
 document.getElementById('nightDate').value=localStorage.getItem('mt_nightDate')||todayDMY();
 function saveStore(){localStorage.setItem('mt_members',JSON.stringify(members));localStorage.setItem('mt_roster',JSON.stringify(roster));localStorage.setItem('mt_nightDate',document.getElementById('nightDate').value);}
-function shortCode(duty){if(duty=="স্টান বাই")return "S/B";if(duty=="মোবাইল টহল (১ম)")return "M/T(1)";if(duty=="মোবাইল টহল (২য়)")return "M/T(2)";if(duty=="মোবাইল টহল (৩য়)")return "M/T(3)";if(duty=="এমটি পার্ক (১ম)")return "M/P(1)";if(duty=="এমটি পার্ক (২য়)")return "M/P(2)";if(duty=="এমটি পার্ক (৩য়)")return "M/P(3)";return duty;}
-function getColor(duty){var map={"স্টান বাই":"c-SB","মোবাইল টহল (১ম)":"c-MT1","মোবাইল টহল (২য়)":"c-MT2","মোবাইল টহল (৩য়)":"c-MT3","এমটি পার্ক (১ম)":"c-MP1","এমটি পার্ক (২য়)":"c-MP2","এমটি পার্ক (৩য়)":"c-MP3"};return map[duty]||"";}
+function shortCode(d){if(d=="স্টান বাই")return "S/B";if(d=="মোবাইল টহল (১ম)")return "M/T(1)";if(d=="মোবাইল টহল (২য়)")return "M/T(2)";if(d=="মোবাইল টহল (৩য়)")return "M/T(3)";if(d=="এমটি পার্ক (১ম)")return "M/P(1)";if(d=="এমটি পার্ক (২য়)")return "M/P(2)";if(d=="এমটি পার্ক (৩য়)")return "M/P(3)";return d;}
+function getColor(d){var m={"স্টান বাই":"c-SB","মোবাইল টহল (১ম)":"c-MT1","মোবাইল টহল (২য়)":"c-MT2","মোবাইল টহল (৩য়)":"c-MT3","এমটি পার্ক (১ম)":"c-MP1","এমটি পার্ক (২য়)":"c-MP2","এমটি পার্ক (৩য়)":"c-MP3"};return m[d]||"";}
 function addMember(){var r=document.getElementById('rank').value;var n=document.getElementById('mName').value.trim();if(!n)return;members.push({id:Date.now(),rank:r,name:n});document.getElementById('mName').value='';saveStore();render();}
-function render(){
-  document.getElementById('cnt').innerText=' মোট: '+members.length;
-  var h='<tr><th class="name" style="border-bottom:3px solid #000">নাম / তারিখ</th>';for(var i=0;i<dates.length;i++){h+='<th class="th-green">'+dates[i].slice(8)+'</th>';}h+='</tr>';
-  for(var j=0;j<members.length;j++){var mm=members[j];h+='<tr><td class="name">'+mm.rank+' '+mm.name+'</td>';for(var k=0;k<dates.length;k++){var dt=dates[k];var val=roster[mm.id+'_'+dt]||'';var code=val?shortCode(val):'';var cls=val?getColor(val):'';h+='<td onclick="openDuty('+mm.id+',\''+dt+'\')" class="'+cls+'" style="cursor:pointer">'+code+'</td>';}h+='</tr>';}
-  document.getElementById('main').innerHTML=h;renderNight();
-}
-function renderNight(){
-  var sel=dmyToYmd(document.getElementById('nightDate').value)||dates[0];
-  var ht='<tr><th class="th-yellow">ডিউটি</th><th class="th-yellow">নাম</th></tr>';
-  var duties=["স্টান বাই","মোবাইল টহল (১ম)","মোবাইল টহল (২য়)","মোবাইল টহল (৩য়)","এমটি পার্ক (১ম)","এমটি পার্ক (২য়)","এমটি পার্ক (৩য়)"];
-  duties.forEach(function(duty){var list=[];members.forEach(function(mm){if(roster[mm.id+'_'+sel]==duty)list.push(mm.rank+' '+mm.name);});if(list.length>0)ht+='<tr><td class="'+getColor(duty)+'">'+duty+'</td><td style="text-align:left;background:#fff !important">'+list.join(' , ')+'</td></tr>';});
-  if(ht.indexOf('c-')==-1)ht+='<tr><td colspan=2>কোনো ডিউটি নাই</td></tr>';
-  document.getElementById('nightTable').innerHTML=ht;
-}
+function render(){document.getElementById('cnt').innerText=' মোট: '+members.length;var h='<tr><th class="name">নাম / তারিখ</th>';for(var i=0;i<dates.length;i++){h+='<th class="th-green">'+dates[i].slice(8)+'</th>';}h+='</tr>';for(var j=0;j<members.length;j++){var mm=members[j];h+='<tr><td class="name">'+mm.rank+' '+mm.name+'</td>';for(var k=0;k<dates.length;k++){var dt=dates[k];var val=roster[mm.id+'_'+dt]||'';var code=val?shortCode(val):'';var cls=val?getColor(val):'';h+='<td onclick="openDuty('+mm.id+',\''+dt+'\')" class="'+cls+'" style="cursor:pointer">'+code+'</td>';}h+='</tr>';}document.getElementById('main').innerHTML=h;renderNight();}
+function renderNight(){var sel=dmyToYmd(document.getElementById('nightDate').value)||dates[0];var ht='<tr><th class="th-yellow">ডিউটি</th><th class="th-yellow">নাম</th></tr>';var duties=["স্টান বাই","মোবাইল টহল (১ম)","মোবাইল টহল (২য়)","মোবাইল টহল (৩য়)","এমটি পার্ক (১ম)","এমটি পার্ক (২য়)","এমটি পার্ক (৩য়)"];duties.forEach(function(duty){var list=[];members.forEach(function(mm){if(roster[mm.id+'_'+sel]==duty)list.push(mm.rank+' '+mm.name);});if(list.length>0)ht+='<tr><td class="'+getColor(duty)+'">'+duty+'</td><td style="text-align:left;background:#fff !important">'+list.join(' , ')+'</td></tr>';});if(ht.indexOf('c-')==-1)ht+='<tr><td colspan=2>কোনো ডিউটি নাই</td></tr>';document.getElementById('nightTable').innerHTML=ht;}
 function openDuty(id,dt){sid=id;sdate=dt;var mm=members.find(x=>x.id==id);document.getElementById('info').innerText=mm.rank+' '+mm.name+' - '+ymdToDmy(dt);document.getElementById('duty').value=roster[id+'_'+dt]||'';document.getElementById('pop').style.display='block';}
 function saveDuty(){var v=document.getElementById('duty').value;var k=sid+'_'+sdate;if(v)roster[k]=v;else delete roster[k];document.getElementById('pop').style.display='none';saveStore();render();}
 document.getElementById('nightDate').addEventListener('change',function(){saveStore();renderNight();});
-render();
+buildMonths();genDates();render();
 </script></body></html>
