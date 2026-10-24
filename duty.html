@@ -1,4 +1,4 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Final Fix</title><style>
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Sticky Clear</title><style>
 body{margin:0;background:#dbeafe;font-family:sans-serif;zoom:0.75}
 .card{margin:10px;padding:0;border-radius:12px;overflow:hidden;border:3px solid #000;background:#fff}
 .card-head{padding:10px;text-align:center;font-weight:800;font-size:18px;border-bottom:3px solid #000}
@@ -6,19 +6,19 @@ body{margin:0;background:#dbeafe;font-family:sans-serif;zoom:0.75}
 .card-body-inner{padding:12px}
 button{background:#0a5c26;color:#fff;border:0;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;margin:2px}
 input,select{padding:9px;border:2px solid #000;border-radius:8px;font-size:14px;margin:2px;font-weight:700}
-table{border-collapse:collapse;width:100%;min-width:1300px}th,td{border:2px solid #000;padding:6px;text-align:center;font-size:13px;font-weight:800}
-/* ব্যাকগ্রাউন্ড তুলে দিলাম, Sticky তুলে দিলাম যাতে পুরা শিট দেখা যায় */
-.th-name{background:#fef08a !important;min-width:135px;width:140px;text-align:left}
-.td-name{background:transparent !important;min-width:135px;width:140px;text-align:left;font-size:12px;line-height:1.2;border-bottom:1px solid #000 !important}
+table{border-collapse:collapse;width:100%;min-width:1320px}th,td{border:2px solid #000;padding:6px;text-align:center;font-size:13px;font-weight:800}
+/* নাম/নং আটকে থাকবে কিন্তু নিচের লেখা স্পষ্ট দেখা যাবে */
+.th-name{background:#fef08a !important;min-width:140px;width:145px;position:sticky;left:0;z-index:5;border-right:3px solid #000 !important;text-align:left}
+.td-name{background:rgba(255,255,255,0.88) !important;backdrop-filter:blur(1.5px);min-width:140px;width:145px;position:sticky;left:0;z-index:4;border-right:3px solid #000 !important;text-align:left;font-size:12px;line-height:1.2}
 .th-green{background:#14532d !important;color:#fff !important;min-width:34px}
 .th-act{background:#dc2626 !important;color:#fff !important;min-width:110px}
 .td-act{background:#fff9c4 !important;min-width:110px}
 .th-yellow{background:#facc15 !important;color:#000 !important}
 .c-SB{background:#fecaca !important}.c-MT1{background:#bbf7d0 !important}.c-MT2{background:#bfdbfe !important}.c-MT3{background:#fed7aa !important}.c-MP1{background:#e9d5ff !important}.c-MP2{background:#99f6e0 !important}.c-MP3{background:#fef08a !important}
 .c-LV{background:#f87171 !important;color:#fff !important}.c-ATT{background:#fb923c !important}.c-SK{background:#fde047 !important}.c-CR{background:#67e8f9 !important}.c-CAD{background:#a3a3a3 !important;color:#fff !important}.c-CO{background:#4ade80 !important}.c-2IC{background:#60a5fa !important;color:#fff !important}
-.sena{font-size:11px;color:#333;display:block;font-weight:700}
+.sena{font-size:11px;color:#222;display:block;font-weight:700}
 .red-note{border:3px solid #cc0000 !important;padding:10px;text-align:center;font-weight:800;margin-top:10px;background:#ffe6e6 !important;color:#cc0000 !important}
-@media print{body{zoom:1 !important}.no-print{display:none !important}*{ -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}.th-act,.td-act{display:none !important}}
+@media print{body{zoom:1 !important}.no-print{display:none !important}*{ -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}.th-act,.td-act{display:none !important}.th-name,.td-name{position:static !important;background:#fff !important}}
 </style></head><body>
 <div class="card no-print" style="padding:10px;display:flex;flex-wrap:wrap;align-items:center;gap:4px">
 <input id="senaNo" placeholder="সেনা নং" style="width:90px">
@@ -34,9 +34,6 @@ table{border-collapse:collapse;width:100%;min-width:1300px}th,td{border:2px soli
 <div id="editPop" style="display:none;position:fixed;top:15%;left:5%;right:5%;background:#fff;border:3px solid #000;padding:15px;border-radius:12px;z-index:100"><b>এডিট করুন</b><br><br><input id="eSena" placeholder="সেনা নং" style="width:90%"><br><select id="eRank" style="width:90%"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option>সৈনিক</option></select><br><input id="eName" placeholder="নাম" style="width:90%"><br><br><button onclick="saveEdit()">Update</button> <button onclick="document.getElementById('editPop').style.display='none'" style="background:gray">Close</button></div>
 <script>
 var members=JSON.parse(localStorage.getItem('mt_members')||'[]');var roster=JSON.parse(localStorage.getItem('mt_roster')||'{}');var dates=[],sid=null,sdate=null,curY,curM,editId=null;
-function getRole(){var r=(localStorage.getItem('mt_role')||localStorage.getItem('role')||'').toUpperCase();if(location.search.includes('clk=1')||location.search.includes('admin=1')) r='CLK';return r;}
-var role=getRole();var isAdmin = role.includes('CLK')||role.includes('ADMIN')||true; // আপাতত সবাই এডমিন, তোর বাইরের লগইন থেকে কন্ট্রোল হবে
-// যদি শুধু CLK পারবে চাস তাহলে উপরের ||true তুলে দিবি
 function bn2en(s){if(!s)return '';var map={'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};return s.toString().split('').map(ch=>map[ch]||ch).join('');}
 function getSenaNum(m){var raw=bn2en(m.senaNo||'');var n=parseInt(raw.replace(/[^0-9]/g,''));return isNaN(n)?9999999:n;}
 function sortBySena(){members.sort((a,b)=>getSenaNum(a)-getSenaNum(b));}
