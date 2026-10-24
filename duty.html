@@ -1,29 +1,32 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Final Save Fix</title><style>body{margin:0;background:#eef2f7;font-family:sans-serif}.card{background:#fff;margin:10px;padding:12px;border-radius:12px;overflow:auto}button{background:#0a5c26;color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:700}input,select{padding:10px;border:1px solid #888;border-radius:8px;font-size:15px;margin:3px}table{border-collapse:collapse;width:100%;min-width:950px}th,td{border:1px solid #333;padding:8px;text-align:center;font-size:13px}.name{position:sticky;left:0;background:#e0e0e0 !important;color:#000 !important;text-align:left;font-weight:800;min-width:170px;z-index:2}th{background:#0a5c26;color:#fff}.night-card{background:#fff9c4;border:2px solid #f9a825}.night-title{background:#f9a825;color:#000;padding:10px;border-radius:8px;font-weight:800;text-align:center;font-size:18px}.note{background:#fff3cd;border:1px solid #f9a825;padding:10px;border-radius:8px;font-size:14px;margin-top:10px;text-align:center;font-weight:600}
-.color-0{background:#ffebee}.color-1{background:#e8f5e9}.color-2{background:#e3f2fd}.color-3{background:#fff3e0}.color-4{background:#f3e5f5}.color-5{background:#e0f2f1}.color-6{background:#fffde7}.date-input{width:160px;text-align:center;font-weight:700}
-@media print{.no-print{display:none}}</style></head><body>
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Final Print</title><style>body{margin:0;background:#eef2f7;font-family:sans-serif}.card{background:#fff;margin:10px;padding:12px;border-radius:12px;overflow:auto}button{background:#0a5c26;color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer}input,select{padding:10px;border:1px solid #888;border-radius:8px;font-size:15px;margin:3px}table{border-collapse:collapse;width:100%;min-width:950px}th,td{border:1px solid #333;padding:8px;text-align:center;font-size:13px;font-weight:700}.name{position:sticky;left:0;background:#e0e0e0 !important;color:#000 !important;text-align:left;font-weight:800;min-width:170px;z-index:2}th{background:#0a5c26;color:#fff}.night-card{background:#fff9c4;border:2px solid #f9a825}.night-title{background:#f9a825;color:#000;padding:10px;border-radius:8px;font-weight:800;text-align:center;font-size:18px}.note{background:#fff3cd;border:1px solid #f9a825;padding:10px;border-radius:8px;font-size:14px;margin-top:10px;text-align:center;font-weight:600}
+.color-SB{background:#ffebee}.color-MT1{background:#e8f5e9}.color-MT2{background:#e3f2fd}.color-MT3{background:#fff3e0}.color-MP1{background:#f3e5f5}.color-MP2{background:#e0f2f1}.color-MP3{background:#fffde7}
+.date-input{width:160px;text-align:center;font-weight:700}
+@media print{.no-print{display:none}body{background:#fff}.card{border:1px solid #000;box-shadow:none}}
+</style></head><body>
 <div class="card no-print">
 <select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select>
 <input id="mName" placeholder="নাম লেখো">
 <button onclick="addMember()">Add Member</button> <b id="cnt"></b>
-<button onclick="clearAll()" style="background:#c00;float:right">Clear All</button>
+<button onclick="window.print()" style="background:#1a237e;float:right">🖨️ Print</button>
 </div>
 
 <div class="card night-card">
 <div class="night-title">রাত্রিকালীন কর্তব্য</div>
-<div style="margin-top:10px">তারিখ: <input type="text" id="nightDate" class="date-input" placeholder="DD/MM/YYYY"></div>
+<div style="margin-top:10px">তারিখ: <input type="text" id="nightDate" class="date-input"></div>
 <table id="nightTable" style="min-width:100%;margin-top:12px"></table>
 <div class="note">ডিউটিতে কারো কষ্ট থাকলে কর্পোরাল মোঃ মেহেদী হাসান (এমটি এনসিএ) সাথে যোগাযোগ করুন।</div>
 </div>
 
 <div class="card no-print">
 <b>মাসিক ডিউটি সামারি</b><br>
-<div style="margin-top:8px"><input type="text" id="fromDate" class="date-input" placeholder="DD/MM/YYYY"> থেকে <input type="text" id="toDate" class="date-input" placeholder="DD/MM/YYYY"> <button onclick="doSearch()">Search</button> <button onclick="hideSearch()" style="background:gray">Hide</button></div>
+<div style="margin-top:8px"><input type="text" id="fromDate" class="date-input"> থেকে <input type="text" id="toDate" class="date-input"> <button onclick="doSearch()">Search</button> <button onclick="hideSearch()" style="background:gray">Hide</button></div>
 <div id="searchWrap" style="display:none;overflow:auto;margin-top:12px"><table id="summary"></table></div>
 </div>
 
 <div class="card">
 <b>মাসিক ডিউটি সামারি</b>
 <div style="overflow:auto;margin-top:8px"><table id="main"></table></div>
+<div style="margin-top:10px;font-size:12px">S/B=স্টান বাই, M/T=মোবাইল টহল, M/P=এমটি পার্ক</div>
 </div>
 
 <div id="pop" style="display:none;position:fixed;top:20%;left:5%;right:5%;background:#fff;border:3px solid #0a5c26;padding:15px;border-radius:12px;z-index:99"><b id="info"></b><br><br><select id="duty" style="width:100%;font-size:16px"><option value="">No Duty</option><option>স্টান বাই</option><option>মোবাইল টহল (১ম)</option><option>মোবাইল টহল (২য়)</option><option>মোবাইল টহল (৩য়)</option><option>এমটি পার্ক (১ম)</option><option>এমটি পার্ক (২য়)</option><option>এমটি পার্ক (৩য়)</option></select><br><br><button onclick="saveDuty()">SAVE</button> <button onclick="document.getElementById('pop').style.display='none'" style="background:gray">Close</button></div>
@@ -32,59 +35,30 @@
 var members=JSON.parse(localStorage.getItem('mt_members')||'[]');
 var roster=JSON.parse(localStorage.getItem('mt_roster')||'{}');
 var dates=[],sid=null,sdate=null;
-
-function todayDMY(){
-  var d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
-}
-function firstDMY(){
-  var d=new Date();return '01/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
-}
-function lastDMY(){
-  var d=new Date();var last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();return String(last).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
-}
-function dmyToYmd(dmy){ // 25/10/2026 -> 2026-10-25
-  if(!dmy||!dmy.includes('/')) return null;
-  var p=dmy.split('/');if(p.length!=3)return null;
-  return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');
-}
-function ymdToDmy(ymd){ // 2026-10-25 -> 25/10/2026
-  if(!ymd||!ymd.includes('-')) return ymd;
-  var p=ymd.split('-');return p[2]+'/'+p[1]+'/'+p[0];
-}
-function fmt(d){return ymdToDmy(d);}
-
+function todayDMY(){var d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+function firstDMY(){var d=new Date();return '01/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+function lastDMY(){var d=new Date();var last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();return String(last).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+function dmyToYmd(dmy){if(!dmy||!dmy.includes('/'))return null;var p=dmy.split('/');if(p.length!=3)return null;return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');}
+function ymdToDmy(ymd){if(!ymd||!ymd.includes('-'))return ymd;var p=ymd.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 var now=new Date(),y=now.getFullYear(),m=now.getMonth(),total=new Date(y,m+1,0).getDate();
 for(var i=1;i<=total;i++){dates.push(y+'-'+String(m+1).padStart(2,'0')+'-'+String(i).padStart(2,'0'))}
-
 document.getElementById('nightDate').value=localStorage.getItem('mt_nightDate')||todayDMY();
-document.getElementById('fromDate').value=firstDMY();
-document.getElementById('toDate').value=lastDMY();
-
-function saveStore(){
-  localStorage.setItem('mt_members',JSON.stringify(members));
-  localStorage.setItem('mt_roster',JSON.stringify(roster));
-  localStorage.setItem('mt_nightDate',document.getElementById('nightDate').value);
-}
-function clearAll(){if(confirm('সব ডিলেট করবো?')){localStorage.clear();members=[];roster={};render();}}
-
-function getColor(duty){
-  var map={"স্টান বাই":"color-0","মোবাইল টহল (১ম)":"color-1","মোবাইল টহল (২য়)":"color-2","মোবাইল টহল (৩য়)":"color-3","এমটি পার্ক (১ম)":"color-4","এমটি পার্ক (২য়)":"color-5","এমটি পার্ক (৩য়)":"color-6"};
-  return map[duty]||"color-0";
-}
+document.getElementById('fromDate').value=firstDMY();document.getElementById('toDate').value=lastDMY();
+function saveStore(){localStorage.setItem('mt_members',JSON.stringify(members));localStorage.setItem('mt_roster',JSON.stringify(roster));localStorage.setItem('mt_nightDate',document.getElementById('nightDate').value);}
+function shortCode(duty){if(duty=="স্টান বাই")return "S/B";if(duty=="মোবাইল টহল (১ম)")return "M/T(1)";if(duty=="মোবাইল টহল (২য়)")return "M/T(2)";if(duty=="মোবাইল টহল (৩য়)")return "M/T(3)";if(duty=="এমটি পার্ক (১ম)")return "M/P(1)";if(duty=="এমটি পার্ক (২য়)")return "M/P(2)";if(duty=="এমটি পার্ক (৩য়)")return "M/P(3)";return duty;}
+function getColor(duty){var map={"স্টান বাই":"color-SB","মোবাইল টহল (১ম)":"color-MT1","মোবাইল টহল (২য়)":"color-MT2","মোবাইল টহল (৩য়)":"color-MT3","এমটি পার্ক (১ম)":"color-MP1","এমটি পার্ক (২য়)":"color-MP2","এমটি পার্ক (৩য়)":"color-MP3"};return map[duty]||"";}
 function addMember(){var r=document.getElementById('rank').value;var n=document.getElementById('mName').value.trim();if(!n){alert('নাম লেখো');return;}members.push({id:Date.now(),rank:r,name:n});document.getElementById('mName').value='';saveStore();render();}
 function render(){
   document.getElementById('cnt').innerText=' মোট: '+members.length+' জন';
   var h='<tr><th class="name">নাম / তারিখ</th>';for(var i=0;i<dates.length;i++){h+='<th>'+dates[i].slice(8)+'</th>';}h+='</tr>';
-  for(var j=0;j<members.length;j++){var mm=members[j];h+='<tr><td class="name">'+mm.rank+' '+mm.name+'</td>';for(var k=0;k<dates.length;k++){var dt=dates[k];var key=mm.id+'_'+dt;var val=roster[key]||'';var cls=val?getColor(val):'';h+='<td onclick="openDuty('+mm.id+',\''+dt+'\')" class="'+cls+'" style="cursor:pointer;font-weight:600">'+val+'</td>';}h+='</tr>';}
+  for(var j=0;j<members.length;j++){var mm=members[j];h+='<tr><td class="name">'+mm.rank+' '+mm.name+'</td>';for(var k=0;k<dates.length;k++){var dt=dates[k];var key=mm.id+'_'+dt;var val=roster[key]||'';var code=val?shortCode(val):'';var cls=val?getColor(val):'';h+='<td onclick="openDuty('+mm.id+',\''+dt+'\')" class="'+cls+'" style="cursor:pointer">'+code+'</td>';}h+='</tr>';}
   if(members.length==0)h+='<tr><td colspan='+(dates.length+1)+'>Add করলে নাম আসবে</td></tr>';
-  document.getElementById('main').innerHTML=h;
-  renderNight();
+  document.getElementById('main').innerHTML=h;renderNight();
 }
 function renderNight(){
   var dmy=document.getElementById('nightDate').value||todayDMY();
   var sel=dmyToYmd(dmy)|| (y+'-'+String(m+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'));
-  var eff=sel;
-  for(var d=dates.length-1;d>=0;d--){if(dates[d]<=sel){var has=false;for(var i=0;i<members.length;i++){if(roster[members[i].id+'_'+dates[d]]){has=true;break;}}if(has){eff=dates[d];break;}}}
+  var eff=sel;for(var d=dates.length-1;d>=0;d--){if(dates[d]<=sel){var has=false;for(var i=0;i<members.length;i++){if(roster[members[i].id+'_'+dates[d]]){has=true;break;}}if(has){eff=dates[d];break;}}}
   var ht='<tr><th style="background:#f9a825;color:#000">ডিউটি</th><th style="background:#f9a825;color:#000">নাম</th></tr>';
   var duties=["স্টান বাই","মোবাইল টহল (১ম)","মোবাইল টহল (২য়)","মোবাইল টহল (৩য়)","এমটি পার্ক (১ম)","এমটি পার্ক (২য়)","এমটি পার্ক (৩য়)"];
   duties.forEach(function(duty){var list=[];members.forEach(function(mm){var k=mm.id+'_'+eff;if(roster[k]==duty)list.push(mm.rank+' '+mm.name);});if(list.length>0)ht+='<tr><td class="'+getColor(duty)+'" style="font-weight:700">'+duty+'</td><td style="text-align:left">'+list.join(' , ')+'</td></tr>';});
@@ -95,15 +69,13 @@ function doSearch(){
   var fromYmd=dmyToYmd(document.getElementById('fromDate').value), toYmd=dmyToYmd(document.getElementById('toDate').value);
   if(!fromYmd||!toYmd){alert('তারিখ DD/MM/YYYY ফরমেটে লেখো');return;}
   var filtered=dates.filter(function(d){return d>=fromYmd&&d<=toYmd;});
-  var sh='<tr><th class="name">নাম / তারিখ</th>';filtered.forEach(function(d){sh+='<th>'+fmt(d)+'</th>';});sh+='</tr>';
-  members.forEach(function(mm){sh+='<tr><td class="name">'+mm.rank+' '+mm.name+'</td>';filtered.forEach(function(d){var k=mm.id+'_'+d;var val=roster[k]||'';var cls=val?getColor(val):'';sh+='<td class="'+cls+'">'+val+'</td>';});sh+='</tr>';});
-  document.getElementById('summary').innerHTML=sh;
-  document.getElementById('searchWrap').style.display='block';
+  var sh='<tr><th class="name">নাম / তারিখ</th>';filtered.forEach(function(d){sh+='<th>'+ymdToDmy(d)+'</th>';});sh+='</tr>';
+  members.forEach(function(mm){sh+='<tr><td class="name">'+mm.rank+' '+mm.name+'</td>';filtered.forEach(function(d){var k=mm.id+'_'+d;var val=roster[k]||'';var code=val?shortCode(val):'';var cls=val?getColor(val):'';sh+='<td class="'+cls+'">'+code+'</td>';});sh+='</tr>';});
+  document.getElementById('summary').innerHTML=sh;document.getElementById('searchWrap').style.display='block';
 }
 function hideSearch(){document.getElementById('searchWrap').style.display='none';}
-function openDuty(id,dt){sid=id;sdate=dt;var mm=null;for(var i=0;i<members.length;i++){if(members[i].id==id){mm=members[i];break;}}document.getElementById('info').innerText=mm.rank+' '+mm.name+' - '+fmt(dt);document.getElementById('duty').value=roster[id+'_'+dt]||'';document.getElementById('pop').style.display='block';}
+function openDuty(id,dt){sid=id;sdate=dt;var mm=null;for(var i=0;i<members.length;i++){if(members[i].id==id){mm=members[i];break;}}document.getElementById('info').innerText=mm.rank+' '+mm.name+' - '+ymdToDmy(dt);document.getElementById('duty').value=roster[id+'_'+dt]||'';document.getElementById('pop').style.display='block';}
 function saveDuty(){var v=document.getElementById('duty').value;var k=sid+'_'+sdate;if(v)roster[k]=v;else delete roster[k];document.getElementById('pop').style.display='none';saveStore();render();}
-
 document.getElementById('nightDate').addEventListener('change',function(){saveStore();renderNight();});
 render();
 </script></body></html>
