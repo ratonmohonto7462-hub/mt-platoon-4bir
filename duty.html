@@ -2,84 +2,100 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Duty Roster - MT PLATOON</title>
+<title>Duty Roster 15 Days</title>
 <style>
 body{margin:0;font-family:sans-serif;background:#eef2f7}
-.header{background:#0a5c26;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.card{background:white;margin:15px;padding:15px;border-radius:15px;box-shadow:0 2px 5px #0001}
-input,select{width:100%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:8px}
-button{background:#0a5c26;color:white;padding:10px 15px;border:none;border-radius:8px;width:100%;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left;font-size:14px}
-.search{background:#fff3cd;padding:10px;border-radius:8px;margin-bottom:10px}
+.header{background:#0a5c26;color:white;padding:12px;display:flex;justify-content:space-between}
+.card{background:white;margin:10px;padding:12px;border-radius:12px;overflow:auto}
+input,button,select{padding:8px;border-radius:6px;border:1px solid #ccc}
+button{background:#0a5c26;color:white;font-weight:bold}
+table{border-collapse:collapse;width:100%;min-width:800px}
+th,td{border:1px solid #bbb;padding:6px;text-align:center;font-size:13px;min-width:70px}
+td.name-col{text-align:left;min-width:140px;background:#f9f9f9;position:sticky;left:0}
+th.date-col{background:#0a5c26;color:white}
+td.duty-cell{cursor:pointer}
+td.duty-cell:hover{background:#fff3cd}
+@media print{ .no-print{display:none} table{min-width:100%} }
 </style>
 </head>
 <body>
-<div class="header">
-  <b onclick="location.href='dashboard.html'">← MT PLATOON 4 BIR</b>
-  <b>DUTY ROSTER</b>
+<div class="header no-print">
+  <b onclick="location.href='dashboard.html'">← BACK</b>
+  <b>DUTY ROSTER (15 DAYS)</b>
+  <button onclick="window.print()">PRINT</button>
+</div>
+
+<div class="card no-print">
+  <input id="startDate" type="date"> <button onclick="genDates()">15 Din Set Koro</button>
+  <input id="rank" placeholder="Rank" style="width:80px"><input id="mName" placeholder="Name" style="width:100px"><button onclick="addMember()">Add Member</button>
+  <div id="dutySelector" style="display:none;margin-top:10px;background:#e8ffe8;padding:8px;border-radius:8px">
+    <b id="selInfo"></b><br>
+    <select id="dutyType"><option value="">- No Duty -</option><option>Guard</option><option>Sentry</option><option>Patrol</option><option>Day Duty</option><option>Night Duty</option><option>Leave</option></select>
+    <button onclick="saveDuty()">Save</button><button onclick="closeSel()" style="background:gray">Cancel</button>
+  </div>
 </div>
 
 <div class="card">
-  <h3>Add Member</h3>
-  <input id="rank" placeholder="Rank (e.g. Sepoy)">
-  <input id="name" placeholder="Name">
-  <input id="armyNo" placeholder="Army No">
-  <button onclick="addMember()">Add Member</button>
-</div>
-
-<div class="card">
-  <h3>Assign Duty</h3>
-  <select id="memberSelect"></select>
-  <input id="dutyDate" type="date">
-  <select id="dutyType"><option>Guard</option><option>Sentry</option><option>Patrol</option><option>Day Duty</option></select>
-  <button onclick="addDuty()">Assign Duty</button>
-</div>
-
-<div class="card">
-  <h3>Duty History</h3>
-  <input id="search" placeholder="Search by Name or Date..." onkeyup="renderDuty()">
-  <table>
-    <thead><tr><th>Date</th><th>Name</th><th>Duty</th><th>X</th></tr></thead>
-    <tbody id="dutyTable"></tbody>
-  </table>
+  <div id="printTitle" style="text-align:center;font-weight:bold;font-size:18px;margin-bottom:8px"></div>
+  <div style="overflow:auto">
+    <table id="rosterTable"></table>
+  </div>
 </div>
 
 <script>
 let members = JSON.parse(localStorage.getItem('mt_members')||'[]');
-let duties = JSON.parse(localStorage.getItem('mt_duties')||'[]');
-
-function save(){ localStorage.setItem('mt_members',JSON.stringify(members)); localStorage.setItem('mt_duties',JSON.stringify(duties)); render(); }
+let roster = JSON.parse(localStorage.getItem('mt_roster')||'{}'); // key: memberId_date
+let curDates = [];
+let sel = {mid:null, date:null};
 
 function addMember(){
-  let r=document.getElementById('rank').value, n=document.getElementById('name').value, a=document.getElementById('armyNo').value;
-  if(!n) return alert('Name likho');
-  members.push({id:Date.now(), rank:r, name:n, armyNo:a}); save();
-  document.getElementById('rank').value='';document.getElementById('name').value='';document.getElementById('armyNo').value='';
+  let r=document.getElementById('rank').value, n=document.getElementById('mName').value;
+  if(!n) return alert('Name dao');
+  members.push({id:Date.now(), rank:r, name:n}); localStorage.setItem('mt_members',JSON.stringify(members)); renderTable();
+  document.getElementById('mName').value='';
 }
-function addDuty(){
-  let mid=document.getElementById('memberSelect').value, date=document.getElementById('dutyDate').value, type=document.getElementById('dutyType').value;
-  if(!mid||!date) return alert('Member & Date dao');
-  duties.push({id:Date.now(), memberId:mid, date:date, type:type}); save();
+document.getElementById('startDate').valueAsDate = new Date();
+genDates();
+
+function genDates(){
+  let start = new Date(document.getElementById('startDate').value);
+  curDates=[];
+  for(let i=0;i<15;i++){ let d=new Date(start); d.setDate(start.getDate()+i); curDates.push(d.toISOString().slice(0,10)); }
+  renderTable();
 }
-function render(){
-  let sel=document.getElementById('memberSelect'); sel.innerHTML='';
-  members.forEach(m=>{ let o=document.createElement('option'); o.value=m.id; o.textContent=m.rank+' '+m.name; sel.appendChild(o); });
-  renderDuty();
-}
-function renderDuty(){
-  let q=document.getElementById('search').value.toLowerCase();
-  let tbody=document.getElementById('dutyTable'); tbody.innerHTML='';
-  let sorted=[...duties].sort((a,b)=>b.date.localeCompare(a.date));
-  sorted.forEach(d=>{
-    let m=members.find(x=>x.id==d.memberId); if(!m) return;
-    let str=(d.date+' '+m.name+' '+m.rank).toLowerCase();
-    if(q && !str.includes(q)) return;
-    tbody.innerHTML+=`<tr><td>${d.date}</td><td>${m.rank} ${m.name}</td><td>${d.type}</td><td><button onclick="delDuty(${d.id})" style="background:red;padding:2px 8px">X</button></td></tr>`;
+function renderTable(){
+  let t=document.getElementById('rosterTable'); 
+  let title = curDates.length? `MT PLATOON 4 BIR - Duty Roster ${curDates[0]} to ${curDates[curDates.length-1]}`:'';
+  document.getElementById('printTitle').innerText=title;
+  let html=`<tr><th class="name-col">NAME (Rank)</th>`;
+  curDates.forEach(d=>{ html+=`<th class="date-col">${d.slice(5)}</th>`; });
+  html+=`</tr>`;
+  members.forEach(m=>{
+    html+=`<tr><td class="name-col">${m.rank} ${m.name}</td>`;
+    curDates.forEach(d=>{
+      let key=m.id+'_'+d; let val=roster[key]||'';
+      html+=`<td class="duty-cell" onclick="openSel('${m.id}','${d}')">${val}</td>`;
+    });
+    html+=`</tr>`;
   });
+  t.innerHTML=html;
 }
-function delDuty(id){ duties=duties.filter(d=>d.id!=id); save(); }
-render();
+function openSel(mid,date){
+  sel.mid=mid; sel.date=date;
+  let m=members.find(x=>x.id==mid);
+  document.getElementById('selInfo').innerText = `${m.rank} ${m.name} - ${date} er Duty`;
+  document.getElementById('dutyType').value = roster[mid+'_'+date]||'';
+  document.getElementById('dutySelector').style.display='block';
+  window.scrollTo(0,0);
+}
+function saveDuty(){
+  let v=document.getElementById('dutyType').value;
+  let key=sel.mid+'_'+sel.date;
+  if(v) roster[key]=v; else delete roster[key];
+  localStorage.setItem('mt_roster',JSON.stringify(roster));
+  closeSel(); renderTable();
+}
+function closeSel(){ document.getElementById('dutySelector').style.display='none'; }
 </script>
 </body>
 </html>
