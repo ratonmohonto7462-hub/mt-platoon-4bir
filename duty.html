@@ -1,42 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Duty Roster 15 Days</title>
+<title>MT Platoon 4 BIR - Duty Roster</title>
 <style>
 body{margin:0;font-family:sans-serif;background:#eef2f7}
-.header{background:#0a5c26;color:white;padding:12px;display:flex;justify-content:space-between}
-.card{background:white;margin:10px;padding:12px;border-radius:12px;overflow:auto}
-input,button,select{padding:8px;border-radius:6px;border:1px solid #ccc}
-button{background:#0a5c26;color:white;font-weight:bold}
-table{border-collapse:collapse;width:100%;min-width:800px}
-th,td{border:1px solid #bbb;padding:6px;text-align:center;font-size:13px;min-width:70px}
-td.name-col{text-align:left;min-width:140px;background:#f9f9f9;position:sticky;left:0}
-th.date-col{background:#0a5c26;color:white}
-td.duty-cell{cursor:pointer}
-td.duty-cell:hover{background:#fff3cd}
-@media print{ .no-print{display:none} table{min-width:100%} }
+.header{background:#0a5c26;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
+.card{background:white;margin:10px;padding:12px;border-radius:12px;box-shadow:0 2px 4px #0001}
+input,select{padding:9px;border-radius:7px;border:1px solid #ccc}
+button{background:#0a5c26;color:white;border:none;padding:9px 14px;border-radius:7px;font-weight:bold;cursor:pointer}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{border:1px solid #bbb;padding:6px;text-align:center;font-size:13px}
+td.name-col{text-align:left;min-width:150px;background:#f9f9f9;position:sticky;left:0;z-index:2}
+th{background:#0a5c26;color:white;position:sticky;top:0}
+td.duty-cell{cursor:pointer;min-width:75px;height:28px}
+td.duty-cell:hover{background:#fff8c6}
+.summary-table th{background:#1a73e8}
+.summary-table td{text-align:left;padding:8px}
+@media print{
+  .no-print{display:none !important}
+  body{background:white}
+  .card{box-shadow:none;margin:0;border-radius:0}
+  table{min-width:100% !important}
+}
 </style>
 </head>
 <body>
+
 <div class="header no-print">
   <b onclick="location.href='dashboard.html'">← BACK</b>
-  <b>DUTY ROSTER (15 DAYS)</b>
-  <button onclick="window.print()">PRINT</button>
+  <b>MT PLATOON 4 BIR - DUTY ROSTER</b>
+  <button onclick="doPrint()">PRINT</button>
 </div>
 
 <div class="card no-print">
-  <input id="startDate" type="date"> <button onclick="genDates()">15 Din Set Koro</button>
-  <input id="rank" placeholder="Rank" style="width:80px"><input id="mName" placeholder="Name" style="width:100px"><button onclick="addMember()">Add Member</button>
-  <div id="dutySelector" style="display:none;margin-top:10px;background:#e8ffe8;padding:8px;border-radius:8px">
-    <b id="selInfo"></b><br>
-    <select id="dutyType"><option value="">- No Duty -</option><option>Guard</option><option>Sentry</option><option>Patrol</option><option>Day Duty</option><option>Night Duty</option><option>Leave</option></select>
-    <button onclick="saveDuty()">Save</button><button onclick="closeSel()" style="background:gray">Cancel</button>
+  <input id="monthPick" type="month"> 
+  <input id="rank" placeholder="Rank" style="width:90px">
+  <input id="mName" placeholder="Name" style="width:110px">
+  <button onclick="addMember()">Add Member</button>
+
+  <div id="dutySelector" style="display:none;margin-top:12px;background:#e8ffe8;padding:10px;border-radius:10px;border:1px solid #0a5c26">
+    <b id="selInfo"></b><br><br>
+    <select id="dutyType" style="width:70%">
+      <option value="">-- Duty Nai --</option>
+      <option>স্টান বাই</option>
+      <option>মোবাইল টহল</option>
+      <option>এমটি পার্ক</option>
+    </select>
+    <button onclick="saveDuty()">Save</button>
+    <button onclick="closeSel()" style="background:#666">Cancel</button>
   </div>
 </div>
 
+<!-- উপরে আলাদা সামারি চার্ট -->
+<div class="card" id="summaryCard">
+  <b>তারিখ অনুযায়ী ডিউটির সামারি</b>
+  <div style="overflow:auto;margin-top:8px">
+    <table class="summary-table" id="summaryTable"></table>
+  </div>
+</div>
+
+<!-- মেইন মাসের চার্ট -->
 <div class="card">
-  <div id="printTitle" style="text-align:center;font-weight:bold;font-size:18px;margin-bottom:8px"></div>
+  <div id="printTitle" style="text-align:center;font-weight:bold;font-size:16px;margin-bottom:8px"></div>
   <div style="overflow:auto">
     <table id="rosterTable"></table>
   </div>
@@ -44,58 +71,41 @@ td.duty-cell:hover{background:#fff3cd}
 
 <script>
 let members = JSON.parse(localStorage.getItem('mt_members')||'[]');
-let roster = JSON.parse(localStorage.getItem('mt_roster')||'{}'); // key: memberId_date
+let roster = JSON.parse(localStorage.getItem('mt_roster')||'{}');
 let curDates = [];
-let sel = {mid:null, date:null};
+let sel = {mid:null,date:null};
+
+const monthPick = document.getElementById('monthPick');
+monthPick.value = new Date().toISOString().slice(0,7);
+monthPick.addEventListener('change', genMonth);
+genMonth();
 
 function addMember(){
-  let r=document.getElementById('rank').value, n=document.getElementById('mName').value;
+  let r=document.getElementById('rank').value.trim();
+  let n=document.getElementById('mName').value.trim();
   if(!n) return alert('Name dao');
-  members.push({id:Date.now(), rank:r, name:n}); localStorage.setItem('mt_members',JSON.stringify(members)); renderTable();
+  members.push({id:Date.now(), rank:r, name:n});
+  localStorage.setItem('mt_members',JSON.stringify(members));
   document.getElementById('mName').value='';
+  renderAll();
 }
-document.getElementById('startDate').valueAsDate = new Date();
-genDates();
-
-function genDates(){
-  let start = new Date(document.getElementById('startDate').value);
+function genMonth(){
+  let [y,m] = monthPick.value.split('-').map(Number);
+  let days = new Date(y,m,0).getDate();
   curDates=[];
-  for(let i=0;i<15;i++){ let d=new Date(start); d.setDate(start.getDate()+i); curDates.push(d.toISOString().slice(0,10)); }
+  for(let i=1;i<=days;i++){
+    let dd=String(i).padStart(2,'0'), mm=String(m).padStart(2,'0');
+    curDates.push(`${y}-${mm}-${dd}`);
+  }
+  renderAll();
+}
+function renderAll(){
   renderTable();
+  renderSummary();
 }
 function renderTable(){
-  let t=document.getElementById('rosterTable'); 
-  let title = curDates.length? `MT PLATOON 4 BIR - Duty Roster ${curDates[0]} to ${curDates[curDates.length-1]}`:'';
+  let title = `Duty Roster - ${monthPick.value}`;
   document.getElementById('printTitle').innerText=title;
-  let html=`<tr><th class="name-col">NAME (Rank)</th>`;
-  curDates.forEach(d=>{ html+=`<th class="date-col">${d.slice(5)}</th>`; });
-  html+=`</tr>`;
-  members.forEach(m=>{
-    html+=`<tr><td class="name-col">${m.rank} ${m.name}</td>`;
-    curDates.forEach(d=>{
-      let key=m.id+'_'+d; let val=roster[key]||'';
-      html+=`<td class="duty-cell" onclick="openSel('${m.id}','${d}')">${val}</td>`;
-    });
-    html+=`</tr>`;
-  });
-  t.innerHTML=html;
-}
-function openSel(mid,date){
-  sel.mid=mid; sel.date=date;
-  let m=members.find(x=>x.id==mid);
-  document.getElementById('selInfo').innerText = `${m.rank} ${m.name} - ${date} er Duty`;
-  document.getElementById('dutyType').value = roster[mid+'_'+date]||'';
-  document.getElementById('dutySelector').style.display='block';
-  window.scrollTo(0,0);
-}
-function saveDuty(){
-  let v=document.getElementById('dutyType').value;
-  let key=sel.mid+'_'+sel.date;
-  if(v) roster[key]=v; else delete roster[key];
-  localStorage.setItem('mt_roster',JSON.stringify(roster));
-  closeSel(); renderTable();
-}
-function closeSel(){ document.getElementById('dutySelector').style.display='none'; }
-</script>
-</body>
-</html>
+  let t=document.getElementById('rosterTable');
+  let html=`<tr><th class="name-col">নাম</th>`;
+  curDates.forEach(d=>{ html+=`<th>${d.slice(8)}<br><span style="font-size:10px">${d.slice(5,
