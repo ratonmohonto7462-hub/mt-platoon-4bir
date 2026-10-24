@@ -1,141 +1,132 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT Duty Roster - Fixed</title>
+<title>Duty Fixed</title>
 <style>
 body{margin:0;font-family:sans-serif;background:#eef2f7}
-.header{background:#0a5c26;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center}
-.card{background:white;margin:10px;padding:12px;border-radius:12px;overflow:auto}
-input,select{padding:9px;border:1px solid #aaa;border-radius:7px}
-button{background:#0a5c26;color:white;border:none;padding:9px 14px;border-radius:7px;font-weight:bold}
-table{border-collapse:collapse;width:100%;min-width:1000px}
-th,td{border:1px solid #999;padding:6px;text-align:center;font-size:13px}
-td.name-col{text-align:left;min-width:160px;background:#f1f1f1;position:sticky;left:0;font-weight:bold}
-th{position:sticky;top:0;background:#0a5c26;color:white;z-index:3}
-td.duty-cell{cursor:pointer;min-width:80px}
-td.duty-cell:hover{background:#fff59d}
-@media print{.no-print{display:none !important}}
+.header{background:#0a5c26;color:#fff;padding:12px;display:flex;justify-content:space-between}
+.card{background:#fff;margin:10px;padding:12px;border-radius:12px;overflow:auto}
+input,select{padding:10px;border:1px solid #999;border-radius:8px;margin:3px}
+button{background:#0a5c26;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold}
+table{border-collapse:collapse;width:100%;min-width:1100px}
+th,td{border:1px solid #777;padding:7px;text-align:center;font-size:13px}
+td.name-col{text-align:left;min-width:160px;background:#eee;position:sticky;left:0;font-weight:bold}
+th{background:#0a5c26;color:white;position:sticky;top:0}
+.duty-cell{background:#fff;cursor:pointer}
+@media print{.no-print{display:none}}
 </style>
 </head>
 <body>
-
 <div class="header no-print">
-  <div onclick="location.href='dashboard.html'"><b>← BACK</b></div>
-  <b>MT PLATOON 4 BIR</b>
+  <b onclick="location.href='dashboard.html'">← BACK</b>
+  <b id="headTitle">DUTY ROSTER</b>
   <button onclick="window.print()">PRINT</button>
 </div>
 
 <div class="card no-print">
-  <input id="monthPick" type="month">
-  <input id="rank" placeholder="Rank: সৈনিক" style="width:95px">
-  <input id="mName" placeholder="Name: রতন" style="width:115px">
-  <button onclick="addMember()">Add Member</button>
-  <button onclick="clearAll()" style="background:#b00;margin-left:5px">Clear All</button>
+  <input id="rank" placeholder="Rank">
+  <input id="mName" placeholder="Name লেখো">
+  <button type="button" onclick="addMember()">Add Member</button>
+  <button type="button" onclick="resetAll()" style="background:#a00">Reset</button>
 
-  <div id="editBox" style="display:none;margin-top:10px;background:#e8ffe8;padding:10px;border:2px solid #0a5c26;border-radius:10px">
+  <div id="editBox" style="display:none;margin-top:10px;background:#d4edda;padding:10px;border-radius:10px">
     <b id="editInfo"></b><br><br>
-    <select id="dutyType" style="width:65%;font-size:16px">
+    <select id="dutyType" style="font-size:16px;width:70%">
       <option value="">-- No Duty --</option>
       <option>স্টান বাই</option>
       <option>মোবাইল টহল</option>
       <option>এমটি পার্ক</option>
     </select>
-    <button onclick="saveDuty()">SAVE</button>
-    <button onclick="closeBox()" style="background:gray">X</button>
+    <button type="button" onclick="saveDuty()">SAVE</button>
   </div>
 </div>
 
-<div class="card">
-  <b>তারিখ অনুযায়ী ডিউটির সামারি (উপরের চার্ট)</b>
-  <table id="summaryTable" style="min-width:100%;margin-top:8px"></table>
-</div>
+<div class="card"><b>তারিখ অনুযায়ী সামারি</b><table id="summary" style="min-width:100%;margin-top:8px"></table></div>
 
 <div class="card">
-  <div id="title" style="text-align:center;font-weight:bold;margin-bottom:6px"></div>
-  <div style="overflow:auto">
-    <table id="mainTable"></table>
-  </div>
+  <div id="mainWrap" style="overflow:auto"><table id="main"></table></div>
 </div>
 
 <script>
-let members = JSON.parse(localStorage.getItem('mt_members_v2')||'[]');
-let roster = JSON.parse(localStorage.getItem('mt_roster_v2')||'{}');
-let curDates=[];
-let sel={mid:null,date:null};
+var members = [];
+var roster = {};
+try{ members = JSON.parse(localStorage.getItem('mt_m')||'[]'); roster = JSON.parse(localStorage.getItem('mt_r')||'{}'); }catch(e){}
 
-let mp=document.getElementById('monthPick');
-mp.value = new Date().toISOString().slice(0,7);
-mp.addEventListener('change', buildDates);
-buildDates();
+var curDates = [];
+var selMid = null; var selDate = null;
 
-function buildDates(){
-  let val=mp.value;
-  let y,m;
-  if(val.includes('-')){ let p=val.split('-'); y=parseInt(p[0]); m=parseInt(p[1]); }
-  else { let d=new Date(); y=d.getFullYear(); m=d.getMonth()+1; }
-  if(!y||!m){ let d=new Date(); y=d.getFullYear(); m=d.getMonth()+1; }
-  let days=new Date(y,m,0).getDate();
-  curDates=[];
-  for(let i=1;i<=days;i++){
-    let dd=String(i).padStart(2,'0'), mm=String(m).padStart(2,'0');
+function makeDates(){
+  var d = new Date();
+  var y = d.getFullYear(); var m = d.getMonth();
+  var days = new Date(y, m+1, 0).getDate();
+  curDates = [];
+  for(var i=1;i<=days;i++){
+    var mm = String(m+1).padStart(2,'0'); var dd = String(i).padStart(2,'0');
     curDates.push(y+'-'+mm+'-'+dd);
   }
-  document.getElementById('title').innerText='Duty Roster - '+y+'-'+String(m).padStart(2,'0');
-  render();
+  document.getElementById('headTitle').innerText = 'DUTY - '+y+'-'+(m+1);
 }
 
 function addMember(){
-  let r=document.getElementById('rank').value.trim();
-  let n=document.getElementById('mName').value.trim();
-  if(!n){ alert('Name লেখো দোস্ত'); return; }
-  let id='id_'+Date.now();
+  var r = document.getElementById('rank').value;
+  var n = document.getElementById('mName').value.trim();
+  if(n==''){ alert('নাম লেখো'); return; }
+  var id = 'm'+Date.now();
   members.push({id:id, rank:r, name:n});
-  localStorage.setItem('mt_members_v2', JSON.stringify(members));
+  try{ localStorage.setItem('mt_m', JSON.stringify(members)); }catch(e){}
   document.getElementById('mName').value='';
   render();
-  alert('Add হয়ে গেছে: '+r+' '+n);
 }
 
 function render(){
-  let mt=document.getElementById('mainTable');
-  let html='<tr><th class="name-col">নাম / তারিখ</th>';
-  curDates.forEach(d=>{ html+='<th>'+d.slice(8)+'</th>'; });
-  html+='</tr>';
-  members.forEach(mem=>{
-    html+='<tr><td class="name-col">'+mem.rank+' '+mem.name+'</td>';
-    curDates.forEach(d=>{
-      let key=mem.id+'_'+d;
-      let v=roster[key]||'';
-      html+='<td class="duty-cell" onclick="openBox(\''+mem.id+'\',\''+d+'\')">'+v+'</td>';
+  var main = document.getElementById('main');
+  var h = '<tr><th class="name-col">নাম / তারিখ</th>';
+  curDates.forEach(function(dt){ h+='<th>'+dt.slice(8)+'</th>'; });
+  h+='</tr>';
+  members.forEach(function(mem){
+    h+='<tr><td class="name-col">'+mem.rank+' '+mem.name+'</td>';
+    curDates.forEach(function(dt){
+      var key = mem.id+'_'+dt;
+      var val = roster[key]||'';
+      h+='<td class="duty-cell" onclick="openEdit(\''+mem.id+'\',\''+dt+'\')">'+val+'</td>';
     });
-    html+='</tr>';
+    h+='</tr>';
   });
-  if(members.length==0) html+='<tr><td class="name-col" colspan="'+(curDates.length+1)+'">কোনো মেম্বার নাই, উপরে নাম লিখে Add Member চাপো</td></tr>';
-  mt.innerHTML=html;
+  if(members.length==0) h+='<tr><td colspan='+(curDates.length+1)+'>এখনো কেউ Add হয়নি</td></tr>';
+  main.innerHTML = h;
 
-  let st=document.getElementById('summaryTable');
-  let shtml='<tr><th>তারিখ</th><th>ডিউটি আছে যাদের</th></tr>';
-  curDates.forEach(d=>{
-    let list=[];
-    members.forEach(mem=>{
-      let k=mem.id+'_'+d;
-      if(roster[k]) list.push(mem.rank+' '+mem.name+' ['+roster[k]+']');
+  var s = document.getElementById('summary');
+  var sh = '<tr><th>তারিখ</th><th>ডিউটি</th></tr>';
+  curDates.forEach(function(dt){
+    var list=[];
+    members.forEach(function(mem){
+      var k=mem.id+'_'+dt; if(roster[k]) list.push(mem.rank+' '+mem.name+'['+roster[k]+']');
     });
-    if(list.length>0) shtml+='<tr><td><b>'+d+'</b></td><td style="text-align:left">'+list.join(', ')+'</td></tr>';
+    if(list.length>0) sh+='<tr><td>'+dt+'</td><td style="text-align:left">'+list.join(', ')+'</td></tr>';
   });
-  if(shtml.includes('<tr><th>')){ /* keep */ }
-  st.innerHTML=shtml;
+  s.innerHTML = sh;
 }
 
-function openBox(mid,date){
-  sel.mid=mid; sel.date=date;
-  let m=members.find(x=>x.id==mid);
-  document.getElementById('editInfo').innerText=m.rank+' '+m.name+' - '+date+' তারিখ';
-  document.getElementById('dutyType').value=roster[mid+'_'+date]||'';
+function openEdit(mid, dt){
+  selMid=mid; selDate=dt;
+  var m = members.find(function(x){return x.id==mid});
+  document.getElementById('editInfo').innerText = m.rank+' '+m.name+' - '+dt;
+  document.getElementById('dutyType').value = roster[mid+'_'+dt]||'';
   document.getElementById('editBox').style.display='block';
-  window.scrollTo(0,0);
 }
 function saveDuty(){
-  let v=document.getElementById('d
+  var v = document.getElementById('dutyType').value;
+  var k = selMid+'_'+selDate;
+  if(v) roster[k]=v; else delete roster[k];
+  try{ localStorage.setItem('mt_r', JSON.stringify(roster)); }catch(e){}
+  document.getElementById('editBox').style.display='none';
+  render();
+}
+function resetAll(){ if(confirm('সব মুছবে?')){ members=[]; roster={}; localStorage.removeItem('mt_m'); localStorage.removeItem('mt_r'); render(); } }
+
+makeDates(); render();
+</script>
+</body>
+</html>
