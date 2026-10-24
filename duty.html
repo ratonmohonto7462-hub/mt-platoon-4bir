@@ -1,18 +1,18 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Final No Sticky</title><style>
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Transparent Sticky</title><style>
 body{margin:0;background:#dbeafe;font-family:sans-serif}
 .card{margin:10px;padding:0;border-radius:12px;overflow:hidden;border:3px solid #000;background:#fff}
 .card-head{padding:10px;text-align:center;font-weight:800;font-size:18px;border-bottom:3px solid #000}
 .card-body{padding:12px;overflow:auto}
 button{background:#0a5c26;color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer}
 input,select{padding:10px;border:2px solid #000;border-radius:8px;font-size:15px;margin:3px;font-weight:700}
-table{border-collapse:collapse;width:100%;min-width:950px}th,td{border:2px solid #000;padding:8px;text-align:center;font-size:13px;font-weight:800}
-.th-name{background:#fef08a !important;color:#000 !important;text-align:left;min-width:150px}
-.td-name{background:#ffffff !important;color:#000 !important;text-align:left;min-width:150px}
+table{border-collapse:collapse;width:100%;min-width:950px}th,td{border:2px solid #000;padding:8px;text-align:center;font-size:15px;font-weight:800}
+.th-name{background:#fef08a !important;color:#000 !important;text-align:left;min-width:160px;position:sticky;left:0;z-index:3;border-right:3px solid #000 !important}
+.td-name{background:rgba(255,255,255,0.75) !important;color:#000 !important;text-align:left;min-width:160px;position:sticky;left:0;z-index:2;border-right:3px solid #000 !important;border-bottom:2px solid #000 !important;backdrop-filter:blur(2px)}
 .th-green{background:#14532d !important;color:#fff !important}
 .th-yellow{background:#facc15 !important;color:#000 !important}
 .c-SB{background:#fecaca !important}.c-MT1{background:#bbf7d0 !important}.c-MT2{background:#bfdbfe !important}.c-MT3{background:#fed7aa !important}.c-MP1{background:#e9d5ff !important}.c-MP2{background:#99f6e0 !important}.c-MP3{background:#fef08a !important}
 .red-note{border:3px solid #cc0000 !important;padding:10px;text-align:center;font-weight:800;margin-top:10px;background:#ffe6e6 !important;color:#cc0000 !important;font-size:15px}
-@media print{@page{size:A4 landscape;margin:8mm}.no-print{display:none !important}*{ -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}th,td{font-size:9px !important;padding:4px !important}}
+@media print{@page{size:A4 landscape;margin:8mm}.no-print{display:none !important}*{ -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}.td-name{background:#fff !important;position:static !important}th,td{font-size:10px !important}}
 </style></head><body>
 <div class="card no-print" style="padding:12px"><select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select><input id="mName" placeholder="নাম লেখো"><button onclick="addMember()">Add Member</button> <b id="cnt"></b><button onclick="window.print()" style="background:#1e40af;float:right">🖨️ Print</button></div>
 <div class="card no-print" style="padding:12px;background:#fffbeb !important"><b>মাস:</b> <select id="monthSel" onchange="changeMonth()"></select> <select id="yearSel" onchange="changeMonth()"></select></div>
