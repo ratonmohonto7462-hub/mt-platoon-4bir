@@ -1,22 +1,25 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT Platoon - Fixed Add</title>
-<style>
-body{margin:0;font-family:sans-serif;background:#eef2f7}
-.card{background:white;margin:10px;padding:12px;border-radius:12px;overflow:auto}
-button{padding:12px 18px;background:#0a5c26;color:white;border:none;border-radius:10px;font-weight:bold;font-size:16px}
-select,input{padding:12px;border:1px solid #666;border-radius:8px;font-size:16px}
-table{border-collapse:collapse;width:100%;min-width:1000px}
-th,td{border:1px solid #444;padding:8px;text-align:center}
-.name-col{background:#eee;position:sticky;left:0;min-width:180px;text-align:left;font-weight:bold}
-th{background:#0a5c26;color:white}
-.night-card{background:#fff9c4;border:2px solid #f9a825}
-.night-title{background:#f9a825;padding:8px;border-radius:8px;font-weight:bold;text-align:center;font-size:18px}
-</style>
-</head>
-<body>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Duty</title><style>body{margin:0;background:#eef2f7;font-family:sans-serif}.card{background:#fff;margin:10px;padding:12px;border-radius:12px}button{background:#0a5c26;color:#fff;border:0;padding:12px 18px;border-radius:8px;font-weight:700}input,select{padding:12px;border:1px solid #888;border-radius:8px;font-size:16px}table{border-collapse:collapse;width:100%;min-width:900px}th,td{border:1px solid #555;padding:8px;text-align:center}.name{position:sticky;left:0;background:#eee;text-align:left;font-weight:700;min-width:150px}th{background:#0a5c26;color:#fff}</style></head><body>
 <div class="card">
-<select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option
+<select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select>
+<input id="mName" placeholder="নাম লেখো">
+<button id="addBtn">Add Member</button>
+<span id="cnt"></span>
+</div>
+<div class="card"><div style="overflow:auto"><table id="main"></table></div></div>
+<div id="pop" style="display:none;position:fixed;top:20%;left:5%;right:5%;background:#fff;border:3px solid #0a5c26;padding:15px;border-radius:12px"><b id="info"></b><br><br><select id="duty" style="width:100%"><option value="">No Duty</option><option>স্টান বাই</option><option>মোবাইল টহল (১ম)</option><option>মোবাইল টহল (২য়)</option><option>মোবাইল টহল (৩য়)</option><option>এমটি পার্ক (১ম)</option><option>এমটি পার্ক (২য়)</option><option>এমটি পার্ক (৩য়)</option></select><br><br><button id="saveBtn">SAVE</button> <button id="closeBtn" style="background:gray">Close</button></div>
+<script>
+let members=[],roster={},dates=[],sid=null,sdate=null;
+let d=new Date(),y=d.getFullYear(),m=d.getMonth(),total=new Date(y,m+1,0).getDate();
+for(let i=1;i<=total;i++){dates.push(y+'-'+String(m+1).padStart(2,'0')+'-'+String(i).padStart(2,'0'))}
+document.getElementById('addBtn').onclick=()=>{
+  let r=document.getElementById('rank').value;
+  let n=document.getElementById('mName').value.trim();
+  if(!n){alert('নাম লেখো');return}
+  members.push({id:Date.now(),rank:r,name:n});
+  document.getElementById('mName').value='';
+  render();
+};
+function render(){
+  document.getElementById('cnt').innerText=' মোট: '+members.length+' জন';
+  let h='<tr><th class="name">নাম / তারিখ</th>';dates.forEach(x=>h+='<th>'+x.slice(8)+'</th>');h+='</tr>';
+  members.forEach(mm
