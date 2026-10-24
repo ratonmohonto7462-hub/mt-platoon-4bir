@@ -3,52 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT Platoon 4 BIR - Duty</title>
+<title>MT Platoon 4 BIR</title>
 <style>
 body{margin:0;font-family:sans-serif;background:#eef2f7}
-.header{background:#0a5c26;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center}
+.header{background:#0a5c26;color:white;padding:12px;display:flex;justify-content:space-between}
 .card{background:white;margin:10px;padding:12px;border-radius:12px;overflow:auto}
-select,input{padding:12px;border:1px solid #777;border-radius:8px;font-size:16px}
-button{padding:12px 18px;background:#0a5c26;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px}
+input,select{padding:10px;border:1px solid #777;border-radius:8px;font-size:15px;margin:2px}
+button{padding:10px 14px;background:#0a5c26;color:white;border:none;border-radius:8px;font-weight:bold}
 table{border-collapse:collapse;width:100%;min-width:1000px}
-th,td{border:1px solid #555;padding:8px;text-align:center}
-.name-col{background:#eee;position:sticky;left:0;min-width:180px;text-align:left;font-weight:bold}
+th,td{border:1px solid #444;padding:7px;text-align:center;font-size:13px}
+.name-col{background:#f0f0f0;position:sticky;left:0;min-width:170px;text-align:left;font-weight:bold}
 th{background:#0a5c26;color:white}
+.night-card{background:#fff9c4;border:2px solid #f9a825}
+.night-title{background:#f9a825;color:black;padding:8px;border-radius:8px;font-weight:bold;text-align:center;font-size:18px}
+.date-badge{background:#0a5c26;color:white;padding:4px 10px;border-radius:20px;font-size:13px}
+@media print{.no-print{display:none}}
 </style>
 </head>
 <body>
-
-<div class="header">
+<div class="header no-print">
 <b onclick="location.href='/'">← BACK</b>
 <b>MT PLATOON 4 BIR</b>
 <b onclick="window.print()">PRINT</b>
 </div>
 
-<div class="card">
-  <select id="rank">
-    <option>সার্জেন্ট</option>
-    <option>কর্পোরাল</option>
-    <option>ল্যান্স কর্পোরাল</option>
-    <option selected>সৈনিক</option>
-  </select>
-  <input id="mName" placeholder="নাম লেখো">
-  <button onclick="addMember()">Add Member</button>
+<div class="card no-print">
+<select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select>
+<input id="mName" placeholder="নাম লেখো">
+<button onclick="addMember()">Add Member</button>
 </div>
 
-<div class="card">
-<b>ডিউটি অনুযায়ী সামারি - এক লাইনে</b>
-<table id="summary" style="min-width:100%;margin-top:10px"></table>
+<!-- 1. রাত্রিকালীন ডিউটি -->
+<div class="card night-card">
+<div class="night-title">রা রাত্রিকালীন ডিউটি</div>
+<div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+<div>তারিখ: <input type="date" id="nightDate"></div>
+<div><span class="date-badge" id="activeDateLabel">আজকের ডিউটি</span></div>
+</div>
+<table id="nightTable" style="min-width:100%;margin-top:10px"></table>
+<div style="font-size:12px;margin-top:6px;color:#555">* যে তারিখে ডিউটি লাগাবে ঐ তারিখেই দেখাবে, পরের ডিউটি না লাগা পর্যন্ত আগেরটাই থাকবে।</div>
 </div>
 
+<!-- 2. মাসিক ডিউটি সামারি -->
 <div class="card">
-<div style="overflow:auto">
-<table id="main"></table>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px">
+<b>মাসিক ডিউটি সামারি - <span id="rangeLabel">1 October থেকে 31 October</span></b>
+<div class="no-print">
+<input type="date" id="fromDate"> থেকে <input type="date" id="toDate">
+<button onclick="doSearch()">Search</button>
+<button onclick="resetSearch()" style="background:gray">Reset</button>
+</div>
+</div>
+<div style="overflow:auto;margin-top:10px">
+<table id="summary"></table>
 </div>
 </div>
 
-<div id="box" style="display:none;position:fixed;top:20%;left:5%;right:5%;background:white;border:3px solid #0a5c26;padding:20px;border-radius:12px">
+<div class="card"><div style="overflow:auto"><table id="main"></table></div></div>
+
+<div id="box" style="display:none;position:fixed;top:20%;left:5%;right:5%;background:white;border:3px solid #0a5c26;padding:20px;border-radius:12px;z-index:99">
 <b id="bInfo"></b><br><br>
-<select id="dutyType" style="width:100%">
+<select id="dutyType" style="width:100%;font-size:16px">
 <option value="">No Duty</option>
 <option>স্টান বাই</option>
 <option>মোবাইল টহল (১ম)</option>
@@ -63,84 +78,86 @@ th{background:#0a5c26;color:white}
 </div>
 
 <script>
-var members = [];
-var roster = {};
-var dates = [];
-var selId = null, selDate = null;
+var members=[], roster={}, dates=[], selId=null, selDate=null;
 
-var now = new Date();
-var y = now.getFullYear();
-var m = now.getMonth();
-var total = new Date(y, m+1, 0).getDate();
-for(var i=1;i<=total;i++){
-  var mm = String(m+1).padStart(2,'0');
-  var dd = String(i).padStart(2,'0');
-  dates.push(y+'-'+mm+'-'+dd);
+var now=new Date(); var y=now.getFullYear(), m=now.getMonth();
+var total=new Date(y,m+1,0).getDate();
+for(var i=1;i<=total;i++){ var mm=String(m+1).padStart(2,'0'), dd=String(i).padStart(2,'0'); dates.push(y+'-'+mm+'-'+dd); }
+
+var todayStr = y+'-'+String(m+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+document.getElementById('nightDate').value = todayStr;
+document.getElementById('fromDate').value = y+'-'+String(m+1).padStart(2,'0')+'-01';
+document.getElementById('toDate').value = y+'-'+String(m+1).padStart(2,'0')+'-'+String(total).padStart(2,'0');
+document.getElementById('nightDate').addEventListener('change', renderNight);
+document.getElementById('fromDate').addEventListener('change', updateRangeLabel);
+document.getElementById('toDate').addEventListener('change', updateRangeLabel);
+
+function updateRangeLabel(){
+  var f=document.getElementById('fromDate').value, t=document.getElementById('toDate').value;
+  document.getElementById('rangeLabel').innerText = f+' থেকে '+t;
 }
-
 function addMember(){
-  var r = document.getElementById('rank').value;
-  var n = document.getElementById('mName').value.trim();
-  if(n==""){ alert('নাম লেখো'); return; }
-  var id = 'm'+Date.now()+Math.random();
-  members.push({id:id, rank:r, name:n});
-  document.getElementById('mName').value='';
-  render();
+  var r=document.getElementById('rank').value, n=document.getElementById('mName').value.trim();
+  if(!n){alert('নাম লেখো');return;}
+  members.push({id:'m'+Date.now()+Math.random(), rank:r, name:n});
+  document.getElementById('mName').value=''; render();
 }
-
 function render(){
-  var main = document.getElementById('main');
-  var h = '<tr><th class="name-col">নাম / তারিখ</th>';
-  for(var i=0;i<dates.length;i++){ h+='<th>'+dates[i].slice(8)+'</th>'; }
-  h+='</tr>';
-  for(var j=0;j<members.length;j++){
-    var mem = members[j];
-    h+='<tr><td class="name-col">'+mem.rank+' '+mem.name+'</td>';
-    for(var k=0;k<dates.length;k++){
-      var dt = dates[k];
-      var key = mem.id+'_'+dt;
-      var v = roster[key] ? roster[key] : '';
-      h+='<td onclick="openBox(\''+mem.id+'\',\''+dt+'\')" style="cursor:pointer">'+v+'</td>';
+  // main table
+  var main=document.getElementById('main');
+  var h='<tr><th class="name-col">নাম / তারিখ</th>'; for(var i=0;i<dates.length;i++) h+='<th>'+dates[i].slice(8)+'</th>'; h+='</tr>';
+  for(var j=0;j<members.length;j++){ var mem=members[j]; h+='<tr><td class="name-col">'+mem.rank+' '+mem.name+'</td>'; for(var k=0;k<dates.length;k++){ var dt=dates[k]; var key=mem.id+'_'+dt; var v=roster[key]||''; h+='<td onclick="openBox(\''+mem.id+'\',\''+dt+'\')" style="cursor:pointer">'+v+'</td>'; } h+='</tr>'; }
+  main.innerHTML=h;
+  renderNight(); renderSummary();
+}
+function renderNight(){
+  var selected = document.getElementById('nightDate').value || todayStr;
+  // logic: selected date e duty na thakle ager date er duty khujbo
+  var effectiveDate = selected;
+  var found=false;
+  for(var d=dates.length-1; d>=0; d--){
+    if(dates[d]<=selected){
+      // check if any duty on dates[d]
+      var has=false;
+      for(var i=0;i<members.length;i++){ if(roster[members[i].id+'_'+dates[d]]) { has=true; break; } }
+      if(has){ effectiveDate=dates[d]; found=true; break; }
     }
-    h+='</tr>';
   }
-  if(members.length==0){ h+='<tr><td colspan='+(dates.length+1)+'>এখনো কেউ Add হয়নি, উপরে নাম লিখে Add চাপো</td></tr>'; }
-  main.innerHTML = h;
+  if(!found){ effectiveDate=selected; } // jodi kono duty na thake tahole selected tai dekhabe (empty)
+  document.getElementById('activeDateLabel').innerText = 'কার্যকর: '+effectiveDate;
+  var tbl=document.getElementById('nightTable');
+  var ht='<tr><th style="background:#f9a825;color:black">ডিউটি</th><th style="background:#f9a825;color:black">নাম</th></tr>';
+  var duties=["স্টান বাই","মোবাইল টহল (১ম)","মোবাইল টহল (২য়)","মোবাইল টহল (৩য়)","এমটি পার্ক (১ম)","এমটি পার্ক (২য়)","এমটি পার্ক (৩য়)"];
+  duties.forEach(function(duty){
+    var list=[];
+    members.forEach(function(mem){ var k=mem.id+'_'+effectiveDate; if(roster[k]==duty) list.push(mem.rank+' '+mem.name); });
+    if(list.length>0) ht+='<tr><td style="background:#fff3cd;font-weight:bold">'+duty+'</td><td style="text-align:left;white-space:nowrap">'+list.join(' , ')+'</td></tr>';
+  });
+  if(ht=='<tr><th style="background:#f9a825;color:black">ডিউটি</th><th style="background:#f9a825;color:black">নাম</th></tr>') ht+='<tr><td colspan=2>এই তারিখে কোনো ডিউটি লাগানো হয়নি</td></tr>';
+  tbl.innerHTML=ht;
+}
+function renderSummary(){
+  var from=document.getElementById('fromDate').value, to=document.getElementById('toDate').value;
+  var filtered = dates.filter(function(d){ return d>=from && d<=to; });
+  var s=document.getElementById('summary');
+  var sh='<tr><th class="name-col">নাম / তারিখ</th>'; filtered.forEach(function(d){ sh+='<th>'+d+'</th>'; }); sh+='</tr>';
+  members.forEach(function(mem){
+    sh+='<tr><td class="name-col">'+mem.rank+' '+mem.name+'</td>';
+    filtered.forEach(function(d){ var k=mem.id+'_'+d; sh+='<td>'+(roster[k]||'')+'</td>'; });
+    sh+='</tr>';
+  });
+  s.innerHTML=sh;
+}
+function doSearch(){ updateRangeLabel(); renderSummary(); }
+function resetSearch(){
+  document.getElementById('fromDate').value = y+'-'+String(m+1).padStart(2,'0')+'-01';
+  document.getElementById('toDate').value = y+'-'+String(m+1).padStart(2,'0')+'-'+String(total).padStart(2,'0');
+  updateRangeLabel(); renderSummary();
+}
+function openBox(mid,dt){ selId=mid; selDate=dt; var mem=members.find(x=>x.id==mid); document.getElementById('bInfo').innerText=mem.rank+' '+mem.name+' - '+dt; document.getElementById('dutyType').value=roster[mid+'_'+dt]||''; document.getElementById('box').style.display='block'; }
+function saveDuty(){ var v=document.getElementById('dutyType').value; var k=selId+'_'+selDate; if(v) roster[k]=v; else delete roster[k]; document.getElementById('box').style.display='none'; render(); }
 
-  var duties = ["স্টান বাই","মোবাইল টহল (১ম)","মোবাইল টহল (২য়)","মোবাইল টহল (৩য়)","এমটি পার্ক (১ম)","এমটি পার্ক (২য়)","এমটি পার্ক (৩য়)"];
-  var s = '';
-  for(var d=0; d<duties.length; d++){
-    var duty = duties[d];
-    var list = [];
-    for(var a=0;a<dates.length;a++){
-      var dt2 = dates[a];
-      for(var b=0;b<members.length;b++){
-        var mem2 = members[b];
-        var kk = mem2.id+'_'+dt2;
-        if(roster[kk]==duty){ list.push(dt2.slice(8)+' - '+mem2.rank+' '+mem2.name); }
-      }
-    }
-    s+='<tr><td style="background:#e8f5e9;font-weight:bold;width:150px">'+duty+'</td><td style="text-align:left;white-space:nowrap">'+(list.join(' , ')||'—')+'</td></tr>';
-  }
-  document.getElementById('summary').innerHTML = s;
-}
-
-function openBox(mid, dt){
-  selId = mid; selDate = dt;
-  var mem = null;
-  for(var i=0;i<members.length;i++){ if(members[i].id==mid){ mem=members[i]; break; } }
-  document.getElementById('bInfo').innerText = mem.rank+' '+mem.name+' - '+dt;
-  document.getElementById('dutyType').value = roster[mid+'_'+dt] || '';
-  document.getElementById('box').style.display='block';
-}
-function saveDuty(){
-  var v = document.getElementById('dutyType').value;
-  var k = selId+'_'+selDate;
-  if(v){ roster[k]=v; } else { delete roster[k]; }
-  document.getElementById('box').style.display='none';
-  render();
-}
-render();
+updateRangeLabel(); render();
 </script>
 </body>
 </html>
