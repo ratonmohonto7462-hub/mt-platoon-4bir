@@ -20,7 +20,7 @@ th{background:#0a5c26;color:white}
 </style>
 </head>
 <body>
-<div class="header no-print">
+<div class="header print">
 <b onclick="location.href='/'">← BACK</b>
 <b>MT PLATOON 4 BIR</b>
 <b onclick="window.print()">PRINT</b>
@@ -28,21 +28,21 @@ th{background:#0a5c26;color:white}
 
 <div class="card no-print">
 <select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select>
-<input id="mName" placeholder="নাম লেখো">
+<input id="mName" placeholder="নাম">
 <button onclick="addMember()">Add Member</button>
 </div>
 
 <!-- 1. রাত্রিকালীন ডিউটি - সবসময় Show -->
 <div class="card night-card">
 <div class="night-title">রাত্রিকালীন ডিউটি</div>
-<div style="margin-top:8px">তারিখ: <input type="date" id="nightDate"> <span id="activeDateLabel" style="background:#0a5c26;color:white;padding:4px 10px;border-radius:20px;font-size:12px"></span></div>
+<div style="margin-top:8px">তারিখ: <input type="date" id="nightDate"> <span id="activeDateLabel" style="background:#0a5c26;color: blue;padding:4px 10px;border-radius:20px;font-size:12px"></span></div>
 <table id="nightTable" style="min-width:100%;margin-top:10px"></table>
 </div>
 
-<!-- 2. মাসিক ডিউটি সামারি - শুধু Search দিলে আসবে -->
-<div class="card no-print">
+<!-- 2. মাসিক ডিউটি সামারি - -->
+<div class="card print">
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px">
-<b>মাসিক ডিউটি সামারি - <span id="rangeLabel">Search দিলে আসবে</span></b>
+<b>মাসিক ডিউটি সামারি - <span id="rangeLabel/span></b>
 <div>
 <input type="date" id="fromDate"> থেকে <input type="date" id="toDate">
 <button onclick="doSearch()">Search</button>
