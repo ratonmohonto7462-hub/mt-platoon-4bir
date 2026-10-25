@@ -21,21 +21,24 @@
  .btn-d{background:#ff1a1a;color:white;border:none;padding:4px 7px;border-radius:6px;font-weight:bold;margin:1px;font-size:11px}
 
  @media print{
-  @page{size:A4 landscape;margin:6mm}
-  html,body{height:auto !important; zoom:1.15 !important; background:white !important; margin:0 !important; padding:0 !important}
+  @page{size:Legal portrait;margin:4mm}
+  html,body{height:auto !important; zoom:0.65 !important; background:white !important; margin:0 !important; padding:0 !important}
   .header,#adminBox,.btn-print,.view-only{display:none !important}
   table th:last-child,table td:last-child{display:none !important}
-  .container{padding:0 !important; margin:0 !important; max-width:100% !important; width:100% !important}
-  .title{margin:6px 0 2px !important; font-size:16px !important}
-  .sub{margin:0 0 8px !important; font-size:13px !important}
-  .table-wrap{border:1px solid #000 !important; border-radius:0 !important; overflow:visible !important; width:100% !important}
-  table{width:100% !important; table-layout:auto !important}
-  th{padding:7px 6px !important; font-size:11px !important; line-height:14px !important}
-  td{padding:6px 6px !important; font-size:11px !important; line-height:14px !important}
-  /* কলাম ছড়ানো */
-  td:nth-child(1){width:45px} td:nth-child(2){width:95px} td:nth-child(3){width:85px}
-  td:nth-child(4){width:auto; min-width:200px; text-align:left; padding-left:10px !important}
-  td:nth-child(5){width:110px} td:nth-child(6){width:75px} td:nth-child(7){width:90px}
+  .container{padding:0 !important; margin:0 auto !important; max-width:100% !important; width:95% !important}
+  .title{margin:3px 0 0 !important; font-size:12px !important}
+  .sub{margin:0 0 4px !important; font-size:10px !important}
+  .table-wrap{border:1px solid #000 !important; border-radius:0 !important; overflow:visible !important; margin:0 auto !important; width:95% !important}
+  table{width:95% !important; margin:0 auto !important; border-collapse:collapse !important}
+  th{padding:3px 2px !important; font-size:7.5px !important; line-height:10px !important}
+  td{padding:2px 2px !important; font-size:7.5px !important; line-height:10px !important}
+  td:nth-child(1){width:28px !important}
+  td:nth-child(2){width:55px !important}
+  td:nth-child(3){width:50px !important}
+  td:nth-child(4){width:110px !important; max-width:110px !important; text-align:left; padding-left:4px !important; white-space:normal !important}
+  td:nth-child(5){width:60px !important}
+  td:nth-child(6){width:40px !important}
+  td:nth-child(7){width:45px !important}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
  }
 </style>
@@ -52,7 +55,7 @@
 <button id="mainBtn" class="btn-add" onclick="saveData()">Add করুন</button>
 <p id="msg" style="text-align:center;font-weight:bold;color:green"></p>
 </div>
-<div id="viewBox" class="view-only" style="display:none">👁️ আপনি View Mode এ আছেন (MT PLATOON)</div>
+<div id="viewBox" class="view-only" style="display:none">👁️ View Mode এ আছেন</div>
 <div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
 <div class="sub">এমটি প্লাটুন ৪ বীর</div>
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
