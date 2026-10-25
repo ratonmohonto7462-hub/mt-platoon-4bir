@@ -6,6 +6,6 @@ duties.forEach(function(duty){
 var list=[];members.forEach(function(mm){if(roster[mm.id+'_'+sel]==duty)list.push(mm.rank+' '+mm.name);});
 if(list.length>0)ht+='<tr><td class="'+getColor(duty)+'">'+duty+'</td><td style="text-align:left;background:#fff !important">'+list.join(' , ')+'</td></tr>';
 });
-if(ht.indexOf('c-')==-1)ht+='<tr><td colspan=2>কোনো ডিউটি নাই</td></tr>';
+if(ht.indexOf('c-')==-1)ht+='<tr><td colspan=2>এই তারিখে রাত্রিকালীন ডিউটি নাই</td></tr>';
 document.getElementById('nightTable').innerHTML=ht;
-} 
+}
