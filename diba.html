@@ -20,10 +20,9 @@ table{border-collapse:collapse;width:100%;min-width:750px}th,td{border:2px solid
 <button onclick="window.print()" style="background:#1e40af;margin-left:auto">🖨️ Print</button>
 </div>
 
-<div class="card" id="addCard">
-<div class="card-head" style="background:#fffbeb !important;color:#000 !important;font-size:14px">Add - ক্র/নং, পদবি, নাম, ডিউটির নাম, সময়, বিএ নং, গাড়ির ধরন</div>
+<div class="card">
+<div class="card-head">দিবাকালীন কর্তব্য</div>
 <div class="add-grid no-print" id="addArea">
-<input id="dSerial" placeholder="ক্র/নং" style="max-width:70px">
 <select id="dRank"><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select>
 <input id="dName" placeholder="নাম">
 <input id="dDuty" placeholder="ডিউটির নাম">
@@ -39,7 +38,6 @@ table{border-collapse:collapse;width:100%;min-width:750px}th,td{border:2px solid
 </div>
 
 <script>
-// Role - index এর মতো
 var urlRole = new URLSearchParams(location.search).get('role');
 var storedRole = localStorage.getItem('role');
 var USER_ROLE = (urlRole || storedRole || 'mt').toLowerCase();
@@ -49,20 +47,20 @@ function applyRole(){
 var t = IS_VIEWER ? '👁️ VIEW - MT' : '✏️ EDIT - MT CLK';
 var c = IS_VIEWER ? 'role-badge role-platoon' : 'role-badge role-clk';
 document.getElementById('roleShow').innerText=t; document.getElementById('roleShow').className=c;
-document.getElementById('addCard').style.display = IS_VIEWER ? 'block' : 'block';
 document.getElementById('addArea').style.display = IS_VIEWER ? 'none' : 'flex';
 }
-
 function todayDMY(){var d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
 document.getElementById('dDate').value = localStorage.getItem('mt_dibaDate') || todayDMY();
 var dibaData = JSON.parse(localStorage.getItem('mt_dibaDuty')||'[]');
 
 function addDiba(){
 if(IS_VIEWER){alert('VIEW only');return;}
+var curDate=document.getElementById('dDate').value;
+var count=dibaData.filter(x=>x.date==curDate).length;
 var o={
 id:Date.now(),
-date:document.getElementById('dDate').value,
-serial:document.getElementById('dSerial').value,
+date:curDate,
+serial:count+1,
 rank:document.getElementById('dRank').value,
 name:document.getElementById('dName').value,
 duty:document.getElementById('dDuty').value,
@@ -76,13 +74,17 @@ localStorage.setItem('mt_dibaDuty',JSON.stringify(dibaData));
 clearForm();
 renderDiba();
 }
-function clearForm(){['dSerial','dName','dDuty','dTime','dBA','dVehicle'].forEach(id=>document.getElementById(id).value='');}
-function delDiba(id){if(IS_VIEWER)return; if(!confirm('ডিলিট করবে?'))return; dibaData=dibaData.filter(x=>x.id!=id); localStorage.setItem('mt_dibaDuty',JSON.stringify(dibaData)); renderDiba();}
+function clearForm(){['dName','dDuty','dTime','dBA','dVehicle'].forEach(id=>document.getElementById(id).value='');}
+function delDiba(id){if(IS_VIEWER)return; if(!confirm('ডিলিট করবে?'))return; dibaData=dibaData.filter(x=>x.id!=id); // serial re-calc
+var cur=document.getElementById('dDate').value;
+var list=dibaData.filter(x=>x.date==cur).sort((a,b)=>a.id-b.id);
+list.forEach((it,i)=>{it.serial=i+1});
+localStorage.setItem('mt_dibaDuty',JSON.stringify(dibaData)); renderDiba();}
 
 function renderDiba(){
 var cur=document.getElementById('dDate').value;
 localStorage.setItem('mt_dibaDate',cur);
-var list=dibaData.filter(x=>x.date==cur);
+var list=dibaData.filter(x=>x.date==cur).sort((a,b)=>a.id-b.id);
 var h='<tr><th class="th-g">ক্র/নং</th><th class="th-g">পদবি</th><th class="th-g">নাম</th><th class="th-g">ডিউটির নাম</th><th class="th-g">সময়</th><th class="th-g">বিএ নং</th><th class="th-g">গাড়ির ধরন</th>'+(IS_VIEWER?'':'<th class="th-g">Del</th>')+'</tr>';
 if(list.length==0){h+='<tr><td colspan=8>কোনো ডিউটি নাই</td></tr>';}
 else{
@@ -92,7 +94,6 @@ h+='<tr><td>'+r.serial+'</td><td>'+r.rank+'</td><td>'+r.name+'</td><td>'+r.duty+
 }
 document.getElementById('dTable').innerHTML=h;
 }
-
 document.getElementById('dDate').addEventListener('change',renderDiba);
 applyRole();
 renderDiba();
