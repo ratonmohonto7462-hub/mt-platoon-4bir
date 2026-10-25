@@ -8,8 +8,20 @@ input,select{padding:9px;border:2px solid #000;border-radius:8px;font-weight:700
 button{background:#0a5c26;color:#fff;border:0;padding:9px 14px;border-radius:8px;font-weight:800;cursor:pointer}
 table{border-collapse:collapse;width:100%;min-width:750px}th,td{border:2px solid #000;padding:8px;text-align:center;font-size:13px;font-weight:800}
 .th-g{background:#14532d !important;color:#fff !important}
+.red-note{
+  border:2px solid #cc0000 !important;
+  padding:6px 2px;
+  text-align:center;
+  font-weight:800;
+  font-size:11px;
+  background:#ffe6e6 !important;
+  color:#cc0000 !important;
+  margin-top:8px;
+  white-space:nowrap;
+  line-height:1.2;
+}
 .role-badge{padding:6px 12px;border-radius:20px;font-weight:800;font-size:12px}.role-platoon{background:#fef08a;border:2px solid #000}.role-clk{background:#14532d;color:#fff;border:2px solid #000}
-@media print{ .no-print{display:none !important} body{zoom:1 !important;background:#fff !important}}
+@media print{ .no-print{display:none !important} body{zoom:1 !important;background:#fff !important} .card{margin:2px !important} *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}}
 </style></head><body>
 
 <a href="duty.html" class="back-btn no-print">⬅️ Back to Folder</a>
@@ -33,7 +45,7 @@ table{border-collapse:collapse;width:100%;min-width:750px}th,td{border:2px solid
 </div>
 <div style="padding:10px;overflow:auto">
 <table id="dTable"></table>
-<div style="border:3px solid #cc0000;padding:8px;text-align:center;font-weight:800;background:#ffe6e6;color:#cc0000;margin-top:8px">দিবাকালীন ডিউটিতে কষ্ট থাকলে কর্পোরাল মোঃ মেহেদী হাসান (এমটি এনসিএ) সাথে যোগাযোগ করুন।</div>
+<div class="red-note">ডিউটিতে কারো কষ্ট থাকলে কর্পোরাল মোঃ মেহেদী হাসান (এমটি এনসিও) সাথে যোগাযোগ করুন।</div>
 </div>
 </div>
 
@@ -75,11 +87,14 @@ clearForm();
 renderDiba();
 }
 function clearForm(){['dName','dDuty','dTime','dBA','dVehicle'].forEach(id=>document.getElementById(id).value='');}
-function delDiba(id){if(IS_VIEWER)return; if(!confirm('ডিলিট করবে?'))return; dibaData=dibaData.filter(x=>x.id!=id); // serial re-calc
+function delDiba(id){
+if(IS_VIEWER)return; if(!confirm('ডিলিট করবে?'))return;
+dibaData=dibaData.filter(x=>x.id!=id);
 var cur=document.getElementById('dDate').value;
 var list=dibaData.filter(x=>x.date==cur).sort((a,b)=>a.id-b.id);
 list.forEach((it,i)=>{it.serial=i+1});
-localStorage.setItem('mt_dibaDuty',JSON.stringify(dibaData)); renderDiba();}
+localStorage.setItem('mt_dibaDuty',JSON.stringify(dibaData)); renderDiba();
+}
 
 function renderDiba(){
 var cur=document.getElementById('dDate').value;
