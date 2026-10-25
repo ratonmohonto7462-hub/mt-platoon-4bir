@@ -47,4 +47,15 @@ body{margin:0;background:#eef2f7;font-family:Arial}
 </div>
 </div>
 </body>
-</html>
+</html><script>
+// আগে সেভ করা আদেশ থাকলে অটো দেখাবে
+let old = localStorage.getItem('joruriAdesh');
+if(old){ document.getElementById('joruriText').innerHTML = '🚨 জরুরি আদেশ: ' + old + ' 🚨'; }
+
+// নতুন আদেশ আপডেট করার ফাংশন
+function updateJoruriAdesh(text){
+  document.getElementById('joruriText').innerHTML = '🚨 জরুরি আদেশ: ' + text + ' 🚨';
+  localStorage.setItem('joruriAdesh', text);
+}
+// ব্যবহার: updateJoruriAdesh("আজ রাত ২০:০০ এ গাড়ি চেক")
+</script>
