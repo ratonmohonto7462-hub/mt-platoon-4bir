@@ -1,12 +1,32 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT 7 Duty Only</title><style>
+body{margin:0;background:#dbeafe;font-family:sans-serif;zoom:0.75}
+.card{margin:10px;padding:0;border-radius:12px;overflow:hidden;border:3px solid #000;background:#fff}
+.card-head{padding:10px;text-align:center;font-weight:800;font-size:18px;border-bottom:3px solid #000}
+.card-body{padding:0;overflow:auto}
+.card-body-inner{padding:12px}
+button{background:#0a5c26;color:#fff;border:0;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;margin:2px}
+input,select{padding:9px;border:2px solid #000;border-radius:8px;font-size:14px;margin:2px;font-weight:700}
+table{border-collapse:collapse;width:100%;min-width:1320px}th,td{border:2px solid #000;padding:6px;text-align:center;font-size:13px;font-weight:800}
+.th-name{background:#fef08a !important;min-width:140px;width:145px;position:sticky;left:0;z-index:5;border-right:3px solid #000 !important;text-align:left}
+.td-name{background:rgba(255,255,255,0.90) !important;min-width:140px;width:145px;position:sticky;left:0;z-index:4;border-right:3px solid #000 !important;text-align:left;font-size:12px;line-height:1.2}
+.th-green{background:#14532d !important;color:#fff !important;min-width:34px}
+.th-act{background:#dc2626 !important;color:#fff !important;min-width:110px}
+.td-act{background:#fff9c4 !important;min-width:110px}
+.th-yellow{background:#facc15 !important;color:#000 !important}
+.c-SB{background:#fecaca !important}.c-MT1{background:#bbf7d0 !important}.c-MT2{background:#bfdbfe !important}.c-MT3{background:#fed7aa !important}.c-MP1{background:#e9d5ff !important}.c-MP2{background:#99f6e0 !important}.c-MP3{background:#fef08a !important}
+.c-LV{background:#f87171 !important;color:#fff !important}.c-ATT{background:#fb923c !important}.c-SK{background:#fde047 !important}.c-CR{background:#67e8f9 !important}.c-CAD{background:#a3a3a3 !important;color:#fff !important}.c-CO{background:#4ade80 !important}.c-2IC{background:#60a5fa !important;color:#fff !important}
+.sena{font-size:11px;color:#222;display:block;font-weight:700}
+.red-note{border:3px solid #cc0000 !important;padding:10px;text-align:center;font-weight:800;margin-top:10px;background:#ffe6e6 !important;color:#cc0000 !important}
 @media print{
-@page{size:Letter landscape;margin:3mm}
+@page{size:A4 landscape;margin:3mm}
 body{zoom:1 !important;background:#fff !important}
 .no-print{display:none !important}
 .card{margin:2px !important;border:1.5px solid #000 !important;overflow:visible !important}
 .card-body{overflow:visible !important}
 table{min-width:0 !important;width:100% !important}
+#nightCard{margin-bottom:5px !important}
 #nightTable{min-width:0 !important;width:100% !important}
-#nightTable th,#nightTable td{font-size:8px !important;padding:2px !important}
+#nightTable th,#nightTable td{font-size:8px !important;padding:2px !important;border:1.2px solid #000 !important}
 #main{min-width:0 !important;width:100% !important;table-layout:fixed !important}
 #main th,#main td{font-size:6.5px !important;padding:2px 1px !important;word-break:break-word !important}
 .th-name,.td-name{position:static !important;min-width:0 !important;width:85px !important;max-width:85px !important;font-size:6.5px !important;white-space:normal !important}
@@ -15,3 +35,42 @@ table{min-width:0 !important;width:100% !important}
 .th-act,.td-act{display:none !important}
 *{ -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
 }
+</style></head><body>
+<div class="card no-print" style="padding:10px;display:flex;flex-wrap:wrap;align-items:center;gap:4px">
+<input id="senaNo" placeholder="সেনা নং" style="width:90px">
+<select id="rank"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option selected>সৈনিক</option></select>
+<input id="mName" placeholder="নাম" style="width:110px">
+<button onclick="addMember()">Add</button> <b id="cnt"></b>
+<button onclick="window.print()" style="background:#1e40af;margin-left:auto">🖨️ Print</button>
+</div>
+<div class="card no-print" style="padding:10px;background:#fffbeb !important"><b>মাস:</b> <select id="monthSel" onchange="changeMonth()"></select> <select id="yearSel" onchange="changeMonth()"></select></div>
+<div class="card" id="nightCard"><div class="card-head" style="background:#facc15 !important">রাত্রিকালীন কর্তব্য</div><div class="card-body"><div class="card-body-inner" style="background:#fffbeb !important">তারিখ: <input type="text" id="nightDate" style="width:135px;text-align:center"><table id="nightTable" style="min-width:100%;margin-top:6px;background:#fff"></table><div class="red-note">ডিউটিতে কারো কষ্ট থাকলে কর্পোরাল মোঃ মেহেদী হাসান (এমটি এনসিএ) সাথে যোগাযোগ করুন।</div></div></div></div>
+<div class="card" id="monthCard"><div class="card-head" style="background:#14532d !important;color:#fff !important">মাসিক ডিউটি সামারি - <span id="monthLabel"></span></div><div class="card-body"><div class="card-body-inner" style="background:#eff6ff !important"><table id="main"></table></div></div></div>
+<div id="pop" style="display:none;position:fixed;top:20%;left:5%;right:5%;background:#fff;border:3px solid #000;padding:15px;border-radius:12px;z-index:99"><b id="info"></b><br><br><select id="duty" style="width:100%;font-size:16px;border:2px solid #000"><option value="">No Duty</option><option>স্টান বাই</option><option>মোবাইল টহল (১ম)</option><option>মোবাইল টহল (২য়)</option><option>মোবাইল টহল (৩য়)</option><option>এমটি পার্ক (১ম)</option><option>এমটি পার্ক (২য়)</option><option>এমটি পার্ক (৩য়)</option><option>ছুটি</option><option>সংযুক্ত</option><option>সিক</option><option>কোর্স</option><option>ক্যাডার</option><option>সিও</option><option>টুআইসি</option></select><br><br><button onclick="saveDuty()">SAVE</button> <button onclick="document.getElementById('pop').style.display='none'" style="background:gray">Close</button></div>
+<div id="editPop" style="display:none;position:fixed;top:15%;left:5%;right:5%;background:#fff;border:3px solid #000;padding:15px;border-radius:12px;z-index:100"><b>এডিট করুন</b><br><br><input id="eSena" placeholder="সেনা নং" style="width:90%"><br><select id="eRank" style="width:90%"><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option>সৈনিক</option></select><br><input id="eName" placeholder="নাম" style="width:90%"><br><br><button onclick="saveEdit()">Update</button> <button onclick="document.getElementById('editPop').style.display='none'" style="background:gray">Close</button></div>
+<script>
+var members=JSON.parse(localStorage.getItem('mt_members')||'[]');var roster=JSON.parse(localStorage.getItem('mt_roster')||'{}');var dates=[],sid=null,sdate=null,curY,curM,editId=null;
+function bn2en(s){if(!s)return '';var map={'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};return s.toString().split('').map(ch=>map[ch]||ch).join('');}
+function getSenaNum(m){var raw=bn2en(m.senaNo||'');var n=parseInt(raw.replace(/[^0-9]/g,''));return isNaN(n)?9999999:n;}
+function sortBySena(){members.sort((a,b)=>getSenaNum(a)-getSenaNum(b));}
+function todayDMY(){var d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+function dmyToYmd(dmy){if(!dmy||!dmy.includes('/'))return null;var p=dmy.split('/');return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');}
+function ymdToDmy(ymd){var p=ymd.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function buildMonths(){var ms=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];var mSel=document.getElementById('monthSel');var ySel=document.getElementById('yearSel');ms.forEach((n,i)=>{var o=document.createElement('option');o.value=i;o.text=n;mSel.appendChild(o);});for(var y=2025;y<=2030;y++){var o=document.createElement('option');o.value=y;o.text=y;ySel.appendChild(o);}var now=new Date();mSel.value=now.getMonth();ySel.value=now.getFullYear();curY=now.getFullYear();curM=now.getMonth();}
+function changeMonth(){curM=parseInt(document.getElementById('monthSel').value);curY=parseInt(document.getElementById('yearSel').value);genDates();render();}
+function genDates(){dates=[];var total=new Date(curY,curM+1,0).getDate();for(var i=1;i<=total;i++){dates.push(curY+'-'+String(curM+1).padStart(2,'0')+'-'+String(i).padStart(2,'0'))}document.getElementById('monthLabel').innerText=(curM+1)+'/'+curY;}
+document.getElementById('nightDate').value=localStorage.getItem('mt_nightDate')||todayDMY();
+function saveStore(){localStorage.setItem('mt_members',JSON.stringify(members));localStorage.setItem('mt_roster',JSON.stringify(roster));localStorage.setItem('mt_nightDate',document.getElementById('nightDate').value);}
+function shortCode(d){var m={"স্টান বাই":"S/B","মোবাইল টহল (১ম)":"M/T1","মোবাইল টহল (২য়)":"M/T2","মোবাইল টহল (৩য়)":"M/T3","এমটি পার্ক (১ম)":"M/P1","এমটি পার্ক (২য়)":"M/P2","এমটি পার্ক (৩য়)":"M/P3","ছুটি":"ছুটি","সংযুক্ত":"সং","সিক":"সিক","কোর্স":"কোর্স","ক্যাডার":"ক্যাডার","সিও":"সিও","টুআইসি":"2IC"};return m[d]||d;}
+function getColor(d){var m={"স্টান বাই":"c-SB","মোবাইল টহল (১ম)":"c-MT1","মোবাইল টহল (২য়)":"c-MT2","মোবাইল টহল (৩য়)":"c-MT3","এমটি পার্ক (১ম)":"c-MP1","এমটি পার্ক (২য়)":"c-MP2","এমটি পার্ক (৩য়)":"c-MP3","ছুটি":"c-LV","সংযুক্ত":"c-ATT","সিক":"c-SK","কোর্স":"c-CR","ক্যাডার":"c-CAD","সিও":"c-CO","টুআইসি":"c-2IC"};return m[d]||"";}
+function addMember(){var s=document.getElementById('senaNo').value.trim();var r=document.getElementById('rank').value;var n=document.getElementById('mName').value.trim();if(!s||!n){alert('সেনা নং ও নাম লেখো');return;}members.push({id:Date.now(),senaNo:s,rank:r,name:n});document.getElementById('senaNo').value='';document.getElementById('mName').value='';sortBySena();saveStore();render();}
+function delMember(id){if(!confirm('ডিলিট করবে?'))return;members=members.filter(x=>x.id!=id);for(var k in roster){if(k.startsWith(id+'_'))delete roster[k];}saveStore();render();}
+function openEdit(id){var mm=members.find(x=>x.id==id);editId=id;document.getElementById('eSena').value=mm.senaNo;document.getElementById('eRank').value=mm.rank;document.getElementById('eName').value=mm.name;document.getElementById('editPop').style.display='block';}
+function saveEdit(){var mm=members.find(x=>x.id==editId);mm.senaNo=document.getElementById('eSena').value.trim();mm.rank=document.getElementById('eRank').value;mm.name=document.getElementById('eName').value.trim();document.getElementById('editPop').style.display='none';sortBySena();saveStore();render();}
+function render(){sortBySena();document.getElementById('cnt').innerText=' মোট: '+members.length;var h='<tr><th class="th-name">সেনা নং / নাম / তারিখ</th>';for(var i=0;i<dates.length;i++){h+='<th class="th-green">'+dates[i].slice(8)+'</th>';}h+='<th class="th-act">Edit/Delete</th></tr>';for(var j=0;j<members.length;j++){var mm=members[j];h+='<tr><td class="td-name"><span class="sena">'+mm.senaNo+'</span>'+mm.rank+' '+mm.name+'</td>';for(var k=0;k<dates.length;k++){var dt=dates[k];var val=roster[mm.id+'_'+dt]||'';var code=val?shortCode(val):'';var cls=val?getColor(val):'';h+='<td onclick="openDuty('+mm.id+',\''+dt+'\')" class="'+cls+'" style="cursor:pointer">'+code+'</td>';}h+='<td class="td-act"><button onclick="openEdit('+mm.id+')" style="background:#1e40af;padding:4px 7px;font-size:11px">Edit</button><button onclick="delMember('+mm.id+')" style="background:#dc2626;padding:4px 7px;font-size:11px">Del</button></td></tr>';}document.getElementById('main').innerHTML=h;renderNight();}
+function renderNight(){var sel=dmyToYmd(document.getElementById('nightDate').value)||dates[0];var ht='<tr><th class="th-yellow">ডিউটি</th><th class="th-yellow">নাম</th></tr>';var duties=["স্টান বাই","মোবাইল টহল (১ম)","মোবাইল টহল (২য়)","মোবাইল টহল (৩য়)","এমটি পার্ক (১ম)","এমটি পার্ক (২য়)","এমটি পার্ক (৩য়)"];duties.forEach(function(duty){var list=[];members.forEach(function(mm){if(roster[mm.id+'_'+sel]==duty)list.push(mm.rank+' '+mm.name);});if(list.length>0)ht+='<tr><td class="'+getColor(duty)+'">'+duty+'</td><td style="text-align:left;background:#fff !important">'+list.join(' , ')+'</td></tr>';});if(ht.indexOf('c-')==-1)ht+='<tr><td colspan=2>কোনো ডিউটি নাই</td></tr>';document.getElementById('nightTable').innerHTML=ht;}
+function openDuty(id,dt){sid=id;sdate=dt;var mm=members.find(x=>x.id==id);document.getElementById('info').innerText=(mm.senaNo||'')+' '+mm.rank+' '+mm.name+' - '+ymdToDmy(dt);document.getElementById('duty').value=roster[id+'_'+dt]||'';document.getElementById('pop').style.display='block';}
+function saveDuty(){var v=document.getElementById('duty').value;var k=sid+'_'+sdate;if(v)roster[k]=v;else delete roster[k];document.getElementById('pop').style.display='none';saveStore();render();}
+document.getElementById('nightDate').addEventListener('change',function(){saveStore();renderNight();});
+buildMonths();genDates();render();
+</script></body></html>
