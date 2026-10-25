@@ -15,27 +15,27 @@
  .table-wrap{width:100%;overflow-x:auto;background:white;border-radius:12px;border:1px solid #ccc}
  table{width:100%;border-collapse:collapse;background:white}
  th{background:#0a6b2e;color:white;padding:8px 4px;border:1px solid #fff;font-size:12px;white-space:nowrap}
- td{border:1px solid #999;padding:7px 4px;text-align:center;font-size:12px;vertical-align:middle;line-height:18px}
- td:nth-child(1){width:38px} td:nth-child(2){width:80px;white-space:nowrap;font-weight:700}
- td:nth-child(4){min-width:130px;max-width:180px;font-weight:700;text-align:left;padding-left:6px}
+ td{border:1px solid #999;padding:7px 4px;text-align:center;font-size:12px;vertical-align:middle}
+ .view-only{color:#0a5c2f;text-align:center;font-weight:900;background:#d4edda;padding:10px;border-radius:10px;margin-bottom:12px}
  .btn-e{background:#2a7bff;color:white;border:none;padding:4px 7px;border-radius:6px;font-weight:bold;margin:1px;font-size:11px}
  .btn-d{background:#ff1a1a;color:white;border:none;padding:4px 7px;border-radius:6px;font-weight:bold;margin:1px;font-size:11px}
- .view-only{color:#0a5c2f;text-align:center;font-weight:900;background:#d4edda;padding:10px;border-radius:10px;margin-bottom:12px}
 
- /* ===== আগের সব ঠিক রেখে নতুন প্রিন্ট ফিক্স এড করা হলো - 55 জন 1 পেজে হবে ===== */
  @media print{
-  @page{size:A4 landscape;margin:3mm}
-  html,body{height:auto !important; zoom:0.88 !important; background:white !important; margin:0 !important; padding:0 !important}
+  @page{size:A4 landscape;margin:6mm}
+  html,body{height:auto !important; zoom:1.15 !important; background:white !important; margin:0 !important; padding:0 !important}
   .header,#adminBox,.btn-print,.view-only{display:none !important}
   table th:last-child,table td:last-child{display:none !important}
-  .container{padding:0 !important; margin:0 !important; max-width:100% !important}
-  .title{margin:2px 0 0 !important; font-size:13px !important}
-  .sub{margin:0 0 3px !important; font-size:11px !important}
-  .table-wrap{border:none !important; border-radius:0 !important; overflow:visible !important}
-  table{page-break-inside:auto; width:100% !important}
-  tr{page-break-inside:avoid}
-  th{padding:3px 2px !important; font-size:8.5px !important; line-height:10px !important}
-  td{padding:2px 2px !important; font-size:8.5px !important; line-height:11px !important; height:14px !important}
+  .container{padding:0 !important; margin:0 !important; max-width:100% !important; width:100% !important}
+  .title{margin:6px 0 2px !important; font-size:16px !important}
+  .sub{margin:0 0 8px !important; font-size:13px !important}
+  .table-wrap{border:1px solid #000 !important; border-radius:0 !important; overflow:visible !important; width:100% !important}
+  table{width:100% !important; table-layout:auto !important}
+  th{padding:7px 6px !important; font-size:11px !important; line-height:14px !important}
+  td{padding:6px 6px !important; font-size:11px !important; line-height:14px !important}
+  /* কলাম ছড়ানো */
+  td:nth-child(1){width:45px} td:nth-child(2){width:95px} td:nth-child(3){width:85px}
+  td:nth-child(4){width:auto; min-width:200px; text-align:left; padding-left:10px !important}
+  td:nth-child(5){width:110px} td:nth-child(6){width:75px} td:nth-child(7){width:90px}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
  }
 </style>
@@ -52,7 +52,7 @@
 <button id="mainBtn" class="btn-add" onclick="saveData()">Add করুন</button>
 <p id="msg" style="text-align:center;font-weight:bold;color:green"></p>
 </div>
-<div id="viewBox" class="view-only" style="display:none">👁️ আপনি View Mode এ আছেন (MT PLATOON) - শুধু দেখতে পারবেন</div>
+<div id="viewBox" class="view-only" style="display:none">👁️ আপনি View Mode এ আছেন (MT PLATOON)</div>
 <div class="title">সিনিয়ারিটি অনুযায়ী নামীয় তালিকা</div>
 <div class="sub">এমটি প্লাটুন ৪ বীর</div>
 <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
@@ -73,9 +73,9 @@ function checkRole(){
 }
 function formatDate(s){if(!s)return'';let d=new Date(s);if(isNaN(d))return s;return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear()}
 async function loadData(){ try{ let res=await fetch(SHEET_URL+"?t="+Date.now()); let data=await res.json(); let tb=document.getElementById('tb');tb.innerHTML=''; if(!data||data.length==0){tb.innerHTML='<tr><td colspan="8">কোনো ডাটা নাই</td></tr>';return} data.sort((a,b)=>new Date(a.D)-new Date(b.D)); data.forEach((r,i)=>{ let today=new Date();today.setHours(0,0,0,0); let jd=new Date(r.D);jd.setHours(0,0,0,0); let diff=Math.floor((today-jd)/86400000);if(diff<0)diff=0; let actionBtns = isAdmin? `<td><button class="btn-e" onclick="startEdit(${r.row},'${r.S}','${r.P}','${r.N}','${r.D}','${r.M||''}')">Edit</button><button class="btn-d" onclick="deleteData(${r.row})">X</button></td>` : `<td style="display:none"></td>`; tb.innerHTML+=`<tr><td>${i+1}</td><td>${r.S}</td><td>${r.P}</td><td>${r.N}</td><td>${formatDate(r.D)}</td><td>${diff} দিন</td><td>${r.M||''}</td>${actionBtns}</tr>`; }); }catch(e){document.getElementById('tb').innerHTML='<tr><td colspan="8">Error: '+e.message+'</td></tr>'} }
-function startEdit(row,S,P,N,D,M){if(!isAdmin){alert('আপনার Edit করার অনুমতি নাই');return}document.getElementById('s').value=S;document.getElementById('p').value=P;document.getElementById('n').value=N;document.getElementById('m').value=M;try{document.getElementById('d').value=new Date(D).toISOString().split('T')[0]}catch(e){document.getElementById('d').value=D}editRowNum=row;document.getElementById('mainBtn').innerText='Update করুন';window.scrollTo(0,0)}
-async function deleteData(row){if(!isAdmin){alert('আপনার Delete করার অনুমতি নাই');return}if(!confirm('ডিলিট করবে?'))return;await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row})});alert('ডিলিট হয়েছে');setTimeout(loadData,2000)}
-async function saveData(){if(!isAdmin){alert('আপনার Add করার অনুমতি নাই');return}let S=document.getElementById('s').value.trim(),P=document.getElementById('p').value,N=document.getElementById('n').value.trim(),D=document.getElementById('d').value,M=document.getElementById('m').value.trim();if(!S||!N||!D){alert('সব পূরণ করো');return}let payload=editRowNum==-1?{S,P,N,D,M}:{action:"edit",row:editRowNum,S,P,N,D,M};document.getElementById('msg').innerText='পাঠানো হচ্ছে...';await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});document.getElementById('msg').innerText='✅ Done!';document.getElementById('s').value=document.getElementById('n').value=document.getElementById('d').value=document.getElementById('m').value='';editRowNum=-1;document.getElementById('mainBtn').innerText='Add করুন';setTimeout(loadData,2000);}
+function startEdit(row,S,P,N,D,M){if(!isAdmin){alert('অনুমতি নাই');return}document.getElementById('s').value=S;document.getElementById('p').value=P;document.getElementById('n').value=N;document.getElementById('m').value=M;try{document.getElementById('d').value=new Date(D).toISOString().split('T')[0]}catch(e){document.getElementById('d').value=D}editRowNum=row;document.getElementById('mainBtn').innerText='Update করুন';window.scrollTo(0,0)}
+async function deleteData(row){if(!isAdmin){alert('অনুমতি নাই');return}if(!confirm('ডিলিট করবে?'))return;await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:"delete",row})});alert('ডিলিট হয়েছে');setTimeout(loadData,2000)}
+async function saveData(){if(!isAdmin){alert('অনুমতি নাই');return}let S=document.getElementById('s').value.trim(),P=document.getElementById('p').value,N=document.getElementById('n').value.trim(),D=document.getElementById('d').value,M=document.getElementById('m').value.trim();if(!S||!N||!D){alert('সব পূরণ করো');return}let payload=editRowNum==-1?{S,P,N,D,M}:{action:"edit",row:editRowNum,S,P,N,D,M};document.getElementById('msg').innerText='পাঠানো হচ্ছে...';await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)});document.getElementById('msg').innerText='✅ Done!';document.getElementById('s').value=document.getElementById('n').value=document.getElementById('d').value=document.getElementById('m').value='';editRowNum=-1;document.getElementById('mainBtn').innerText='Add করুন';setTimeout(loadData,2000);}
 checkRole(); loadData();
 </script>
 </body>
