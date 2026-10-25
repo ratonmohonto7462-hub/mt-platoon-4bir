@@ -1,0 +1,99 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>দিবাকালীন কর্তব্য</title><style>
+body{margin:0;background:#dbeafe;font-family:sans-serif;zoom:0.85}
+.card{margin:8px;padding:0;border-radius:12px;border:3px solid #000;background:#fff;overflow:hidden}
+.card-head{padding:12px;text-align:center;font-weight:900;font-size:18px;background:#14532d;color:#fff;border-bottom:3px solid #000}
+.back-btn{margin:10px;padding:10px 18px;background:#000;color:#fff;border-radius:10px;border:0;font-weight:800;display:inline-block;text-decoration:none}
+.add-grid{display:flex;flex-wrap:wrap;gap:5px;padding:10px;background:#fffbeb;border-bottom:3px solid #000}
+input,select{padding:9px;border:2px solid #000;border-radius:8px;font-weight:700;font-size:13px;flex:1 1 85px;min-width:80px}
+button{background:#0a5c26;color:#fff;border:0;padding:9px 14px;border-radius:8px;font-weight:800;cursor:pointer}
+table{border-collapse:collapse;width:100%;min-width:750px}th,td{border:2px solid #000;padding:8px;text-align:center;font-size:13px;font-weight:800}
+.th-g{background:#14532d !important;color:#fff !important}
+.role-badge{padding:6px 12px;border-radius:20px;font-weight:800;font-size:12px}.role-platoon{background:#fef08a;border:2px solid #000}.role-clk{background:#14532d;color:#fff;border:2px solid #000}
+@media print{ .no-print{display:none !important} body{zoom:1 !important;background:#fff !important}}
+</style></head><body>
+
+<a href="duty.html" class="back-btn no-print">⬅️ Back to Folder</a>
+
+<div class="card no-print" style="padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+<span id="roleShow" class="role-badge"></span>
+<b>তারিখ: <input type="text" id="dDate" style="width:120px;text-align:center"></b>
+<button onclick="window.print()" style="background:#1e40af;margin-left:auto">🖨️ Print</button>
+</div>
+
+<div class="card" id="addCard">
+<div class="card-head" style="background:#fffbeb !important;color:#000 !important;font-size:14px">Add - ক্র/নং, পদবি, নাম, ডিউটির নাম, সময়, বিএ নং, গাড়ির ধরন</div>
+<div class="add-grid no-print" id="addArea">
+<input id="dSerial" placeholder="ক্র/নং" style="max-width:70px">
+<select id="dRank"><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select>
+<input id="dName" placeholder="নাম">
+<input id="dDuty" placeholder="ডিউটির নাম">
+<input id="dTime" placeholder="সময়" style="max-width:90px">
+<input id="dBA" placeholder="বিএ নং" style="max-width:100px">
+<input id="dVehicle" placeholder="গাড়ির ধরন">
+<button onclick="addDiba()">Add</button>
+</div>
+<div style="padding:10px;overflow:auto">
+<table id="dTable"></table>
+<div style="border:3px solid #cc0000;padding:8px;text-align:center;font-weight:800;background:#ffe6e6;color:#cc0000;margin-top:8px">দিবাকালীন ডিউটিতে কষ্ট থাকলে কর্পোরাল মোঃ মেহেদী হাসান (এমটি এনসিএ) সাথে যোগাযোগ করুন।</div>
+</div>
+</div>
+
+<script>
+// Role - index এর মতো
+var urlRole = new URLSearchParams(location.search).get('role');
+var storedRole = localStorage.getItem('role');
+var USER_ROLE = (urlRole || storedRole || 'mt').toLowerCase();
+var IS_VIEWER = (USER_ROLE === 'mt');
+if(urlRole) localStorage.setItem('role', USER_ROLE);
+function applyRole(){
+var t = IS_VIEWER ? '👁️ VIEW - MT' : '✏️ EDIT - MT CLK';
+var c = IS_VIEWER ? 'role-badge role-platoon' : 'role-badge role-clk';
+document.getElementById('roleShow').innerText=t; document.getElementById('roleShow').className=c;
+document.getElementById('addCard').style.display = IS_VIEWER ? 'block' : 'block';
+document.getElementById('addArea').style.display = IS_VIEWER ? 'none' : 'flex';
+}
+
+function todayDMY(){var d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+document.getElementById('dDate').value = localStorage.getItem('mt_dibaDate') || todayDMY();
+var dibaData = JSON.parse(localStorage.getItem('mt_dibaDuty')||'[]');
+
+function addDiba(){
+if(IS_VIEWER){alert('VIEW only');return;}
+var o={
+id:Date.now(),
+date:document.getElementById('dDate').value,
+serial:document.getElementById('dSerial').value,
+rank:document.getElementById('dRank').value,
+name:document.getElementById('dName').value,
+duty:document.getElementById('dDuty').value,
+time:document.getElementById('dTime').value,
+ba:document.getElementById('dBA').value,
+vehicle:document.getElementById('dVehicle').value
+};
+if(!o.name){alert('নাম লেখো');return;}
+dibaData.push(o);
+localStorage.setItem('mt_dibaDuty',JSON.stringify(dibaData));
+clearForm();
+renderDiba();
+}
+function clearForm(){['dSerial','dName','dDuty','dTime','dBA','dVehicle'].forEach(id=>document.getElementById(id).value='');}
+function delDiba(id){if(IS_VIEWER)return; if(!confirm('ডিলিট করবে?'))return; dibaData=dibaData.filter(x=>x.id!=id); localStorage.setItem('mt_dibaDuty',JSON.stringify(dibaData)); renderDiba();}
+
+function renderDiba(){
+var cur=document.getElementById('dDate').value;
+localStorage.setItem('mt_dibaDate',cur);
+var list=dibaData.filter(x=>x.date==cur);
+var h='<tr><th class="th-g">ক্র/নং</th><th class="th-g">পদবি</th><th class="th-g">নাম</th><th class="th-g">ডিউটির নাম</th><th class="th-g">সময়</th><th class="th-g">বিএ নং</th><th class="th-g">গাড়ির ধরন</th>'+(IS_VIEWER?'':'<th class="th-g">Del</th>')+'</tr>';
+if(list.length==0){h+='<tr><td colspan=8>কোনো ডিউটি নাই</td></tr>';}
+else{
+list.forEach(r=>{
+h+='<tr><td>'+r.serial+'</td><td>'+r.rank+'</td><td>'+r.name+'</td><td>'+r.duty+'</td><td>'+r.time+'</td><td>'+r.ba+'</td><td>'+r.vehicle+'</td>'+(IS_VIEWER?'':'<td><button onclick="delDiba('+r.id+')" style="background:#dc2626">X</button></td>')+'</tr>';
+});
+}
+document.getElementById('dTable').innerHTML=h;
+}
+
+document.getElementById('dDate').addEventListener('change',renderDiba);
+applyRole();
+renderDiba();
+</script></body></html>
