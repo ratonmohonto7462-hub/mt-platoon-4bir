@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT Platoon Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Noto Sans Bengali',sans-serif}
+body{background:#e8efe8;padding-bottom:90px}
+.topbar{background:#2d5a27;color:white;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.topbar h1{font-size:20px;display:flex;align-items:center;gap:8px}
+.card{background:white;border-radius:18px;margin:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.create-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.avatar{width:42px;height:42px;border-radius:50%;background:#c5d8c3;display:flex;align-items:center;justify-content:center;font-size:20px}
+.input-box{background:#dbe8d6;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;border:1px solid #b5ccaF}
+.input-box input{border:none;background:transparent;outline:none;width:100%;font-size:15px}
+.post-btn{background:#2d5a27;color:white;border:none;padding:8px 20px;border-radius:20px;float:right;margin-top:10px;display:flex;align-items:center;gap:6px;cursor:pointer}
+.clear{clear:both}
+.post-header{display:flex;gap:10px;align-items:center}
+.post-avatar{width:48px;height:48px;border-radius:50%;background:#2d5a27;color:white;display:flex;align-items:center;justify-content:center}
+.badge{color:#2d5a27;font-size:12px}
+.post-body{margin:14px 0;font-size:16px;line-height:1.6;color:#222}
+.post-footer{display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:10px;margin-top:10px;color:#666;font-size:13px}
+.like-btn{background:#2d5a27;color:white;padding:6px 14px;border-radius:8px;border:none}
+.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:#2d5a27;border-radius:24px;display:flex;justify-content:space-around;padding:10px 0;color:#a8d5a2}
+.bottom-nav div{text-align:center;font-size:12px;cursor:pointer}
+.bottom-nav .active{color:white}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<h1>🛡️ MT Platoon Feed</h1>
+<div>🔍 🔔</div>
+</div>
+
+<div class="card">
+<div class="create-top">
+<div class="avatar">👤</div>
+<b>Create Post</b>
+</div>
+<div class="input-box">
+<span>📎</span>
+<input id="postInput" placeholder="Write new instruction...">
+</div>
+<button class="post-btn" onclick="createPost()">✈️ Post</button>
+<div class="clear"></div>
+</div>
+
+<div id="feed"></div>
+
+<div class="bottom-nav">
+<div class="active">🏠<br>Feed</div>
+<div>👥<br>Roster</div>
+<div>📝<br>Tasks</div>
+<div>👤<br>Profile</div>
+</div>
+
+<script>
+let posts = JSON.parse(localStorage.getItem('mt_feed')||`[
+{"name":"MT JCO","date":"14 Oct 2024 • 07:30 AM • MT Platoon","text":"আগামীকাল ০৬:০০ এ পিটি প্যারেড বাধ্যতামূলক। সকলকে নির্ধারিত ইউনিফর্মে ইউনিট লাইনে উপস্থিত থাকতে হবে। বিলম্ব গ্রহণযোগ্য নয়।","seen":42,"like":12,"cmt":3},
+{"name":"MT JCO","date":"13 Oct 2024 • 05:45 PM • MT Platoon","text":"এমটি যানবাহন চেক-আপ আগামী ১৫ অক্টোবর সকাল ০৯:০০। সকল চালককে লগবুক আপডেট করে রিপোর্ট জমা দিতে হবে। যানবাহন পরিষ্কার ও জ্বালানি পূর্ণ রাখা নিশ্চিত করুন।","seen":28,"like":7,"cmt":1}
+]`);
+
+function render(){
+ let html='';
+ posts.forEach((p,i)=>{
+  html+=`
+  <div class="card">
+   <div class="post-header">
+    <div class="post-avatar">⭐</div>
+    <div><b>${p.name}</b> <span style="color:green">✔️</span><br><small style="color:#666">${p.date}</small></div>
+   </div>
+   <div class="post-body">${p.text}</div>
+   <div class="post-footer">
+    <span>👁️ Seen ${p.seen}</span>
+    <button class="like-btn" onclick="like(${i})">👍 Like ${p.like}</button>
+    <span>💬 Comments ${p.cmt}</span>
+   </div>
+  </div>`;
+ });
+ document.getElementById('feed').innerHTML=html;
+}
+
+function createPost(){
+ let t=document.getElementById('postInput').value;
+ if(!t.trim()) return;
+ posts.unshift({name:"MT JCO",date:new Date().toLocaleString('en-GB')+" • MT Platoon",text:t,seen:1,like:0,cmt:0});
+ localStorage.setItem('mt_feed',JSON.stringify(posts));
+ document.getElementById('postInput').value='';
+ render();
+}
+function like(i){posts[i].like++;posts[i].seen++;localStorage.setItem('mt_feed',JSON.stringify(posts));render();}
+render();
+</script>
+</body>
+</html>
