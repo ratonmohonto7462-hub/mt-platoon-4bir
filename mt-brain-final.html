@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MT BRAIN</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#040d04;font-family:Arial,sans-serif;color:#fff;height:100vh;display:flex;flex-direction:column}
+.header{background:linear-gradient(90deg,#0a4d0a,#0f7a0f);padding:14px;text-align:center;font-weight:900;font-size:17px;letter-spacing:1px;box-shadow:0 2px 10px #000}
+#chat{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.bubble{max-width:85%;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.me{background:#1677ff;align-self:flex-end;border-bottom-right-radius:5px}
+.bot{background:#152415;border:1px solid #1f4d1f;align-self:flex-start;border-bottom-left-radius:5px}
+.bar{display:flex;gap:8px;padding:12px;background:#0d1a0d;border-top:1px solid #1a3a1a}
+.bar input{flex:1;padding:14px 18px;border-radius:25px;border:1px solid #1f4d1f;background:#1a2a1a;color:#fff;outline:none;font-size:15px}
+.bar button{background:#0f8a0f;color:#fff;border:none;padding:0 22px;border-radius:25px;font-weight:900;font-size:20px;cursor:pointer}
+.bar button:active{transform:scale(0.95)}
+.time{font-size:11px;opacity:0.6;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="header">🧠 MT BRAIN - MT Platoon AI Assistant</div>
+<div id="chat">
+<div class="bubble bot">আসসালামু আলাইকুম! আমি MT BRAIN।
+গাড়ি, তেল, ব্রেক, চাকা, ডিউটি - যেকোনো প্রশ্ন করো।
+যেমন: "চাকার হাওয়া কত" / "ব্রেক অয়েল কোনটা"</div>
+</div>
+<div class="bar">
+<input id="q" placeholder="প্রশ্ন লিখো..." autocomplete="off" onkeydown="if(event.key==='Enter') send()">
+<button onclick="send()">➤</button>
+</div>
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdGacyzv75odMelXicrVr3oLtcDqt2YYKeXnGlBcItLVbQE0WfGzmsAZklrNxMd3rnew/exec";
+function send(){
+  let input=document.getElementById('q');
+  let t=input.value.trim();
+  if(!t) return;
+  add(t,'me');
+  input.value='';
+  let load = add('MT BRAIN লিখছে...','bot');
+  fetch(SCRIPT_URL+"?action=ask&q="+encodeURIComponent(t))
+    .then(r=>r.text())
+    .then(ans=>{
+      load.remove();
+      add(ans,'bot');
+    })
+    .catch(e=>{
+      load.remove();
+      add('নেট সমস্যা, আবার চেষ্টা করো।','bot');
+    });
+}
+function add(txt,cls){
+  let c=document.getElementById('chat');
+  let d=document.createElement('div');
+  d.className='bubble '+cls;
+  d.innerText=txt;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+  return d;
+}
+</script>
+</body>
+</html>
