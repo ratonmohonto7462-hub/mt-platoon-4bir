@@ -22,6 +22,19 @@ body{margin:0;background:#eef2f7;font-family:Arial}
 <body>
 <div class="top"><b>MT PLATOON 4 BIR</b><button class="logout" onclick="localStorage.clear();location.href='index.html'">LOGOUT</button></div>
 <div class="wrap">
+<!-- জরুরি আদেশ স্ক্রল -->
+<div style="background:#b91c1c;color:white;padding:7px 0;overflow:hidden;white-space:nowrap;width:100%;">
+  <div id="joruriText" style="display:inline-block;padding-left:100%;animation: scrollLeft 18s linear infinite;font-weight:bold;font-size:15px">
+    🚨 জরুরি আদেশ: আগামীকাল সকাল ০৬:০০ ঘটিকায় সকল ড্রাইভার MT Park এ ফল-ইন 🚨
+  </div>
+</div>
+
+<style>
+@keyframes scrollLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+</style>
 <div class="welcome">Assalamualaikum</div>
 <div class="mobile">📞 MT PLATOON Mobile: 01769-013433</div>
 <div class="grid">
