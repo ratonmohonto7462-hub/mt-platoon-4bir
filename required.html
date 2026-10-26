@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Required Mobile Number</title>
+<title>Required - MT PLATOON 4 BIR</title>
 <style>
-body{margin:0;font-family:Arial;background:#8a9a8a;min-height:100vh}
-.header{background:#0f2110;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
-.header b{font-size:14px}.backBtn{background:#5a0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
-.searchWrap{padding:12px}.searchWrap input{width:100%;padding:12px;border-radius:12px;border:none;box-sizing:border-box}
-.addBtn{margin:0 12px 12px;width:calc(100% - 24px);padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900}
-.card{background:#f5f5f5;border-radius:16px;padding:12px;margin:0 12px 12px;box-shadow:0 4px 12px #0002}
-.cardTop{display:flex;justify-content:space-between;align-items:center}
-.cardTitle{font-weight:900;font-size:15px}.cardSub{font-size:12px;color:#555;margin-top:2px}
+body{margin:0;font-family:Arial;min-height:100vh;background-color:#4a5d3a;background-image:radial-gradient(ellipse at 25% 25%, #2a3d1f 0% 18%, transparent 19%),radial-gradient(ellipse at 70% 15%, #8b6d4a 0% 12%, transparent 13%),radial-gradient(ellipse at 55% 75%, #2f1f14 0% 14%, transparent 15%),radial-gradient(ellipse at 15% 75%, #9a9a7a 0% 10%, transparent 11%),radial-gradient(ellipse at 45% 50%, #5a722a 0% 22%, transparent 23%);background-size:320px 320px}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(238,242,247,0.72);z-index:-1}
+.top{background:#0f2110ef;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top b{font-size:15px;font-weight:900}.backBtn{background:#5a0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
+.wrap{padding:14px}
+.searchWrap input{width:100%;padding:12px;border-radius:12px;border:none;box-sizing:border-box}
+.addBtn{margin:12px 0;width:100%;padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900}
+.card{background:rgba(255,255,255,0.92);border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:0 4px 12px #0002}
+.cardTop{display:flex;justify-content:space-between;align-items:center}.cardTitle{font-weight:900;font-size:15px}.cardSub{font-size:12px;color:#555;margin-top:2px}
 .badge{background:#0f2110;color:white;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900}
 .info{margin-top:8px;background:white;border-radius:10px;padding:8px;font-size:13px;line-height:1.6}
-.btns{display:flex;gap:8px;margin-top:10px}.editBtn{flex:1;background:#0f2110;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.delBtn{flex:1;background:#7d0000;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}
-/* FORM MODAL - একবারে সব */
+.btns{display:flex;gap:8px;margin-top:10px}.editBtn{flex:1;background:#0f2110;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.delBtn{flex:1;background:#7d0000;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.viewOnly{flex:1;background:#eee;color:#555;padding:10px;border-radius:10px;text-align:center;font-weight:700;font-size:12px}
 #formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;padding:12px}
 #formBox{background:white;border-radius:18px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
 #formBox h3{margin:0;padding:14px 16px;background:#0f2110;color:white;border-radius:18px 18px 0 0;text-align:center}
@@ -23,38 +23,44 @@ body{margin:0;font-family:Arial;background:#8a9a8a;min-height:100vh}
 </style>
 </head>
 <body>
-<div class="header"><b>REQUIRED MOBILE NUMBER</b><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div>
+<div class="top"><b>REQUIRED MOBILE NUMBER</b><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div>
+<div class="wrap">
 <div class="searchWrap"><input id="search" placeholder="🔍 নাম / পদবী / নম্বর সার্চ..." oninput="render()"></div>
-<button class="addBtn" onclick="openAdd()">+ ADD NUMBER</button>
+<button id="addBtnMain" class="addBtn" onclick="openAdd()">+ ADD NUMBER</button>
 <div id="list"></div>
+</div>
 
-<!-- একবারে ফর্ম -->
 <div id="formModal" onclick="if(event.target==this)closeForm()">
 <div id="formBox">
 <h3 id="formTitle">Add Number</h3>
 <div class="formInner">
-<label>পদবী</label><input id="f_podobi" placeholder="সার্জেন্ট">
-<label>নাম</label><input id="f_name" placeholder="নাম">
-<label>নিয়োজিত</label><input id="f_niyojito" placeholder="MT Platoon">
-<label>মোবাইল নম্বর</label><input id="f_mobile" type="number" placeholder="01769...">
-<label>মন্তব্য</label><input id="f_montobbo" placeholder="মন্তব্য">
+<label>পদবী</label><input id="f_podobi">
+<label>নাম</label><input id="f_name">
+<label>নিয়োজিত</label><input id="f_niyojito">
+<label>মোবাইল নম্বর</label><input id="f_mobile" type="number">
+<label>মন্তব্য</label><input id="f_montobbo">
 <div class="formBtns"><button class="cancelBtn" onclick="closeForm()">Cancel</button><button class="saveBtn" onclick="saveForm()">✅ Save</button></div>
 </div>
 </div>
 </div>
 
 <script>
+let role = (localStorage.getItem('role') || '').toLowerCase();
+let isClk = role === 'clk';
+
 let contacts = JSON.parse(localStorage.getItem('mt_required_v2') || localStorage.getItem('mt_required') || '[]');
 let editIndex = -1;
 function saveLS(){ localStorage.setItem('mt_required_v2', JSON.stringify(contacts)); localStorage.setItem('mt_required', JSON.stringify(contacts)); }
 
 function openAdd(){
+ if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Add করা যাবে"); return; }
  editIndex=-1;
  document.getElementById('formTitle').innerText="Add Number";
  document.getElementById('f_podobi').value=""; document.getElementById('f_name').value=""; document.getElementById('f_niyojito').value=""; document.getElementById('f_mobile').value=""; document.getElementById('f_montobbo').value="";
  document.getElementById('formModal').style.display='flex';
 }
 function openEdit(i){
+ if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Edit করা যাবে"); return; }
  editIndex=i; let c=contacts[i];
  document.getElementById('formTitle').innerText="Edit - "+c.name;
  document.getElementById('f_podobi').value=c.podobi; document.getElementById('f_name').value=c.name; document.getElementById('f_niyojito').value=c.niyojito; document.getElementById('f_mobile').value=c.mobile; document.getElementById('f_montobbo').value=c.montobbo;
@@ -62,6 +68,7 @@ function openEdit(i){
 }
 function closeForm(){ document.getElementById('formModal').style.display='none'; }
 function saveForm(){
+ if(!isClk){ alert("Permission নেই"); return; }
  let podobi=document.getElementById('f_podobi').value.trim();
  let name=document.getElementById('f_name').value.trim();
  let mobile=document.getElementById('f_mobile').value.trim();
@@ -73,12 +80,14 @@ function saveForm(){
 function render(){
  let q=document.getElementById('search').value.toLowerCase();
  let list=document.getElementById('list'); list.innerHTML='';
+ document.getElementById('addBtnMain').style.display = isClk ? 'block' : 'none';
  contacts.forEach((c, idx)=>{
    if(q && !(c.name.toLowerCase().includes(q) || c.podobi.toLowerCase().includes(q) || c.mobile.includes(q))) return;
-   list.innerHTML+=`<div class="card"><div class="cardTop"><div><div class="cardTitle">👤 ${c.podobi} ${c.name}</div><div class="cardSub">📍 ${c.niyojito}</div></div><div class="badge">📞</div></div><div class="info">📱 <b>${c.mobile}</b><br>📝 ${c.montobbo}</div><div class="btns"><button class="editBtn" onclick="openEdit(${idx})">✏️ Edit</button><button class="delBtn" onclick="deleteContact(${idx})">Delete</button></div></div>`;
+   let btns = isClk ? `<div class="btns"><button class="editBtn" onclick="openEdit(${idx})">✏️ Edit</button><button class="delBtn" onclick="deleteContact(${idx})">Delete</button></div>` : `<div class="btns"><div class="viewOnly">👁️ View Only - MT PLATOON</div></div>`;
+   list.innerHTML+=`<div class="card"><div class="cardTop"><div><div class="cardTitle">👤 ${c.podobi} ${c.name}</div><div class="cardSub">📍 ${c.niyojito}</div></div><div class="badge">📞</div></div><div class="info">📱 <b>${c.mobile}</b><br>📝 ${c.montobbo}</div>${btns}</div>`;
  });
 }
-function deleteContact(i){ if(confirm("Delete?")){ contacts.splice(i,1); saveLS(); render(); } }
+function deleteContact(i){ if(!isClk){ alert("Permission নেই"); return; } if(confirm("Delete?")){ contacts.splice(i,1); saveLS(); render(); } }
 render();
 </script>
 </body>
