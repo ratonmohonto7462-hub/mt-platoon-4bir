@@ -1,27 +1,55 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LUBE OIL REPORT - 4 BIR</title>
 <style>
-body{margin:0;font-family:Arial;background:#eef3f7}
-.top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
-.top b{font-size:17px}
-.back{background:#d50000;color:white;border:none;padding:8px 18px;border-radius:12px;font-weight:900}
-.wrap{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:700px;margin:0 auto}
-.card{background:white;border:2px solid #0a4d0a;border-radius:22px;padding:22px 10px;text-align:center;cursor:pointer}
-.card .ic{font-size:40px}
-.card b{font-size:14px;display:block;margin-top:8px;line-height:1.3}
+.list-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99;padding:16px}
+.modal-box{background:#fff;border-radius:18px;max-height:90vh;overflow-y:auto;padding:14px}
+.row{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #ddd;font-size:14px;font-weight:700}
+.row.low{color:#b50000;background:#ffe0e0}
+.row.ok{color:#0a5a1f}
 </style>
-</head>
-<body>
-<div class="top"><b>LUBE OIL REPORT - 4 BIR</b><button class="back" onclick="location.href='oil.html'">BACK</button></div>
-<div class="wrap">
-<div class="card" onclick="location.href='engine_oil.html'"><div class="ic">🛢️</div><b>ইঞ্জিন অয়েল বদলি</b></div>
-<div class="card" onclick="location.href='transmission_oil.html'"><div class="ic">⚙️</div><b>ট্রান্সমিশন অয়েল বদলি</b></div>
-<div class="card" onclick="location.href='coolant.html'"><div class="ic">💧</div><b>কুলেন্ট বদলি</b></div>
-<div class="card" onclick="location.href='atf.html'"><div class="ic">🔧</div><b>এটিএফ বদলি</b></div>
-</div>
-</body>
-</html>
+
+<script>
+// তোর সব গাড়ি এখানে Add কর
+const ALL_VEH = ["Truck-01","Truck-02","Truck-03","Truck-04","Truck-05","Truck-06","Truck-07","Truck-08","Jeep-01","Jeep-02","Pickup-01","Pickup-02","Pickup-03","Ambulance-01"];
+
+const data = {
+engine: ALL_VEH.map((v,i)=>({veh:v, last:i<5 ? "2025-08-15" : "2025-10-10", life:90})),
+transmission: ALL_VEH.map(v=>({veh:v, last:"2025-06-01", life:180})),
+coolant: ALL_VEH.map(v=>({veh:v, last:"2025-09-01", life:120})),
+atf: ALL_VEH.slice(0,10).map(v=>({veh:v, last:"2025-09-15", life:100}))
+};
+
+function getStats(list){
+let low=0;
+list.forEach(it=>{
+let next=new Date(it.last); next.setDate(next.getDate()+it.life);
+let diff=Math.ceil((next-new Date())/86400000);
+if(diff<=15) low++;
+});
+return {low, total:list.length};
+}
+
+function render(id, list){
+let el=document.getElementById(id);
+let s=getStats(list);
+if(s.low>0){
+el.className="status low";
+el.innerHTML=`🔴 ${s.low} টা Low / ${s.total} টা Total`;
+}else{
+el.className="status ok";
+el.innerHTML=`🟢 সব OK - ${s.total} টা গাড়ি`;
+}
+}
+function openList(type){
+let list=data[type];
+let html=`<div class="list-modal" id="modal" style="display:block" onclick="this.style.display='none'"><div class="modal-box" onclick="event.stopPropagation()"><h3 style="text-align:center;margin-bottom:10px">${type.toUpperCase()} - সব গাড়ি</h3>`;
+list.forEach(it=>{
+let last=new Date(it.last);
+let next=new Date(last); next.setDate(last.getDate()+it.life);
+let diff=Math.ceil((next-new Date())/86400000);
+let cls=diff<=7?"low":"ok";
+let txt=diff<=0?`Over ${Math.abs(diff)} দিন`:`${diff} দিন বাকি`;
+html+=`<div class="row ${cls}"><span>${it.veh}</span><span>${txt}</span></div>`;
+});
+html+=`<br><button onclick="document.getElementById('modal').style.display='none'" style="width:100%;padding:10px;background:#0a5a1f;color:#fff;border:none;border-radius:10px;font-weight:800">CLOSE</button></div></div>`;
+document.body.insertAdjacentHTML('beforeend', html);
+}
+</script>
