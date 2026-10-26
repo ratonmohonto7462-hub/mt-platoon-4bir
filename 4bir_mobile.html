@@ -1,60 +1,122 @@
-<!DOCTYPE html> <html lang="bn"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <title>4 BIR MOBILE NUMBER - 4 BIR</title> <style> body{margin:0;font-family:Arial;background:#eef2f7;zoom:0.62} .top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center} .top b{font-size:15px;font-weight:900} .logout{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer} .wrap{padding:14px;max-width:1100px;margin:0 auto} input{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:10px;box-sizing:border-box;font-size:16px} .btn-add{width:100%;padding:14px;background:#0a4d0a;color:white;border:none;border-radius:10px;font-size:17px;font-weight:900;cursor:pointer} .tit{text-align:center;font-size:20px;font-weight:900;margin:14px 0;color:#0a4d0a;text-decoration:underline;white-space:nowrap} .btn-print{background:blue;color:white;border:none;padding:10px 18px;border-radius:10px;font-weight:900;cursor:pointer;margin:10px auto;display:block} table{width:100%;border-collapse:collapse;background:white;font-size:14px;table-layout:auto} th{background:#0a4d0a;color:white;padding:10px 6px;border:1px solid #000;white-space:nowrap;font-size:13px} td{padding:8px 6px;border:1px solid #000;text-align:center;white-space:nowrap;font-size:13px} td:nth-child(3){text-align:left;max-width:140px;overflow:hidden;text-overflow:ellipsis} @media print{ .top,#box,.btn-print{display:none!important} th:last-child,td:last-child{display:none!important} body{background:white;zoom:1!important}.wrap{padding:0} } </style> </head> <body> <div class="top"><b>4 BIR MOBILE NUMBER</b><button class="logout" onclick="location.href='communication.html'">BACK</button></div> <div class="wrap"> <div id="box"> <input id="padobi" placeholder="পদবী"> <input id="name" placeholder="নাম"> <input id="number" placeholder="মোবাইল নম্বর"> <input id="remarks" placeholder="মন্তব্য"> <button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button> <p id="msg" style="text-align:center;color:green;font-weight:900"></p> </div> <div class="tit">4 BIR MOBILE NUMBER - 4 BIR</div> <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button> <table> <thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr></thead> <tbody id="tbl"><tr><td colspan="6">কোনো ডাটা নাই</td></tr></tbody> </table> </div> <script>
-let role=(localStorage.getItem('role')||'').toLowerCase(); 
+<!DOCTYPE html> <html lang="bn"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <title>4 BIR MOBILE NUMBER</title> <style>
+body{margin:0;font-family:Arial;background:#eef2f7;zoom:0.62}
+.top{background:#0a4d0a;color:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top b{font-size:15px;font-weight:900}
+.top-right{display:flex;gap:6px}
+.btn-print-top{background:#0d6efd;color:white;border:none;padding:7px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:12px}
+.logout{background:#d50000;color:white;border:none;padding:7px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:12px}
+.wrap{padding:14px;max-width:1100px;margin:0 auto}
+.input, .selectBox{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:10px;box-sizing:border-box;font-size:16px;background:white;cursor:pointer;text-align:left}
+.selectBox:after{content:'▼';float:right;font-size:12px;color:#555;margin-top:3px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-add{width:100%;padding:14px;background:#0a4d0a;color:white;border:none;border-radius:10px;font-size:17px;font-weight:900;cursor:pointer;margin-top:4px}
+.tit{text-align:center;font-size:20px;font-weight:900;margin:14px 0;color:#0a4d0a;text-decoration:underline;white-space:nowrap}
+table{width:100%;border-collapse:collapse;background:white;font-size:14px;table-layout:auto}
+th{background:#0a4d0a;color:white;padding:10px 6px;border:1px solid #000;white-space:nowrap;font-size:13px}
+td{padding:8px 6px;border:1px solid #000;text-align:center;white-space:nowrap;font-size:13px}
+td:nth-child(3){text-align:left;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+
+/* নতুন ভেসে ওঠার স্টাইল */
+#popupOverlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0006;z-index:100;align-items:center;justify-content:center}
+.popup{background:white;width:85%;max-width:320px;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px #0005;animation:pop .2s ease}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.popupHead{background:#0a4d0a;color:white;padding:12px;text-align:center;font-weight:900;font-size:14px}
+.popupItem{padding:14px 16px;border-bottom:1px solid #eee;font-size:15px;font-weight:700;cursor:pointer;text-align:center}
+.popupItem:active{background:#e8f5e9}
+.popupItem:last-child{border:none}
+.popupClose{background:#f1f1f1;padding:10px;text-align:center;font-weight:900;color:#d50000;cursor:pointer}
+
+@media print{ .top,#box{display:none!important} body{background:white;zoom:1!important}.wrap{padding:0} }
+</style> </head> <body>
+<div class="top"><b>4 BIR MOBILE NUMBER</b><div class="top-right"><button class="btn-print-top" onclick="window.print()">🖨️ প্রিন্ট</button><button class="logout" onclick="location.href='communication.html'">BACK</button></div></div>
+<div class="wrap">
+<div id="box">
+<div class="row2">
+<div class="selectBox" id="padobiBox" onclick="openPop('padobi')">পদবী</div>
+<div class="selectBox" id="coyBox" onclick="openPop('coy')">কোং</div>
+</div>
+<input type="hidden" id="padobi">
+<input type="hidden" id="coy">
+<input id="name" placeholder="নাম">
+<input id="number" type="number" placeholder="মোবাইল নম্বর">
+<input id="remarks" placeholder="মন্তব্য">
+<button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button>
+<p id="msg" style="text-align:center;color:green;font-weight:900"></p>
+</div>
+<div class="tit">4 BIR MOBILE NUMBER - 4 BIR</div>
+<table> <thead><tr><th>ক্র/নং</th><th>পদবী</th><th>কোং</th><th>নাম</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr></thead> <tbody id="tbl"><tr><td colspan="7">কোনো ডাটা নাই</td></tr></tbody> </table>
+</div>
+
+<!-- Popup -->
+<div id="popupOverlay" onclick="closePop()">
+<div class="popup" onclick="event.stopPropagation()">
+<div class="popupHead" id="popupTitle">Select</div>
+<div id="popupList"></div>
+<div class="popupClose" onclick="closePop()">বন্ধ করুন</div>
+</div>
+</div>
+
+<script>
+let role=(localStorage.getItem('role')||'').toLowerCase();
 let isClk=role==='clk';
-let contacts=JSON.parse(localStorage.getItem('mt_4bir_v2')||'[]');
+let contacts=JSON.parse(localStorage.getItem('mt_4bir_v3')||'[]');
 let editIndex=-1;
+let padobiList=['সৈনিক','ল্যান্স কর্পোঃ','কর্পোরাল','সার্জেন্ট'];
+let coyList=['এ','বি','সি','ডি','সদর'];
+let currentType='';
 
 window.onload=function(){ if(!isClk){ document.getElementById('box').style.display='none'; } render(); };
 
-function saveLS(){ localStorage.setItem('mt_4bir_v2', JSON.stringify(contacts)); }
-
-function render(){
- let tb=document.getElementById('tbl');
- tb.innerHTML='';
- if(!contacts.length){ tb.innerHTML='<tr><td colspan="6">কোনো ডাটা নাই</td></tr>'; return; }
- contacts.forEach((x,i)=>{
-  let act = isClk ? `<button onclick="editD(${i})" style="background:orange;color:white;border:none;padding:5px 8px;border-radius:5px">Edit</button> <button onclick="delD(${i})" style="background:red;color:white;border:none;padding:5px 8px;border-radius:5px">Del</button>` : `-`;
-  tb.innerHTML+=`<tr><td>${i+1}</td><td>${x.padobi}</td><td style="text-align:left">${x.name}</td><td>${x.number}</td><td>${x.remarks}</td><td>${act}</td></tr>`;
- });
+function openPop(type){
+ currentType=type;
+ document.getElementById('popupOverlay').style.display='flex';
+ let list = type==='padobi'?padobiList:coyList;
+ document.getElementById('popupTitle').innerText = type==='padobi'?'পদবী সিলেক্ট করুন':'কোং সিলেক্ট করুন';
+ let html='';
+ list.forEach(v=>{ html+=`<div class="popupItem" onclick="selectVal('${v}')">${v}</div>`; });
+ document.getElementById('popupList').innerHTML=html;
+}
+function closePop(){ document.getElementById('popupOverlay').style.display='none'; }
+function selectVal(v){
+ if(currentType==='padobi'){ document.getElementById('padobi').value=v; document.getElementById('padobiBox').innerText=v; document.getElementById('padobiBox').style.color='#000'; document.getElementById('padobiBox').style.fontWeight='900'; }
+ else{ document.getElementById('coy').value=v; document.getElementById('coyBox').innerText=v; document.getElementById('coyBox').style.color='#000'; document.getElementById('coyBox').style.fontWeight='900'; }
+ closePop();
 }
 
+function saveLS(){ localStorage.setItem('mt_4bir_v3', JSON.stringify(contacts)); }
+function render(){
+ let tb=document.getElementById('tbl'); tb.innerHTML='';
+ if(!contacts.length){ tb.innerHTML='<tr><td colspan="7">কোনো ডাটা নাই</td></tr>'; return; }
+ contacts.forEach((x,i)=>{
+  let act = isClk ? `<button onclick="editD(${i})" style="background:orange;color:white;border:none;padding:5px 8px;border-radius:6px;font-weight:900">Edit</button> <button onclick="delD(${i})" style="background:red;color:white;border:none;padding:5px 8px;border-radius:6px;font-weight:900">Del</button>` : `View`;
+  tb.innerHTML+=`<tr><td>${i+1}</td><td>${x.padobi}</td><td>${x.coy}</td><td style="text-align:left">${x.name}</td><td>${x.number}</td><td>${x.remarks}</td><td>${act}</td></tr>`;
+ });
+}
 function editD(i){
- if(!isClk)return;
- editIndex=i;
- let x=contacts[i];
- document.getElementById('padobi').value=x.padobi;
+ if(!isClk)return; editIndex=i; let x=contacts[i];
+ document.getElementById('padobi').value=x.padobi; document.getElementById('padobiBox').innerText=x.padobi;
+ document.getElementById('coy').value=x.coy; document.getElementById('coyBox').innerText=x.coy;
  document.getElementById('name').value=x.name;
  document.getElementById('number').value=x.number;
  document.getElementById('remarks').value=x.remarks;
- document.getElementById('mainBtn').innerText='Update করুন';
- window.scrollTo(0,0);
+ document.getElementById('mainBtn').innerText='Update করুন'; window.scrollTo(0,0);
 }
-
-function delD(i){
- if(!isClk)return;
- if(!confirm('Delete করবেন?'))return;
- contacts.splice(i,1);
- saveLS();
- render();
-}
-
+function delD(i){ if(!isClk)return; if(!confirm('Delete করবেন?'))return; contacts.splice(i,1); saveLS(); render(); }
 function addData(){
  if(!isClk){ alert('Permission নাই'); return; }
  let pa=document.getElementById('padobi').value.trim();
+ let co=document.getElementById('coy').value.trim();
  let na=document.getElementById('name').value.trim();
  let nu=document.getElementById('number').value.trim();
  let re=document.getElementById('remarks').value.trim();
- if(!pa||!na||!nu){ alert('পদবী, নাম, নম্বর লাগবে'); return; }
- let obj={padobi:pa,name:na,number:nu,remarks:re};
- if(editIndex==-1){ contacts.push(obj); }
- else{ contacts[editIndex]=obj; editIndex=-1; document.getElementById('mainBtn').innerText='Add করুন'; }
+ if(!pa||!co||!na||!nu){ alert('পদবী, নাম, কোং, নম্বর লাগবে'); return; }
+ let obj={padobi:pa,coy:co,name:na,number:nu,remarks:re};
+ if(editIndex==-1){ contacts.push(obj); } else{ contacts[editIndex]=obj; editIndex=-1; document.getElementById('mainBtn').innerText='Add করুন'; }
  saveLS();
- document.getElementById('padobi').value='';
- document.getElementById('name').value='';
- document.getElementById('number').value='';
- document.getElementById('remarks').value='';
- document.getElementById('msg').innerText='✅ Done';
- setTimeout(()=>{document.getElementById('msg').innerText='';},1500);
+ document.getElementById('padobi').value=''; document.getElementById('padobiBox').innerText='পদবী'; document.getElementById('padobiBox').style.color='';
+ document.getElementById('coy').value=''; document.getElementById('coyBox').innerText='কোং'; document.getElementById('coyBox').style.color='';
+ document.getElementById('name').value=''; document.getElementById('number').value=''; document.getElementById('remarks').value='';
+ document.getElementById('msg').innerText='✅ Done'; setTimeout(()=>{document.getElementById('msg').innerText='';},1500);
  render();
 }
 </script> </body> </html>
