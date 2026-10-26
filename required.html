@@ -1,76 +1,45 @@
 <!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Required Mobile Number</title>
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Required</title>
 <style>
-/* ZOOM KOMANO */
 html{zoom:0.78}
-body{margin:0;font-family:Arial;background:linear-gradient(135deg,#122e1d,#2d5a27,#4a7c43);min-height:100vh}
-.header{background:#0f2110;color:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
-.header b{font-size:14px}
-.back{background:#7d0000;color:white;border:none;padding:5px 12px;border-radius:7px;font-weight:900;font-size:12px}
-
-.form{padding:8px 12px;max-width:420px;margin:0 auto}
-.form input{
- width:100%;padding:9px 12px;border-radius:10px;border:none;margin-bottom:6px;
- box-sizing:border-box;font-size:13px;font-weight:600;background:#fffffff2
+body{
+ margin:0;font-family:Arial;min-height:100vh;
+ background-color:#4b5e3d;
+ background-image: 
+  radial-gradient(ellipse at 20% 30%, #2d4a22 25%, transparent 26%),
+  radial-gradient(ellipse at 75% 20%, #8d6e4b 20%, transparent 21%),
+  radial-gradient(ellipse at 60% 80%, #3d2b1f 22%, transparent 23%),
+  radial-gradient(ellipse at 10% 80%, #a3a380 15%, transparent 16%),
+  radial-gradient(ellipse at 40% 50%, #556b2f 30%, transparent 31%);
 }
-.addBtn{width:100%;padding:9px;background:#0f2110;color:white;border:none;border-radius:10px;font-weight:900;font-size:13px}
-
-.title{text-align:center;margin:10px 0 6px 0;font-weight:900;color:white;font-size:13px;letter-spacing:.5px}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(239,244,239,0.90);z-index:-1}
+.header{background:#0f2110ef;color:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.header b{font-size:14px}.back{background:#7d0000;color:white;border:none;padding:5px 12px;border-radius:7px;font-weight:900;font-size:12px}
+.form{padding:8px 12px;max-width:440px;margin:0 auto}
+.form input{width:100%;padding:9px 12px;border-radius:10px;border:none;margin-bottom:6px;box-sizing:border-box;font-size:13px;font-weight:600;background:#fffffff5}
+.addBtn{width:100%;padding:9px;background:linear-gradient(90deg,#0f2110,#2d5a27);color:white;border:none;border-radius:10px;font-weight:900;font-size:13px}
+.title{text-align:center;margin:10px 0 6px 0;font-weight:900;color:#0f2110;font-size:13px}
 .printBtn{display:block;margin:0 auto 8px auto;background:#1e3e20;color:white;border:none;padding:6px 14px;border-radius:8px;font-weight:900;font-size:12px}
-
-.table-wrap{width:96%;margin:0 auto 15px auto;overflow-x:auto;background:#f5f7f5f0;border-radius:10px}
-table{width:100%;border-collapse:collapse;min-width:100%}
-th{background:#0f2110;color:#d5e8d5;padding:7px 4px;font-size:11px;white-space:nowrap}
-td{padding:6px 4px;border:1px solid #ccc;text-align:center;font-weight:600;font-size:11px;white-space:nowrap}
-.edit{background:#ffaa00;color:white;border:none;padding:3px 7px;border-radius:5px;font-weight:900;font-size:10px}
-.del{background:#7d0000;color:white;border:none;padding:3px 7px;border-radius:5px;font-weight:900;font-size:10px;margin-top:2px}
-
-@media print{
- .header, .form, .printBtn{display:none !important}
- body{background:white !important; zoom:1 !important}
- .title{color:black !important; font-size:16px}
- .table-wrap{width:100% !important}
- td,th{white-space:normal !important; font-size:13px !important}
-}
+.table-wrap{width:96%;margin:0 auto 15px auto;overflow-x:auto;background:#f5f7f5f5;border-radius:10px}
+table{width:100%;border-collapse:collapse}th{background:#0f2110;color:#d5e8d5;padding:7px 4px;font-size:11px;white-space:nowrap}td{padding:6px 4px;border:1px solid #ccc;text-align:center;font-weight:600;font-size:11px;white-space:nowrap}
+.edit{background:#ffaa00;color:white;border:none;padding:3px 7px;border-radius:5px;font-weight:900;font-size:10px}.del{background:#7d0000;color:white;border:none;padding:3px 7px;border-radius:5px;font-weight:900;font-size:10px;margin-top:2px}
+@media print{body::before{display:none !important}.header,.form,.printBtn{display:none !important}body{background:white !important;zoom:1 !important}.table-wrap{width:100% !important}}
 </style></head><body>
-
 <div class="header"><b>REQUIRED MOBILE NUMBER</b><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
-
 <div class="form">
-<input id="podobi" placeholder="পদবী">
-<input id="name" placeholder="নাম">
-<input id="niyojito" placeholder="নিয়োজিত">
-<input id="mobile" placeholder="মোবাইল নম্বর">
-<input id="montobbo" placeholder="মন্তব্য">
+<input id="podobi" placeholder="পদবী"><input id="name" placeholder="নাম"><input id="niyojito" placeholder="নিয়োজিত"><input id="mobile" placeholder="মোবাইল নম্বর"><input id="montobbo" placeholder="মন্তব্য">
 <button class="addBtn" onclick="addData()">Add করুন</button>
 </div>
-
 <div class="title">⚔️ REQUIRED MOBILE NUMBER ⚔️</div>
 <button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-
-<div class="table-wrap">
-<table><thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>নিয়োজিত</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr></thead><tbody id="tbody"></tbody></table>
-</div>
-
+<div class="table-wrap"><table><thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>নিয়োজিত</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr></thead><tbody id="tbody"></tbody></table></div>
 <script>
 let data=JSON.parse(localStorage.getItem('required_mobile_v2')||'[]');
 let role=localStorage.getItem('role')||'mt'; let isClerk=role==='clk';
 function save(){localStorage.setItem('required_mobile_v2',JSON.stringify(data))}
-function render(){
- let tb=document.getElementById('tbody'); tb.innerHTML='';
- data.forEach((d,i)=>{
-  let btns=isClerk?`<button class="edit" onclick="editData(${i})">Edit</button><br><button class="del" onclick="delData(${i})">Del</button>`:'-';
-  tb.innerHTML+=`<tr><td>${i+1}</td><td>${d.podobi}</td><td>${d.name}</td><td>${d.niyojito||''}</td><td>${d.mobile}</td><td>${d.montobbo}</td><td>${btns}</td></tr>`;
- });
-}
-function addData(){
- if(!isClerk){alert('View Only');return;}
- let podobi=document.getElementById('podobi').value, name=document.getElementById('name').value, niyojito=document.getElementById('niyojito').value, mobile=document.getElementById('mobile').value, montobbo=document.getElementById('montobbo').value;
- if(!name||!mobile){alert('নাম ও মোবাইল দিন');return;}
- data.push({podobi,name,niyojito,mobile,montobbo}); save(); render();
- document.getElementById('podobi').value='';document.getElementById('name').value='';document.getElementById('niyojito').value='';document.getElementById('mobile').value='';document.getElementById('montobbo').value='';
-}
-function editData(i){ let d=data[i]; let podobi=prompt("পদবী:",d.podobi); if(podobi===null)return; let name=prompt("নাম:",d.name); if(name===null)return; let niyojito=prompt("নিয়োজিত:",d.niyojito); if(niyojito===null)return; let mobile=prompt("মোবাইল:",d.mobile); if(mobile===null)return; let montobbo=prompt("মন্তব্য:",d.montobbo); if(montobbo===null)return; data[i]={podobi,name,niyojito,mobile,montobbo}; save(); render();}
-function delData(i){ if(confirm("ডিলেট করবা?")){data.splice(i,1); save(); render();}}
+function render(){let tb=document.getElementById('tbody');tb.innerHTML='';data.forEach((d,i)=>{let btns=isClerk?`<button class="edit" onclick="editData(${i})">Edit</button><br><button class="del" onclick="delData(${i})">Del</button>`:'-';tb.innerHTML+=`<tr><td>${i+1}</td><td>${d.podobi}</td><td>${d.name}</td><td>${d.niyojito||''}</td><td>${d.mobile}</td><td>${d.montobbo}</td><td>${btns}</td></tr>`;});}
+function addData(){if(!isClerk){alert('View Only');return;}let podobi=document.getElementById('podobi').value,name=document.getElementById('name').value,niyojito=document.getElementById('niyojito').value,mobile=document.getElementById('mobile').value,montobbo=document.getElementById('montobbo').value;if(!name||!mobile){alert('নাম ও মোবাইল দিন');return;}data.push({podobi,name,niyojito,mobile,montobbo});save();render();document.getElementById('podobi').value='';document.getElementById('name').value='';document.getElementById('niyojito').value='';document.getElementById('mobile').value='';document.getElementById('montobbo').value='';}
+function editData(i){let d=data[i];let podobi=prompt("পদবী:",d.podobi);if(podobi===null)return;let name=prompt("নাম:",d.name);if(name===null)return;let niyojito=prompt("নিয়োজিত:",d.niyojito);if(niyojito===null)return;let mobile=prompt("মোবাইল:",d.mobile);if(mobile===null)return;let montobbo=prompt("মন্তব্য:",d.montobbo);if(montobbo===null)return;data[i]={podobi,name,niyojito,mobile,montobbo};save();render();}
+function delData(i){if(confirm("ডিলেট করবা?")){data.splice(i,1);save();render();}}
 render();
 </script></body></html>
