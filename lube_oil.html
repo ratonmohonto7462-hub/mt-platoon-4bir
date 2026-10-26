@@ -1,26 +1,68 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LUBE OIL - 4 BIR</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lube Oil Change Record - 4 BIR</title>
 <style>
-body{margin:0;font-family:Arial;background:#eef2f5}
-.top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
-.top b{font-size:16px;font-weight:900}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#6b8f7a}
+.header{background:#1a3c28;padding:14px;color:white;position:sticky;top:0;z-index:5}
+.top{display:flex;justify-content:space-between;align-items:center}
+.badge{background:#2d5a3a;padding:6px 12px;border-radius:20px;font-size:12px;margin-top:10px;display:flex;justify-content:space-between}
+.search{margin:14px;background:white;border-radius:12px;padding:10px;display:flex;gap:8px}
+.search input{flex:1;border:none;outline:none;font-size:14px;font-weight:700}
+.card{background:#f2f5f1;margin:0 14px 14px 14px;border-radius:16px;padding:12px;box-shadow:0 4px 10px #0002;cursor:pointer}
+.card-head{display:flex;justify-content:space-between;align-items:center}
+.status{font-size:10px;padding:4px 8px;border-radius:12px;font-weight:900}
+.due{background:#ffddb0;color:#a33d00} .good{background:#a8d5b5;color:#0a4d0a} .alert{background:#ffcccc;color:#a00}
+.inner{background:white;border-radius:12px;padding:10px;margin-top:8px;font-size:12px}
+.oil-row{display:flex;justify-content:space-between;margin:4px 0;padding:4px 6px;border-radius:6px;background:#f9f9f9}
+.count{color:#ffd;background:#00000033;padding:2px 8px;border-radius:10px;font-size:11px}
 .back{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer}
-.wrap{padding:14px;max-width:900px;margin:0 auto}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fbtn{background:white;padding:18px 10px;border-radius:16px;text-align:center;box-shadow:0 4px 12px #0001;cursor:pointer;font-weight:900;font-size:15px;border:2px solid #0a4d0a}
 </style>
 </head>
 <body>
-<div class="top"><b>LUBE OIL RECORD - 4 BIR</b><button class="back" onclick="location.href='fuel.html'">BACK</button></div>
-<div class="wrap"><div class="grid">
-<div class="fbtn" onclick="location.href='lube_a.html'">A Pln Lube Record</div>
-<div class="fbtn" onclick="location.href='lube_b.html'">B Pln Lube Record</div>
-<div class="fbtn" onclick="location.href='lube_c.html'">C Pln Lube Record</div>
-<div class="fbtn" onclick="location.href='lube_d.html'">D Pln Lube Record</div>
-</div></div>
+<div class="header">
+<div class="top"><b>🛡️ Lube Oil Change Record</b><button class="back" onclick="location.href='fuel.html'">BACK</button></div>
+<div class="badge"><span>🛡️ MT Platoon 4 BIR - 35 Vehicles</span><span id="dueCount" class="count">0 Due</span></div>
+</div>
+<div class="search"><span>🔍</span><input id="search" placeholder="গাড়ির নাম্বার সার্চ করুন... Ex: Truck-05" oninput="render()"></div>
+<div id="list"></div>
+<script>
+const vehicles = [
+"Truck-01","Truck-02","Truck-03","Truck-04","Truck-05","Truck-06","Truck-07","Truck-08","Truck-09","Truck-10",
+"Jeep-01","Jeep-02","Jeep-03","Jeep-04","Jeep-05",
+"Pickup-01","Pickup-02","Pickup-03","Pickup-04","Pickup-05",
+"Ambulance-01","Ambulance-02",
+"Bowser-01","Bowser-02","Bowser-03",
+"Recovery-01","Recovery-02",
+"Bus-01","Bus-02",
+"Car-01","Car-02","Car-03","Car-04","Car-05","Bike-01"
+];
+const data = vehicles.map((v,i)=>{
+  const isDue = i%3==0;
+  return {name:v, eng: isDue?'Due Soon':'Good', trans: i%5==0?'Due Soon':'Good', coolant: '92%', atf: i%4==0?'Due Soon':'Good', due:isDue}
+});
+function render(){
+  const q = document.getElementById('search').value.toLowerCase();
+  const list = document.getElementById('list');
+  let due=0;
+  list.innerHTML='';
+  data.filter(d=>d.name.toLowerCase().includes(q)).forEach(d=>{
+    if(d.due) due++;
+    list.innerHTML+=`
+    <div class="card" onclick="location.href='vehicle_detail.html?v=${d.name}'">
+      <div class="card-head"><b>${d.name}</b><span class="status ${d.due?'due':'good'}">${d.due?'⚠️ Due Soon':'✅ Good'}</span></div>
+      <div class="inner">
+        <div class="oil-row"><span>Engine Oil</span><b style="color:${d.eng=='Due Soon'?'#a33d00':'#0a4d0a'}">${d.eng}</b></div>
+        <div class="oil-row"><span>Transmission Oil</span><b>${d.trans}</b></div>
+        <div class="oil-row"><span>Coolant</span><b>${d.coolant}</b></div>
+        <div class="oil-row"><span>ATF</span><b style="color:${d.atf=='Due Soon'?'#a33d00':'#0a4d0a'}">${d.atf}</b></div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('dueCount').innerText=due+' Due';
+}
+render();
+</script>
 </body>
 </html>
