@@ -17,10 +17,13 @@ th{background:#0f2e0f;color:white;padding:8px 4px;font-weight:900;font-size:11px
 td{padding:7px 4px;border-bottom:1px solid #ddd;text-align:center;font-weight:600;font-size:11px;word-break:break-word}
 .editBtn{background:#ffaa00;color:white;border:none;padding:4px 8px;border-radius:6px;font-weight:900;font-size:10px;margin:1px}.delBtn{background:#7d0000;color:white;border:none;padding:4px 8px;border-radius:6px;font-weight:900;font-size:10px;margin:1px}
 .viewOnly{font-size:9px;background:#eee;color:#555;padding:2px 4px;border-radius:4px}
+
+/* PRINT FIX - Title এখন আসবে */
 @media print{
- body{zoom:1;background:white !important; padding:0}
- .top,#formArea,.printBtn,.backBtn,.title{display:none !important}
- .tableWrap{box-shadow:none;border-radius:0;margin:0}
+ body{zoom:1;background:white !important;padding:0}
+ .top,#formArea,.printBtn,.backBtn{display:none !important}
+ .title{display:block !important;color:black !important;text-shadow:none !important;font-size:18px !important;margin:10px 0 !important}
+ .tableWrap{box-shadow:none;border-radius:0;margin:0;border:1px solid #000}
  th{background:#000 !important;color:white !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
@@ -40,7 +43,7 @@ td{padding:7px 4px;border-bottom:1px solid #ddd;text-align:center;font-weight:60
 <div class="title">⚔️ REQUIRED MOBILE NUMBER ⚔️</div>
 <button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 
-<div class="tableWrap" id="printArea">
+<div class="tableWrap">
 <table>
 <thead>
 <tr><th>পদবী</th><th>নাম</th><th>নিয়োজিত</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr>
