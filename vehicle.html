@@ -2,52 +2,92 @@
 <html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vehicle - MT PLATOON 4 BIR</title>
 <style>
 body{margin:0;font-family:Arial;background:#7a9b7e}
-.header{background:linear-gradient(135deg,#122e1d 0%,#1e4a2e 100%);color:white;padding:16px;border-radius:0 0 20px 20px;position:sticky;top:0;z-index:10}
+.header{background:linear-gradient(135deg,#122e1d,#1e4a2e);color:white;padding:16px;border-radius:0 0 20px 20px;position:sticky;top:0;z-index:10}
 .h-top{display:flex;justify-content:space-between;align-items:center}
-.logo{display:flex;gap:10px;align-items:center}
-.logo-icon{width:42px;height:42px;background:#ffffff22;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff33}
+.logo{display:flex;gap:10px;align-items:center}.logo-icon{width:42px;height:42px;background:#ffffff22;border-radius:12px;display:flex;align-items:center;justify-content:center}
 .h-title{font-weight:900;font-size:17px;line-height:1.1}
 .back{background:#7d0000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer}
 .badge-bar{margin-top:12px;background:#2d5a3d;padding:8px 14px;border-radius:30px;display:flex;justify-content:space-between;font-size:12px;font-weight:700;border:1px solid #ffffff22}
 .container{padding:12px 12px 90px 12px}
-.search{background:#f5f7f5;border-radius:14px;padding:12px;display:flex;gap:10px;box-shadow:0 2px 8px #0001;margin-bottom:12px}
-.search input{flex:1;border:none;outline:none;background:transparent;font-weight:700}
-.addBtn{width:100%;padding:14px;background:#0f2e1d;color:white;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:12px;display:none}
+.search{background:#f5f7f5;border-radius:14px;padding:12px;display:flex;gap:10px;margin-bottom:12px}.search input{flex:1;border:none;outline:none;background:transparent;font-weight:700}
+.addBtn{width:100%;padding:14px;background:#0f2e1d;color:white;border:none;border-radius:14px;font-weight:900;font-size:16px;margin-bottom:12px;display:none}
 .card{background:#f5f7f5;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 4px 14px #0002}
 .card-head{display:flex;justify-content:space-between;align-items:center}
-.st{font-size:11px;padding:5px 10px;border-radius:20px;font-weight:900}
-.st.good{background:#d5e8d5;color:#0f2e1d} .st.due{background:#f5d5d5;color:#7d0000}
+.st{font-size:11px;padding:5px 10px;border-radius:20px;font-weight:900}.st.good{background:#d5e8d5;color:#0f2e1d}.st.due{background:#f5d5d5;color:#7d0000}
 .inner-white{background:white;border-radius:14px;padding:12px;margin-top:10px}
-.row{display:flex;justify-content:space-between;font-size:12px;padding:6px 8px;margin:4px 0;background:#f9faf7;border-radius:8px;font-weight:700}
-.act{display:flex;gap:8px;margin-top:10px} .act button{flex:1;padding:10px;border:none;border-radius:10px;font-weight:900;cursor:pointer}
-.edit{background:#0f2e1d;color:white} .del{background:#7d0000;color:white}
+.row{display:flex;justify-content:space-between;font-size:12px;padding:7px 8px;margin:4px 0;background:#f9faf7;border-radius:8px;font-weight:700}
+.act{display:flex;gap:8px;margin-top:10px}.act button{flex:1;padding:10px;border:none;border-radius:10px;font-weight:900;cursor:pointer}
+.edit{background:#0f2e1d;color:white}.del{background:#7d0000;color:white}
+#modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000a;z-index:100;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.mBox{background:#f5f7f5;border-radius:20px;padding:18px;width:100%;max-width:400px}
+.mBox input,.mBox select{width:100%;padding:11px;border-radius:10px;border:2px solid #ddd;margin:5px 0 10px 0;box-sizing:border-box;font-weight:700}
+.mBox label{font-weight:900;font-size:12px;color:#0f2e1d}
 </style></head><body>
 <div class="header">
 <div class="h-top"><div class="logo"><div class="logo-icon">🛡️</div><div class="h-title">Vehicle Maintenance<br>System</div></div><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
-<div class="badge-bar"><span>🛡️ MT Platoon 4 BIR</span><span id="roleView">MT CLK - EDITOR • Online ✨</span></div>
+<div class="badge-bar"><span>🛡️ MT Platoon 4 BIR</span><span id="roleView"></span></div>
 </div>
 <div class="container">
 <div class="search"><span>🔍</span><input id="q" placeholder="গাড়ি সার্চ..." oninput="render()"></div>
 <button id="addBtn" class="addBtn" onclick="addVeh()">+ ADD NEW VEHICLE</button>
 <div id="list"></div>
 </div>
+
+<div id="modal"><div class="mBox">
+<h3 id="mTitle" style="margin:0 0 10px 0;color:#0f2e1d">Edit Vehicle</h3>
+<label>Vehicle Name</label><input id="mName">
+<label>বর্তমান KM (Odometer)</label><input id="mCurrentKm" type="number">
+<label>Engine Oil - শেষ চেঞ্জ KM</label><input id="mEngKm" type="number">
+<label>Engine Oil - শেষ চেঞ্জ Date</label><input id="mEngDate" type="date">
+<label>Transmission Oil - শেষ চেঞ্জ KM</label><input id="mTransKm" type="number">
+<label>Transmission Oil - শেষ চেঞ্জ Date</label><input id="mTransDate" type="date">
+<label>ATF - শেষ চেঞ্জ Date (2 বছর পর পর)</label><input id="mAtfDate" type="date">
+<label>Coolant - শেষ চেঞ্জ Date (3 বছর পর পর)</label><input id="mCoolDate" type="date">
+<label>Coolant %</label><input id="mCoolPct" type="number">
+<div style="display:flex;gap:10px;margin-top:10px"><button onclick="closeM()" style="flex:1;padding:12px;border:none;border-radius:10px;background:#ddd;font-weight:900">Cancel</button><button onclick="saveM()" style="flex:1;padding:12px;border:none;border-radius:10px;background:#0f2e1d;color:white;font-weight:900">Save</button></div>
+</div></div>
+
 <script>
 let role=localStorage.getItem('role')||'mt'; let isClerk=role==='clk';
 document.getElementById('roleView').innerText=isClerk?'MT CLK - EDITOR • Online ✨':'MT PLATOON - VIEW ONLY';
 document.getElementById('addBtn').style.display=isClerk?'block':'none';
-let vehicles=JSON.parse(localStorage.getItem('mt_vehicles')||'null')||["Truck-05","Truck-01","Truck-02","Jeep-01","Pickup-01","Ambulance-01","Bowser-01","Recovery-01","Bus-01","Car-01"];
-function save(){localStorage.setItem('mt_vehicles',JSON.stringify(vehicles))}
+
+let vehicles=JSON.parse(localStorage.getItem('mt_vehicles_final')||'null')||[
+{name:"Truck-05",currentKm:22450,engKm:17500,engDate:"2025-04-20",transKm:8000,transDate:"2024-10-26",atfDate:"2023-10-26",coolDate:"2022-10-26",coolPct:92},
+{name:"Truck-01",currentKm:18000,engKm:14000,engDate:"2025-06-01",transKm:4000,transDate:"2024-11-01",atfDate:"2024-01-15",coolDate:"2023-05-01",coolPct:88}
+];
+
+function daysDiff(d){return Math.floor((new Date() - new Date(d))/(1000*60*60*24));}
+function save(){localStorage.setItem('mt_vehicles_final',JSON.stringify(vehicles))}
+
+function getStatus(v){
+ let engDue = (v.currentKm - v.engKm >= 5000) || (daysDiff(v.engDate) >= 180);
+ let transDue = (v.currentKm - v.transKm >= 14000) || (daysDiff(v.transDate) >= 365);
+ let atfDue = daysDiff(v.atfDate) >= 730;
+ let coolDue = daysDiff(v.coolDate) >= 1095 || v.coolPct < 75;
+ return {engDue,transDue,atfDue,coolDue, anyDue: engDue||transDue||atfDue||coolDue};
+}
+
+let editIndex=-1;
 function render(){
  let q=document.getElementById('q').value.toLowerCase(); let list=document.getElementById('list');list.innerHTML='';
- vehicles.filter(v=>v.toLowerCase().includes(q)).forEach((v,i)=>{
-  let due=i%3===0;
-  let btns=isClerk?`<div class="act"><button class="edit" onclick="editVeh(${i})">✏️ Edit</button><button class="del" onclick="delVeh(${i})">🗑️ Delete</button></div>`:'';
-  let alertBox=due?`<div style="background:#d32f2f;color:white;border-radius:12px;padding:10px;margin-top:10px;display:flex;gap:8px"><span>⚠️</span><div><b style="font-size:13px">Radiator Failure in 7 days - 85% risk</b><div style="font-size:11px;opacity:.9">Replace coolant & inspect fan belt</div></div></div>`:'';
-  list.innerHTML+=`<div class="card"><div class="card-head"><b>🚚 ${v}</b><span class="st ${due?'due':'good'}">${due?'⚠️ Due':'✅ Good'}</span></div><div class="inner-white"><div class="row"><span>Engine Oil</span><b style="color:${due?'#7d0000':'#0f2e1d'}">${due?'Due Soon':'Good'}</b></div><div class="row"><span>Transmission Oil</span><b>Good</b></div><div class="row"><span>Coolant</span><b>92%</b></div><div class="row"><span>ATF</span><b>Good</b></div>${alertBox}${btns}</div></div>`;
+ vehicles.filter(v=>v.name.toLowerCase().includes(q)).forEach((v,i)=>{
+  let s=getStatus(v);
+  let btns=isClerk?`<div class="act"><button class="edit" onclick="openM(${i})">✏️ Edit Date/KM</button><button class="del" onclick="delVeh(${i})">🗑️ Delete</button></div>`:'';
+  let alertBox=s.anyDue?`<div style="background:#d32f2f;color:white;border-radius:12px;padding:10px;margin-top:10px"><b>⚠️ Radiator / Service Due</b><div style="font-size:11px;margin-top:2px">Engine: ${v.currentKm-v.engKm}km / ${daysDiff(v.engDate)} দিন | Trans: ${v.currentKm-v.transKm}km / ${daysDiff(v.transDate)} দিন</div></div>`:'';
+  list.innerHTML+=`<div class="card"><div class="card-head"><b>🚚 ${v.name} - ${v.currentKm}km</b><span class="st ${s.anyDue?'due':'good'}">${s.anyDue?'⚠️ Due':'✅ Good'}</span></div>
+  <div class="inner-white">
+  <div class="row"><span>Engine Oil (5000km/6m)</span><b style="color:${s.engDue?'#7d0000':'#0f2e1d'}">${v.currentKm-v.engKm}km, ${daysDiff(v.engDate)}দিন ${s.engDue?'⚠️':''}</b></div>
+  <div class="row"><span>Trans Oil (14000km/1y)</span><b style="color:${s.transDue?'#7d0000':'#0f2e1d'}">${v.currentKm-v.transKm}km, ${daysDiff(v.transDate)}দিন ${s.transDue?'⚠️':''}</b></div>
+  <div class="row"><span>ATF (2 বছর)</span><b style="color:${s.atfDue?'#7d0000':'#0f2e1d'}">${daysDiff(v.atfDate)} দিন আগে ${s.atfDue?'⚠️':''}</b></div>
+  <div class="row"><span>Coolant (3 বছর)</span><b style="color:${s.coolDue?'#7d0000':'#0f2e1d'}">${v.coolPct}% - ${daysDiff(v.coolDate)} দিন আগে ${s.coolDue?'⚠️':''}</b></div>
+  ${alertBox}${btns}</div></div>`;
  });
 }
-function addVeh(){let n=prompt("নতুন গাড়ির নাম:");if(n){vehicles.push(n.trim());save();render();}}
-function editVeh(i){let n=prompt("Edit নাম:",vehicles[i]);if(n){vehicles[i]=n.trim();save();render();}}
-function delVeh(i){if(confirm(vehicles[i]+" ডিলেট করবা?")){vehicles.splice(i,1);save();render();}}
+function openM(i){editIndex=i;let v=vehicles[i];document.getElementById('mName').value=v.name;document.getElementById('mCurrentKm').value=v.currentKm;document.getElementById('mEngKm').value=v.engKm;document.getElementById('mEngDate').value=v.engDate;document.getElementById('mTransKm').value=v.transKm;document.getElementById('mTransDate').value=v.transDate;document.getElementById('mAtfDate').value=v.atfDate;document.getElementById('mCoolDate').value=v.coolDate;document.getElementById('mCoolPct').value=v.coolPct;document.getElementById('modal').style.display='flex';}
+function closeM(){document.getElementById('modal').style.display='none';}
+function saveM(){let v=vehicles[editIndex];v.name=document.getElementById('mName').value;v.currentKm=parseInt(document.getElementById('mCurrentKm').value)||0;v.engKm=parseInt(document.getElementById('mEngKm').value)||0;v.engDate=document.getElementById('mEngDate').value;v.transKm=parseInt(document.getElementById('mTransKm').value)||0;v.transDate=document.getElementById('mTransDate').value;v.atfDate=document.getElementById('mAtfDate').value;v.coolDate=document.getElementById('mCoolDate').value;v.coolPct=parseInt(document.getElementById('mCoolPct').value)||0;save();render();closeM();}
+function addVeh(){let n=prompt("নতুন গাড়ির নাম:");if(n){vehicles.push({name:n.trim(),currentKm:0,engKm:0,engDate:new Date().toISOString().split('T')[0],transKm:0,transDate:new Date().toISOString().split('T')[0],atfDate:new Date().toISOString().split('T')[0],coolDate:new Date().toISOString().split('T')[0],coolPct:100});save();render();}}
+function delVeh(i){if(confirm(vehicles[i].name+" ডিলেট করবা?")){vehicles.splice(i,1);save();render();}}
 render();
 </script></body></html>
