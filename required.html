@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Required Mobile Number</title>
 <style>
-/* ARMY COLORFUL BACKGROUND */
-body{
- margin:0;font-family:Arial;
- background: linear-gradient(135deg, #0f1a0f, #1a3a1a, #2d5a27, #4a7c43, #6b8f3c, #8aa899);
- background-size: 400% 400%;
- animation: armyBG 12s ease infinite;
- min-height:100vh;
-}
-@keyframes armyBG{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+body{margin:0;font-family:Arial;background:linear-gradient(135deg,#1a3a1a,#2d5a27,#4a7c43);min-height:100vh}
+.header{background:#122e1d;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center}
+.back{background:#7d0000;color:white;border:none;padding:6px 14px;border-radius:8px;font-weight:900;cursor:pointer}
 
-.header{background:linear-gradient(90deg,#122e1d,#1e4a2e);color:white;padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #5a8a3a;box-shadow:0 4px 15px #0005}
-.header b{font-size:15px;letter-spacing:1px}
-.back{background:#7d0000;color:white;border:none;padding:7px 16px;border-radius:8px;font-weight:900;cursor:pointer}
-
-.form{padding:14px}
+/* এক লাইনে - জুম কমানো */
+.form{display:flex;gap:6px;padding:8px;flex-wrap:nowrap;overflow-x:auto}
 .form input{
- width:100%;padding:13px;border-radius:14px;border:1.5px solid #ffffff55;
- margin-bottom:11px;box-sizing:border-box;font-size:15px;outline:none;
- background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);
- box-shadow:0 4px 12px #0002;font-weight:700;
+ flex:1; min-width:70px;
+ padding:10px 8px; border-radius:10px; border:none;
+ font-size:13px; font-weight:700;
+ background:#fffffff2; box-shadow:0 2px 6px #0002;
+ white-space:nowrap;
 }
-.form input::placeholder{color:#2d5a27}
-
 .addBtn{
- width:100%;padding:14px;
- background:linear-gradient(90deg,#1a3a1a,#2d5a27,#4a7c43);
- color:white;border:none;border-radius:14px;font-weight:900;font-size:17px;cursor:pointer;
- box-shadow:0 6px 18px #0004;border:1px solid #ffffff33;
+ min-width:85px; padding:10px 12px;
+ background:#122e1d; color:white; border:none; border-radius:10px;
+ font-weight:900; font-size:13px; cursor:pointer; white-space:nowrap;
 }
-.title{text-align:center;margin:16px 0 10px 0;font-weight:900;color:#eaffea;text-shadow:0 2px 10px #0008;font-size:20px;letter-spacing:1px}
-.printBtn{display:block;margin:0 auto 14px auto;background:linear-gradient(90deg,#2d5a27,#8aa899);color:white;border:none;padding:9px 22px;border-radius:12px;font-weight:900;box-shadow:0 4px 12px #0004;border:1px solid #ffffff44}
-table{width:96%;margin:0 auto 20px auto;border-collapse:collapse;background:rgba(245,247,245,0.96);border-radius:14px;overflow:hidden;box-shadow:0 10px 30px #0005}
-th{background:linear-gradient(90deg,#122e1d,#2d5a27);color:#d5e8d5;padding:11px 8px;border:1px solid #1a3a1a;font-size:13px}
-td{padding:9px 6px;border:1px solid #c5d5c0;text-align:center;font-weight:600;font-size:13px}
-.edit{background:#ffaa00;color:white;border:none;padding:5px 9px;border-radius:6px;font-weight:900;cursor:pointer}
-.del{background:#7d0000;color:white;border:none;padding:5px 9px;border-radius:6px;font-weight:900;cursor:pointer}
+
+.title{text-align:center;margin:10px 0 6px 0;font-weight:900;color:white;font-size:16px}
+.printBtn{display:block;margin:0 auto 10px auto;background:#2d5a27;color:white;border:none;padding:7px 16px;border-radius:10px;font-weight:900;font-size:13px}
+
+table{width:98%;margin:0 auto 15px auto;border-collapse:collapse;background:#f5f7f5ef;border-radius:12px;overflow:hidden;font-size:12px}
+th{background:#122e1d;color:white;padding:8px 4px;font-size:12px}
+td{padding:7px 4px;border:1px solid #ccc;text-align:center;font-weight:600}
+.edit{background:#ffaa00;color:white;border:none;padding:4px 7px;border-radius:6px;font-weight:900;font-size:11px}
+.del{background:#7d0000;color:white;border:none;padding:4px 7px;border-radius:6px;font-weight:900;font-size:11px}
+
+/* প্রিন্টে ওপরের ঘর হাইড */
+@media print{
+ .header, .form, .printBtn, .back{display:none !important}
+ body{background:white !important}
+ .title{color:black !important; text-shadow:none !important}
+ table{width:100% !important; background:white !important; box-shadow:none !important; font-size:14px}
+ th{background:#000 !important; color:white !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+}
 </style></head><body>
 
 <div class="header"><b>REQUIRED MOBILE NUMBER</b><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
@@ -50,7 +50,7 @@ td{padding:9px 6px;border:1px solid #c5d5c0;text-align:center;font-weight:600;fo
 <button class="addBtn" onclick="addData()">Add করুন</button>
 </div>
 
-<div class="title">⚔️ REQUIRED MOBILE NUMBER ⚔️</div>
+<div class="title">REQUIRED MOBILE NUMBER</div>
 <button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 
 <table><thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>নিয়োজিত</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr></thead><tbody id="tbody"></tbody></table>
@@ -62,19 +62,18 @@ function save(){localStorage.setItem('required_mobile_v2',JSON.stringify(data))}
 function render(){
  let tb=document.getElementById('tbody'); tb.innerHTML='';
  data.forEach((d,i)=>{
-  let btns=isClerk?`<button class="edit" onclick="editData(${i})">Edit</button> <button class="del" onclick="delData(${i})">Del</button>`:'<span style="font-size:11px;color:#555">View</span>';
+  let btns=isClerk?`<button class="edit" onclick="editData(${i})">Edit</button> <button class="del" onclick="delData(${i})">Del</button>`:'-';
   tb.innerHTML+=`<tr><td>${i+1}</td><td>${d.podobi}</td><td>${d.name}</td><td>${d.niyojito||''}</td><td>${d.mobile}</td><td>${d.montobbo}</td><td>${btns}</td></tr>`;
  });
- if(!isClerk){document.querySelector('.addBtn').disabled=true; document.querySelector('.addBtn').innerText='View Only - MT Platoon'; document.querySelector('.addBtn').style.opacity='.7'}
 }
 function addData(){
- if(!isClerk){alert('MT Platoon শুধু দেখতে পারবে'); return;}
+ if(!isClerk){alert('View Only');return;}
  let podobi=document.getElementById('podobi').value, name=document.getElementById('name').value, niyojito=document.getElementById('niyojito').value, mobile=document.getElementById('mobile').value, montobbo=document.getElementById('montobbo').value;
- if(!name||!mobile){alert('নাম ও মোবাইল দিন'); return;}
+ if(!name||!mobile){alert('নাম ও মোবাইল দিন');return;}
  data.push({podobi,name,niyojito,mobile,montobbo}); save(); render();
  document.getElementById('podobi').value='';document.getElementById('name').value='';document.getElementById('niyojito').value='';document.getElementById('mobile').value='';document.getElementById('montobbo').value='';
 }
-function editData(i){ if(!isClerk) return; let d=data[i]; let podobi=prompt("পদবী:",d.podobi); if(podobi===null) return; let name=prompt("নাম:",d.name); if(name===null) return; let niyojito=prompt("নিয়োজিত:",d.niyojito); if(niyojito===null) return; let mobile=prompt("মোবাইল:",d.mobile); if(mobile===null) return; let montobbo=prompt("মন্তব্য:",d.montobbo); if(montobbo===null) return; data[i]={podobi,name,niyojito,mobile,montobbo}; save(); render(); }
-function delData(i){ if(!isClerk) return; if(confirm("ডিলেট করবা?")){data.splice(i,1); save(); render();}}
+function editData(i){ let d=data[i]; let podobi=prompt("পদবী:",d.podobi); if(podobi===null)return; let name=prompt("নাম:",d.name); if(name===null)return; let niyojito=prompt("নিয়োজিত:",d.niyojito); if(niyojito===null)return; let mobile=prompt("মোবাইল:",d.mobile); if(mobile===null)return; let montobbo=prompt("মন্তব্য:",d.montobbo); if(montobbo===null)return; data[i]={podobi,name,niyojito,mobile,montobbo}; save(); render();}
+function delData(i){ if(confirm("ডিলেট করবা?")){data.splice(i,1); save(); render();}}
 render();
 </script></body></html>
