@@ -1,48 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MT PLATOON 4 BIR</title>
 <style>
 body{
- margin:0;
- font-family:Arial;
- min-height:100vh;
- /* Combat Fabric Background - No Image Needed */
- background-color:#4b5e3d;
+ margin:0;font-family:Arial;min-height:100vh;
+ /* BD ARMY COMBAT - MORE VISIBLE */
+ background-color:#4a5d3a;
  background-image: 
-  radial-gradient(ellipse at 20% 30%, #2d4a22 25%, transparent 26%),
-  radial-gradient(ellipse at 75% 20%, #8d6e4b 20%, transparent 21%),
-  radial-gradient(ellipse at 60% 80%, #3d2b1f 22%, transparent 23%),
-  radial-gradient(ellipse at 10% 80%, #a3a380 15%, transparent 16%),
-  radial-gradient(ellipse at 40% 50%, #556b2f 30%, transparent 31%),
-  radial-gradient(ellipse at 85% 60%, #1a2e1a 18%, transparent 19%);
- position:relative;
+  radial-gradient(ellipse at 25% 25%, #2a3d1f 0% 18%, transparent 19%),
+  radial-gradient(ellipse at 70% 15%, #8b6d4a 0% 12%, transparent 13%),
+  radial-gradient(ellipse at 55% 75%, #2f1f14 0% 14%, transparent 15%),
+  radial-gradient(ellipse at 15% 75%, #9a9a7a 0% 10%, transparent 11%),
+  radial-gradient(ellipse at 45% 50%, #5a722a 0% 22%, transparent 23%),
+  radial-gradient(ellipse at 85% 55%, #1a281a 0% 12%, transparent 13%);
+ background-size: 320px 320px;
 }
 body::before{
  content:'';
  position:fixed;top:0;left:0;right:0;bottom:0;
- background:rgba(238,242,247,0.88);
+ background:rgba(238,242,247,0.72); /* আগে 0.88 ছিল, এখন 0.72 - ফেব্রিক বেশি দেখা যাবে */
  z-index:-1;
 }
-.top{background:#0f2110ef;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(4px);position:sticky;top:0;z-index:10}
-.top b{font-size:18px;font-weight:900}
-.logout{background:#d50000;color:white;border:none;padding:10px 18px;border-radius:12px;font-weight:900}
-.wrap{padding:14px}
-.welcome{font-size:34px;font-weight:900;text-align:center;margin:14px 0 6px 0;color:#0f2110;text-shadow:0 1px 0 #fff}
+.top{background:#0f2110ef;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top b{font-size:18px;font-weight:900}.logout{background:#d50000;color:white;border:none;padding:10px 18px;border-radius:12px;font-weight:900}
+.wrap{padding:14px}.welcome{font-size:34px;font-weight:900;text-align:center;margin:14px 0 6px 0;color:#0f2110;text-shadow:0 1px 0 #fff}
 .mobile{text-align:center;font-weight:900;color:#0a4d0a;font-size:17px;margin-bottom:18px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{
- background:rgba(255,255,255,0.96);
- border-radius:26px;padding:22px 10px;text-align:center;
- box-shadow:0 6px 18px #0002;cursor:pointer;
- border:1px solid #ffffffaa;
- backdrop-filter:blur(2px);
-}
-.icon{font-size:56px;display:block}
-.t1{font-weight:900;color:#0a4d0a;font-size:15px;margin-top:10px}
-.t2{font-size:12.5px;color:#777;margin-top:5px}
+.card{background:rgba(255,255,255,0.92);border-radius:26px;padding:22px 10px;text-align:center;box-shadow:0 6px 18px #0002;cursor:pointer;border:1px solid #fff}
+.icon{font-size:56px;display:block}.t1{font-weight:900;color:#0a4d0a;font-size:15px;margin-top:10px}.t2{font-size:12.5px;color:#777;margin-top:5px}
 @keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 </style>
 </head>
@@ -55,17 +41,12 @@ body::before{
 </div>
 <div class="welcome">Assalamualaikum</div>
 <div class="mobile">📞 MT PLATOON Mobile: 01769-013433</div>
-<!-- MT BRAIN TOP BANNER - BEST PLACE -->
 <a href="mt-brain-final.html" style="text-decoration:none;">
-<div style=" background:linear-gradient(90deg,#0a4d0a,#12a012); border-radius:16px; padding:14px 18px; display:flex; align-items:center; gap:12px; margin:14px 12px 8px 12px; box-shadow:0 4px 15px rgba(10,122,10,0.35); border:1px solid #1f8a1f; ">
+<div style="background:linear-gradient(90deg,#0a4d0a,#12a012);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin:14px 12px 8px 12px;box-shadow:0 4px 15px rgba(10,122,10,0.35);border:1px solid #1f8a1f;">
 <div style="background:#fff;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">🧠</div>
-<div style="flex:1;">
-<div style="color:#fff;font-weight:900;font-size:16px;">MT BRAIN - AI Assistant</div>
-<div style="color:#c8ffc8;font-size:13px;">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div>
-</div>
+<div style="flex:1;"><div style="color:#fff;font-weight:900;font-size:16px;">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:13px;">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div>
 <div style="background:#fff;color:#0a6a0a;padding:6px 14px;border-radius:20px;font-weight:900;font-size:13px;">ASK →</div>
-</div>
-</a>
+</div></a>
 <div class="grid">
 <div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div><div class="t2">All Vehicle Information</div></div>
 <div class="card" onclick="location.href='required.html'"><span class="icon">☎️</span><div class="t1">REQUIRED MOBILE NUMBER</div><div class="t2">All Required Number</div></div>
@@ -73,13 +54,11 @@ body::before{
 <div class="card" onclick="location.href='seniority.html'"><span class="icon">⭐</span><div class="t1">SUTY SENIORITY</div><div class="t2">Seniority List & Updates</div></div>
 <div class="card" onclick="location.href='instruction.html'"><span class="icon">📝</span><div class="t1">INSTRUCTION</div><div class="t2">Other Updates</div></div>
 <div class="card" onclick="location.href='contact.html'"><span class="icon">📞</span><div class="t1">MT PLATOON<br>MOBILE NUMBER</div><div class="t2">Contact List</div></div>
-</div>
-</div>
+</div></div>
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
 try{ fetch(SHEET_URL).then(r=>r.json()).then(d=>{ if(d && d.text){ document.getElementById('joruriText').innerText = '🚨 ' + d.text + ' 🚨'; } }).catch(()=>{}); }catch(e){}
 if(localStorage.getItem('role') === 'clk'){ document.getElementById('editJoruriBtn').style.display='block'; }
-function editJoruri(){ let t = prompt("নতুন জরুরি আদেশ লিখুন:"); if(!t) return; fetch(SHEET_URL, {method:'POST', mode:'no-cors', body: new URLSearchParams({text:t})}) .then(()=>{ alert("✅ সেভ হয়েছে"); location.reload(); }); }
+function editJoruri(){ let t = prompt("নতুন জরুরি আদেশ লিখুন:"); if(!t) return; fetch(SHEET_URL, {method:'POST', mode:'no-cors', body: new URLSearchParams({text:t})}).then(()=>{ alert("✅ সেভ হয়েছে"); location.reload(); }); }
 </script>
-</body>
-</html>
+</body></html>
