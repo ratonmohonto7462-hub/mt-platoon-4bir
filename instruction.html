@@ -1,98 +1,118 @@
 <!DOCTYPE html>
 <html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MT Platoon Feed</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instruction - MT PLATOON 4 BIR</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Noto Sans Bengali',sans-serif}
-body{background:#e8efe8;padding-bottom:90px}
-.topbar{background:#2d5a27;color:white;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.topbar h1{font-size:20px;display:flex;align-items:center;gap:8px}
-.card{background:white;border-radius:18px;margin:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-.create-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.avatar{width:42px;height:42px;border-radius:50%;background:#c5d8c3;display:flex;align-items:center;justify-content:center;font-size:20px}
-.input-box{background:#dbe8d6;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;border:1px solid #b5ccaF}
-.input-box input{border:none;background:transparent;outline:none;width:100%;font-size:15px}
-.post-btn{background:#2d5a27;color:white;border:none;padding:8px 20px;border-radius:20px;float:right;margin-top:10px;display:flex;align-items:center;gap:6px;cursor:pointer}
-.clear{clear:both}
-.post-header{display:flex;gap:10px;align-items:center}
-.post-avatar{width:48px;height:48px;border-radius:50%;background:#2d5a27;color:white;display:flex;align-items:center;justify-content:center}
-.badge{color:#2d5a27;font-size:12px}
-.post-body{margin:14px 0;font-size:16px;line-height:1.6;color:#222}
-.post-footer{display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:10px;margin-top:10px;color:#666;font-size:13px}
-.like-btn{background:#2d5a27;color:white;padding:6px 14px;border-radius:8px;border:none}
-.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:#2d5a27;border-radius:24px;display:flex;justify-content:space-around;padding:10px 0;color:#a8d5a2}
-.bottom-nav div{text-align:center;font-size:12px;cursor:pointer}
-.bottom-nav .active{color:white}
+body{margin:0;font-family:Arial;min-height:100vh;background:#e8ecef}
+.top{background:#0f2110;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top b{font-size:15px;font-weight:900}.backBtn{background:#7d0000;color:white;border:none;padding:7px 12px;border-radius:8px;font-weight:900;font-size:12px}
+.tabs{display:flex;gap:8px;padding:10px;background:#0f2110;position:sticky;top:48px;z-index:9}
+.tabBtn{flex:1;padding:12px;border:none;border-radius:12px;font-weight:900;font-size:14px;background:#2a4a2a;color:#a3c9a3}
+.tabBtn.active{background:white;color:#0f2110}
+.wrap{padding:10px}
+.addBox{background:white;border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px #0001}
+.addBox textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;box-sizing:border-box;font-size:14px;font-weight:600;min-height:80px;resize:vertical}
+.addBox input{width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;margin-bottom:8px;font-size:13px}
+.postBtn{width:100%;padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900;margin-top:8px}
+.printBtn{background:#2d4a28;color:white;border:none;padding:6px 14px;border-radius:20px;font-weight:900;font-size:12px;margin:6px auto;display:block}
+.feedCard{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px #0001}
+.feedHead{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.avatar{width:42px;height:42px;border-radius:50%;background:#2d4a28;display:flex;align-items:center;justify-content:center;color:#ffcc00;font-size:20px;font-weight:900}
+.feedName{font-weight:900;font-size:14px}.feedTime{font-size:11px;color:#666}
+.feedText{font-size:14px;line-height:1.6;font-weight:600;margin:10px 0;white-space:pre-wrap}
+.feedActions{display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:8px;margin-top:8px;font-size:12px;color:#555}
+.editDel{display:flex;gap:6px;margin-top:8px}
+.eBtn{background:#ffaa00;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px}
+.dBtn{background:#7d0000;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px}
+.viewOnly{font-size:11px;background:#eee;color:#555;padding:6px 10px;border-radius:8px;text-align:center}
+@media print{
+ body{background:white} .top,.tabs,.addBox,.printBtn,.editDel,.backBtn{display:none !important}
+ .feedCard{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+ .wrap{padding:0}
+}
 </style>
 </head>
 <body>
-
-<div class="topbar">
-<h1>🛡️ MT Platoon Feed</h1>
-<div>🔍 🔔</div>
+<div class="top"><b>📝 INSTRUCTION</b><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div>
+<div class="tabs">
+<button id="tab1" class="tabBtn active" onclick="switchTab('sthayi')">📌 স্থায়ী আদেশ</button>
+<button id="tab2" class="tabBtn" onclick="switchTab('doinondin')">📋 দৈনন্দিন আদেশ</button>
+</div>
+<div class="wrap">
+<div id="formArea" class="addBox">
+<input id="f_title" placeholder="শিরোনাম (যেমন: পিটি প্যারেড)">
+<textarea id="f_text" placeholder="আদেশ লিখুন..."></textarea>
+<button id="mainBtn" class="postBtn" onclick="savePost()">✈️ Post করুন</button>
 </div>
 
-<div class="card">
-<div class="create-top">
-<div class="avatar">👤</div>
-<b>Create Post</b>
-</div>
-<div class="input-box">
-<span>📎</span>
-<input id="postInput" placeholder="Write new instruction...">
-</div>
-<button class="post-btn" onclick="createPost()">✈️ Post</button>
-<div class="clear"></div>
-</div>
+<div id="printTitle" style="text-align:center;font-weight:900;font-size:18px;margin:10px 0;">📌 স্থায়ী আদেশ</div>
+<button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
 
-<div id="feed"></div>
-
-<div class="bottom-nav">
-<div class="active">🏠<br>Feed</div>
-<div>👥<br>Roster</div>
-<div>📝<br>Tasks</div>
-<div>👤<br>Profile</div>
+<div id="list"></div>
 </div>
 
 <script>
-let posts = JSON.parse(localStorage.getItem('mt_feed')||`[
-{"name":"MT JCO","date":"14 Oct 2024 • 07:30 AM • MT Platoon","text":"আগামীকাল ০৬:০০ এ পিটি প্যারেড বাধ্যতামূলক। সকলকে নির্ধারিত ইউনিফর্মে ইউনিট লাইনে উপস্থিত থাকতে হবে। বিলম্ব গ্রহণযোগ্য নয়।","seen":42,"like":12,"cmt":3},
-{"name":"MT JCO","date":"13 Oct 2024 • 05:45 PM • MT Platoon","text":"এমটি যানবাহন চেক-আপ আগামী ১৫ অক্টোবর সকাল ০৯:০০। সকল চালককে লগবুক আপডেট করে রিপোর্ট জমা দিতে হবে। যানবাহন পরিষ্কার ও জ্বালানি পূর্ণ রাখা নিশ্চিত করুন।","seen":28,"like":7,"cmt":1}
-]`);
+let role=(localStorage.getItem('role')||'').toLowerCase();
+let isClk=role==='clk';
+let currentTab = localStorage.getItem('inst_tab') || 'sthayi';
+let sthayi = JSON.parse(localStorage.getItem('mt_inst_sthayi_v1')||'[]');
+let doinondin = JSON.parse(localStorage.getItem('mt_inst_doinondin_v1')||'[]');
+let editIndex=-1;
 
-function render(){
- let html='';
- posts.forEach((p,i)=>{
-  html+=`
-  <div class="card">
-   <div class="post-header">
-    <div class="post-avatar">⭐</div>
-    <div><b>${p.name}</b> <span style="color:green">✔️</span><br><small style="color:#666">${p.date}</small></div>
-   </div>
-   <div class="post-body">${p.text}</div>
-   <div class="post-footer">
-    <span>👁️ Seen ${p.seen}</span>
-    <button class="like-btn" onclick="like(${i})">👍 Like ${p.like}</button>
-    <span>💬 Comments ${p.cmt}</span>
-   </div>
-  </div>`;
- });
- document.getElementById('feed').innerHTML=html;
+function getTodayStr(){
+ let d=new Date(); let months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+ return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} • ${d.toLocaleTimeString('en-BD',{hour:'2-digit',minute:'2-digit'})}`;
 }
-
-function createPost(){
- let t=document.getElementById('postInput').value;
- if(!t.trim()) return;
- posts.unshift({name:"MT JCO",date:new Date().toLocaleString('en-GB')+" • MT Platoon",text:t,seen:1,like:0,cmt:0});
- localStorage.setItem('mt_feed',JSON.stringify(posts));
- document.getElementById('postInput').value='';
+function switchTab(t){
+ currentTab=t; localStorage.setItem('inst_tab',t);
+ document.getElementById('tab1').classList.toggle('active',t==='sthayi');
+ document.getElementById('tab2').classList.toggle('active',t==='doinondin');
+ document.getElementById('printTitle').innerText = t==='sthayi' ? '📌 স্থায়ী আদেশ' : '📋 দৈনন্দিন আদেশ';
+ editIndex=-1; document.getElementById('mainBtn').innerText='✈️ Post করুন'; document.getElementById('f_title').value=''; document.getElementById('f_text').value='';
  render();
 }
-function like(i){posts[i].like++;posts[i].seen++;localStorage.setItem('mt_feed',JSON.stringify(posts));render();}
-render();
+function saveLS(){
+ localStorage.setItem('mt_inst_sthayi_v1',JSON.stringify(sthayi));
+ localStorage.setItem('mt_inst_doinondin_v1',JSON.stringify(doinondin));
+}
+function savePost(){
+ if(!isClk){alert("⛔ শুধু MT CLK ID থেকে Post করতে পারবে");return;}
+ let title=document.getElementById('f_title').value.trim();
+ let text=document.getElementById('f_text').value.trim();
+ if(!text){alert("আদেশ লিখুন");return;}
+ let post={title:text?title:"",text:text,time:getTodayStr(),name: isClk?'MT CLK':'MT JCO'};
+ let arr = currentTab==='sthayi'? sthayi:doinondin;
+ if(editIndex==-1){ arr.unshift(post); }
+ else{ arr[editIndex]=post; editIndex=-1; document.getElementById('mainBtn').innerText='✈️ Post করুন'; }
+ saveLS(); document.getElementById('f_title').value=''; document.getElementById('f_text').value=''; render();
+}
+function render(){
+ let arr = currentTab==='sthayi'? sthayi:doinondin;
+ let list=document.getElementById('list'); list.innerHTML='';
+ document.getElementById('formArea').style.display = isClk ? 'block' : 'none';
+ if(arr.length==0){ list.innerHTML=`<div style="text-align:center;padding:20px;background:white;border-radius:16px;color:#777">কোনো আদেশ নেই</div>`; return;}
+ arr.forEach((p,idx)=>{
+   let btns = isClk ? `<div class="editDel"><button class="eBtn" onclick="editPost(${idx})">✏️ Edit</button><button class="dBtn" onclick="deletePost(${idx})">🗑️ Del</button></div>` : `<div class="viewOnly">👁️ View Only - MT PLATOON</div>`;
+   list.innerHTML+=`<div class="feedCard">
+   <div class="feedHead"><div class="avatar">★</div><div><div class="feedName">${p.name} ✓</div><div class="feedTime">${p.time} • MT Platoon</div></div></div>
+   ${p.title?`<div style="font-weight:900;font-size:13px;color:#0f2110;margin-bottom:4px">${p.title}</div>`:''}
+   <div class="feedText">${p.text}</div>
+   <div class="feedActions"><span>👁️ Seen ${Math.floor(Math.random()*40+5)}</span><span>👍 Like</span><span>💬 Comments</span></div>
+   ${btns}
+   </div>`;
+ });
+}
+function editPost(i){
+ if(!isClk){alert("Permission নেই");return;}
+ editIndex=i; let arr=currentTab==='sthayi'? sthayi:doinondin; let p=arr[i];
+ document.getElementById('f_title').value=p.title; document.getElementById('f_text').value=p.text;
+ document.getElementById('mainBtn').innerText='✅ Update করুন'; window.scrollTo(0,0);
+}
+function deletePost(i){
+ if(!isClk){alert("Permission নেই");return;}
+ if(confirm("Delete করবে?")){ let arr=currentTab==='sthayi'? sthayi:doinondin; arr.splice(i,1); saveLS(); render(); }
+}
+switchTab(currentTab);
 </script>
 </body>
 </html>
