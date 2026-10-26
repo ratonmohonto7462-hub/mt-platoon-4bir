@@ -1,55 +1,57 @@
 <!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VEHICLE UPDATE - 35 VEH</title>
-<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef2f7}
-.top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.back{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900}
-.badge{background:#e8f5e9;color:#0a4d0a;padding:8px 12px;margin:10px 14px;border-radius:12px;font-weight:900;display:flex;justify-content:space-between;font-size:13px}
-.search{margin:0 14px 10px 14px;background:white;border-radius:14px;padding:12px;display:flex;gap:10px;box-shadow:0 2px 8px #0001}
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VEHICLE UPDATE - MT PLATOON 4 BIR</title>
+<style>
+body{margin:0;background:#eef2f5;font-family:Arial}
+.top{background:#0a7e07;color:white;padding:14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+.top b{font-size:16px;font-weight:900;letter-spacing:1px}
+.back{background:#7d0000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer}
+.badge{margin:10px 14px;background:white;padding:10px 14px;border-radius:14px;display:flex;justify-content:space-between;font-weight:900;font-size:13px;box-shadow:0 2px 8px #0001;border-left:5px solid #0a7e07}
+.search{margin:0 14px 12px 14px;background:white;border-radius:14px;padding:12px;display:flex;gap:10px;box-shadow:0 2px 8px #0001}
 .search input{flex:1;border:none;outline:none;font-size:14px;font-weight:700}
-.addBtn{background:#0a4d0a;color:white;border:none;padding:12px 14px;margin:0 14px 14px 14px;border-radius:12px;width:calc(100% - 28px);font-weight:900;font-size:15px;cursor:pointer;display:none}
+.addBtn{margin:0 14px 14px 14px;width:calc(100% - 28px);padding:14px;background:#0a7e07;color:white;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;display:none;box-shadow:0 4px 12px #0002}
 .grid{padding:0 14px 20px 14px;display:grid;gap:12px}
-.card{background:white;border-radius:16px;padding:12px;box-shadow:0 4px 12px #0001;border-left:5px solid #0a4d0a;position:relative}
+.card{background:white;border-radius:18px;padding:14px;box-shadow:0 4px 12px #0001;border-left:5px solid #0a7e07}
 .card.due{border-left-color:#ff9800}
 .head{display:flex;justify-content:space-between;align-items:center}
-.act{margin-top:8px;display:flex;gap:8px;display:none}
-.act button{flex:1;padding:8px;border:none;border-radius:8px;font-weight:900;cursor:pointer}
-.edit{background:#1976d2;color:white} .del{background:#d32f2f;color:white}
-.row{display:flex;justify-content:space-between;font-size:12px;padding:5px 6px;margin:3px 0;background:#f9faf9;border-radius:6px}
+.st{font-size:11px;padding:5px 10px;border-radius:20px;font-weight:900}
+.st.due{background:#fff3e0;color:#e65100} .st.good{background:#e8f5e9;color:#0a7e07}
+.inner{margin-top:10px;background:#f6f8fa;border-radius:12px;padding:8px}
+.row{display:flex;justify-content:space-between;font-size:13px;padding:6px 8px;margin:4px 0;background:white;border-radius:8px;font-weight:700}
+.act{margin-top:10px;display:flex;gap:8px}
+.act button{flex:1;padding:10px;border:none;border-radius:10px;font-weight:900;cursor:pointer}
+.edit{background:#0a7e07;color:white} .del{background:#7d0000;color:white}
 </style></head><body>
 <div class="top"><b>VEHICLE UPDATE - 35 VEH</b><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
-<div class="badge"><span>🛡️ MT Platoon 4 BIR</span><span id="roleView" style="background:#0a4d0a;color:white;padding:2px 8px;border-radius:10px;font-size:11px">VIEW</span></div>
+<div class="badge"><span>🛡️ MT PLATOON 4 BIR</span><span id="roleView"></span></div>
 <div class="search"><span>🔍</span><input id="q" placeholder="গাড়ি সার্চ..." oninput="render()"></div>
 <button id="addBtn" class="addBtn" onclick="addVeh()">+ ADD NEW VEHICLE</button>
 <div id="list" class="grid"></div>
 <script>
-const params=new URLSearchParams(window.location.search);
-let role=params.get('role')||localStorage.getItem('mt_role')||'platoon';
-localStorage.setItem('mt_role',role);
-const isClerk=role.toLowerCase().includes('clk')||role.toLowerCase().includes('clerk');
-document.getElementById('roleView').innerText=isClerk?'MT CLK - EDITOR':'MT PLATOON - VIEW ONLY';
-document.getElementById('roleView').style.background=isClerk?'#ff9800':'#0a4d0a';
-if(isClerk)document.getElementById('addBtn').style.display='block';
+let role = localStorage.getItem('role') || 'mt';
+let isClerk = (role === 'clk');
+let roleEl = document.getElementById('roleView');
+if(isClerk){
+  roleEl.innerText = 'MT CLK - EDITOR';
+  roleEl.style.background = '#0a7e07'; roleEl.style.color='white'; roleEl.style.padding='4px 10px'; roleEl.style.borderRadius='20px';
+  document.getElementById('addBtn').style.display='block';
+} else {
+  roleEl.innerText = 'MT PLATOON - VIEW ONLY';
+  roleEl.style.background = '#7d0000'; roleEl.style.color='white'; roleEl.style.padding='4px 10px'; roleEl.style.borderRadius='20px';
+}
 
-let vehicles=JSON.parse(localStorage.getItem('mt_vehicles')||'null')||["Truck-01","Truck-02","Truck-03","Truck-04","Truck-05","Truck-06","Truck-07","Truck-08","Truck-09","Truck-10","Jeep-01","Jeep-02","Jeep-03","Jeep-04","Jeep-05","Pickup-01","Pickup-02","Pickup-03","Pickup-04","Pickup-05","Ambulance-01","Ambulance-02","Bowser-01","Bowser-02","Bowser-03","Recovery-01","Recovery-02","Bus-01","Bus-02","Car-01","Car-02","Car-03","Car-04","Car-05","Bike-01"];
-
+let vehicles = JSON.parse(localStorage.getItem('mt_vehicles')||'null') || ["Truck-01","Truck-02","Truck-03","Truck-04","Truck-05","Truck-06","Truck-07","Truck-08","Truck-09","Truck-10","Jeep-01","Jeep-02","Jeep-03","Jeep-04","Jeep-05","Pickup-01","Pickup-02","Pickup-03","Pickup-04","Pickup-05","Ambulance-01","Ambulance-02","Bowser-01","Bowser-02","Bowser-03","Recovery-01","Recovery-02","Bus-01","Bus-02","Car-01","Car-02","Car-03","Car-04","Car-05","Bike-01"];
 function save(){localStorage.setItem('mt_vehicles',JSON.stringify(vehicles));}
 function render(){
  const q=document.getElementById('q').value.toLowerCase();
  const list=document.getElementById('list');list.innerHTML='';
  vehicles.filter(v=>v.toLowerCase().includes(q)).forEach((v,i)=>{
-  const realIdx=vehicles.indexOf(v); const due=realIdx%3==0;
-  list.innerHTML+=`<div class="card ${due?'due':''}">
-   <div class="head"><b>🚚 ${v}</b><span style="font-size:10px;padding:4px 8px;border-radius:20px;font-weight:900;background:${due?'#fff3e0':'#e8f5e9'};color:${due?'#e65100':'#2e7d32'}">${due?'⚠️ Due Soon':'✅ Good'}</span></div>
-   <div style="margin-top:8px;background:#f9faf9;border-radius:10px;padding:8px">
-    <div class="row"><span>Engine Oil</span><b style="color:${due?'#e65100':'#2e7d32'}">${due?'Due Soon':'Good'}</b></div>
-    <div class="row"><span>Transmission Oil</span><b>Good</b></div><div class="row"><span>Coolant</span><b>92%</b></div><div class="row"><span>ATF</span><b>Good</b></div>
-   </div>
-   <div class="act" style="display:${isClerk?'flex':'none'}"><button class="edit" onclick="editVeh(${realIdx})">✏️ Edit</button><button class="del" onclick="delVeh(${realIdx})">🗑️ Delete</button></div>
-  </div>`;
+  const due=i%3==0;
+  const btns = isClerk ? `<div class="act"><button class="edit" onclick="editVeh(${i})">✏️ Edit</button><button class="del" onclick="delVeh(${i})">🗑️ Delete</button></div>` : '';
+  list.innerHTML+=`<div class="card ${due?'due':''}"><div class="head"><b>🚚 ${v}</b><span class="st ${due?'due':'good'}">${due?'⚠️ Due':'✅ Good'}</span></div><div class="inner"><div class="row"><span>Engine Oil</span><b style="color:${due?'#e65100':'#0a7e07'}">${due?'Due Soon':'Good'}</b></div><div class="row"><span>Transmission</span><b>Good</b></div><div class="row"><span>Coolant</span><b>92%</b></div><div class="row"><span>ATF</span><b>Good</b></div></div>${btns}</div>`;
  });
 }
-function addVeh(){let n=prompt("নতুন গাড়ির নাম লিখো: Ex: Truck-11");if(n){vehicles.push(n.trim());save();render();}}
-function editVeh(i){let n=prompt("নাম Edit করো:",vehicles[i]);if(n){vehicles[i]=n.trim();save();render();}}
+function addVeh(){let n=prompt("নতুন গাড়ির নাম:");if(n){vehicles.push(n.trim());save();render();}}
+function editVeh(i){let n=prompt("Edit নাম:",vehicles[i]);if(n){vehicles[i]=n.trim();save();render();}}
 function delVeh(i){if(confirm(vehicles[i]+" ডিলেট করবা?")){vehicles.splice(i,1);save();render();}}
 render();
 </script></body></html>
