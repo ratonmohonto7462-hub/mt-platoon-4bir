@@ -5,145 +5,133 @@
 <style>
 body{margin:0;font-family:Arial;background:#8a9a8a;min-height:100vh}
 .header{background:#0f2110;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
-.h-right{display:flex;gap:8px}
-.alertBtn{background:#ffcc00;color:#000;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:13px;position:relative}
-.alertCount{background:#d50000;color:white;border-radius:50%;padding:2px 7px;font-size:11px;position:absolute;top:-7px;right:-7px}
-.backBtn{background:#5a0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
+.h-right{display:flex;gap:8px}.alertBtn{background:#ffcc00;color:#000;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:13px;position:relative}.alertCount{background:#d50000;color:white;border-radius:50%;padding:2px 7px;font-size:11px;position:absolute;top:-7px;right:-7px}.backBtn{background:#5a0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
 .searchWrap{padding:12px}.searchWrap input{width:100%;padding:12px;border-radius:12px;border:none;box-sizing:border-box}
 .addBtn{margin:0 12px 12px;width:calc(100% - 24px);padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900}
-.autoAlert{background:#fff3cd;border:2px solid #ffcc00;border-radius:12px;margin:0 12px 12px;padding:10px;display:none}
-.autoAlert h4{margin:0 0 6px 0;font-size:14px;color:#856404}
-.notifItem{background:white;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px;font-weight:700;border-left:4px solid #d50000}
+.autoAlert{background:#fff3cd;border:2px solid #ffcc00;border-radius:12px;margin:0 12px 12px;padding:10px;display:none}.notifItem{background:white;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px;font-weight:700;border-left:4px solid #d50000}
 .card{background:#f5f5f5;border-radius:18px;padding:12px;margin:0 12px 12px;box-shadow:0 4px 12px #0002}
-.cardTop{display:flex;justify-content:space-between;align-items:center}
-.cardTitle{font-weight:900}
-.badgeDue{background:#ffd6d6;color:#a00;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:900}
-.badgeOk{background:#d4edda;color:#0a4d0a;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:900}
-.rows{background:white;border-radius:12px;padding:6px;margin-top:8px}
-.row{display:flex;justify-content:space-between;padding:10px 8px;border-bottom:1px solid #eee;font-size:13px;font-weight:600;border-radius:8px;margin-bottom:4px}
-.row.due{background:#d50000 !important;color:white !important}
-.row.due b{color:white !important}
-.btns{display:flex;gap:8px;margin-top:10px}
-.editBtn{flex:1;background:#0f2110;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}
-.delBtn{flex:1;background:#7d0000;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}
+.cardTop{display:flex;justify-content:space-between;align-items:center}.cardTitle{font-weight:900}.badgeDue{background:#ffd6d6;color:#a00;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:900}.badgeOk{background:#d4edda;color:#0a4d0a;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:900}
+.rows{background:white;border-radius:12px;padding:6px;margin-top:8px}.row{display:flex;justify-content:space-between;padding:10px 8px;border-bottom:1px solid #eee;font-size:13px;font-weight:600;border-radius:8px;margin-bottom:4px}.row.due{background:#d50000 !important;color:white !important}.btns{display:flex;gap:8px;margin-top:10px}.editBtn{flex:1;background:#0f2110;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.delBtn{flex:1;background:#7d0000;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}
+/* EDIT FORM MODAL */
+#formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;padding:12px}
+#formBox{background:white;border-radius:18px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
+#formBox h3{margin:0;padding:14px 16px;background:#0f2110;color:white;border-radius:18px 18px 0 0;text-align:center}
+.formInner{padding:14px}
+.formInner label{font-size:12px;font-weight:900;display:block;margin:10px 0 4px 0;color:#333}
+.formInner input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;font-size:14px;font-weight:600}
+.formBtns{display:flex;gap:10px;margin-top:16px}
+.saveBtn{flex:1;background:#0f2110;color:white;border:none;padding:12px;border-radius:10px;font-weight:900}
+.cancelBtn{flex:1;background:#ccc;color:#000;border:none;padding:12px;border-radius:10px;font-weight:900}
 </style>
 </head>
 <body>
-<div class="header">
-<b>Vehicle Maintenance</b>
-<div class="h-right">
-<button class="alertBtn">🚨 Alert <span id="alertCount" class="alertCount">0</span></button>
-<button class="backBtn" onclick="location.href='dashboard.html'">BACK</button>
-</div>
-</div>
-
+<div class="header"><b>Vehicle Maintenance</b><div class="h-right"><button class="alertBtn">🚨 Alert <span id="alertCount" class="alertCount">0</span></button><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div></div>
 <div class="searchWrap"><input id="search" placeholder="🔍 গাড়ি সার্চ..." oninput="render()"></div>
-
-<!-- AUTO ALERT - 7 দিন আগে -->
-<div id="autoAlertArea" class="autoAlert">
-<h4>🚨 Alert - 7 দিনের মধ্যে Due (<span id="alertNum">0</span>)</h4>
-<div id="autoAlertList"></div>
-</div>
-
-<button class="addBtn" onclick="addVehicle()">+ ADD NEW VEHICLE</button>
+<div id="autoAlertArea" class="autoAlert"><h4>🚨 Alert - 7 দিনের মধ্যে Due (<span id="alertNum">0</span>)</h4><div id="autoAlertList"></div></div>
+<button class="addBtn" onclick="openAdd()">+ ADD NEW VEHICLE</button>
 <div id="list"></div>
+
+<!-- EDIT FORM - একবারে সব ঘর -->
+<div id="formModal" onclick="if(event.target==this)closeForm()">
+<div id="formBox">
+<h3 id="formTitle">Edit Vehicle</h3>
+<div class="formInner">
+<label>BA No / Truck No</label><input id="f_ba" placeholder="618">
+<label>বর্তমান KM</label><input id="f_cur" type="number" placeholder="32773">
+<label>Engine Oil - শেষ চেঞ্জ KM</label><input id="f_eKm" type="number">
+<label>Engine Oil - শেষ চেঞ্জ তারিখ</label><input id="f_eDate" type="date">
+<label>Trans Oil - শেষ চেঞ্জ KM</label><input id="f_tKm" type="number">
+<label>Trans Oil - শেষ চেঞ্জ তারিখ</label><input id="f_tDate" type="date">
+<label>ATF - শেষ চেঞ্জ তারিখ (2 বছর)</label><input id="f_atf" type="date">
+<label>Coolant - শেষ চেঞ্জ তারিখ (3 বছর)</label><input id="f_cool" type="date">
+<div class="formBtns"><button class="cancelBtn" onclick="closeForm()">Cancel</button><button class="saveBtn" onclick="saveForm()">✅ Save</button></div>
+</div>
+</div>
+</div>
 
 <script>
 let vehicles = JSON.parse(localStorage.getItem('mt_vehicles_v4') || '[]');
 let today = new Date();
-function save(){ localStorage.setItem('mt_vehicles_v4', JSON.stringify(vehicles)); }
-function daysPassed(dateStr){ if(!dateStr) return 0; let d=new Date(dateStr); let diff=Math.floor((today-d)/(1000*60*60*24)); return diff<0?0:diff; }
-function formatDays(d){
- if(d<30) return d+"দিন";
- let m=Math.floor(d/30); let rd=d%30;
- if(rd==0) return m+"মাস";
- return m+"মা "+rd+"দিন";
+let editIndex = -1;
+function saveLS(){ localStorage.setItem('mt_vehicles_v4', JSON.stringify(vehicles)); }
+function daysPassed(s){ if(!s) return 0; let d=new Date(s); let diff=Math.floor((today-d)/(1000*60*60*24)); return diff<0?0:diff; }
+function formatDays(d){ if(d<30) return d+"দিন"; let m=Math.floor(d/30); let r=d%30; return r==0? m+"মাস" : m+"মা "+r+"দিন"; }
+
+function openAdd(){
+ editIndex=-1;
+ document.getElementById('formTitle').innerText="Add New Vehicle";
+ document.getElementById('f_ba').value=""; document.getElementById('f_cur').value="";
+ document.getElementById('f_eKm').value=""; document.getElementById('f_eDate').value=new Date().toISOString().slice(0,10);
+ document.getElementById('f_tKm').value=""; document.getElementById('f_tDate').value=new Date().toISOString().slice(0,10);
+ document.getElementById('f_atf').value=new Date().toISOString().slice(0,10);
+ document.getElementById('f_cool').value=new Date().toISOString().slice(0,10);
+ document.getElementById('formModal').style.display='flex';
+}
+function openEdit(i){
+ editIndex=i; let v=vehicles[i];
+ document.getElementById('formTitle').innerText="Edit - "+v.ba;
+ document.getElementById('f_ba').value=v.ba; document.getElementById('f_cur').value=v.currentKM;
+ document.getElementById('f_eKm').value=v.engineKM; document.getElementById('f_eDate').value=v.engineDate;
+ document.getElementById('f_tKm').value=v.transKM; document.getElementById('f_tDate').value=v.transDate;
+ document.getElementById('f_atf').value=v.atfDate; document.getElementById('f_cool').value=v.coolDate;
+ document.getElementById('formModal').style.display='flex';
+}
+function closeForm(){ document.getElementById('formModal').style.display='none'; }
+function saveForm(){
+ let ba=document.getElementById('f_ba').value.trim(); if(!ba){ alert("BA No দাও"); return; }
+ let v={
+  ba:ba,
+  currentKM:parseInt(document.getElementById('f_cur').value)||0,
+  engineKM:parseInt(document.getElementById('f_eKm').value)||0,
+  engineDate:document.getElementById('f_eDate').value,
+  transKM:parseInt(document.getElementById('f_tKm').value)||0,
+  transDate:document.getElementById('f_tDate').value,
+  atfDate:document.getElementById('f_atf').value,
+  coolDate:document.getElementById('f_cool').value
+ };
+ if(editIndex==-1) vehicles.push(v); else vehicles[editIndex]=v;
+ saveLS(); closeForm(); render();
 }
 
 function render(){
  let q=document.getElementById('search').value.toLowerCase();
  let list=document.getElementById('list'); list.innerHTML='';
  let alerts=[];
-
  vehicles.forEach((v, idx)=>{
    if(q && !v.ba.toLowerCase().includes(q)) return;
-
-   let eDP = daysPassed(v.engineDate);
-   let eKP = (v.currentKM||0) - (v.engineKM||0); if(eKP<0) eKP=0;
-   let eDaysLeft = 180 - eDP;
-   let eKmLeft = 5000 - eKP;
-   let eDue = eDaysLeft <=0 || eKmLeft <=0;
-   let eAlert = eDaysLeft <=7 || eKmLeft <=300; // 7 দিন বাকি
-
-   let tDP = daysPassed(v.transDate);
-   let tKP = (v.currentKM||0) - (v.transKM||0); if(tKP<0) tKP=0;
-   let tDaysLeft = 365 - tDP;
-   let tKmLeft = 14000 - tKP;
-   let tDue = tDaysLeft <=0 || tKmLeft <=0;
-   let tAlert = tDaysLeft <=7 || tKmLeft <=300;
-
-   let atfDP = daysPassed(v.atfDate);
-   let atfDaysLeft = 730 - atfDP;
-   let atfDue = atfDaysLeft <=0;
-   let atfAlert = atfDaysLeft <=7;
-
-   let coolDP = daysPassed(v.coolDate);
-   let coolDaysLeft = 1095 - coolDP;
-   let coolDue = coolDaysLeft <=0;
-   let coolAlert = coolDaysLeft <=7;
-
-   if(eAlert) alerts.push({ba:v.ba, item:'Engine Oil', left:`${eDaysLeft} দিন বাকি`, over:eDue});
-   if(tAlert) alerts.push({ba:v.ba, item:'Trans Oil (14000km/1y)', left:`${tDaysLeft} দিন বাকি`, over:tDue});
-   if(atfAlert) alerts.push({ba:v.ba, item:'ATF (2 বছর)', left:`${atfDaysLeft} দিন বাকি`, over:atfDue});
-   if(coolAlert) alerts.push({ba:v.ba, item:'Coolant (3 বছর)', left:`${coolDaysLeft} দিন বাকি`, over:coolDue});
-
-   let anyOver = eDue || tDue || atfDue || coolDue;
-
-   list.innerHTML += `
+   let eDP=daysPassed(v.engineDate); let eKP=(v.currentKM||0)-(v.engineKM||0); if(eKP<0)eKP=0;
+   let eDL=180-eDP; let eKL=5000-eKP; let eDue=eDL<=0||eKL<=0; let eAlert=eDL<=7||eKL<=300;
+   let tDP=daysPassed(v.transDate); let tKP=(v.currentKM||0)-(v.transKM||0); if(tKP<0)tKP=0;
+   let tDL=365-tDP; let tKL=14000-tKP; let tDue=tDL<=0||tKL<=0; let tAlert=tDL<=7||tKL<=300;
+   let atfDP=daysPassed(v.atfDate); let atfDL=730-atfDP; let atfDue=atfDL<=0; let atfAlert=atfDL<=7;
+   let coolDP=daysPassed(v.coolDate); let coolDL=1095-coolDP; let coolDue=coolDL<=0; let coolAlert=coolDL<=7;
+   if(eAlert) alerts.push({ba:v.ba, item:'Engine Oil', over:eDue});
+   if(tAlert) alerts.push({ba:v.ba, item:'Trans Oil', over:tDue});
+   if(atfAlert) alerts.push({ba:v.ba, item:'ATF', over:atfDue});
+   if(coolAlert) alerts.push({ba:v.ba, item:'Coolant', over:coolDue});
+   let anyOver=eDue||tDue||atfDue||coolDue;
+   list.innerHTML+=`
    <div class="card">
      <div class="cardTop"><div class="cardTitle">🚚 ${v.ba} - ${v.currentKM}km</div><div class="${anyOver?'badgeDue':'badgeOk'}">${anyOver?'⚠️ Due':'✅ OK'}</div></div>
      <div class="rows">
        <div class="row ${eDue?'due':''}"><span>Engine Oil (5000km/6m)</span><b>${eKP}km / ${formatDays(eDP)}</b></div>
        <div class="row ${tDue?'due':''}"><span>Trans Oil (14000km/1y)</span><b>${tKP}km / ${formatDays(tDP)}</b></div>
        <div class="row ${atfDue?'due':''}"><span>ATF (2 বছর)</span><b>${formatDays(atfDP)} আগে</b></div>
-       <div class="row ${coolDue?'due':''}"><span>Coolant (3 বছর)</span><b>${formatDays(coolDP)} আগে</b></div>
+       <div class="row ${coolDue?'due':''}"><span>Coolant</span><b>${formatDays(coolDP)} আগে</b></div>
      </div>
-     <div class="btns"><button class="editBtn" onclick="editVehicle(${idx})">✏️ Edit</button><button class="delBtn" onclick="deleteVehicle(${idx})">Delete</button></div>
+     <div class="btns"><button class="editBtn" onclick="openEdit(${idx})">✏️ Edit</button><button class="delBtn" onclick="deleteVehicle(${idx})">Delete</button></div>
    </div>`;
  });
-
- document.getElementById('alertCount').innerText = alerts.length;
- document.getElementById('alertNum').innerText = alerts.length;
- let auto = document.getElementById('autoAlertList');
- auto.innerHTML = '';
- if(alerts.length==0){
-   document.getElementById('autoAlertArea').style.display='none';
- }else{
+ document.getElementById('alertCount').innerText=alerts.length;
+ document.getElementById('alertNum').innerText=alerts.length;
+ let auto=document.getElementById('autoAlertList'); auto.innerHTML='';
+ if(alerts.length==0){ document.getElementById('autoAlertArea').style.display='none'; }
+ else{
    document.getElementById('autoAlertArea').style.display='block';
-   alerts.forEach(a=>{
-     auto.innerHTML += `<div class="notifItem">🚨 <b>${a.ba}</b> - ${a.item} - ${a.over?'🔴 Due':'🟡 '+a.left}<br><span style="font-size:11px;color:#555">BA: ${a.ba}</span></div>`;
-   });
+   alerts.forEach(a=>{ auto.innerHTML+=`<div class="notifItem">🚨 <b>${a.ba}</b> - ${a.item} ${a.over?'🔴 Due':'🟡 7 দিনের মধ্যে Due'}</div>`; });
  }
 }
-
-function addVehicle(){
- let ba=prompt("BA No / Truck No:"); if(!ba) return;
- let km=parseInt(prompt("বর্তমান KM:")||'0');
- let v={ba:ba, currentKM:km, engineKM:km, engineDate:new Date().toISOString().slice(0,10), transKM:km, transDate:new Date().toISOString().slice(0,10), atfDate:new Date().toISOString().slice(0,10), coolDate:new Date().toISOString().slice(0,10)};
- vehicles.push(v); save(); render();
-}
-function editVehicle(i){
- let v=vehicles[i];
- let cur=prompt("বর্তমান KM:",v.currentKM); if(cur!==null) v.currentKM=parseInt(cur)||0;
- let ekm=prompt("Engine শেষ KM:",v.engineKM); if(ekm!==null) v.engineKM=parseInt(ekm)||0;
- let ed=prompt("Engine শেষ তারিখ YYYY-MM-DD:",v.engineDate); if(ed!==null) v.engineDate=ed;
- let tkm=prompt("Trans শেষ KM:",v.transKM); if(tkm!==null) v.transKM=parseInt(tkm)||0;
- let td=prompt("Trans তারিখ:",v.transDate); if(td!==null) v.transDate=td;
- let atf=prompt("ATF তারিখ:",v.atfDate); if(atf!==null) v.atfDate=atf;
- let cool=prompt("Coolant তারিখ:",v.coolDate); if(cool!==null) v.coolDate=cool;
- save(); render();
-}
-function deleteVehicle(i){ if(confirm("Delete?")){ vehicles.splice(i,1); save(); render(); } }
+function deleteVehicle(i){ if(confirm("Delete?")){ vehicles.splice(i,1); saveLS(); render(); } }
 render();
 </script>
 </body>
