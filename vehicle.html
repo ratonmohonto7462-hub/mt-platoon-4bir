@@ -1,53 +1,61 @@
 <!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VEHICLE UPDATE - MT PLATOON 4 BIR</title>
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vehicle - MT PLATOON 4 BIR</title>
 <style>
-body{margin:0;background:#eef2f5;font-family:Arial}
-.top{background:#0a7e07;color:white;padding:14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
-.top b{font-size:16px;font-weight:900;letter-spacing:1px}
+body{margin:0;font-family:Arial;background:#7a9b7e}
+.header{background:linear-gradient(135deg,#122e1d 0%,#1e4a2e 100%);color:white;padding:16px;border-radius:0 0 20px 20px;position:sticky;top:0;z-index:10}
+.h-top{display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;gap:10px;align-items:center}
+.logo-icon{width:42px;height:42px;background:#ffffff22;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff33}
+.h-title{font-weight:900;font-size:17px;line-height:1.1}
 .back{background:#7d0000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer}
-.badge{margin:10px 14px;background:white;padding:10px 14px;border-radius:14px;display:flex;justify-content:space-between;font-weight:900;font-size:13px;box-shadow:0 2px 8px #0001;border-left:5px solid #0a7e07}
-.search{margin:0 14px 12px 14px;background:white;border-radius:14px;padding:12px;display:flex;gap:10px;box-shadow:0 2px 8px #0001}
-.search input{flex:1;border:none;outline:none;font-size:14px;font-weight:700}
-.addBtn{margin:0 14px 14px 14px;width:calc(100% - 28px);padding:14px;background:#0a7e07;color:white;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;display:none;box-shadow:0 4px 12px #0002}
-.grid{padding:0 14px 20px 14px;display:grid;gap:12px}
-.card{background:white;border-radius:18px;padding:14px;box-shadow:0 4px 12px #0001;border-left:5px solid #0a7e07}
-.card.due{border-left-color:#ff9800}
-.head{display:flex;justify-content:space-between;align-items:center}
+.badge-bar{margin-top:12px;background:#2d5a3d;padding:8px 14px;border-radius:30px;display:flex;justify-content:space-between;font-size:12px;font-weight:700;border:1px solid #ffffff22}
+.container{padding:12px 12px 90px 12px}
+.search{background:#f5f7f5;border-radius:14px;padding:12px;display:flex;gap:10px;box-shadow:0 2px 8px #0001;margin-bottom:12px}
+.search input{flex:1;border:none;outline:none;background:transparent;font-weight:700}
+.addBtn{width:100%;padding:14px;background:#0f2e1d;color:white;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:12px;display:none;box-shadow:0 4px 12px #0002}
+.card{background:#f5f7f5;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 4px 14px #0002}
+.card-head{display:flex;justify-content:space-between;align-items:center}
+.card-head b{font-size:18px;color:#0f2e1d}
 .st{font-size:11px;padding:5px 10px;border-radius:20px;font-weight:900}
-.st.due{background:#fff3e0;color:#e65100} .st.good{background:#e8f5e9;color:#0a7e07}
-.inner{margin-top:10px;background:#f6f8fa;border-radius:12px;padding:8px}
-.row{display:flex;justify-content:space-between;font-size:13px;padding:6px 8px;margin:4px 0;background:white;border-radius:8px;font-weight:700}
-.act{margin-top:10px;display:flex;gap:8px}
+.st.good{background:#d5e8d5;color:#0f2e1d} .st.due{background:#f5d5d5;color:#7d0000}
+.inner-white{background:white;border-radius:14px;padding:12px;margin-top:10px;box-shadow:0 2px 8px #0001}
+.row{display:flex;justify-content:space-between;font-size:12px;padding:6px 8px;margin:4px 0;background:#f9faf7;border-radius:8px;font-weight:700}
+.act{display:flex;gap:8px;margin-top:10px}
 .act button{flex:1;padding:10px;border:none;border-radius:10px;font-weight:900;cursor:pointer}
-.edit{background:#0a7e07;color:white} .del{background:#7d0000;color:white}
+.edit{background:#0f2e1d;color:white} .del{background:#7d0000;color:white}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#f5f7f0;padding:10px 0 14px 0;display:flex;justify-content:space-around;border-radius:18px 18px 0 0;box-shadow:0 -4px 14px #0002}
+.bottom-nav div{text-align:center;font-size:12px;font-weight:700;color:#666;cursor:pointer}
+.bottom-nav div.active{color:#0f2e1d}
 </style></head><body>
-<div class="top"><b>VEHICLE UPDATE - 35 VEH</b><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
-<div class="badge"><span>🛡️ MT PLATOON 4 BIR</span><span id="roleView"></span></div>
+<div class="header">
+<div class="h-top"><div class="logo"><div class="logo-icon">🛡️</div><div class="h-title">Paradise Maintenance<br>System</div></div><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
+<div class="badge-bar"><span>🛡️ MT Platoon 4 BIR</span><span id="roleView">Predictive Alerts • Online ✨</span></div>
+</div>
+
+<div class="container">
 <div class="search"><span>🔍</span><input id="q" placeholder="গাড়ি সার্চ..." oninput="render()"></div>
 <button id="addBtn" class="addBtn" onclick="addVeh()">+ ADD NEW VEHICLE</button>
-<div id="list" class="grid"></div>
-<script>
-let role = localStorage.getItem('role') || 'mt';
-let isClerk = (role === 'clk');
-let roleEl = document.getElementById('roleView');
-if(isClerk){
-  roleEl.innerText = 'MT CLK - EDITOR';
-  roleEl.style.background = '#0a7e07'; roleEl.style.color='white'; roleEl.style.padding='4px 10px'; roleEl.style.borderRadius='20px';
-  document.getElementById('addBtn').style.display='block';
-} else {
-  roleEl.innerText = 'MT PLATOON - VIEW ONLY';
-  roleEl.style.background = '#7d0000'; roleEl.style.color='white'; roleEl.style.padding='4px 10px'; roleEl.style.borderRadius='20px';
-}
+<div id="list"></div>
+</div>
 
-let vehicles = JSON.parse(localStorage.getItem('mt_vehicles')||'null') || ["Truck-01","Truck-02","Truck-03","Truck-04","Truck-05","Truck-06","Truck-07","Truck-08","Truck-09","Truck-10","Jeep-01","Jeep-02","Jeep-03","Jeep-04","Jeep-05","Pickup-01","Pickup-02","Pickup-03","Pickup-04","Pickup-05","Ambulance-01","Ambulance-02","Bowser-01","Bowser-02","Bowser-03","Recovery-01","Recovery-02","Bus-01","Bus-02","Car-01","Car-02","Car-03","Car-04","Car-05","Bike-01"];
-function save(){localStorage.setItem('mt_vehicles',JSON.stringify(vehicles));}
+<div class="bottom-nav"><div onclick="location.href='dashboard.html'">📦<br>Dashboard</div><div class="active">🗂️<br>Tasks</div><div>📋<br>Inventory</div><div>📊<br>Reports</div></div>
+
+<script>
+let role=localStorage.getItem('role')||'mt';
+let isClerk=role==='clk';
+document.getElementById('roleView').innerText=isClerk?'MT CLK - EDITOR • Online ✨':'MT PLATOON - VIEW ONLY';
+document.getElementById('addBtn').style.display=isClerk?'block':'none';
+
+let vehicles=JSON.parse(localStorage.getItem('mt_vehicles')||'null')||["Truck-05","Truck-01","Truck-02","Jeep-01","Pickup-01","Ambulance-01","Bowser-01","Recovery-01","Bus-01","Car-01"];
+function save(){localStorage.setItem('mt_vehicles',JSON.stringify(vehicles))}
 function render(){
- const q=document.getElementById('q').value.toLowerCase();
- const list=document.getElementById('list');list.innerHTML='';
+ let q=document.getElementById('q').value.toLowerCase();
+ let list=document.getElementById('list');list.innerHTML='';
  vehicles.filter(v=>v.toLowerCase().includes(q)).forEach((v,i)=>{
-  const due=i%3==0;
-  const btns = isClerk ? `<div class="act"><button class="edit" onclick="editVeh(${i})">✏️ Edit</button><button class="del" onclick="delVeh(${i})">🗑️ Delete</button></div>` : '';
-  list.innerHTML+=`<div class="card ${due?'due':''}"><div class="head"><b>🚚 ${v}</b><span class="st ${due?'due':'good'}">${due?'⚠️ Due':'✅ Good'}</span></div><div class="inner"><div class="row"><span>Engine Oil</span><b style="color:${due?'#e65100':'#0a7e07'}">${due?'Due Soon':'Good'}</b></div><div class="row"><span>Transmission</span><b>Good</b></div><div class="row"><span>Coolant</span><b>92%</b></div><div class="row"><span>ATF</span><b>Good</b></div></div>${btns}</div>`;
+  let due=i%3===0;
+  let btns=isClerk?`<div class="act"><button class="edit" onclick="editVeh(${i})">✏️ Edit</button><button class="del" onclick="delVeh(${i})">🗑️ Delete</button></div>`:'';
+  let alertBox=due?`<div style="background:#d32f2f;color:white;border-radius:12px;padding:10px;margin-top:10px;display:flex;gap:8px"><span>⚠️</span><div><b style="font-size:13px">Radiator Failure in 7 days - 85% risk</b><div style="font-size:11px;opacity:.9">Replace coolant & inspect fan belt</div></div></div>`:'';
+  list.innerHTML+=`<div class="card"><div class="card-head"><b>🚚 ${v}</b><span class="st ${due?'due':'good'}">${due?'⚠️ Due':'✅ Good'}</span></div><div class="inner-white"><div class="row"><span>Engine Oil</span><b style="color:${due?'#7d0000':'#0f2e1d'}">${due?'Due Soon':'Good'}</b></div><div class="row"><span>Transmission Oil</span><b>Good</b></div><div class="row"><span>Coolant</span><b>92%</b></div><div class="row"><span>ATF</span><b>Good</b></div>${alertBox}${btns}</div></div>`;
  });
 }
 function addVeh(){let n=prompt("নতুন গাড়ির নাম:");if(n){vehicles.push(n.trim());save();render();}}
