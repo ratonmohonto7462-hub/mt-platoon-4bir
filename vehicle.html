@@ -7,11 +7,11 @@ body{margin:0;font-family:Arial;background:#8a9a8a;min-height:100vh}
 .header{background:#0f2110;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
 .h-right{display:flex;gap:8px}
 .alertBtn{background:#ffcc00;color:#000;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:13px;position:relative}
-.alertCount{background:#d50000;color:white;border-radius:50%;padding:2px 7px;font-size:11px;position:absolute;top:-7px;right:-7px;min-width:14px;text-align:center}
+.alertCount{background:#d50000;color:white;border-radius:50%;padding:2px 7px;font-size:11px;position:absolute;top:-7px;right:-7px}
 .backBtn{background:#5a0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
 .searchWrap{padding:12px}.searchWrap input{width:100%;padding:12px;border-radius:12px;border:none;box-sizing:border-box}
 .addBtn{margin:0 12px 12px;width:calc(100% - 24px);padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900}
-.autoAlert{background:#fff3cd;border:2px solid #ffcc00;border-radius:12px;margin:0 12px 12px;padding:10px}
+.autoAlert{background:#fff3cd;border:2px solid #ffcc00;border-radius:12px;margin:0 12px 12px;padding:10px;display:none}
 .autoAlert h4{margin:0 0 6px 0;font-size:14px;color:#856404}
 .notifItem{background:white;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px;font-weight:700;border-left:4px solid #d50000}
 .card{background:#f5f5f5;border-radius:18px;padding:12px;margin:0 12px 12px;box-shadow:0 4px 12px #0002}
@@ -39,9 +39,9 @@ body{margin:0;font-family:Arial;background:#8a9a8a;min-height:100vh}
 
 <div class="searchWrap"><input id="search" placeholder="🔍 গাড়ি সার্চ..." oninput="render()"></div>
 
-<!-- AUTO NOTIFICATION AREA - CHAP DEWA LAGBE NA -->
+<!-- AUTO ALERT - 7 দিন আগে -->
 <div id="autoAlertArea" class="autoAlert">
-<h4>🚨 Due / 7 দিনের মধ্যে Due (<span id="alertNum">0</span> টা)</h4>
+<h4>🚨 Alert - 7 দিনের মধ্যে Due (<span id="alertNum">0</span>)</h4>
 <div id="autoAlertList"></div>
 </div>
 
@@ -52,85 +52,91 @@ body{margin:0;font-family:Arial;background:#8a9a8a;min-height:100vh}
 let vehicles = JSON.parse(localStorage.getItem('mt_vehicles_v4') || '[]');
 let today = new Date();
 function save(){ localStorage.setItem('mt_vehicles_v4', JSON.stringify(vehicles)); }
-function daysPassed(dateStr){ if(!dateStr) return 9999; return Math.floor((today - new Date(dateStr))/(1000*60*60*24)); }
+function daysPassed(dateStr){ if(!dateStr) return 0; let d=new Date(dateStr); let diff=Math.floor((today-d)/(1000*60*60*24)); return diff<0?0:diff; }
+function formatDays(d){
+ if(d<30) return d+"দিন";
+ let m=Math.floor(d/30); let rd=d%30;
+ if(rd==0) return m+"মাস";
+ return m+"মা "+rd+"দিন";
+}
 
 function render(){
- let q = document.getElementById('search').value.toLowerCase();
- let list = document.getElementById('list');
- list.innerHTML = '';
- let alerts = [];
+ let q=document.getElementById('search').value.toLowerCase();
+ let list=document.getElementById('list'); list.innerHTML='';
+ let alerts=[];
 
  vehicles.forEach((v, idx)=>{
    if(q && !v.ba.toLowerCase().includes(q)) return;
-   
-   // Calc
+
    let eDP = daysPassed(v.engineDate);
-   let eKP = (v.currentKM||0) - (v.engineKM||0);
-   let eKL = 5000 - eKP;
-   let eDL = 180 - eDP;
-   let eDue = eKL <= 500 || eDL <= 7; // 7 দিন আগে থেকে alert
-   let eOverDue = eKL <=0 || eDL <=0;
+   let eKP = (v.currentKM||0) - (v.engineKM||0); if(eKP<0) eKP=0;
+   let eDaysLeft = 180 - eDP;
+   let eKmLeft = 5000 - eKP;
+   let eDue = eDaysLeft <=0 || eKmLeft <=0;
+   let eAlert = eDaysLeft <=7 || eKmLeft <=300; // 7 দিন বাকি
 
    let tDP = daysPassed(v.transDate);
-   let tKP = (v.currentKM||0) - (v.transKM||0);
-   let tKL = 14000 - tKP;
-   let tDL = 365 - tDP;
-   let tDue = tKL <= 500 || tDL <= 7;
-   let tOverDue = tKL <=0 || tDL <=0;
+   let tKP = (v.currentKM||0) - (v.transKM||0); if(tKP<0) tKP=0;
+   let tDaysLeft = 365 - tDP;
+   let tKmLeft = 14000 - tKP;
+   let tDue = tDaysLeft <=0 || tKmLeft <=0;
+   let tAlert = tDaysLeft <=7 || tKmLeft <=300;
 
    let atfDP = daysPassed(v.atfDate);
-   let atfDue = atfDP >= (730-7);
-   let atfOver = atfDP >= 730;
+   let atfDaysLeft = 730 - atfDP;
+   let atfDue = atfDaysLeft <=0;
+   let atfAlert = atfDaysLeft <=7;
 
    let coolDP = daysPassed(v.coolDate);
-   let coolDue = coolDP >= (1095-7);
-   let coolOver = coolDP >= 1095;
+   let coolDaysLeft = 1095 - coolDP;
+   let coolDue = coolDaysLeft <=0;
+   let coolAlert = coolDaysLeft <=7;
 
-   if(eDue) alerts.push({ba:v.ba, item:'Engine Oil', left: eOverDue?'Due':`${eKL}km, ${eDL}দিন বাকি`, over:eOverDue});
-   if(tDue) alerts.push({ba:v.ba, item:'Trans Oil', left: tOverDue?'Due':`${tKL}km, ${tDL}দিন বাকি`, over:tOverDue});
-   if(atfDue) alerts.push({ba:v.ba, item:'ATF', left: atfOver?'Due':`${730-atfDP}দিন বাকি`, over:atfOver});
-   if(coolDue) alerts.push({ba:v.ba, item:'Coolant', left: coolOver?'Due':`${1095-coolDP}দিন বাকি`, over:coolOver});
+   if(eAlert) alerts.push({ba:v.ba, item:'Engine Oil', left:`${eDaysLeft} দিন বাকি`, over:eDue});
+   if(tAlert) alerts.push({ba:v.ba, item:'Trans Oil (14000km/1y)', left:`${tDaysLeft} দিন বাকি`, over:tDue});
+   if(atfAlert) alerts.push({ba:v.ba, item:'ATF (2 বছর)', left:`${atfDaysLeft} দিন বাকি`, over:atfDue});
+   if(coolAlert) alerts.push({ba:v.ba, item:'Coolant (3 বছর)', left:`${coolDaysLeft} দিন বাকি`, over:coolDue});
 
-   let anyOver = eOverDue || tOverDue || atfOver || coolOver;
+   let anyOver = eDue || tDue || atfDue || coolDue;
 
    list.innerHTML += `
    <div class="card">
      <div class="cardTop"><div class="cardTitle">🚚 ${v.ba} - ${v.currentKM}km</div><div class="${anyOver?'badgeDue':'badgeOk'}">${anyOver?'⚠️ Due':'✅ OK'}</div></div>
      <div class="rows">
-       <div class="row ${eOverDue?'due':''}"><span>Engine Oil</span><b>${eKL}km, ${eDL}দিন ${eOverDue?'⚠️':''}</b></div>
-       <div class="row ${tOverDue?'due':''}"><span>Trans Oil</span><b>${tKL}km, ${tDL}দিন ${tOverDue?'⚠️':''}</b></div>
-       <div class="row ${atfOver?'due':''}"><span>ATF (2 বছর)</span><b>${atfDP} দিন আগে</b></div>
-       <div class="row ${coolOver?'due':''}"><span>Coolant</span><b>${coolDP} দিন আগে</b></div>
+       <div class="row ${eDue?'due':''}"><span>Engine Oil (5000km/6m)</span><b>${eKP}km / ${formatDays(eDP)}</b></div>
+       <div class="row ${tDue?'due':''}"><span>Trans Oil (14000km/1y)</span><b>${tKP}km / ${formatDays(tDP)}</b></div>
+       <div class="row ${atfDue?'due':''}"><span>ATF (2 বছর)</span><b>${formatDays(atfDP)} আগে</b></div>
+       <div class="row ${coolDue?'due':''}"><span>Coolant (3 বছর)</span><b>${formatDays(coolDP)} আগে</b></div>
      </div>
      <div class="btns"><button class="editBtn" onclick="editVehicle(${idx})">✏️ Edit</button><button class="delBtn" onclick="deleteVehicle(${idx})">Delete</button></div>
    </div>`;
  });
 
- // Auto Alert Show
  document.getElementById('alertCount').innerText = alerts.length;
  document.getElementById('alertNum').innerText = alerts.length;
  let auto = document.getElementById('autoAlertList');
  auto.innerHTML = '';
- if(alerts.length==0){ auto.innerHTML = '<div style="font-size:13px;font-weight:600;color:#0a4d0a">✅ কোনো গাড়ি Due নাই</div>'; document.getElementById('autoAlertArea').style.display='none'; }
- else{
+ if(alerts.length==0){
+   document.getElementById('autoAlertArea').style.display='none';
+ }else{
    document.getElementById('autoAlertArea').style.display='block';
    alerts.forEach(a=>{
-     auto.innerHTML += `<div class="notifItem">🚨 <b>${a.ba}</b> - ${a.item} - ${a.left}<br><span style="font-size:11px">BA: ${a.ba} | ${a.item}</span></div>`;
+     auto.innerHTML += `<div class="notifItem">🚨 <b>${a.ba}</b> - ${a.item} - ${a.over?'🔴 Due':'🟡 '+a.left}<br><span style="font-size:11px;color:#555">BA: ${a.ba}</span></div>`;
    });
  }
 }
 
 function addVehicle(){
- let ba = prompt("BA No / Truck No:"); if(!ba) return;
- let km = parseInt(prompt("বর্তমান KM:")||'0');
- let v = {ba:ba, currentKM:km, engineKM:km, engineDate:new Date().toISOString().slice(0,10), transKM:km, transDate:new Date().toISOString().slice(0,10), atfDate:new Date().toISOString().slice(0,10), coolDate:new Date().toISOString().slice(0,10)};
+ let ba=prompt("BA No / Truck No:"); if(!ba) return;
+ let km=parseInt(prompt("বর্তমান KM:")||'0');
+ let v={ba:ba, currentKM:km, engineKM:km, engineDate:new Date().toISOString().slice(0,10), transKM:km, transDate:new Date().toISOString().slice(0,10), atfDate:new Date().toISOString().slice(0,10), coolDate:new Date().toISOString().slice(0,10)};
  vehicles.push(v); save(); render();
 }
 function editVehicle(i){
  let v=vehicles[i];
  let cur=prompt("বর্তমান KM:",v.currentKM); if(cur!==null) v.currentKM=parseInt(cur)||0;
  let ekm=prompt("Engine শেষ KM:",v.engineKM); if(ekm!==null) v.engineKM=parseInt(ekm)||0;
- let ed=prompt("Engine তারিখ YYYY-MM-DD:",v.engineDate); if(ed!==null) v.engineDate=ed;
+ let ed=prompt("Engine শেষ তারিখ YYYY-MM-DD:",v.engineDate); if(ed!==null) v.engineDate=ed;
  let tkm=prompt("Trans শেষ KM:",v.transKM); if(tkm!==null) v.transKM=parseInt(tkm)||0;
  let td=prompt("Trans তারিখ:",v.transDate); if(td!==null) v.transDate=td;
  let atf=prompt("ATF তারিখ:",v.atfDate); if(atf!==null) v.atfDate=atf;
