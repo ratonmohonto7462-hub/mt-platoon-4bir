@@ -1,0 +1,60 @@
+<!DOCTYPE html> <html lang="bn"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <title>4 BIR MOBILE NUMBER - 4 BIR</title> <style> body{margin:0;font-family:Arial;background:#eef2f7;zoom:0.62} .top{background:#0a4d0a;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center} .top b{font-size:15px;font-weight:900} .logout{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;cursor:pointer} .wrap{padding:14px;max-width:1100px;margin:0 auto} input{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:10px;box-sizing:border-box;font-size:16px} .btn-add{width:100%;padding:14px;background:#0a4d0a;color:white;border:none;border-radius:10px;font-size:17px;font-weight:900;cursor:pointer} .tit{text-align:center;font-size:20px;font-weight:900;margin:14px 0;color:#0a4d0a;text-decoration:underline;white-space:nowrap} .btn-print{background:blue;color:white;border:none;padding:10px 18px;border-radius:10px;font-weight:900;cursor:pointer;margin:10px auto;display:block} table{width:100%;border-collapse:collapse;background:white;font-size:14px;table-layout:auto} th{background:#0a4d0a;color:white;padding:10px 6px;border:1px solid #000;white-space:nowrap;font-size:13px} td{padding:8px 6px;border:1px solid #000;text-align:center;white-space:nowrap;font-size:13px} td:nth-child(3){text-align:left;max-width:140px;overflow:hidden;text-overflow:ellipsis} @media print{ .top,#box,.btn-print{display:none!important} th:last-child,td:last-child{display:none!important} body{background:white;zoom:1!important}.wrap{padding:0} } </style> </head> <body> <div class="top"><b>4 BIR MOBILE NUMBER</b><button class="logout" onclick="location.href='communication.html'">BACK</button></div> <div class="wrap"> <div id="box"> <input id="padobi" placeholder="পদবী"> <input id="name" placeholder="নাম"> <input id="number" placeholder="মোবাইল নম্বর"> <input id="remarks" placeholder="মন্তব্য"> <button class="btn-add" id="mainBtn" onclick="addData()">Add করুন</button> <p id="msg" style="text-align:center;color:green;font-weight:900"></p> </div> <div class="tit">4 BIR MOBILE NUMBER - 4 BIR</div> <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button> <table> <thead><tr><th>ক্র/নং</th><th>পদবী</th><th>নাম</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr></thead> <tbody id="tbl"><tr><td colspan="6">কোনো ডাটা নাই</td></tr></tbody> </table> </div> <script>
+let role=(localStorage.getItem('role')||'').toLowerCase(); 
+let isClk=role==='clk';
+let contacts=JSON.parse(localStorage.getItem('mt_4bir_v2')||'[]');
+let editIndex=-1;
+
+window.onload=function(){ if(!isClk){ document.getElementById('box').style.display='none'; } render(); };
+
+function saveLS(){ localStorage.setItem('mt_4bir_v2', JSON.stringify(contacts)); }
+
+function render(){
+ let tb=document.getElementById('tbl');
+ tb.innerHTML='';
+ if(!contacts.length){ tb.innerHTML='<tr><td colspan="6">কোনো ডাটা নাই</td></tr>'; return; }
+ contacts.forEach((x,i)=>{
+  let act = isClk ? `<button onclick="editD(${i})" style="background:orange;color:white;border:none;padding:5px 8px;border-radius:5px">Edit</button> <button onclick="delD(${i})" style="background:red;color:white;border:none;padding:5px 8px;border-radius:5px">Del</button>` : `-`;
+  tb.innerHTML+=`<tr><td>${i+1}</td><td>${x.padobi}</td><td style="text-align:left">${x.name}</td><td>${x.number}</td><td>${x.remarks}</td><td>${act}</td></tr>`;
+ });
+}
+
+function editD(i){
+ if(!isClk)return;
+ editIndex=i;
+ let x=contacts[i];
+ document.getElementById('padobi').value=x.padobi;
+ document.getElementById('name').value=x.name;
+ document.getElementById('number').value=x.number;
+ document.getElementById('remarks').value=x.remarks;
+ document.getElementById('mainBtn').innerText='Update করুন';
+ window.scrollTo(0,0);
+}
+
+function delD(i){
+ if(!isClk)return;
+ if(!confirm('Delete করবেন?'))return;
+ contacts.splice(i,1);
+ saveLS();
+ render();
+}
+
+function addData(){
+ if(!isClk){ alert('Permission নাই'); return; }
+ let pa=document.getElementById('padobi').value.trim();
+ let na=document.getElementById('name').value.trim();
+ let nu=document.getElementById('number').value.trim();
+ let re=document.getElementById('remarks').value.trim();
+ if(!pa||!na||!nu){ alert('পদবী, নাম, নম্বর লাগবে'); return; }
+ let obj={padobi:pa,name:na,number:nu,remarks:re};
+ if(editIndex==-1){ contacts.push(obj); }
+ else{ contacts[editIndex]=obj; editIndex=-1; document.getElementById('mainBtn').innerText='Add করুন'; }
+ saveLS();
+ document.getElementById('padobi').value='';
+ document.getElementById('name').value='';
+ document.getElementById('number').value='';
+ document.getElementById('remarks').value='';
+ document.getElementById('msg').innerText='✅ Done';
+ setTimeout(()=>{document.getElementById('msg').innerText='';},1500);
+ render();
+}
+</script> </body> </html>
