@@ -2,81 +2,78 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LUBE OIL REPORT - 4 BIR</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#e8eef1;font-family:Arial,sans-serif}
-.header{background:#0a5a1f;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 14px}
-.header h1{font-size:18px;font-weight:900;letter-spacing:0.5px}
+body{background:#e8eef1;font-family:Arial, sans-serif}
+.header{background:#0a5a1f;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;position:sticky;top:0;z-index:10}
+.header h1{font-size:17px;font-weight:900}
 .back{background:#e10600;color:#fff;border:none;padding:8px 22px;border-radius:10px;font-weight:900;cursor:pointer}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px}
-.card{background:#fff;border:2px solid #0a5a1f;border-radius:22px;padding:16px 10px;text-align:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
-.icon{font-size:46px;margin-bottom:6px}
-.card p{font-size:16px;font-weight:800;color:#000;line-height:1.2}
-.badge{margin-top:10px;display:inline-block;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:900}
-.badge-low{background:#ff2b2b;color:#fff;animation:blink 1s infinite}
-.badge-ok{background:#0a5a1f;color:#fff}
-.badge-warn{background:#ff9800;color:#fff}
-@keyframes blink{50%{opacity:0.6}}
+.card{background:#fff;border:2.5px solid #0a5a1f;border-radius:22px;padding:20px 10px;text-align:center;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.08)}
+.card:active{transform:scale(0.97)}
+.icon{font-size:48px;margin-bottom:8px}
+.card p{font-size:16px;font-weight:800;color:#000;line-height:1.3}
+.badge{margin-top:12px;display:inline-block;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:900}
+.low{background:#ff2b2b;color:#fff}
+.ok{background:#0a5a1f;color:#fff}
+.warn{background:#ff9800;color:#fff}
+
+/* ভিতরের লিস্ট */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99;padding:16px}
+.box{background:#fff;border-radius:18px;max-height:90vh;overflow-y:auto;padding:14px}
+.row{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #eee;font-size:14px;font-weight:700}
 </style>
 </head>
 <body>
+
 <div class="header">
 <h1>LUBE OIL REPORT - 4 BIR</h1>
-<button class="back" onclick="history.back()">BACK</button>
+<button class="back" onclick="location.href='/fuel'">BACK</button>
 </div>
 
 <div class="grid">
-  <div class="card" onclick="location.href='lube-details.html?type=engine'">
+  <div class="card" onclick="openList('engine')">
     <div class="icon">🛢️</div>
     <p>ইঞ্জিন অয়েল<br>বদলি</p>
-    <span id="b-engine" class="badge badge-ok">✓ 11 টা OK</span>
+    <span id="e" class="badge ok">লোড হচ্ছে...</span>
   </div>
-
-  <div class="card" onclick="location.href='lube-details.html?type=transmission'">
+  <div class="card" onclick="openList('transmission')">
     <div class="icon">⚙️</div>
-    <p>ট্রান্সমিশন অয়েল<br>বদলি</p>
-    <span id="b-trans" class="badge badge-ok">✓ 11 টা OK</span>
+    <p>ট্রান্সমিশন<br>অয়েল বদলি</p>
+    <span id="t" class="badge ok">লোড হচ্ছে...</span>
   </div>
-
-  <div class="card" onclick="location.href='lube-details.html?type=coolant'">
+  <div class="card" onclick="openList('coolant')">
     <div class="icon">💧</div>
     <p>কুলেন্ট<br>বদলি</p>
-    <span id="b-cool" class="badge badge-ok">✓ 11 টা OK</span>
+    <span id="c" class="badge ok">লোড হচ্ছে...</span>
   </div>
-
-  <div class="card" onclick="location.href='lube-details.html?type=atf'">
-    <div class="icon">⚙️</div>
+  <div class="card" onclick="openList('atf')">
+    <div class="icon">🔧</div>
     <p>এটিএফ<br>বদলি</p>
-    <span id="b-atf" class="badge badge-low">3 টা LOW</span>
+    <span id="a" class="badge ok">লোড হচ্ছে...</span>
   </div>
 </div>
 
+<div id="modal" class="modal" onclick="this.style.display='none'">
+  <div class="box" onclick="event.stopPropagation()" id="modalContent"></div>
+</div>
+
 <script>
-// AUTO CALCULATION - তোর Sheet থেকে পরে আসবে
-// Demo: যদি 15 দিনের কম বাকি থাকে তাহলে LOW দেখাবে
-const demo = {
-  engine: {total:11, low:0},
-  transmission: {total:11, low:1},
-  coolant: {total:11, low:0},
-  atf: {total:11, low:3}
+// তোর সব গাড়ি এখানে - 100 টা হলেও সমস্যা নাই
+const VEH = ["Truck-01","Truck-02","Truck-03","Truck-04","Truck-05","Truck-06","Truck-07","Truck-08","Jeep-01","Jeep-02","Pickup-01","Pickup-02"];
+
+const data = {
+engine: VEH.map((v,i)=>({veh:v, last:i<3?"2025-08-15":"2025-10-10", life:90})),
+transmission: VEH.map(v=>({veh:v, last:"2025-06-01", life:180})),
+coolant: VEH.map(v=>({veh:v, last:"2025-09-01", life:120})),
+atf: VEH.map(v=>({veh:v, last:"2025-09-15", life:100}))
 };
 
-function setBadge(id, data){
-  let el = document.getElementById(id);
-  if(data.low>0){
-    el.className = data.low<=2 ? "badge badge-warn" : "badge badge-low";
-    el.innerText = `⚠ ${data.low} টা LOW`;
-  } else {
-    el.className = "badge badge-ok";
-    el.innerText = `✓ ${data.total} টা OK`;
-  }
-}
-setBadge("b-engine", demo.engine);
-setBadge("b-trans", demo.transmission);
-setBadge("b-cool", demo.coolant);
-setBadge("b-atf", demo.atf);
-</script>
-</body>
-</html>
+function getStats(list){
+let low=0; list.forEach(it=>{
+let nxt=new Date(it.last); nxt.setDate(nxt.getDate()+it.life);
+let diff=Math.ceil((nxt-new Date())/86400000);
+if(diff<=15) low++;
+}); return
