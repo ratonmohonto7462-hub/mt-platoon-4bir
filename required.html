@@ -1,91 +1,81 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Required - MT PLATOON 4 BIR</title>
+<title>Required Mobile Number</title>
 <style>
-body{margin:0;font-family:Arial;min-height:100vh;background-color:#4a5d3a;background-image:radial-gradient(ellipse at 25% 25%, #2a3d1f 0% 18%, transparent 19%),radial-gradient(ellipse at 70% 15%, #8b6d4a 0% 12%, transparent 13%),radial-gradient(ellipse at 55% 75%, #2f1f14 0% 14%, transparent 15%),radial-gradient(ellipse at 15% 75%, #9a9a7a 0% 10%, transparent 11%),radial-gradient(ellipse at 45% 50%, #5a722a 0% 22%, transparent 23%);background-size:320px 320px}
-body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(238,242,247,0.72);z-index:-1}
-.top{background:#0f2110ef;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.top b{font-size:15px;font-weight:900}.backBtn{background:#5a0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
+body{margin:0;font-family:Arial;min-height:100vh;background:linear-gradient(180deg,#1e3a1a 0%,#2d5a27 50%,#3a6b35 100%);padding-bottom:30px}
+.top{background:#0f2110;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top b{font-size:16px;font-weight:900}.backBtn{background:#7d0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
 .wrap{padding:14px}
-.searchWrap input{width:100%;padding:12px;border-radius:12px;border:none;box-sizing:border-box}
-.addBtn{margin:12px 0;width:100%;padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900}
-.card{background:rgba(255,255,255,0.92);border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:0 4px 12px #0002}
-.cardTop{display:flex;justify-content:space-between;align-items:center}.cardTitle{font-weight:900;font-size:15px}.cardSub{font-size:12px;color:#555;margin-top:2px}
-.badge{background:#0f2110;color:white;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900}
-.info{margin-top:8px;background:white;border-radius:10px;padding:8px;font-size:13px;line-height:1.6}
-.btns{display:flex;gap:8px;margin-top:10px}.editBtn{flex:1;background:#0f2110;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.delBtn{flex:1;background:#7d0000;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.viewOnly{flex:1;background:#eee;color:#555;padding:10px;border-radius:10px;text-align:center;font-weight:700;font-size:12px}
-#formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;padding:12px}
-#formBox{background:white;border-radius:18px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
-#formBox h3{margin:0;padding:14px 16px;background:#0f2110;color:white;border-radius:18px 18px 0 0;text-align:center}
-.formInner{padding:14px}.formInner label{font-size:12px;font-weight:900;display:block;margin:10px 0 4px 0;color:#333}.formInner input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;font-size:14px;font-weight:600}
-.formBtns{display:flex;gap:10px;margin-top:16px}.saveBtn{flex:1;background:#0f2110;color:white;border:none;padding:12px;border-radius:10px;font-weight:900}.cancelBtn{flex:1;background:#ccc;color:#000;border:none;padding:12px;border-radius:10px;font-weight:900}
+.input{width:100%;padding:16px 18px;border-radius:20px;border:none;box-sizing:border-box;margin-bottom:12px;font-size:16px;font-weight:600;box-shadow:0 2px 8px #0002;outline:none}
+.addBtn{width:100%;padding:16px;background:#0f2e0f;color:white;border:none;border-radius:20px;font-weight:900;font-size:18px;margin:10px 0;box-shadow:0 4px 10px #0003}
+.title{color:white;text-align:center;font-weight:900;font-size:20px;margin:18px 0 10px 0;text-shadow:0 1px 2px #000}
+.printBtn{background:#2d4a28;color:white;border:none;padding:8px 18px;border-radius:12px;font-weight:900;display:block;margin:0 auto 14px auto}
+.tableWrap{background:white;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px #0003;margin-top:10px}
+.tableHeader{display:grid;grid-template-columns:1.2fr 1fr 0.8fr 0.6fr;background:#0f2e0f;color:white;padding:12px 6px;font-weight:900;font-size:14px;text-align:center}
+.tableRow{display:grid;grid-template-columns:1.2fr 1fr 0.8fr 0.6fr;border-bottom:1px solid #ddd;padding:10px 6px;align-items:center;text-align:center;font-size:14px;font-weight:600;background:white}
+.editBtn{background:#ffaa00;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;margin-bottom:4px;width:100%}.delBtn{background:#7d0000;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;width:100%}
+.viewOnly{font-size:11px;background:#eee;color:#555;padding:4px 6px;border-radius:6px}
+@media print{.top,.wrap .input,.addBtn,.printBtn,.backBtn{display:none} body{background:white}}
 </style>
 </head>
 <body>
 <div class="top"><b>REQUIRED MOBILE NUMBER</b><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div>
 <div class="wrap">
-<div class="searchWrap"><input id="search" placeholder="🔍 নাম / পদবী / নম্বর সার্চ..." oninput="render()"></div>
-<button id="addBtnMain" class="addBtn" onclick="openAdd()">+ ADD NUMBER</button>
-<div id="list"></div>
+<div id="formArea">
+<input id="f_podobi" class="input" placeholder="পদবী">
+<input id="f_name" class="input" placeholder="নাম">
+<input id="f_niyojito" class="input" placeholder="নিয়োজিত">
+<input id="f_mobile" class="input" type="number" placeholder="মোবাইল নম্বর">
+<input id="f_montobbo" class="input" placeholder="মন্তব্য">
+<button id="addBtnMain" class="addBtn" onclick="saveForm()">Add করুন</button>
 </div>
 
-<div id="formModal" onclick="if(event.target==this)closeForm()">
-<div id="formBox">
-<h3 id="formTitle">Add Number</h3>
-<div class="formInner">
-<label>পদবী</label><input id="f_podobi">
-<label>নাম</label><input id="f_name">
-<label>নিয়োজিত</label><input id="f_niyojito">
-<label>মোবাইল নম্বর</label><input id="f_mobile" type="number">
-<label>মন্তব্য</label><input id="f_montobbo">
-<div class="formBtns"><button class="cancelBtn" onclick="closeForm()">Cancel</button><button class="saveBtn" onclick="saveForm()">✅ Save</button></div>
-</div>
+<div class="title">⚔️ REQUIRED MOBILE NUMBER ⚔️</div>
+<button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+
+<div class="tableWrap">
+<div class="tableHeader"><div>নিয়োজিত</div><div>মোবাইল</div><div>মন্তব্য</div><div>একশন</div></div>
+<div id="list"></div>
 </div>
 </div>
 
 <script>
 let role = (localStorage.getItem('role') || '').toLowerCase();
 let isClk = role === 'clk';
-
 let contacts = JSON.parse(localStorage.getItem('mt_required_v2') || localStorage.getItem('mt_required') || '[]');
 let editIndex = -1;
-function saveLS(){ localStorage.setItem('mt_required_v2', JSON.stringify(contacts)); localStorage.setItem('mt_required', JSON.stringify(contacts)); }
 
-function openAdd(){
- if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Add করা যাবে"); return; }
- editIndex=-1;
- document.getElementById('formTitle').innerText="Add Number";
- document.getElementById('f_podobi').value=""; document.getElementById('f_name').value=""; document.getElementById('f_niyojito').value=""; document.getElementById('f_mobile').value=""; document.getElementById('f_montobbo').value="";
- document.getElementById('formModal').style.display='flex';
-}
-function openEdit(i){
- if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Edit করা যাবে"); return; }
- editIndex=i; let c=contacts[i];
- document.getElementById('formTitle').innerText="Edit - "+c.name;
- document.getElementById('f_podobi').value=c.podobi; document.getElementById('f_name').value=c.name; document.getElementById('f_niyojito').value=c.niyojito; document.getElementById('f_mobile').value=c.mobile; document.getElementById('f_montobbo').value=c.montobbo;
- document.getElementById('formModal').style.display='flex';
-}
-function closeForm(){ document.getElementById('formModal').style.display='none'; }
+function saveLS(){ localStorage.setItem('mt_required_v2', JSON.stringify(contacts)); }
+
 function saveForm(){
- if(!isClk){ alert("Permission নেই"); return; }
+ if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Add করা যাবে"); return; }
  let podobi=document.getElementById('f_podobi').value.trim();
  let name=document.getElementById('f_name').value.trim();
+ let niyojito=document.getElementById('f_niyojito').value.trim();
  let mobile=document.getElementById('f_mobile').value.trim();
- if(!name && !mobile){ alert("নাম বা মোবাইল দাও"); return; }
- let c={ podobi:podobi, name:name, niyojito:document.getElementById('f_niyojito').value.trim(), mobile:mobile, montobbo:document.getElementById('f_montobbo').value.trim() };
- if(editIndex==-1) contacts.push(c); else contacts[editIndex]=c;
- saveLS(); closeForm(); render();
+ let montobbo=document.getElementById('f_montobbo').value.trim();
+ if(!mobile){ alert("মোবাইল নম্বর দাও"); return; }
+ let c={podobi:podobi,name:name,niyojito:niyojito,mobile:mobile,montobbo:montobbo};
+ if(editIndex==-1){ contacts.push(c); }
+ else{ contacts[editIndex]=c; editIndex=-1; document.getElementById('addBtnMain').innerText="Add করুন"; }
+ saveLS(); clearForm(); render();
 }
+function clearForm(){ document.getElementById('f_podobi').value=""; document.getElementById('f_name').value=""; document.getElementById('f_niyojito').value=""; document.getElementById('f_mobile').value=""; document.getElementById('f_montobbo').value=""; }
+
 function render(){
- let q=document.getElementById('search').value.toLowerCase();
  let list=document.getElementById('list'); list.innerHTML='';
- document.getElementById('addBtnMain').style.display = isClk ? 'block' : 'none';
- contacts.forEach((c, idx)=>{
-   if(q && !(c.name.toLowerCase().includes(q) || c.podobi.toLowerCase().includes(q) || c.mobile.includes(q))) return;
-   let btns = isClk ? `<div class="btns"><button class="editBtn" onclick="openEdit(${idx})">✏️ Edit</button><button class="delBtn" onclick="deleteContact(${idx})">Delete</button></div>` : `<div class="btns"><div class="viewOnly">👁️ View Only - MT PLATOON</div></div>`;
-   list.innerHTML+=`<div class="card"><div class="cardTop"><div><div class="cardTitle">👤 ${c.podobi} ${c.name}</div><div class="cardSub">📍 ${c.niyojito}</div></div><div class="badge">📞</div></div><div class="info">📱 <b>${c.mobile}</b><br>📝 ${c.montobbo}</div>${btns}</div>`;
+ document.getElementById('formArea').style.display = isClk ? 'block' : 'none';
+ contacts.forEach((c,idx)=>{
+   let btns = isClk ? `<div><button class="editBtn" onclick="editContact(${idx})">Edit</button><button class="delBtn" onclick="deleteContact(${idx})">Del</button></div>` : `<div class="viewOnly">👁️ View</div>`;
+   list.innerHTML+=`<div class="tableRow"><div>${c.podobi} ${c.name}<br><small>${c.niyojito}</small></div><div>${c.mobile}</div><div>${c.montobbo}</div><div>${btns}</div></div>`;
  });
+}
+function editContact(i){
+ if(!isClk){ alert("Permission নেই"); return; }
+ editIndex=i; let c=contacts[i];
+ document.getElementById('f_podobi').value=c.podobi; document.getElementById('f_name').value=c.name; document.getElementById('f_niyojito').value=c.niyojito; document.getElementById('f_mobile').value=c.mobile; document.getElementById('f_montobbo').value=c.montobbo;
+ document.getElementById('addBtnMain').innerText="Update করুন"; window.scrollTo(0,0);
 }
 function deleteContact(i){ if(!isClk){ alert("Permission নেই"); return; } if(confirm("Delete?")){ contacts.splice(i,1); saveLS(); render(); } }
 render();
