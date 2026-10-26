@@ -12,45 +12,33 @@ body{margin:0;font-family:Arial;background:#7a9b7e}
 .container{padding:12px 12px 90px 12px}
 .search{background:#f5f7f5;border-radius:14px;padding:12px;display:flex;gap:10px;box-shadow:0 2px 8px #0001;margin-bottom:12px}
 .search input{flex:1;border:none;outline:none;background:transparent;font-weight:700}
-.addBtn{width:100%;padding:14px;background:#0f2e1d;color:white;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:12px;display:none;box-shadow:0 4px 12px #0002}
+.addBtn{width:100%;padding:14px;background:#0f2e1d;color:white;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:12px;display:none}
 .card{background:#f5f7f5;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 4px 14px #0002}
 .card-head{display:flex;justify-content:space-between;align-items:center}
-.card-head b{font-size:18px;color:#0f2e1d}
 .st{font-size:11px;padding:5px 10px;border-radius:20px;font-weight:900}
 .st.good{background:#d5e8d5;color:#0f2e1d} .st.due{background:#f5d5d5;color:#7d0000}
-.inner-white{background:white;border-radius:14px;padding:12px;margin-top:10px;box-shadow:0 2px 8px #0001}
+.inner-white{background:white;border-radius:14px;padding:12px;margin-top:10px}
 .row{display:flex;justify-content:space-between;font-size:12px;padding:6px 8px;margin:4px 0;background:#f9faf7;border-radius:8px;font-weight:700}
-.act{display:flex;gap:8px;margin-top:10px}
-.act button{flex:1;padding:10px;border:none;border-radius:10px;font-weight:900;cursor:pointer}
+.act{display:flex;gap:8px;margin-top:10px} .act button{flex:1;padding:10px;border:none;border-radius:10px;font-weight:900;cursor:pointer}
 .edit{background:#0f2e1d;color:white} .del{background:#7d0000;color:white}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#f5f7f0;padding:10px 0 14px 0;display:flex;justify-content:space-around;border-radius:18px 18px 0 0;box-shadow:0 -4px 14px #0002}
-.bottom-nav div{text-align:center;font-size:12px;font-weight:700;color:#666;cursor:pointer}
-.bottom-nav div.active{color:#0f2e1d}
 </style></head><body>
 <div class="header">
-<div class="h-top"><div class="logo"><div class="logo-icon">🛡️</div><div class="h-title">Paradise Maintenance<br>System</div></div><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
-<div class="badge-bar"><span>🛡️ MT Platoon 4 BIR</span><span id="roleView">Predictive Alerts • Online ✨</span></div>
+<div class="h-top"><div class="logo"><div class="logo-icon">🛡️</div><div class="h-title">Vehicle Maintenance<br>System</div></div><button class="back" onclick="location.href='dashboard.html'">BACK</button></div>
+<div class="badge-bar"><span>🛡️ MT Platoon 4 BIR</span><span id="roleView">MT CLK - EDITOR • Online ✨</span></div>
 </div>
-
 <div class="container">
 <div class="search"><span>🔍</span><input id="q" placeholder="গাড়ি সার্চ..." oninput="render()"></div>
 <button id="addBtn" class="addBtn" onclick="addVeh()">+ ADD NEW VEHICLE</button>
 <div id="list"></div>
 </div>
-
-<div class="bottom-nav"><div onclick="location.href='dashboard.html'">📦<br>Dashboard</div><div class="active">🗂️<br>Tasks</div><div>📋<br>Inventory</div><div>📊<br>Reports</div></div>
-
 <script>
-let role=localStorage.getItem('role')||'mt';
-let isClerk=role==='clk';
+let role=localStorage.getItem('role')||'mt'; let isClerk=role==='clk';
 document.getElementById('roleView').innerText=isClerk?'MT CLK - EDITOR • Online ✨':'MT PLATOON - VIEW ONLY';
 document.getElementById('addBtn').style.display=isClerk?'block':'none';
-
 let vehicles=JSON.parse(localStorage.getItem('mt_vehicles')||'null')||["Truck-05","Truck-01","Truck-02","Jeep-01","Pickup-01","Ambulance-01","Bowser-01","Recovery-01","Bus-01","Car-01"];
 function save(){localStorage.setItem('mt_vehicles',JSON.stringify(vehicles))}
 function render(){
- let q=document.getElementById('q').value.toLowerCase();
- let list=document.getElementById('list');list.innerHTML='';
+ let q=document.getElementById('q').value.toLowerCase(); let list=document.getElementById('list');list.innerHTML='';
  vehicles.filter(v=>v.toLowerCase().includes(q)).forEach((v,i)=>{
   let due=i%3===0;
   let btns=isClerk?`<div class="act"><button class="edit" onclick="editVeh(${i})">✏️ Edit</button><button class="del" onclick="delVeh(${i})">🗑️ Delete</button></div>`:'';
