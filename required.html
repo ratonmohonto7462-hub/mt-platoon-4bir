@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Required Mobile Number</title>
 <style>
+/* ZOOM KOMANO */
+html{zoom:0.78}
 body{margin:0;font-family:Arial;background:linear-gradient(135deg,#122e1d,#2d5a27,#4a7c43);min-height:100vh}
-.header{background:#122e1d;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center}
-.back{background:#7d0000;color:white;border:none;padding:6px 14px;border-radius:8px;font-weight:900}
+.header{background:#0f2110;color:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.header b{font-size:14px}
+.back{background:#7d0000;color:white;border:none;padding:5px 12px;border-radius:7px;font-weight:900;font-size:12px}
 
-/* ওপরের ফর্ম - আগের মতো বড় বড় থাকবে */
-.form{padding:10px}
-.form input{width:100%;padding:14px;border-radius:16px;border:none;margin-bottom:10px;box-sizing:border-box;font-size:16px;font-weight:700;background:#fffffff2}
-.addBtn{width:100%;padding:14px;background:linear-gradient(90deg,#122e1d,#2d5a27);color:white;border:none;border-radius:16px;font-weight:900;font-size:17px}
+.form{padding:8px 12px;max-width:420px;margin:0 auto}
+.form input{
+ width:100%;padding:9px 12px;border-radius:10px;border:none;margin-bottom:6px;
+ box-sizing:border-box;font-size:13px;font-weight:600;background:#fffffff2
+}
+.addBtn{width:100%;padding:9px;background:#0f2110;color:white;border:none;border-radius:10px;font-weight:900;font-size:13px}
 
-/* টাইটেল - তলোয়ার সহ */
-.title{text-align:center;margin:12px 0 8px 0;font-weight:900;color:white;font-size:17px;letter-spacing:.5px}
-.printBtn{display:block;margin:0 auto 10px auto;background:#2d5a27;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:900}
+.title{text-align:center;margin:10px 0 6px 0;font-weight:900;color:white;font-size:13px;letter-spacing:.5px}
+.printBtn{display:block;margin:0 auto 8px auto;background:#1e3e20;color:white;border:none;padding:6px 14px;border-radius:8px;font-weight:900;font-size:12px}
 
-/* নিচের টেবিল - এক লাইনে, ভাঙবে না */
-.table-wrap{width:98%;margin:0 auto 20px auto;overflow-x:auto;background:#f5f7f5ef;border-radius:14px;box-shadow:0 8px 25px #0004}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th{background:#122e1d;color:white;padding:10px 6px;font-size:13px;white-space:nowrap}
-td{padding:10px 6px;border:1px solid #ccc;text-align:center;font-weight:600;font-size:13px;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
-.edit{background:#ffaa00;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:900}
-.del{background:#7d0000;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:900;margin-top:3px}
+.table-wrap{width:96%;margin:0 auto 15px auto;overflow-x:auto;background:#f5f7f5f0;border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:100%}
+th{background:#0f2110;color:#d5e8d5;padding:7px 4px;font-size:11px;white-space:nowrap}
+td{padding:6px 4px;border:1px solid #ccc;text-align:center;font-weight:600;font-size:11px;white-space:nowrap}
+.edit{background:#ffaa00;color:white;border:none;padding:3px 7px;border-radius:5px;font-weight:900;font-size:10px}
+.del{background:#7d0000;color:white;border:none;padding:3px 7px;border-radius:5px;font-weight:900;font-size:10px;margin-top:2px}
 
-/* প্রিন্টে ওপরের ঘর হাইড */
 @media print{
- .header, .form, .printBtn, .back{display:none !important}
- body{background:white !important}
- .title{color:black !important}
- .table-wrap{width:100% !important; box-shadow:none !important; overflow:visible !important}
- table{min-width:100% !important}
- th{background:#000 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
- td{white-space:normal !important; word-wrap:break-word}
+ .header, .form, .printBtn{display:none !important}
+ body{background:white !important; zoom:1 !important}
+ .title{color:black !important; font-size:16px}
+ .table-wrap{width:100% !important}
+ td,th{white-space:normal !important; font-size:13px !important}
 }
 </style></head><body>
 
