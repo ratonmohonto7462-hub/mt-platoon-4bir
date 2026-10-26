@@ -1,64 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT PLATOON 4 BIR</title>
+<title>Vehicle - MT PLATOON 4 BIR</title>
 <style>
-body{
- margin:0;font-family:Arial;min-height:100vh;
- /* BD ARMY COMBAT - MORE VISIBLE */
- background-color:#4a5d3a;
- background-image: 
-  radial-gradient(ellipse at 25% 25%, #2a3d1f 0% 18%, transparent 19%),
-  radial-gradient(ellipse at 70% 15%, #8b6d4a 0% 12%, transparent 13%),
-  radial-gradient(ellipse at 55% 75%, #2f1f14 0% 14%, transparent 15%),
-  radial-gradient(ellipse at 15% 75%, #9a9a7a 0% 10%, transparent 11%),
-  radial-gradient(ellipse at 45% 50%, #5a722a 0% 22%, transparent 23%),
-  radial-gradient(ellipse at 85% 55%, #1a281a 0% 12%, transparent 13%);
- background-size: 320px 320px;
-}
-body::before{
- content:'';
- position:fixed;top:0;left:0;right:0;bottom:0;
- background:rgba(238,242,247,0.72); /* আগে 0.88 ছিল, এখন 0.72 - ফেব্রিক বেশি দেখা যাবে */
- z-index:-1;
-}
+body{margin:0;font-family:Arial;min-height:100vh;background-color:#4a5d3a;background-image:radial-gradient(ellipse at 25% 25%, #2a3d1f 0% 18%, transparent 19%),radial-gradient(ellipse at 70% 15%, #8b6d4a 0% 12%, transparent 13%),radial-gradient(ellipse at 55% 75%, #2f1f14 0% 14%, transparent 15%),radial-gradient(ellipse at 15% 75%, #9a9a7a 0% 10%, transparent 11%),radial-gradient(ellipse at 45% 50%, #5a722a 0% 22%, transparent 23%),radial-gradient(ellipse at 85% 55%, #1a281a 0% 12%, transparent 13%);background-size:320px 320px}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(238,242,247,0.72);z-index:-1}
 .top{background:#0f2110ef;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.top b{font-size:18px;font-weight:900}.logout{background:#d50000;color:white;border:none;padding:10px 18px;border-radius:12px;font-weight:900}
-.wrap{padding:14px}.welcome{font-size:34px;font-weight:900;text-align:center;margin:14px 0 6px 0;color:#0f2110;text-shadow:0 1px 0 #fff}
-.mobile{text-align:center;font-weight:900;color:#0a4d0a;font-size:17px;margin-bottom:18px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{background:rgba(255,255,255,0.92);border-radius:26px;padding:22px 10px;text-align:center;box-shadow:0 6px 18px #0002;cursor:pointer;border:1px solid #fff}
-.icon{font-size:56px;display:block}.t1{font-weight:900;color:#0a4d0a;font-size:15px;margin-top:10px}.t2{font-size:12.5px;color:#777;margin-top:5px}
-@keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+.top b{font-size:16px;font-weight:900}.backBtn{background:#5a0000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
+.wrap{padding:14px}
+.searchWrap input{width:100%;padding:12px;border-radius:12px;border:none;box-sizing:border-box;box-shadow:0 2px 8px #0001}
+.addBtn{margin:12px 0;width:100%;padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900}
+.autoAlert{background:#fff3cd;border:2px solid #ffcc00;border-radius:12px;padding:10px;margin-bottom:12px;display:none}.notifItem{background:white;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px;font-weight:700;border-left:4px solid #d50000}
+.card{background:rgba(255,255,255,0.92);border-radius:18px;padding:12px;margin-bottom:12px;box-shadow:0 4px 12px #0002}
+.cardTop{display:flex;justify-content:space-between;align-items:center}.cardTitle{font-weight:900}.badgeDue{background:#ffd6d6;color:#a00;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:900}.badgeOk{background:#d4edda;color:#0a4d0a;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:900}
+.rows{background:white;border-radius:12px;padding:6px;margin-top:8px}.row{display:flex;justify-content:space-between;padding:10px 8px;border-bottom:1px solid #eee;font-size:13px;font-weight:600;border-radius:8px;margin-bottom:4px}.row.due{background:#d50000 !important;color:white !important}
+.btns{display:flex;gap:8px;margin-top:10px}.editBtn{flex:1;background:#0f2110;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.delBtn{flex:1;background:#7d0000;color:white;border:none;padding:10px;border-radius:10px;font-weight:900}.viewOnly{flex:1;background:#eee;color:#555;padding:10px;border-radius:10px;text-align:center;font-weight:700;font-size:12px}
+#formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;padding:12px}
+#formBox{background:white;border-radius:18px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
+#formBox h3{margin:0;padding:14px 16px;background:#0f2110;color:white;border-radius:18px 18px 0 0;text-align:center}
+.formInner{padding:14px}.formInner label{font-size:12px;font-weight:900;display:block;margin:10px 0 4px 0;color:#333}.formInner input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;font-size:14px;font-weight:600}
+.formBtns{display:flex;gap:10px;margin-top:16px}.saveBtn{flex:1;background:#0f2110;color:white;border:none;padding:12px;border-radius:10px;font-weight:900}.cancelBtn{flex:1;background:#ccc;color:#000;border:none;padding:12px;border-radius:10px;font-weight:900}
+.alertBtn{background:#ffcc00;color:#000;border:none;padding:6px 12px;border-radius:20px;font-weight:900;font-size:12px;position:relative}
+.alertCount{background:#d50000;color:white;border-radius:50%;padding:2px 7px;font-size:11px;position:absolute;top:-7px;right:-7px}
 </style>
 </head>
 <body>
-<div class="top"><b>MT PLATOON 4 BIR</b><button class="logout" onclick="localStorage.clear();location.href='index.html'">LOGOUT</button></div>
+<div class="top"><b>VEHICLE UPDATE</b><div style="display:flex;gap:8px;align-items:center"><span class="alertBtn">🚨 <span id="alertCount" class="alertCount">0</span></span><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div></div>
 <div class="wrap">
-<div style="background:#b91c1c;color:white;padding:8px 0;overflow:hidden;white-space:nowrap;position:relative;border-radius:8px">
-<div id="joruriText" style="display:inline-block;padding-left:100%;animation:scrollLeft 18s linear infinite;font-weight:bold">🚨 জরুরি আদেশ: লোড হচ্ছে... 🚨</div>
-<span id="editJoruriBtn" onclick="editJoruri()" style="display:none;position:absolute;right:6px;top:3px;background:white;color:#b91c1c;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold">✏️ Edit</span>
+<div class="searchWrap"><input id="search" placeholder="🔍 গাড়ি সার্চ..." oninput="render()"></div>
+<div id="autoAlertArea" class="autoAlert"><h4>🚨 Alert - 7 দিনের মধ্যে Due (<span id="alertNum">0</span>)</h4><div id="autoAlertList"></div></div>
+<button id="addBtnMain" class="addBtn" onclick="openAdd()">+ ADD NEW VEHICLE</button>
+<div id="list"></div>
 </div>
-<div class="welcome">Assalamualaikum</div>
-<div class="mobile">📞 MT PLATOON Mobile: 01769-013433</div>
-<a href="mt-brain-final.html" style="text-decoration:none;">
-<div style="background:linear-gradient(90deg,#0a4d0a,#12a012);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin:14px 12px 8px 12px;box-shadow:0 4px 15px rgba(10,122,10,0.35);border:1px solid #1f8a1f;">
-<div style="background:#fff;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">🧠</div>
-<div style="flex:1;"><div style="color:#fff;font-weight:900;font-size:16px;">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:13px;">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div>
-<div style="background:#fff;color:#0a6a0a;padding:6px 14px;border-radius:20px;font-weight:900;font-size:13px;">ASK →</div>
-</div></a>
-<div class="grid">
-<div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div><div class="t2">All Vehicle Information</div></div>
-<div class="card" onclick="location.href='required.html'"><span class="icon">☎️</span><div class="t1">REQUIRED MOBILE NUMBER</div><div class="t2">All Required Number</div></div>
-<div class="card" onclick="location.href='duty.html'"><span class="icon">👮‍♂️</span><div class="t1">DUTY ROSTER</div><div class="t2">Platoon Duty List</div></div>
-<div class="card" onclick="location.href='seniority.html'"><span class="icon">⭐</span><div class="t1">SUTY SENIORITY</div><div class="t2">Seniority List & Updates</div></div>
-<div class="card" onclick="location.href='instruction.html'"><span class="icon">📝</span><div class="t1">INSTRUCTION</div><div class="t2">Other Updates</div></div>
-<div class="card" onclick="location.href='contact.html'"><span class="icon">📞</span><div class="t1">MT PLATOON<br>MOBILE NUMBER</div><div class="t2">Contact List</div></div>
-</div></div>
+<div id="formModal" onclick="if(event.target==this)closeForm()">
+<div id="formBox">
+<h3 id="formTitle">Edit Vehicle</h3>
+<div class="formInner">
+<label>BA No / Truck No</label><input id="f_ba">
+<label>বর্তমান KM</label><input id="f_cur" type="number">
+<label>Engine Oil - শেষ চেঞ্জ KM</label><input id="f_eKm" type="number">
+<label>Engine Oil - শেষ চেঞ্জ তারিখ (DD-MM-YYYY)</label><input id="f_eDate" type="text" placeholder="26-10-2026">
+<label>Trans Oil - শেষ চেঞ্জ KM</label><input id="f_tKm" type="number">
+<label>Trans Oil - শেষ চেঞ্জ তারিখ (DD-MM-YYYY)</label><input id="f_tDate" type="text" placeholder="26-10-2026">
+<label>ATF - শেষ চেঞ্জ তারিখ (DD-MM-YYYY)</label><input id="f_atf" type="text" placeholder="26-10-2024">
+<label>Coolant - শেষ চেঞ্জ তারিখ (DD-MM-YYYY)</label><input id="f_cool" type="text" placeholder="26-10-2023">
+<div class="formBtns"><button class="cancelBtn" onclick="closeForm()">Cancel</button><button class="saveBtn" onclick="saveForm()">✅ Save</button></div>
+</div>
+</div>
+</div>
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
-try{ fetch(SHEET_URL).then(r=>r.json()).then(d=>{ if(d && d.text){ document.getElementById('joruriText').innerText = '🚨 ' + d.text + ' 🚨'; } }).catch(()=>{}); }catch(e){}
-if(localStorage.getItem('role') === 'clk'){ document.getElementById('editJoruriBtn').style.display='block'; }
-function editJoruri(){ let t = prompt("নতুন জরুরি আদেশ লিখুন:"); if(!t) return; fetch(SHEET_URL, {method:'POST', mode:'no-cors', body: new URLSearchParams({text:t})}).then(()=>{ alert("✅ সেভ হয়েছে"); location.reload(); }); }
+let role = (localStorage.getItem('role') || '').toLowerCase();
+let isClk = role === 'clk';
+let today = new Date();
+let editIndex = -1;
+function loadVehicles(){
+ let keys = ['mt_vehicles_v4','mt_vehicles_v3','mt_vehicles_v2','mt_vehicles','vehicles'];
+ for(let k of keys){ let d=localStorage.getItem(k); if(d){ try{ let arr=JSON.parse(d); if(arr && arr.length>0) return arr; }catch(e){} } }
+ return [];
+}
+let vehicles = loadVehicles();
+function saveLS(){ localStorage.setItem('mt_vehicles_v4', JSON.stringify(vehicles)); }
+function toISO(dmy){ if(!dmy) return new Date().toISOString().slice(0,10); dmy=dmy.trim(); if(dmy.split("-")[0].length==4) return dmy; let p=dmy.split("-"); if(p.length!=3) return new Date().toISOString().slice(0,10); return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`; }
+function toDMY(iso){ if(!iso) return ""; iso=iso.trim(); if(iso.split("-")[0].length==2) return iso; let p=iso.split("-"); if(p.length!=3) return iso; return `${p[2]}-${p[1]}-${p[0]}`; }
+function getTodayDMY(){ let d=new Date(); return `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`; }
+function daysPassed(dmy){ let iso=toISO(dmy); let d=new Date(iso); let diff=Math.floor((today-d)/(1000*60*60*24)); return diff<0?0:diff; }
+function formatDays(d){ if(d<30) return d+"দিন"; let m=Math.floor(d/30); let r=d%30; return r==0? m+"মাস" : m+"মা "+r+"দিন"; }
+function openAdd(){ if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Add করা যাবে"); return; } editIndex=-1; document.getElementById('formTitle').innerText="Add New Vehicle"; document.getElementById('f_ba').value=""; document.getElementById('f_cur').value=""; document.getElementById('f_eKm').value=""; document.getElementById('f_eDate').value=getTodayDMY(); document.getElementById('f_tKm').value=""; document.getElementById('f_tDate').value=getTodayDMY(); document.getElementById('f_atf').value=getTodayDMY(); document.getElementById('f_cool').value=getTodayDMY(); document.getElementById('formModal').style.display='flex'; }
+function openEdit(i){ if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Edit করা যাবে"); return; } editIndex=i; let v=vehicles[i]; document.getElementById('formTitle').innerText="Edit - "+v.ba; document.getElementById('f_ba').value=v.ba; document.getElementById('f_cur').value=v.currentKM; document.getElementById('f_eKm').value=v.engineKM; document.getElementById('f_eDate').value=toDMY(v.engineDate); document.getElementById('f_tKm').value=v.transKM; document.getElementById('f_tDate').value=toDMY(v.transDate); document.getElementById('f_atf').value=toDMY(v.atfDate); document.getElementById('f_cool').value=toDMY(v.coolDate); document.getElementById('formModal').style.display='flex'; }
+function closeForm(){ document.getElementById('formModal').style.display='none'; }
+function saveForm(){ if(!isClk){ alert("Permission নেই"); return; } let ba=document.getElementById('f_ba').value.trim(); if(!ba){ alert("BA No দাও"); return; } let v={ ba:ba, currentKM:parseInt(document.getElementById('f_cur').value)||0, engineKM:parseInt(document.getElementById('f_eKm').value)||0, engineDate:toISO(document.getElementById('f_eDate').value), transKM:parseInt(document.getElementById('f_tKm').value)||0, transDate:toISO(document.getElementById('f_tDate').value), atfDate:toISO(document.getElementById('f_atf').value), coolDate:toISO(document.getElementById('f_cool').value) }; if(editIndex==-1) vehicles.push(v); else vehicles[editIndex]=v; saveLS(); closeForm(); render(); }
+function render(){ let q=document.getElementById('search').value.toLowerCase(); let list=document.getElementById('list'); list.innerHTML=''; let alerts=[]; document.getElementById('addBtnMain').style.display = isClk ? 'block' : 'none'; vehicles.forEach((v, idx)=>{ if(q && !v.ba.toLowerCase().includes(q)) return; let eDP=daysPassed(v.engineDate); let eKP=(v.currentKM||0)-(v.engineKM||0); if(eKP<0)eKP=0; let eDL=180-eDP; let eKL=5000-eKP; let eDue=eDL<=0||eKL<=0; let eAlert=eDL<=7||eKL<=300; let tDP=daysPassed(v.transDate); let tKP=(v.currentKM||0)-(v.transKM||0); if(tKP<0)tKP=0; let tDL=365-tDP; let tKL=14000-tKP; let tDue=tDL<=0||tKL<=0; let tAlert=tDL<=7||tKL<=300; let atfDP=daysPassed(v.atfDate); let atfDL=730-atfDP; let atfDue=atfDL<=0; let atfAlert=atfDL<=7; let coolDP=daysPassed(v.coolDate); let coolDL=1095-coolDP; let coolDue=coolDL<=0; let coolAlert=coolDL<=7; if(eAlert) alerts.push({ba:v.ba, item:'Engine Oil', over:eDue}); if(tAlert) alerts.push({ba:v.ba, item:'Trans Oil', over:tDue}); if(atfAlert) alerts.push({ba:v.ba, item:'ATF', over:atfDue}); if(coolAlert) alerts.push({ba:v.ba, item:'Coolant', over:coolDue}); let anyOver=eDue||tDue||atfDue||coolDue; let btns = isClk ? `<div class="btns"><button class="editBtn" onclick="openEdit(${idx})">✏️ Edit</button><button class="delBtn" onclick="deleteVehicle(${idx})">Delete</button></div>` : `<div class="btns"><div class="viewOnly">👁️ View Only - MT PLATOON</div></div>`; list.innerHTML+=`<div class="card"><div class="cardTop"><div class="cardTitle">🚚 ${v.ba} - ${v.currentKM}km</div><div class="${anyOver?'badgeDue':'badgeOk'}">${anyOver?'⚠️ Due':'✅ OK'}</div></div><div class="rows"><div class="row ${eDue?'due':''}"><span>Engine Oil (5000km/6m)</span><b>${eKP}km / ${formatDays(eDP)}</b></div><div class="row ${tDue?'due':''}"><span>Trans Oil (14000km/1y)</span><b>${tKP}km / ${formatDays(tDP)}</b></div><div class="row ${atfDue?'due':''}"><span>ATF (2 বছর)</span><b>${formatDays(atfDP)} আগে</b></div><div class="row ${coolDue?'due':''}"><span>Coolant</span><b>${formatDays(coolDP)} আগে</b></div></div>${btns}</div>`; }); document.getElementById('alertCount').innerText=alerts.length; document.getElementById('alertNum').innerText=alerts.length; let auto=document.getElementById('autoAlertList'); auto.innerHTML=''; if(alerts.length==0){ document.getElementById('autoAlertArea').style.display='none'; } else{ document.getElementById('autoAlertArea').style.display='block'; alerts.forEach(a=>{ auto.innerHTML+=`<div class="notifItem">🚨 <b>${a.ba}</b> - ${a.item} ${a.over?'🔴 Due':'🟡 7 দিনের মধ্যে Due'}</div>`; }); } }
+function deleteVehicle(i){ if(!isClk){ alert("Permission নেই"); return; } if(confirm("Delete?")){ vehicles.splice(i,1); saveLS(); render(); } }
+render();
 </script>
-</body></html>
+</body>
+</html>
