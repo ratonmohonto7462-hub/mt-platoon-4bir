@@ -2,23 +2,23 @@
 <html>
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MT PLATOON - 4 BIR Profile</title>
+<title>MT PLATOON - 4 BIR - Daily OK Report</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070a14;color:#fff}
 .phone{max-width:430px;margin:0 auto;background:#0a1025;min-height:100vh;border:1px solid #1a2a40;padding-bottom:20px}
 .top{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #1e2f4a;background:#0a1025;position:sticky;top:0;z-index:10}
-.top b{color:#d4b56a;font-size:16px;letter-spacing:1px;display:block}
+.top b{color:#d4b56a;font-size:16px;display:block}
 .top small{color:#8a9bb5;font-size:10px}
 .back{font-size:22px;color:#d4b56a;background:none;border:2px solid #d4b56a;border-radius:50%;width:36px;height:36px;cursor:pointer}
 .hero{display:flex;gap:12px;padding:14px}
 .logoBox{width:115px;height:115px;background:radial-gradient(#142040,#0a0f20);border:2px solid #d4b56a;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;overflow:hidden;position:relative}
 .logoBox img{width:100%;height:100%;object-fit:cover;display:none}
 .logoBox .logoText{display:flex;flex-direction:column;align-items:center;justify-content:center}
-.logoBox b{font-size:38px;color:#d4b56a;line-height:1}.logoBox small{font-size:8px;color:#d4b56a;font-weight:900;text-align:center;margin-top:5px;line-height:1.2}
+.logoBox b{font-size:38px;color:#d4b56a}.logoBox small{font-size:8px;color:#d4b56a;font-weight:900;text-align:center;margin-top:5px}
 .logoBox .cam{position:absolute;bottom:2px;background:rgba(0,0,0,0.7);color:#d4b56a;font-size:9px;padding:2px 6px;border-radius:10px}
 .heroInfo{flex:1}
 .badge{display:inline-block;background:#3a2e10;color:#d4b56a;border:1px solid #d4b56a;font-size:9px;font-weight:900;padding:3px 8px;border-radius:4px;margin-bottom:6px}
-.heroInfo h2{margin:0;font-size:14px;color:#fff;line-height:1.2}.heroInfo p{margin:3px 0 0 0;font-size:10px;color:#8a9bb5}
+.heroInfo h2{margin:0;font-size:14px}.heroInfo p{margin:3px 0 0 0;font-size:10px;color:#8a9bb5}
 .manpowerBox{margin-top:10px;background:#111832;border:1px solid #d4b56a;border-radius:12px;padding:10px}
 .manRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
 .manCard{background:#0e1430;border:1px solid #1e2f4a;border-radius:8px;padding:10px;text-align:center}
@@ -29,10 +29,16 @@
 .vGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
 .vGrid .manCard b{font-size:18px}
 .okBox{background:#102a18;border:1px solid #22c55e;border-radius:12px;padding:10px;margin-top:12px}
-.okBox .manCard{background:#0a1f14;border-color:#145a28}
-.okBox .manCard b{color:#22c55e}
-#formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:100;align-items:center;justify-content:center;padding:12px}
-#formBox{background:#0f172a;border:1px solid #d4b56a;border-radius:14px;width:100%;max-width:400px;max-height:90vh;overflow:auto}
+.okItem{background:#0a1f14;border:1px solid #145a28;border-radius:10px;padding:10px;margin-top:8px}
+.okItemHead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #145a28;padding-bottom:6px;margin-bottom:6px}
+.okItemHead b{color:#22c55e;font-size:14px}
+.okDetails{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
+.okDetails div{background:#0e2a18;border-radius:6px;padding:6px}
+.okDetails small{color:#8abf9a;font-size:9px;display:block}
+.okDetails b{color:#fff;font-size:14px}
+.copyBtn{width:100%;margin-top:12px;background:#d4b56a;color:#000;border:none;padding:12px;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer}
+#formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center;padding:12px}
+#formBox{background:#0f172a;border:1px solid #d4b56a;border-radius:14px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
 #formBox h3{margin:0;padding:12px;background:#2a1a0a;color:#d4b56a;text-align:center;font-size:13px}
 .formInner{padding:12px}.formInner label{font-size:10px;color:#d4b56a;font-weight:900;display:block;margin:8px 0 3px}
 .formInner input{width:100%;padding:9px;border-radius:6px;border:1px solid #1e2f4a;background:#111a2d;color:#fff;font-size:12px}
@@ -80,20 +86,10 @@
 </div>
 
 <div class="okBox">
-<div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:#22c55e;font-weight:900">✅ TODAY OK REPORT</span><button class="editBtnSmall" style="border-color:#22c55e;color:#22c55e;background:#0a2a14" onclick="openOkEdit()">✏️ Edit</button></div>
-<div class="vGrid" style="margin-top:8px">
-<div class="manCard"><b id="okTotal">38</b><small>Total OK</small></div>
-<div class="manCard"><b id="okMC">02</b><small>MC OK</small></div>
-<div class="manCard"><b id="okJeep">09</b><small>Jeep OK</small></div>
-<div class="manCard"><b id="okMicro">01</b><small>Micro OK</small></div>
-<div class="manCard"><b id="okPickup">12</b><small>Pickup OK</small></div>
-<div class="manCard"><b id="ok3Ton">03</b><small>3 Ton OK</small></div>
-<div class="manCard"><b id="okBus">01</b><small>Bus OK</small></div>
-<div class="manCard"><b id="okWT">01</b><small>W/T OK</small></div>
-<div class="manCard"><b id="okFT">02</b><small>F/T OK</small></div>
+<div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:#22c55e;font-weight:900">✅ DAILY OK REPORT - 4 BIR MT</span><button class="editBtnSmall" style="border-color:#22c55e;color:#22c55e;background:#0a2a14" onclick="openOkEdit()">✏️ Edit</button></div>
+<div id="okReportList"></div>
+<button class="copyBtn" onclick="copyReport()">📋 Copy Daily Report For WhatsApp</button>
 </div>
-</div>
-
 </div>
 </div>
 
@@ -101,18 +97,68 @@
 
 <script>
 function loadData(){
- let d=localStorage.getItem('mt_profile_final_v3');
+ let d=localStorage.getItem('mt_profile_final_v4');
  if(d){try{return JSON.parse(d)}catch(e){}}
- return {cmd:{name:"Capt. Mohammad Ali Akbor Arko",no:"BA-11585",com:"2019"},man:{total:52,officer:1,jco:1,or:40},veh:{total:40,mc:2,jeep:9,micro:1,pickup:13,ton3:3,bus:1,wt:1,ft:2},ok:{total:38,mc:2,jeep:9,micro:1,pickup:12,ton3:3,bus:1,wt:1,ft:2},logo:""}
+ return {
+  cmd:{name:"Capt. Mohammad Ali Akbor Arko",no:"BA-11585",com:"2019"},
+  man:{total:52,officer:1,jco:1,or:40},
+  veh:{total:40,mc:2,jeep:9,micro:1,pickup:13,ton3:3,bus:1,wt:1,ft:2},
+  ok:{
+   jeep:{total:9,unit:7,wksp:1,atst:1},
+   pickup:{total:13,unit:10,wksp:2,atst:1},
+   ton3:{total:3,unit:2,wksp:1,atst:0},
+   bus:{total:1,unit:1,wksp:0,atst:0},
+   wt:{total:1,unit:1,wksp:0,atst:0},
+   ft:{total:2,unit:2,wksp:0,atst:0},
+   mc:{total:2,unit:2,wksp:0,atst:0},
+   micro:{total:1,unit:1,wksp:0,atst:0}
+  },
+  logo:""
+ }
 }
 let data=loadData();
-function save(){localStorage.setItem('mt_profile_final_v3',JSON.stringify(data));render();}
+function save(){localStorage.setItem('mt_profile_final_v4',JSON.stringify(data));render();}
 function render(){
  document.getElementById('cmdName').innerText=data.cmd.name;
  document.getElementById('cmdInfo').innerText=`Service No: ${data.cmd.no} • ${data.cmd.com}`;
- document.getElementById('mTotal').innerText=data.man.total;document.getElementById('mOfficer').innerText=String(data.man.officer).padStart(2,'0');document.getElementById('mJCO').innerText=String(data.man.jco).padStart(2,'0');document.getElementById('mOR').innerText=String(data.man.or).padStart(2,'0');
- document.getElementById('vTotal').innerText=data.veh.total;document.getElementById('vMC').innerText=String(data.veh.mc).padStart(2,'0');document.getElementById('vJeep').innerText=String(data.veh.jeep).padStart(2,'0');document.getElementById('vMicro').innerText=String(data.veh.micro).padStart(2,'0');document.getElementById('vPickup').innerText=String(data.veh.pickup).padStart(2,'0');document.getElementById('v3Ton').innerText=String(data.veh.ton3).padStart(2,'0');document.getElementById('vBus').innerText=String(data.veh.bus).padStart(2,'0');document.getElementById('vWT').innerText=String(data.veh.wt).padStart(2,'0');document.getElementById('vFT').innerText=String(data.veh.ft).padStart(2,'0');
- document.getElementById('okTotal').innerText=data.ok.total;document.getElementById('okMC').innerText=String(data.ok.mc).padStart(2,'0');document.getElementById('okJeep').innerText=String(data.ok.jeep).padStart(2,'0');document.getElementById('okMicro').innerText=String(data.ok.micro).padStart(2,'0');document.getElementById('okPickup').innerText=String(data.ok.pickup).padStart(2,'0');document.getElementById('ok3Ton').innerText=String(data.ok.ton3).padStart(2,'0');document.getElementById('okBus').innerText=String(data.ok.bus).padStart(2,'0');document.getElementById('okWT').innerText=String(data.ok.wt).padStart(2,'0');document.getElementById('okFT').innerText=String(data.ok.ft).padStart(2,'0');
+ document.getElementById('mTotal').innerText=data.man.total;
+ document.getElementById('mOfficer').innerText=String(data.man.officer).padStart(2,'0');
+ document.getElementById('mJCO').innerText=String(data.man.jco).padStart(2,'0');
+ document.getElementById('mOR').innerText=String(data.man.or).padStart(2,'0');
+ document.getElementById('vTotal').innerText=data.veh.total;
+ document.getElementById('vMC').innerText=String(data.veh.mc).padStart(2,'0');
+ document.getElementById('vJeep').innerText=String(data.veh.jeep).padStart(2,'0');
+ document.getElementById('vMicro').innerText=String(data.veh.micro).padStart(2,'0');
+ document.getElementById('vPickup').innerText=String(data.veh.pickup).padStart(2,'0');
+ document.getElementById('v3Ton').innerText=String(data.veh.ton3).padStart(2,'0');
+ document.getElementById('vBus').innerText=String(data.veh.bus).padStart(2,'0');
+ document.getElementById('vWT').innerText=String(data.veh.wt).padStart(2,'0');
+ document.getElementById('vFT').innerText=String(data.veh.ft).padStart(2,'0');
+ // OK Report Render
+ let html='';
+ let order=[
+  {key:'jeep',label:'Jeep'},
+  {key:'pickup',label:'Pickup'},
+  {key:'ton3',label:'3 Ton'},
+  {key:'bus',label:'Bus'},
+  {key:'wt',label:'W/T'},
+  {key:'ft',label:'F/T'},
+  {key:'mc',label:'MC'},
+  {key:'micro',label:'Micro'}
+ ];
+ order.forEach(o=>{
+  let v=data.ok[o.key];
+  if(!v) return;
+  html+=`<div class="okItem">
+   <div class="okItemHead"><b>${o.label} - ${String(v.total).padStart(2,'0')}</b><small style="color:#8abf9a">Total: ${v.total}</small></div>
+   <div class="okDetails">
+    <div><small>1. Unit</small><b>${String(v.unit).padStart(2,'0')}</b></div>
+    <div><small>2. Wksp</small><b>${String(v.wksp).padStart(2,'0')}</b></div>
+    <div><small>3. Atst</small><b>${String(v.atst).padStart(2,'0')}</b></div>
+   </div>
+  </div>`;
+ });
+ document.getElementById('okReportList').innerHTML=html;
  if(data.logo){document.getElementById('logoImg').src=data.logo;document.getElementById('logoImg').style.display='block';document.getElementById('logoText').style.display='none';document.getElementById('camIcon').innerText='📷 Change';}
 }
 render();
@@ -123,8 +169,43 @@ function openManEdit(){openModal('Edit Manpower',`<label>Commander</label><input
 function saveMan(){data.cmd.name=document.getElementById('f_cmdName').value;data.cmd.no=document.getElementById('f_cmdNo').value;data.cmd.com=document.getElementById('f_cmdCom').value;data.man.total=document.getElementById('f_total').value;data.man.officer=document.getElementById('f_off').value;data.man.jco=document.getElementById('f_jco').value;data.man.or=document.getElementById('f_or').value;save();closeForm();}
 function openVehicleEdit(){openModal('Edit Total Vehicle',`<label>Total Vehicle</label><input type="number" id="f_vtotal" value="${data.veh.total}"><label>MC</label><input type="number" id="f_mc" value="${data.veh.mc}"><label>Jeep</label><input type="number" id="f_jeep" value="${data.veh.jeep}"><label>Micro</label><input type="number" id="f_micro" value="${data.veh.micro}"><label>Pickup</label><input type="number" id="f_pickup" value="${data.veh.pickup}"><label>3 Ton</label><input type="number" id="f_ton" value="${data.veh.ton3}"><label>Bus</label><input type="number" id="f_bus" value="${data.veh.bus}"><label>W/T</label><input type="number" id="f_wt" value="${data.veh.wt}"><label>F/T</label><input type="number" id="f_ft" value="${data.veh.ft}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveVeh()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);}
 function saveVeh(){data.veh.total=document.getElementById('f_vtotal').value;data.veh.mc=document.getElementById('f_mc').value;data.veh.jeep=document.getElementById('f_jeep').value;data.veh.micro=document.getElementById('f_micro').value;data.veh.pickup=document.getElementById('f_pickup').value;data.veh.ton3=document.getElementById('f_ton').value;data.veh.bus=document.getElementById('f_bus').value;data.veh.wt=document.getElementById('f_wt').value;data.veh.ft=document.getElementById('f_ft').value;save();closeForm();}
-function openOkEdit(){openModal('Edit Today OK Report',`<label>Total OK</label><input type="number" id="f_oktotal" value="${data.ok.total}"><label>MC OK</label><input type="number" id="f_okmc" value="${data.ok.mc}"><label>Jeep OK</label><input type="number" id="f_okjeep" value="${data.ok.jeep}"><label>Micro OK</label><input type="number" id="f_okmicro" value="${data.ok.micro}"><label>Pickup OK</label><input type="number" id="f_okpickup" value="${data.ok.pickup}"><label>3 Ton OK</label><input type="number" id="f_okton" value="${data.ok.ton3}"><label>Bus OK</label><input type="number" id="f_okbus" value="${data.ok.bus}"><label>W/T OK</label><input type="number" id="f_okwt" value="${data.ok.wt}"><label>F/T OK</label><input type="number" id="f_okft" value="${data.ok.ft}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveOk()" style="flex:1;padding:10px;border-radius:8px;background:#22c55e;color:#000;font-weight:900;border:none">Save</button></div>`);}
-function saveOk(){data.ok.total=document.getElementById('f_oktotal').value;data.ok.mc=document.getElementById('f_okmc').value;data.ok.jeep=document.getElementById('f_okjeep').value;data.ok.micro=document.getElementById('f_okmicro').value;data.ok.pickup=document.getElementById('f_okpickup').value;data.ok.ton3=document.getElementById('f_okton').value;data.ok.bus=document.getElementById('f_okbus').value;data.ok.wt=document.getElementById('f_okwt').value;data.ok.ft=document.getElementById('f_okft').value;save();closeForm();}
+function openOkEdit(){
+ let h='';
+ let order=[['jeep','Jeep'],['pickup','Pickup'],['ton3','3 Ton'],['bus','Bus'],['wt','W/T'],['ft','F/T'],['mc','MC'],['micro','Micro']];
+ order.forEach(o=>{
+  let v=data.ok[o[0]]||{total:0,unit:0,wksp:0,atst:0};
+  h+=`<div style="background:#111a2d;border:1px solid #145a28;border-radius:8px;padding:8px;margin-top:8px"><b style="color:#22c55e;font-size:12px">${o[1]}</b>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-top:6px">
+  <div><label>Total</label><input type="number" id="f_${o[0]}_total" value="${v.total}"></div>
+  <div><label>Unit</label><input type="number" id="f_${o[0]}_unit" value="${v.unit}"></div>
+  <div><label>Wksp</label><input type="number" id="f_${o[0]}_wksp" value="${v.wksp}"></div>
+  <div><label>Atst</label><input type="number" id="f_${o[0]}_atst" value="${v.atst}"></div>
+  </div></div>`;
+ });
+ h+=`<div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveOk()" style="flex:1;padding:10px;border-radius:8px;background:#22c55e;color:#000;font-weight:900;border:none">Save</button></div>`;
+ openModal('Edit Daily OK Report - Unit/Wksp/Atst',h);
+}
+function saveOk(){
+ ['jeep','pickup','ton3','bus','wt','ft','mc','micro'].forEach(k=>{
+  data.ok[k]={
+   total:document.getElementById(`f_${k}_total`).value,
+   unit:document.getElementById(`f_${k}_unit`).value,
+   wksp:document.getElementById(`f_${k}_wksp`).value,
+   atst:document.getElementById(`f_${k}_atst`).value
+  };
+ });
+ save();closeForm();
+}
+function copyReport(){
+ let dt=new Date().toLocaleDateString('en-GB');
+ let txt=`Assalamualaikum Sir\nDaily Okay Report 4 BIR MT DT: ${dt}\n\n`;
+ let order=[['jeep','Jeep'],['pickup','Pickup'],['ton3','3 Ton'],['bus','Bus'],['wt','W/T'],['ft','F/T'],['mc','MC'],['micro','Micro']];
+ order.forEach(o=>{
+  let v=data.ok[o[0]];
+  txt+=`${o[1]} - ${String(v.total).padStart(2,'0')}\n1. Unit - ${String(v.unit).padStart(2,'0')}\n2. Wksp - ${String(v.wksp).padStart(2,'0')}\n3. Atst - ${String(v.atst).padStart(2,'0')}\n\n`;
+ });
+ navigator.clipboard.writeText(txt).then(()=>alert('✅ Report Copied!\n\n'+txt)).catch(()=>{prompt('Copy This Report:',txt)});
+}
 </script>
 </body>
 </html>
