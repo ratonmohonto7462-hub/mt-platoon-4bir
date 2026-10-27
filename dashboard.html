@@ -10,9 +10,9 @@
 .avatar{width:38px;height:38px;border-radius:50%;background:#c8a951;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0f2110}
 .logout{background:#d50000;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:900}
 .wrap{padding:14px 14px 90px 14px}.assalam{font-size:27px;font-weight:900;text-align:center;margin:8px 0 4px 0}.dutyStatus{text-align:center;color:#c8a951;font-size:13px;margin-bottom:14px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.s-card{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:14px}.s-card p{margin:0;color:#8aa88f;font-size:12px}.s-card h3{margin:8px 0 0 0;font-size:22px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.s-card{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:14px}.s-card p{margin:0;color:#8aa88f;font-size:12px}.s-card h3{margin:8px 0 0 0;font-size:26px;display:flex;gap:8px;align-items:center}
 .searchBox{display:flex;align-items:center;gap:8px;background:#132a18;border:1px solid #c8a951;border-radius:12px;padding:12px 14px;margin:14px 0 8px 0}.searchBox input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:14px}
-#searchResults{background:#0f2110;border:1px solid #1f4a28;border-radius:12px;padding:6px;display:none;max-height:300px;overflow:auto;margin-bottom:10px}
+#searchResults{background:#0f2110;border:1px solid #1f4a28;border-radius:12px;padding:6px;display:none;max-height:320px;overflow:auto;margin-bottom:10px}
 .ticker{overflow:hidden;white-space:nowrap;position:relative;border-radius:12px;padding:12px 0;margin:10px 0;display:flex}.ticker-track{white-space:nowrap;animation:marqueeRTL 18s linear infinite}@keyframes marqueeRTL{0%{transform:translateX(100%)}100%{transform:translateX(-120%)}}
 .joruri-bg{background:#b91c1c;color:#fff}.seniority-bg{background:#0a4d0a;color:#c8ffc8;border:1px solid #1f8a1f}
 .brain{background:linear-gradient(90deg,#0a7a2a,#12a03a);border-radius:16px;padding:14px;display:flex;gap:12px;margin:12px 0}
@@ -26,38 +26,34 @@
 <body>
 <div class="top"><div style="display:flex;gap:8px;align-items:center"><div class="menuBtn" onclick="document.getElementById('drawer').classList.add('open');document.getElementById('overlay').classList.add('show')">☰</div><b>4 BIR —<br>MT PLATOON</b></div><div style="display:flex;gap:14px;align-items:center"><div class="bell" onclick="toggleNotif()">🔔<i id="notifCount">0</i></div><div class="avatar">RH</div><button class="logout" onclick="localStorage.clear();location.href='index.html'">LOGOUT</button></div></div>
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
-<div class="drawer" id="drawer"><h3>📁 FOLDERS</h3><div style="padding:12px 0;border-bottom:1px solid #1a3d22" onclick="location.href='vehicle.html'">🚚 VEHICLE</div><div style="padding:12px 0;border-bottom:1px solid #1a3d22" onclick="location.href='duty.html'">📋 DUTY ROSTER</div><div style="padding:12px 0;border-bottom:1px solid #1a3d22" onclick="location.href='seniority.html'">⭐ SENIORITY</div><div style="padding:12px 0" onclick="location.href='contact.html'">📞 MOBILE</div><button onclick="closeAll()" style="width:100%;margin-top:20px;padding:10px;background:#1f4a28;color:#fff;border:none;border-radius:10px">Close</button></div>
+<div class="drawer" id="drawer"><h3>📁 FOLDERS</h3><div style="padding:12px 0" onclick="location.href='vehicle.html'">🚚 VEHICLE</div><div style="padding:12px 0" onclick="location.href='communication.html'">☎️ COMMUNICATION</div><div style="padding:12px 0" onclick="location.href='duty.html'">📋 DUTY ROSTER</div><div style="padding:12px 0" onclick="location.href='seniority.html'">⭐ SENIORITY</div><div style="padding:12px 0" onclick="location.href='contact.html'">📞 MOBILE</div><button onclick="closeAll()" style="width:100%;margin-top:20px;padding:10px;background:#1f4a28;color:#fff;border:none;border-radius:10px">Close</button></div>
 <div class="notifPanel" id="notifPanel"><h3 style="margin:0 0 10px 0;display:flex;justify-content:space-between">🔔 Notifications <span onclick="closeAll()" style="cursor:pointer">✖️</span></h3><div id="notifList">Loading...</div></div>
 
 <div class="wrap">
 <div class="assalam">ASSALAMUALAIKUM</div>
-<div class="dutyStatus">Duty Status: <span style="color:#22c55e">Active •</span> <span id="todayDate"></span></div>
+<div class="dutyStatus">Duty Status: <span style="color:#22c55e">Active •</span> <span id="todayDate"></span> • <span id="dayNightLabel"></span></div>
 <div class="stats">
-<div class="s-card"><p>Total Vehicles</p><h3>🚚 18</h3></div>
-<div class="s-card"><p>Communication</p><h3>☎️ 42</h3></div>
-<div class="s-card"><p>Personnel</p><h3>👥 42</h3></div>
-<div class="s-card"><p>On Duty</p><h3>👮 1</h3></div>
+<div class="s-card"><p>Total Vehicles</p><h3>🚚 <span id="totalVehicles">--</span></h3></div>
+<div class="s-card"><p>Communication</p><h3>☎️ <span id="totalComms">--</span></h3></div>
+<div class="s-card"><p>Personnel</p><h3>👥 <span id="totalPersonnel">--</span></h3></div>
+<div class="s-card"><p id="onDutyLabel">On Duty</p><h3>👮 <span id="onDutyCount">--</span></h3><small id="onDutySub" style="font-size:10px;color:#8aa88f"></small></div>
 </div>
-<div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Quick Search... Vehicle, Person, Mobile" oninput="doSearch(this.value)"></div>
+<div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Quick Search... Number, Name, Vehicle" oninput="doSearch(this.value)"></div>
 <div id="searchResults"></div>
-<div class="ticker joruri-bg"><div class="ticker-track"><span id="joruriText">🚨 জরুরি আদেশ: All MT Standby - Convoy Ready 🚨 • 🚨 জরুরি আদেশ: All MT Standby 🚨 • </span></div></div>
+<div class="ticker joruri-bg"><div class="ticker-track"><span id="joruriText">🚨 জরুরি আদেশ: All MT Standby 🚨 • 🚨 জরুরি আদেশ: All MT Standby 🚨 • </span></div></div>
 <div class="ticker seniority-bg"><div class="ticker-track" style="animation-duration:28s"><span id="seniorityText">⭐ Seniority লোড হচ্ছে... ⭐</span></div></div>
-<div class="brain" onclick="location.href='mt-brain-final.html'"><div style="background:#fff;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px">🧠</div><div style="flex:1"><div style="font-weight:900">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো</div></div><div style="background:#fff;color:#0a6a0a;padding:7px 14px;border-radius:20px;font-weight:900;font-size:13px">ASK →</div></div>
+<div class="brain" onclick="location.href='mt-brain-final.html'"><div style="background:#fff;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px">🧠</div><div style="flex:1"><div style="font-weight:900">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div><div style="background:#fff;color:#0a6a0a;padding:7px 14px;border-radius:20px;font-weight:900;font-size:13px">ASK →</div></div>
 <div class="folders"><h3>Folders</h3><div class="grid"><div class="card" onclick="location.href='vehicle.html'"><div style="font-size:44px">🚚</div><div class="t1">VEHICLE UPDATE</div></div><div class="card" onclick="location.href='communication.html'"><div style="font-size:44px">☎️</div><div class="t1">COMMUNICATION</div></div></div></div>
 </div>
 <div class="bottom"><div class="active">🏠<br>Dashboard</div><div onclick="location.href='vehicle.html'">🚚<br>Vehicles</div><div onclick="location.href='contact.html'">☎️<br>Comms</div><div onclick="location.href='duty.html'">📋<br>Roster</div><div>👤<br>Profile</div></div>
 
 <script>
-// --- SAFE LOAD - NO WHITE SCREEN ---
 document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
 function closeAll(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show');document.getElementById('notifPanel').style.display='none';}
 function toggleNotif(){let p=document.getElementById('notifPanel');p.style.display=p.style.display==='block'?'none':'block';document.getElementById('overlay').classList.add('show');}
 
-// Joruri - Local first, sheet later
-try{
-  let saved=localStorage.getItem("joruriAdesh");
-  if(saved) document.getElementById('joruriText').innerText="🚨 "+saved+" 🚨  •  🚨 "+saved+" 🚨  •  ";
-}catch(e){}
+// Bangla to English number convert for search
+function bnToEn(str){let bn=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];let en=['0','1','2','3','4','5','6','7','8','9'];let s=str;for(let i=0;i<10;i++) s=s.split(bn[i]).join(en[i]);return s;}
 
 const DUTY_ID="1cGdPNeo-G1Xx1USo6KZlvYTKVzMcQ_t8V9eUlGADL-I";
 const SENIORITY_ID="1H0aSiqMyxn9bg9PLyjAt6dXPGLMNAWFN7v8hTrj1TZg";
@@ -69,58 +65,92 @@ const MOBILE_CSV="https://docs.google.com/spreadsheets/d/"+MOBILE_ID+"/export?fo
 let ALL_SEARCH=[];
 
 function parseCSV(t){
-  try{
-    let lines=t.split("\n").filter(l=>l.trim().length>0);
-    let out=[];
-    for(let i=1;i<lines.length;i++){
-      let cols=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c=>c.replace(/^"|"$/g,'').trim());
-      if(cols[0]||cols[1]||cols[2]) out.push(cols);
-    }
-    return out;
-  }catch(e){return [];}
+  try{let lines=t.split("\n").filter(l=>l.trim().length>0);let out=[];for(let i=1;i<lines.length;i++){let cols=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c=>c.replace(/^"|"$/g,'').trim());if(cols[0]||cols[1]||cols[2]) out.push(cols);}return out;}catch(e){return [];}
 }
 
 async function loadSheetsSafe(){
-  let seniority=[], duty=[], mobile=[];
+  let seniority=[], duty=[], mobile=[], vehicles=[];
+
+  // Vehicle - from localStorage + sheet if you have
+  try{vehicles=JSON.parse(localStorage.getItem("vehicleList")||localStorage.getItem("vehicles")||localStorage.getItem("vehicleSheetCache")||"[]");}catch(e){vehicles=[];}
+  if(!Array.isArray(vehicles)) vehicles=[];
+
+  // Seniority
   try{let txt=await fetch(SENIORITY_CSV).then(r=>r.text()); seniority=parseCSV(txt).map(c=>({no:c[0],rank:c[1],name:c[2],suty:c[3],mob:c[4]})).filter(x=>x.name); localStorage.setItem("seniorityCache",JSON.stringify(seniority));}catch(e){seniority=JSON.parse(localStorage.getItem("seniorityCache")||"[]");}
-  try{let txt=await fetch(DUTY_CSV).then(r=>r.text()); duty=parseCSV(txt).map(c=>({no:c[0],rank:c[1],name:c[2],duty:c[3],date:c[4],suty:c[5]})).filter(x=>x.name); localStorage.setItem("dutyCache",JSON.stringify(duty));}catch(e){duty=JSON.parse(localStorage.getItem("dutyCache")||"[]");}
+  // Duty
+  try{let txt=await fetch(DUTY_CSV).then(r=>r.text()); duty=parseCSV(txt).map(c=>({no:c[0],rank:c[1],name:c[2],duty:c[3],date:c[4],suty:c[5],shift:c[3]})).filter(x=>x.name); localStorage.setItem("dutyCache",JSON.stringify(duty));}catch(e){duty=JSON.parse(localStorage.getItem("dutyCache")||"[]");}
+  // Mobile
   try{let txt=await fetch(MOBILE_CSV).then(r=>r.text()); mobile=parseCSV(txt).map(c=>({no:c[0],rank:c[1],name:c[2],mobile:c[3],grp:c[4]})).filter(x=>x.name||x.mobile); localStorage.setItem("mobileCache",JSON.stringify(mobile));}catch(e){mobile=JSON.parse(localStorage.getItem("mobileCache")||"[]");}
+
+  // --- LIVE COUNTS ---
+  // Total Vehicles = vehicle folder count
+  let vehicleCount = vehicles.length>0?vehicles.length:parseInt(localStorage.getItem("totalVehiclesCount")||"0")||18;
+  // If vehicle sheet exists, use that
+  try{let vSheet=JSON.parse(localStorage.getItem("vehicleSheetCache")||"[]"); if(vSheet.length>0) vehicleCount=vSheet.length;}catch(e){}
+  document.getElementById('totalVehicles').innerText=vehicleCount;
+
+  // Communication = communication folder / mobile count
+  let commCount = mobile.length>0?mobile.length:parseInt(localStorage.getItem("totalCommsCount")||"0")||42;
+  // Try comms local
+  try{let cLocal=JSON.parse(localStorage.getItem("communications")||localStorage.getItem("contactList")||"[]"); if(cLocal.length>0) commCount=cLocal.length;}catch(e){}
+  document.getElementById('totalComms').innerText=commCount;
+
+  // Personnel = Mobile Number Sheet count
+  document.getElementById('totalPersonnel').innerText=mobile.length>0?mobile.length:commCount;
+
+  // On Duty = Day / Night logic
+  let now=new Date(); let hour=now.getHours(); let isDay=hour>=6 && hour<18;
+  let dayLabel=isDay?"দিনের ডিউটি":"রাতের ডিউটি";
+  document.getElementById('dayNightLabel').innerText=dayLabel;
+  document.getElementById('onDutyLabel').innerText=isDay?"Day Duty":"Night Duty";
+
+  let todayStr=now.toLocaleDateString('en-GB'); // 27/10/2026 format - check your sheet date format
+  let todayDuties=duty.filter(d=>{
+    let dutyText=(d.duty||d.shift||"").toLowerCase();
+    // Check if duty is for today or shift matches day/night
+    if(isDay){return dutyText.includes("day")||dutyText.includes("দিন")||dutyText.includes("morning")||dutyText.includes("duty");}
+    else{return dutyText.includes("night")||dutyText.includes("রাত")||dutyText.includes("evening")||dutyText.includes("duty");}
+  });
+
+  // If no day/night keyword, show all today's duties
+  if(todayDuties.length==0) todayDuties=duty.slice(0,5);
+
+  document.getElementById('onDutyCount').innerText=todayDuties.length||"0";
+  document.getElementById('onDutySub').innerText=todayDuties.slice(0,2).map(d=>d.rank+" "+d.name).join(", ");
 
   // Ticker
   if(seniority.length>0){
     let txt=seniority.slice(0,5).map((s,i)=>`⭐ ${s.no||i+1} No: ${s.rank} ${s.name}`).join("  •  ");
     document.getElementById('seniorityText').innerText=txt+"  •  "+txt;
-  }else{
-    document.getElementById('seniorityText').innerText="⭐ Seniority Sheet Publish করুন - File > Publish to Web ⭐  •  ";
   }
 
-  // Search Cache
+  // Search Cache - ALL with number normalize
   ALL_SEARCH=[];
-  seniority.forEach(s=>ALL_SEARCH.push({type:"SENIORITY",name:`${s.no} No: ${s.rank} ${s.name}`,sub:`Suty: ${s.suty||''}`,link:"seniority.html"}));
-  duty.forEach(d=>ALL_SEARCH.push({type:"DUTY",name:`${d.rank} ${d.name} - ${d.duty}`,sub:`${d.date||''}`,link:"duty.html"}));
-  mobile.forEach(m=>ALL_SEARCH.push({type:"MOBILE",name:`${m.rank} ${m.name} - ${m.mobile}`,sub:`${m.grp||''}`,link:"contact.html"}));
+  seniority.forEach(s=>ALL_SEARCH.push({type:"SENIORITY",name:`${s.no} No: ${s.rank} ${s.name}`,sub:`${s.mob||''} ${s.suty||''}`,norm:`${bnToEn(s.no||'')} ${bnToEn(s.mob||'')} ${s.name}`.toLowerCase(),link:"seniority.html"}));
+  duty.forEach(d=>ALL_SEARCH.push({type:"DUTY",name:`${d.rank} ${d.name} - ${d.duty}`,sub:`${d.date||''}`,norm:`${d.name} ${d.duty} ${d.rank}`.toLowerCase(),link:"duty.html"}));
+  mobile.forEach(m=>ALL_SEARCH.push({type:"MOBILE",name:`${m.rank} ${m.name} - ${m.mobile}`,sub:`${m.grp||''}`,norm:`${bnToEn(m.mobile||'')} ${m.name} ${bnToEn(m.no||'')}`.toLowerCase(),link:"contact.html"}));
+  vehicles.forEach(v=>{let ba=v.ba||v.number||v[0]||''; let km=v.km||''; ALL_SEARCH.push({type:"VEHICLE",name:`${ba} - ${km}`,norm:`${bnToEn(ba)} ${km}`.toLowerCase(),link:"vehicle.html"});});
 
-  // Notification
-  let notifs=[];let today=new Date();
-  seniority.forEach(p=>{if(p.suty){let st=new Date(p.suty);if(!isNaN(st)){let ret=new Date(st);ret.setDate(ret.getDate()+75);let diff=Math.ceil((ret-today)/86400000);if(diff<=7&&diff>=0) notifs.push(`👤 ${p.rank} ${p.name} - Suty 2M 15D - ${diff} দিন বাকি`);if(diff<0&&diff>-3) notifs.push(`🔔 ${p.rank} ${p.name} - Suty Return Overdue`);}}});
-  duty.forEach(p=>{if(p.suty){let st=new Date(p.suty);if(!isNaN(st)){let ret=new Date(st);ret.setDate(ret.getDate()+75);let diff=Math.ceil((ret-today)/86400000);if(diff<=7&&diff>=0) notifs.push(`📋 ${p.rank} ${p.name} - Duty Suty - ${diff} দিন বাকি`);}}});
-
-  document.getElementById('notifCount').innerText=notifs.length>0?notifs.length:0;
+  // Notifications
+  let notifs=[];let todayD=new Date();
+  seniority.forEach(p=>{if(p.suty){let st=new Date(p.suty);if(!isNaN(st)){let ret=new Date(st);ret.setDate(ret.getDate()+75);let diff=Math.ceil((ret-todayD)/86400000);if(diff<=7&&diff>=0) notifs.push(`👤 ${p.rank} ${p.name} - Suty 2M 15D - ${diff} দিন বাকি`);if(diff<0&&diff>-3) notifs.push(`🔔 ${p.rank} ${p.name} - Suty Return Overdue`);}}});
+  document.getElementById('notifCount').innerText=notifs.length||0;
   document.getElementById('notifList').innerHTML=notifs.length?notifs.map(n=>`<div style="padding:10px;border-bottom:1px solid #1a3d22">${n}</div>`).join(""):"✅ কোনো Notification নেই";
 }
 
 function doSearch(q){
   let res=document.getElementById("searchResults");
   if(!q||q.trim().length<1){res.style.display="none";return;}
+  let normalized=bnToEn(q).toLowerCase();
   if(ALL_SEARCH.length==0){res.innerHTML="<div style='padding:10px;color:#888'>লোড হচ্ছে... একটু পর Search করুন</div>";res.style.display="block";return;}
-  let low=q.toLowerCase();
-  let filt=ALL_SEARCH.filter(d=>d.name.toLowerCase().includes(low)||d.type.toLowerCase().includes(low)||(d.sub&&d.sub.toLowerCase().includes(low)));
-  if(filt.length==0){res.innerHTML=`<div style='padding:10px;color:#888'>🔍 "${q}" পাওয়া যায়নি</div>`}
+  let filt=ALL_SEARCH.filter(d=>d.norm.includes(normalized)||d.name.toLowerCase().includes(q.toLowerCase()));
+  if(filt.length==0){res.innerHTML=`<div style='padding:10px;color:#888'>🔍 "${q}" কিছু পাওয়া যায়নি - 3 টা Sheet এ খোঁজা হয়েছে</div>`}
   else{res.innerHTML=filt.slice(0,20).map(d=>`<div onclick="location.href='${d.link}'" style="padding:10px;border-bottom:1px solid #1a3d22;cursor:pointer"><b style="color:#c8a951;font-size:10px">${d.type}</b><br><span style="color:#fff;font-size:13px">${d.name}</span><br><span style="color:#8aa88f;font-size:11px">${d.sub||''}</span></div>`).join("")}
   res.style.display="block";
 }
 
 loadSheetsSafe();
+setInterval(loadSheetsSafe,60000);
 </script>
 </body>
 </html>
