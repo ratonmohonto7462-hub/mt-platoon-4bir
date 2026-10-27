@@ -1,58 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MT PLATOON 4 BIR - Secure Access Portal 2026</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MT PLATOON 4 BIR | TACTICAL COMMAND CENTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,Arial;background:#fbfcfe;color:#0f2312;min-height:100vh}
-.header{background:#12381a;color:#e8f0d5;display:flex;justify-content:space-between;padding:18px 32px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:28px}
-.card{background:#fff;border:1.5px solid #e2e8e0;border-radius:16px;padding:22px;display:flex;gap:18px;cursor:pointer;transition:.2s}
-.card.active{border-color:#12381a;background:#f7faf7;box-shadow:0 0 0 2px rgba(18,56,26,0.15)}
-.icon{width:52px;height:52px;border-radius:50%;background:#12381a;color:#fff;display:grid;place-items:center;font-size:22px}
-.card h3{font-size:28px;font-weight:900;color:#12381a}
-.badge{margin-top:14px;display:inline-block;background:#12381a;color:#d9e8d0;font-size:11px;padding:5px 12px;border-radius:20px}
-.login-wrap{max-width:420px;margin:42px auto 0;position:relative}
-.login-box{background:#fff;border:1.5px solid #e2e8e0;border-radius:16px;padding:28px 24px;box-shadow:0 8px 28px rgba(0,0,0,0.06);text-align:center}
-.input{margin-top:16px;display:flex;border:1.5px solid #12381a;border-radius:10px;overflow:hidden}
-.input input{flex:1;border:none;outline:none;padding:12px;font-size:14px;letter-spacing:4px;text-align:center}
-.btn{width:100%;margin-top:14px;background:#12381a;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;cursor:pointer}
-@media(max-width:800px){.cards{grid-template-columns:1fr}}
+body{min-height:100vh;background:#020b10;color:#c8f3ff;font-family:'Rajdhani',sans-serif;display:flex;flex-direction:column}
+.hud{border:1px solid rgba(100,220,255,0.35);box-shadow:0 0 15px rgba(100,220,255,0.15), inset 0 0 30px rgba(100,220,255,0.05)}
+.header{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;margin:8px;background:rgba(5,20,30,0.9)}
+.main{display:grid;grid-template-columns:1.7fr 0.9fr;gap:8px;margin:0 8px 8px;flex:1}
+.left{position:relative;background:#000;min-height:600px;overflow:hidden}.left img{width:100%;height:100%;object-fit:cover;opacity:0.7}
+.label{position:absolute;font-size:9px;background:rgba(0,20,30,0.85);border:1px solid rgba(100,220,255,0.3);padding:5px 9px;color:#7de8ff}
+.live-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(2,20,35,0.95);border-top:1px solid rgba(100,220,255,0.3);padding:9px 14px;display:flex;justify-content:space-between}
+.right{background:rgba(3,15,25,0.97);padding:18px;display:flex;flex-direction:column;gap:22px;justify-content:center}
+.role-wrap{position:relative}
+.role-main{width:100%;background:rgba(0,30,45,0.85);border:1.5px solid #7de8ff;color:#7de8ff;padding:15px 18px;font-family:'Orbitron';font-size:19px;font-weight:900;display:flex;justify-content:space-between;cursor:pointer;clip-path:polygon(3% 0, 100% 0, 97% 100%, 0 100%)}
+.role-dropdown{display:none;position:absolute;top:calc(100% + 10px);left:0;right:0;background:rgba(2,12,20,0.99);border:1px solid rgba(125,232,255,0.5);z-index:200;clip-path:polygon(2% 0, 100% 0, 98% 100%, 0 100%)}
+.role-dropdown.show{display:block}
+.role-opt{padding:14px 18px;font-size:17px;font-weight:700;cursor:pointer;border-bottom:1px solid rgba(125,232,255,0.12);display:flex;justify-content:space-between;color:#c8f3ff}
+.role-opt.active{background:rgba(125,232,255,0.22);color:#7de8ff}
+.input{display:flex;align-items:center;gap:10px;background:rgba(0,10,15,0.9);border:1.5px solid rgba(125,232,255,0.35);padding:12px 14px;clip-path:polygon(2% 0, 100% 0, 98% 100%, 0 100%)}
+.input input{flex:1;background:transparent;border:none;outline:none;color:#7de8ff;letter-spacing:6px;font-size:18px;text-align:center;font-family:'Orbitron'}
+.login{width:100%;background:transparent;border:1.5px solid #7de8ff;color:#7de8ff;font-family:'Orbitron';font-size:22px;font-weight:900;padding:13px;letter-spacing:4px;clip-path:polygon(5% 0, 100% 0, 95% 100%, 0 100%);cursor:pointer}
 </style>
 </head>
 <body>
-<div class="header">
-  <div>🛡️ BANGLADESH ARMY</div>
-  <div>🌐 mtplatoon4bir.xyz | Dashboard · Personnel · Operations · Security Logout</div>
-</div>
-<div style="max-width:1200px;margin:0 auto;padding:32px 24px">
-  <h1 style="font-size:52px;font-weight:900;color:#12381a">MT PLATOON 4 BIR</h1>
-  <p>Motor Transport Platoon 4 BIR • Secure Access Portal • 2026</p>
-  <div class="cards">
-    <div class="card active" id="card-mt" onclick="setRole('mt')">
-      <div class="icon">🛡️</div>
-      <div><h3>COMMAND</h3><p>Platoon Command & Control<br>Access strategic overview, missions, personnel reports</p><div class="badge">ROLE • COMMAND</div></div>
-    </div>
-    <div class="card" id="card-clk" onclick="setRole('clk')">
-      <div class="icon">🎧</div>
-      <div><h3>OPERATOR</h3><p>Field Operator Access<br>Logistics, vehicle status, transport operations</p><div class="badge">ROLE • OPERATOR</div></div>
-    </div>
-  </div>
-  <div class="login-wrap">
-    <div class="login-box">
-      <h2>Password Login</h2>
-      <p style="font-size:12.5px">Enter your secure password to access the platoon portal</p>
-      <div class="input"><input id="pass" type="password" placeholder="••••••••••"><span style="padding:0 14px;cursor:pointer" onclick="document.getElementById('pass').type=document.getElementById('pass').type==='password'?'text':'password'">👁️</span></div>
-      <button class="btn" onclick="doLogin()">LOGIN TO PORTAL</button>
-    </div>
+<div class="header hud"><div style="display:flex;align-items:center;gap:14px"><div style="width:58px;height:58px;border:1px solid #d4b86a;border-radius:50%;display:grid;place-items:center;background:#0a1a00">⚔️</div><div><h1 style="font-family:'Orbitron';font-size:19px;color:#a8f0ff">MT PLATOON 4<br>BIR BANGLADESH ARMY</h1><p style="font-size:8.5px;letter-spacing:2px;opacity:0.6">TACTICAL COMMAND CENTER • 2026</p></div></div><div style="text-align:right;font-size:11px"><div style="color:#5aff8a;font-weight:700">● SECURE CONNECTION</div><div id="dt" style="opacity:0.7">DATE: 27 OCT 2026 | TIME: 22:41:03 UTC+6</div></div></div>
+<div class="main">
+  <div class="left hud"><img src="https://images.unsplash.com/photo-1485575301923-ff75c30d54ab?q=80&w=1200&auto=format&fit=crop"><div class="label" style="top:14px;left:14px">CONVOY ALPHA - VEH-04</div><div class="label" style="right:18px;top:50%">62 KPH</div><div class="label" style="right:18px;bottom:28%">1.2KM TO WP-BRAVO<br>COORD: 23.8105°N, 90.4125°E<br>THREAT: LOW - CLEAR<br>FUEL: 87%</div><div class="live-bar"><div><h2 style="font-family:'Orbitron';color:#7de8ff">LIVE CONVOY FEED</h2><p style="font-size:11px;opacity:0.6">NIGHT OPERATIONS | CAM-03 THERMAL/LOWLIGHT</p></div><div style="font-size:10px;opacity:0.5">● REC LIVE</div></div></div>
+  <div class="right hud">
+    <div class="role-wrap" id="roleWrap"><button class="role-main" id="roleMain" onclick="toggleDrop()"><span id="roleText">COMMAND</span><span>▼</span></button><div class="role-dropdown" id="roleDropdown"><div class="role-opt active" data-val="mt" onclick="setRole('mt')">COMMAND <span>✓</span></div><div class="role-opt" data-val="clk" onclick="setRole('clk')">MT CLK</div></div></div>
+    <div><h3 style="font-family:'Orbitron';font-size:13px;color:#7de8ff;margin-bottom:10px">PASSWORD LOGIN</h3><div class="input"><span>🔒</span><input id="pass" type="password" placeholder="••••••"></div></div>
+    <div><button class="login" onclick="doLogin()">LOGIN</button><div style="text-align:center;color:#ff4a4a;font-size:11px;margin-top:10px">UNAUTHORIZED ACCESS IS PROHIBITED</div></div>
   </div>
 </div>
 <script>
-let selectedRole="mt";
-function setRole(r){selectedRole=r;document.getElementById('card-mt').classList.toggle('active',r==='mt');document.getElementById('card-clk').classList.toggle('active',r==='clk')}
+let selectedRole = "mt";
+function toggleDrop(){document.getElementById('roleDropdown').classList.toggle('show')}
+function setRole(r){selectedRole=r;document.getElementById('roleText').innerText=r==='mt'?'COMMAND':'MT CLK';document.querySelectorAll('.role-opt').forEach(o=>o.classList.toggle('active',o.dataset.val===r));document.getElementById('roleDropdown').classList.remove('show')}
 function doLogin(){let p=document.getElementById("pass").value;if(selectedRole==="mt" && p==="mt4bir"){localStorage.setItem("role","mt");location.href="dashboard.html";return;}if(selectedRole==="clk" && p==="admin7462"){localStorage.setItem("role","clk");location.href="dashboard.html";return;}alert("ভুল পাসওয়ার্ড!");}
-setRole('mt');
+function tick(){const n=new Date();document.getElementById('dt').innerText=`DATE: ${n.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Dhaka'}).toUpperCase()} | TIME: ${n.toLocaleTimeString('en-GB',{hour12:false,timeZone:'Asia/Dhaka'})} UTC+6`;}tick();setInterval(tick,1000);
+window.addEventListener('click',e=>{if(!document.getElementById('roleWrap').contains(e.target))document.getElementById('roleDropdown').classList.remove('show')});
 </script>
 </body>
 </html>
