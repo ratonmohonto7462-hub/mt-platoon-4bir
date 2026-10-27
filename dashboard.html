@@ -53,10 +53,10 @@
 <div class="greet"><h2>ASSALAMUALAIKUM</h2><p>Duty Status: <span style="color:#22c55e">Active •</span> <span id="todayDate"></span></p></div>
 
 <div class="stats">
-<div class="s-card"><p>Total Vehicles</p><h3>🚚 18</h3></div>
-<div class="s-card"><p>Communication</p><h3>☎️ 42</h3></div>
+<div class="s-card"><p>Total Vehicles</p><h3>🚚 40</h3></div>
+<div class="s-card"><p>Communication</p><h3>☎️ 52</h3></div>
 <div class="s-card"><p>Personnel</p><h3>👥 42</h3></div>
-<div class="s-card"><p>Officer on Duty</p><h3>👮 1</h3></div>
+<div class="s-card"><p>On Duty</p><h3>👮 1</h3></div>
 </div>
 
 <div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Quick Search... Vehicle, Person, Number" onkeyup="doSearch(this.value)"></div>
@@ -90,7 +90,56 @@
 </div>
 
 <script>
+// তোমার Joruri Sheet
 const SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
+
+// তোমার Seniority Sheet এর লিংকটা এখানে বসাও - যেটা থেকে seniority.html সেভ করে
+const SENIORITY_SHEET_URL = "https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec?action=getSeniority"; 
+// যদি একই Sheet হয়, তাহলে ?action=seniority দিয়ে ট্রাই করো, না হলে তোমার seniority sheet এর লিংক দাও
+
+// SENIORITY - Google Sheet থেকে ডান থেকে বামে
+function loadSeniorityFromSheet(){
+  fetch(SENIORITY_SHEET_URL)
+  .then(r=>r.json())
+  .then(data=>{
+    console.log("Sheet Seniority:", data);
+    let list = data;
+    if(data.data) list = data.data; // যদি {data:[...]} আসে
+    if(data.seniority) list = data.seniority;
+    
+    if(!list || list.length==0){
+      document.getElementById('seniorityText').innerText = "⭐ Seniority Sheet খালি ⭐";
+      return;
+    }
+    
+    let txt = list.slice(0,5).map((s,i)=>{
+      let name = s.name || s.Name || s[1] || s[0] || "Unknown";
+      let rank = s.rank || s.Rank || "";
+      let no = s.no || s.No || s.serial || (i+1);
+      return `⭐ ${no} No: ${rank} ${name}`;
+    }).join("  •  ");
+    
+    document.getElementById('seniorityText').innerText = txt + "  •  " + txt + "  •  ";
+    // লোকালেও সেভ রাখলাম, নেট না থাকলেও চলবে
+    localStorage.setItem("sutySenioritySheet", JSON.stringify(list));
+  })
+  .catch(e=>{
+    console.log("Sheet Fail, local try:", e);
+    // নেট ফেল হলে লোকাল থেকে দেখাবে
+    let local = localStorage.getItem("sutySenioritySheet");
+    if(local){
+      let list = JSON.parse(local);
+      let txt = list.slice(0,5).map((s,i)=>`⭐ ${i+1} No: ${s.name||s.Name}`).join("  •  ");
+      document.getElementById('seniorityText').innerText = txt + "  •  " + txt;
+    }else{
+      document.getElementById('seniorityText').innerText = "⭐ নেট চেক করুন - Seniority লোড হচ্ছে না ⭐";
+    }
+  });
+}
+
+loadSeniorityFromSheet();
+setInterval(loadSeniorityFromSheet, 60000); // ১ মিনিট পর পর অটো আপডেট
+</script>
 
 // JORURI - ডান থেকে বামে
 try{
