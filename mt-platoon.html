@@ -8,7 +8,6 @@
 <div class="addBox">
 <h3 style="margin:0 0 10px;color:#25D366;font-size:14px">➕ Add / Edit Number</h3>
 <input type="hidden" id="editRow">
-<input type="hidden" id="no">
 <div class="row"><input id="army" placeholder="সেনা নং *"><input id="rank" placeholder="পদবী"></div>
 <input id="name" placeholder="নাম *">
 <div class="row"><input id="mobile" placeholder="মোবাইল নং *"><input id="licence" placeholder="লাইসেন্স"></div>
@@ -20,7 +19,7 @@
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbw2sl41kOPN1meSmv2B1TL5mYNlFp9xAR9jVCwMQeDV-A7EBAp1CwoeKiy21QbBe8IfpA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxx_76hlM74drJ3I9D98O7PsPdlCVWdwDIh8ATULd-WlrIzTSbgVavPlaXwHeLk17M-Mw/exec";
 let data=[];
 async function load(){
   try{
@@ -28,7 +27,7 @@ async function load(){
     data = await res.json();
     render();
   }catch(e){
-    document.getElementById('list').innerHTML = "<div style='padding:20px;text-align:center'><p style='color:#ff4444'>❌ Failed! Apps Script -> Deploy -> Anyone করো</p><button onclick='load()' style='margin-top:10px;padding:8px 16px'>🔄 Retry</button></div>";
+    document.getElementById('list').innerHTML = "<div style='padding:20px;text-align:center'><p style='color:#ff4444'>❌ Failed!</p><button onclick='load()' style='margin-top:10px;padding:8px 16px'>🔄 Retry</button></div>";
   }
 }
 function render(){
@@ -44,14 +43,14 @@ function render(){
 }
 async function saveData(){
   let r=document.getElementById('editRow').value;
-  let p={no:document.getElementById('no').value || "", rank:rank.value, name:name.value, army:army.value, mobile:mobile.value, licence:licence.value, action:r?"edit":"add", row:r?parseInt(r):0};
+  let p={army:army.value, rank:rank.value, name:name.value, mobile:mobile.value, licence:licence.value, action:r?"edit":"add", row:r?parseInt(r):0};
   if(!p.name||!p.mobile||!p.army){alert("সেনা নং, নাম ও মোবাইল লাগবে!");return;}
   msg.innerText="⏳ Saving...";
   await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(p)});
   msg.innerText="✅ Saved!";
   setTimeout(()=>location.reload(),1200);
 }
-function editData(r){let o=data.find(x=>x.row===r);editRow.value=o.row;no.value=o.no||"";rank.value=o.rank;name.value=o.name;army.value=o.army;mobile.value=o.mobile;licence.value=o.licence;window.scrollTo(0,0);}
+function editData(r){let o=data.find(x=>x.row===r);editRow.value=o.row;army.value=o.army;rank.value=o.rank;name.value=o.name;mobile.value=o.mobile;licence.value=o.licence;window.scrollTo(0,0);}
 async function deleteData(r){if(!confirm("Delete করবা?"))return;await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:r})});alert("Deleted!");location.reload();}
 load();
 </script></body></html>
