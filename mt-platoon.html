@@ -1,68 +1,90 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT PLATOON</title>
-<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070d1a;color:#fff}.phone{max-width:430px;margin:0 auto;background:#0a1120;min-height:100vh}.top{padding:12px;display:flex;gap:8px;border-bottom:1px solid #1e2f4a;position:sticky;top:0;background:#0a1120;z-index:10}.back{font-size:28px;color:#c8a951;background:none;border:none}.switchBtn{padding:8px 12px;border-radius:8px;border:1px solid;font-size:11px;font-weight:900;cursor:pointer}.addBox{margin:14px;background:#111a2d;border:1px solid #25D366;border-radius:14px;padding:14px}.addBox input{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:1px solid #2a3a5a;background:#0a1120;color:#fff}.row{display:flex;gap:8px}.row input{flex:1}.saveBtn{width:100%;margin-top:10px;padding:12px;background:#25D366;color:#000;border:none;border-radius:10px;font-weight:900}.search{margin:12px;background:#111a2d;border:1px solid #c8a951;border-radius:20px;padding:11px 14px;display:flex;gap:8px}.search input{flex:1;background:transparent;border:none;color:#fff;outline:none}.card{background:#111a2d;border-left:4px solid #c8a951;border-radius:14px;margin:12px;border:1px solid #2a3a5a}.btns{display:flex;gap:6px;padding:10px}.btn{flex:1;border-radius:8px;padding:9px;text-align:center;text-decoration:none;font-weight:900;font-size:12px;border:1px solid}.viewBox{margin:14px;padding:10px;background:#0f172a;border:1px dashed #2a3a5a;border-radius:10px;text-align:center;font-size:12px;color:#8a9bb5}</style>
-</head><body>
-<div class="phone">
-<div class="top"><button class="back" onclick="location.href='index.html'">‹</button><div style="flex:1"><b>MT PLATOON</b><small id="roleTxt" style="display:block;color:#8a9bb5">Checking...</small></div></div>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT PLATOON</title> 
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070d1a;color:#fff}.phone{max-width:430px;margin:0 auto;background:#0a1120;min-height:100vh}.top{padding:12px;display:flex;gap:8px;border-bottom:1px solid #1e2f4a;position:sticky;top:0;background:#0a1120;z-index:10}.back{font-size:28px;color:#c8a951;background:none;border:none}.switchBtn{padding:8px 12px;border-radius:8px;border:1px solid;font-size:11px;font-weight:900;cursor:pointer}.addBox{margin:14px;background:#111a2d;border:1px solid #25D366;border-radius:14px;padding:14px}.addBox input{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:1px solid #2a3a5a;background:#0a1120;color:#fff}.row{display:flex;gap:8px}.row input{flex:1}.saveBtn{width:100%;margin-top:10px;padding:12px;background:#25D366;color:#000;border:none;border-radius:10px;font-weight:900}.search{margin:12px;background:#111a2d;border:1px solid #c8a951;border-radius:20px;padding:11px 14px;display:flex;gap:8px}.search input{flex:1;background:transparent;border:none;color:#fff;outline:none}.card{background:#111a2d;border-left:4px solid #c8a951;border-radius:14px;margin:12px;border:1px solid #2a3a5a}.btns{display:flex;gap:6px;padding:10px}.btn{flex:1;border-radius:8px;padding:9px;text-align:center;text-decoration:none;font-weight:900;font-size:12px;border:1px solid}.viewBox{margin:14px;padding:10px;background:#0f172a;border:1px dashed #2a3a5a;border-radius:10px;text-align:center;font-size:12px;color:#8a9bb5}</style> 
+</head><body> 
+<div class="phone"> 
+<div class="top"><button class="back" onclick="history.back()">‹</button><div style="flex:1"><b>MT PLATOON</b><small id="roleTxt" style="display:block;color:#8a9bb5">Checking...</small></div></div>
 
-<!-- Role Switch - এই ২টা Button দিয়ে ঠিক করবা -->
-<div style="padding:10px;display:flex;gap:8px">
-<button class="switchBtn" onclick="setRole('COMMAND')" style="background:#0f172a;color:#c8a951;border-color:#c8a951">COMMAND - View Only</button>
-<button class="switchBtn" onclick="setRole('MT CLK')" style="background:#25D366;color:#000;border-color:#25D366">MT CLK - Full Control</button>
-</div>
+<div style="padding:10px;display:flex;gap:8px"> 
+<button class="switchBtn" onclick="setRole('COMMAND')" style="background:#0f172a;color:#c8a951;border-color:#c8a951">COMMAND - View Only</button> 
+<button class="switchBtn" onclick="setRole('MT CLK')" style="background:#25D366;color:#000;border-color:#25D366">MT CLK - Full Control</button> 
+</div> 
 
-<div id="addBox" class="addBox" style="display:none">
-<h3 style="margin:0 0 10px;color:#25D366;font-size:14px">➕ Add / Edit Number</h3>
-<input type="hidden" id="editRow">
-<div class="row"><input id="no" placeholder="No"><input id="rank" placeholder="Rank"></div>
-<input id="name" placeholder="Name *">
-<div class="row"><input id="army" placeholder="Army No *"><input id="licence" placeholder="Licence"></div>
-<input id="mobile" placeholder="Mobile *">
-<button class="saveBtn" onclick="saveData()">💾 Save to Sheet</button><p id="msg" style="text-align:center;font-size:12px"></p>
-</div>
+<div id="addBox" class="addBox" style="display:none"> 
+<h3 style="margin:0 0 10px;color:#25D366;font-size:14px">➕ Add / Edit Number</h3> 
+<input type="hidden" id="editRow"> 
+<div class="row"><input id="no" placeholder="No"><input id="rank" placeholder="Rank"></div> 
+<input id="name" placeholder="Name *"> 
+<div class="row"><input id="army" placeholder="Army No *"><input id="licence" placeholder="Licence"></div> 
+<input id="mobile" placeholder="Mobile *"> 
+<button class="saveBtn" onclick="saveData()">💾 Save to Sheet</button><p id="msg" style="text-align:center;font-size:12px"></p> 
+</div> 
 
-<div id="viewInfo" class="viewBox" style="display:none">👁️ COMMAND View - শুধু দেখতে পারবেন</div>
-<div class="search">🔍 <input id="s" placeholder="Search Name / Army..." oninput="render()"></div>
-<div id="list"><p style="padding:40px;text-align:center;color:#c8a951">⏳ Loading...</p></div>
-</div>
+<div id="viewInfo" class="viewBox" style="display:none">👁️ COMMAND View - শুধু দেখতে পারবেন</div> 
+<div class="search">🔍 <input id="s" placeholder="Search Name / Army..." oninput="render()"></div> 
+<div id="list"><p style="padding:40px;text-align:center;color:#c8a951">⏳ Loading...</p></div> 
+</div> 
 
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbw2sl41kOPN1meSmv2B1TL5mYNlFp9xAR9jVCwMQeDV-A7EBAp1CwoeKiy21QbBe8IfpA/exec";
-let data=[];
-function setRole(r){ localStorage.setItem("userRole", r); location.reload(); }
-let role = localStorage.getItem("userRole") || "COMMAND";
-let isCLK = role.toUpperCase().includes("CLK");
-document.getElementById('roleTxt').innerText = "Login: " + role + (isCLK ? " - Full Access" : " - View Only");
-document.getElementById('addBox').style.display = isCLK ? "block" : "none";
-document.getElementById('viewInfo').style.display = isCLK ? "none" : "block";
+<script> 
+const API_URL = "https://script.google.com/macros/s/AKfycbw2sl41kOPN1meSmv2B1TL5mYNlFp9xAR9jVCwMQeDV-A7EBAp1CwoeKiy21QbBe8IfpA/exec"; 
+let data=[]; 
 
-async function load(){
- try{
-   let res = await fetch(API_URL);
-   if(!res.ok) throw new Error("Deploy Fail");
-   data = await res.json();
-   render();
- }catch(e){
-   document.getElementById('list').innerHTML = "<div style='padding:20px;text-align:center'><p style='color:#ff4444'>❌ Failed! Apps Script Deploy করো</p><p style='font-size:12px;color:#8a9bb5'>script.google.com > Deploy > Manage deployments > Edit > Version: New version > Who has access: Anyone > Deploy</p><button onclick='load()' style='margin-top:10px;padding:8px 16px'>🔄 Retry</button></div>";
- }
+function getRole(){
+  let urlRole = new URLSearchParams(window.location.search).get('role');
+  if(urlRole) return urlRole;
+  return localStorage.getItem("userRole") || localStorage.getItem("role") || localStorage.getItem("mtRole") || localStorage.getItem("loginType") || localStorage.getItem("user_role") || sessionStorage.getItem("userRole") || sessionStorage.getItem("role") || "COMMAND";
 }
-function render(){
- let q=document.getElementById('s').value.toLowerCase();
- let h=''; data.forEach(o=>{
-   if(q && !`${o.name} ${o.army} ${o.mobile}`.toLowerCase().includes(q)) return;
-   let wa=(o.mobile||'').replace(/\D/g,''); if(wa.startsWith('0')) wa='88'+wa;
-   let edit = isCLK ? `<a class="btn" style="border-color:orange;color:orange;cursor:pointer" onclick="editData(${o.row})">✏️ Edit</a><a class="btn" style="border-color:#ff4444;color:#ff4444;cursor:pointer" onclick="deleteData(${o.row})">🗑️ Del</a>` : '';
-   h+=`<div class="card"><div style="padding:12px"><b>${o.rank||''} ${o.name||''}</b><br><small style="color:#c8a951">No:${o.no||''} • Army:${o.army||''}</small></div><div style="padding:0 12px 8px;font-size:12px">📱 ${o.mobile||''} | Licence: ${o.licence||''}</div><div class="btns"><a class="btn" style="background:#0f172a;border-color:#c8a951;color:#c8a951" href="tel:${o.mobile}">📞 Call</a><a class="btn" style="background:#0a1a0a;border-color:#25D366;color:#25D366" href="https://wa.me/${wa}">💬 WA</a>${edit}</div></div>`;
- }); document.getElementById('list').innerHTML=h||"<p style='padding:20px;text-align:center'>No Data</p>";
-}
-async function saveData(){
- let r=document.getElementById('editRow').value;
- let p={no:no.value,rank:rank.value,name:name.value,army:army.value,mobile:mobile.value,licence:licence.value,action:r?"edit":"add",row:r?parseInt(r):0};
- if(!p.name||!p.mobile){alert("Name & Mobile লাগবে!");return;}
- msg.innerText="⏳ Saving..."; await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(p)});
- msg.innerText="✅ Saved!"; setTimeout(()=>location.reload(),1500);
-}
-function editData(r){let o=data.find(x=>x.row===r);editRow.value=o.row;no.value=o.no;rank.value=o.rank;name.value=o.name;army.value=o.army;mobile.value=o.mobile;licence.value=o.licence;window.scrollTo(0,0);}
-async function deleteData(r){if(!confirm("Delete করবা?"))return;await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:r})});alert("Deleted!");location.reload();}
-load();
+
+function setRole(r){ 
+  localStorage.setItem("userRole", r); 
+  localStorage.setItem("role", r);
+  localStorage.setItem("mtRole", r);
+  location.href = location.pathname + "?role=" + encodeURIComponent(r);
+} 
+
+let role = getRole();
+let isCLK = role.toUpperCase().includes("CLK") || role.toLowerCase().includes("clk");
+if(isCLK){ localStorage.setItem("userRole", "MT CLK"); }
+
+document.getElementById('roleTxt').innerText = "Login: " + role + (isCLK ? " - Full Access" : " - View Only"); 
+document.getElementById('addBox').style.display = isCLK ? "block" : "none"; 
+document.getElementById('viewInfo').style.display = isCLK ? "none" : "block"; 
+
+async function load(){ 
+  try{ 
+    let res = await fetch(API_URL); 
+    if(!res.ok) throw new Error("Deploy Fail"); 
+    data = await res.json(); 
+    render(); 
+  }catch(e){ 
+    document.getElementById('list').innerHTML = "<div style='padding:20px;text-align:center'><p style='color:#ff4444'>❌ Failed! Apps Script Redeploy করো</p><p style='font-size:11px;color:#8a9bb5'>Deploy > Manage deployments > Edit > Version: New version > Who has access: Anyone > Deploy</p><button onclick='load()' style='margin-top:10px;padding:8px 16px'>🔄 Retry</button></div>"; 
+  } 
+} 
+
+function render(){ 
+  let q=document.getElementById('s').value.toLowerCase(); 
+  let h=''; 
+  data.forEach(o=>{ 
+    if(q && !`${o.name} ${o.army} ${o.mobile}`.toLowerCase().includes(q)) return; 
+    let wa=(o.mobile||'').replace(/\D/g,''); 
+    if(wa.startsWith('0')) wa='88'+wa; 
+    let edit = isCLK ? `<a class="btn" style="border-color:orange;color:orange;cursor:pointer" onclick="editData(${o.row})">✏️ Edit</a><a class="btn" style="border-color:#ff4444;color:#ff4444;cursor:pointer" onclick="deleteData(${o.row})">🗑️ Del</a>` : ''; 
+    h+=`<div class="card"><div style="padding:12px"><b>${o.rank||''} ${o.name||''}</b><br><small style="color:#c8a951">No:${o.no||''} • Army:${o.army||''}</small></div><div style="padding:0 12px 8px;font-size:12px">📱 ${o.mobile||''} | Licence: ${o.licence||''}</div><div class="btns"><a class="btn" style="background:#0f172a;border-color:#c8a951;color:#c8a951" href="tel:${o.mobile}">📞 Call</a><a class="btn" style="background:#0a1a0a;border-color:#25D366;color:#25D366" href="https://wa.me/${wa}">💬 WA</a>${edit}</div></div>`; 
+  }); 
+  document.getElementById('list').innerHTML=h||"<p style='padding:20px;text-align:center'>No Data</p>"; 
+} 
+
+async function saveData(){ 
+  let r=document.getElementById('editRow').value; 
+  let p={no:no.value,rank:rank.value,name:name.value,army:army.value,mobile:mobile.value,licence:licence.value,action:r?"edit":"add",row:r?parseInt(r):0}; 
+  if(!p.name||!p.mobile){alert("Name & Mobile লাগবে!");return;} 
+  msg.innerText="⏳ Saving..."; 
+  await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(p)}); 
+  msg.innerText="✅ Saved!"; 
+  setTimeout(()=>location.reload(),1500); 
+} 
+
+function editData(r){let o=data.find(x=>x.row===r);editRow.value=o.row;no.value=o.no;rank.value=o.rank;name.value=o.name;army.value=o.army;mobile.value=o.mobile;licence.value=o.licence;window.scrollTo(0,0);} 
+async function deleteData(r){if(!confirm("Delete করবা?"))return;await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:r})});alert("Deleted!");location.reload();} 
+load(); 
 </script></body></html>
