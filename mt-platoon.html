@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Platoon - 4 BIR</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070d1a;color:#fff}
+.phone{max-width:430px;margin:0 auto;background:#0a1120;min-height:100vh;padding-bottom:80px;border:1px solid #1a2a40}
+.top{padding:14px;display:flex;align-items:center;gap:12px}.top b{color:#d4b56a;font-size:17px;display:block}.top small{color:#8a9bb5;font-size:11px}
+.searchWrap{padding:10px 14px}.search{width:100%;background:#111a2d;border:1px solid #c8a951;border-radius:20px;padding:11px 14px;display:flex;gap:8px}.search input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:12px}
+.stats{background:#111a2d;border:1px solid #1e2f4a;border-radius:12px;margin:8px 14px;padding:10px 14px;font-size:12px}
+.stats b{color:#d4b56a}
+.card{background:#111a2d;border:1px solid #2a3a5a;border-radius:14px;margin:12px 14px;overflow:hidden;border-left:4px solid #c8a951;position:relative}.card::before{content:'';position:absolute;top:0;left:0;right:40%;height:3px;background:#d4b56a}
+.rankBadge{width:52px;height:60px;background:linear-gradient(#d4b56a,#8a6a2a);border-radius:0 0 50% 50%;display:flex;align-items:center;justify-content:center;float:left;margin:10px 12px;font-weight:900;font-size:9px;color:#1a1a0a;text-align:center}
+.cardHead{padding:14px 14px 0 0;display:flex;justify-content:space-between}.cardHead h3{margin:0;font-size:15px}.cardHead h3 small{color:#d4b56a;font-size:12px;display:block}
+.details{clear:both;padding:8px 14px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px}.label{color:#8a9bb5}.val{color:#fff;font-weight:700}.full{grid-column:1/span 2}
+.btns{display:flex;gap:10px;padding:0 14px 14px 14px}.callBtn{flex:1;background:#0f172a;border:1px solid #d4b56a;color:#d4b56a;border-radius:10px;padding:10px;text-align:center;text-decoration:none;font-weight:900;font-size:13px}
+</style></head><body>
+<div class="phone">
+<div class="top"><button onclick="history.back()" style="background:none;border:none;color:#d4b56a;font-size:28px">‹</button><div><b>MT PLATOON CONTACT LIST</b><small>🛡️ BANGLADESH ARMY • 4 BIR</small></div></div>
+<div class="searchWrap"><div class="search">🔍 <input id="s" placeholder="Search by name, rank, number..." oninput="render()"></div></div>
+<div class="stats"><b>Total MT:</b> <span id="total">42</span> — Active: 38 • On Duty: 12</div>
+<div id="list"></div>
+</div>
+<script>
+let data=[{rank:"SGT",name:"SGT. RAHMAN",no:"45210328",mobile:"01712-345001",duty:"Driver - Truck 979"},{rank:"CPL",name:"CPL. ALAM",no:"45210329",mobile:"01712-345002",duty:"Driver - Truck 980"},{rank:"LCPL",name:"LCPL. KARIM",no:"45210330",mobile:"01712-345003",duty:"MT Store | Active Duty"}];
+function render(){let q=document.getElementById('s').value.toLowerCase();let f=data.filter(d=>(d.name+d.mobile).toLowerCase().includes(q));document.getElementById('total').innerText=f.length;document.getElementById('list').innerHTML=f.map(o=>`<div class="card"><div class="cardHead"><div style="display:flex;gap:0"><div class="rankBadge">${o.rank}</div><h3><small>${o.rank}</small>${o.name}</h3></div><div>•••</div></div><div class="details"><div><span class="label">ARMY No:</span></div><div><span class="label">DUTY:</span></div><div><span class="val">${o.no}</span></div><div><span class="val">${o.duty}</span></div><div class="full"><span class="label">MOBILE:</span> <span class="val">${o.mobile}</span></div></div><div class="btns"><a class="callBtn" href="tel:${o.mobile}">📞 Call</a><a class="callBtn" href="https://wa.me/${o.mobile.replace(/\D/g,'')}" style="border-color:#25D366;color:#25D366">💬 WhatsApp</a></div></div>`).join('')}
+render();
+</script></body></html>
