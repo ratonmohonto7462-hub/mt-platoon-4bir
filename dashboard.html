@@ -62,10 +62,77 @@
 <div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Quick Search... Vehicle, Person, Number" onkeyup="doSearch(this.value)"></div>
 <div id="searchResults"></div>
 
-<div class="joruri">
-<div style="flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis"><b>🚨 জরুরি: <span id="joruriText">লোড হচ্ছে...</span></b></div>
-<span id="editJoruriBtn" onclick="editJoruri()" style="display:none;background:white;color:#b91c1c;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900;margin-left:8px">✏️ Edit</span>
+<style>
+.ticker{overflow:hidden;white-space:nowrap;position:relative;border-radius:10px;padding:10px 0;margin:8px 0}
+.ticker-track{display:inline-block;padding-left:100%;animation:marquee 20s linear infinite}
+.ticker-track.slow{animation-duration:25s}
+@keyframes marquee{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+.joruri-bg{background:#b91c1c;color:white}
+.seniority-bg{background:#0a4d0a;color:#c8ffc8;border:1px solid #1f8a1f}
+.badge{margin-right:18px;font-weight:900}
+</style>
+
+<!-- 1st - JORURI ADESH - বাম থেকে ডানে বার বার -->
+<div class="ticker joruri-bg">
+  <div class="ticker-track" id="joruriTrack">
+    <span id="joruriText">🚨 জরুরি আদেশ লোড হচ্ছে... 🚨</span>
+  </div>
+  <span id="editJoruriBtn" onclick="editJoruri()" style="display:none;position:absolute;right:8px;top:6px;background:white;color:#b91c1c;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:900;cursor:pointer">✏️ Edit</span>
 </div>
+
+<!-- 2nd - SUTY SENIORITY - বাম থেকে ডানে 1,2,3,4,5 -->
+<div class="ticker seniority-bg">
+  <div class="ticker-track slow" id="seniorityTrack">
+    <span id="seniorityText">⭐ Suty Seniority লোড হচ্ছে... ⭐</span>
+  </div>
+</div>
+
+<script>
+const SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
+
+// Joruri Adesh Auto Load
+try{
+ fetch(SHEET_URL).then(r=>r.json()).then(d=>{
+   if(d && d.text){ 
+     document.getElementById('joruriText').innerText = "🚨 " + d.text + " 🚨  •  🚨 " + d.text + " 🚨  •  ";
+   }
+ });
+}catch(e){}
+
+// Suty Seniority Auto Load - 1 থেকে 5
+// তোমার seniority লিস্ট localStorage বা Sheet থেকে আসবে
+let seniorityList = JSON.parse(localStorage.getItem("sutySeniority") || "[]");
+
+// যদি লিস্ট খালি থাকে, Demo ডাটা
+if(seniorityList.length===0){
+  seniorityList = [
+    {no:1,name:"Sgt. Rahman"},
+    {no:2,name:"Cpl. Alam"},
+    {no:3,name:"LCpl. Hossain"},
+    {no:4,name:"Pte. Karim"},
+    {no:5,name:"Pte. Jamal"}
+  ];
+}
+
+function updateSeniorityTicker(){
+  let text = seniorityList.slice(0,5).map(s=>`⭐ ${s.no} No: ${s.name}`).join("  •  ");
+  document.getElementById('seniorityText').innerText = "📋 " + text + "  •  📋 " + text + "  •  ";
+}
+updateSeniorityTicker();
+
+// যদি role clk হয় Edit দেখাবে
+if(localStorage.getItem('role')==='clk'){
+  document.getElementById('editJoruriBtn').style.display='block';
+}
+function editJoruri(){
+  let t=prompt("নতুন জরুরি আদেশ লিখুন:");
+  if(!t)return;
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({text:t})}).then(()=>{alert("✅ সেভ হয়েছে");location.reload();});
+}
+</script>
 
 <a href="mt-brain-final.html" style="text-decoration:none;"><div class="brain"><div style="background:white;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">🧠</div><div style="flex:1"><div style="color:white;font-weight:900">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div><div style="background:white;color:#0a6a0a;padding:6px 12px;border-radius:20px;font-weight:900;font-size:12px">ASK →</div></div></a>
 
