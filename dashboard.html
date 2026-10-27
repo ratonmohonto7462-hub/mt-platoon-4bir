@@ -4,145 +4,99 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MT PLATOON 4 BIR</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#0a1a0f;color:white;min-height:100vh}
-.top{background:#0f2815;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #1a3d22}
-.top b{font-size:20px;font-weight:900;line-height:1}
-.top small{color:#a0b8a0;font-size:11px}
-.bell{position:relative;font-size:22px}
-.bell span{position:absolute;top:-6px;right:-6px;background:#d50000;color:white;font-size:10px;padding:2px 5px;border-radius:10px;font-weight:900}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#0a1a0f;color:white;min-height:100vh}
+.top{background:#0f2815;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;border-bottom:1px solid #1a3d22}
+.menuBtn{font-size:26px;font-weight:900;cursor:pointer;padding:2px 8px}
+.top b{font-size:18px;font-weight:900;line-height:1}
 .avatar{width:38px;height:38px;border-radius:50%;background:#c8a951;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0f2110;border:2px solid #c8a951}
+.drawer{position:fixed;top:0;left:-100%;width:78%;max-width:300px;height:100%;background:#0f2110;border-right:1px solid #1f4a28;z-index:100;transition:0.3s;padding:16px;overflow:auto}
+.drawer.open{left:0}.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:90;display:none}.overlay.show{display:block}
+.d-item{padding:14px 10px;border-bottom:1px solid #1a3d22;cursor:pointer;font-weight:700;display:flex;gap:10px;align-items:center}
 .wrap{padding:14px 14px 90px 14px}
-.greet h2{margin:0;font-size:20px}.greet p{margin:2px 0 14px 0;color:#c8a951;font-size:13px}
+.greet h2{margin:0;font-size:28px;font-weight:900;text-align:center;letter-spacing:1px}.greet p{text-align:center;margin:4px 0 14px 0;color:#c8a951;font-size:13px}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .s-card{background:#132a18;border:1px solid #1f4a28;border-radius:14px;padding:12px}
-.s-card p{margin:0;color:#8aa88f;font-size:12px}.s-card h3{margin:6px 0 0 0;font-size:26px;display:flex;gap:8px;align-items:center}
-.qsearch{margin:18px 0 10px 0}
-.qsearch h3{text-align:center;margin:0 0 8px 0;font-size:16px}
-.searchBox{display:flex;align-items:center;gap:8px;background:#132a18;border:1px solid #c8a951;border-radius:12px;padding:10px 14px}
+.s-card p{margin:0;color:#8aa88f;font-size:12px}.s-card h3{margin:6px 0 0 0;font-size:22px;display:flex;gap:8px;align-items:center}
+.searchBox{display:flex;align-items:center;gap:8px;background:#132a18;border:1px solid #c8a951;border-radius:12px;padding:10px 14px;margin:14px 0}
 .searchBox input{flex:1;background:transparent;border:none;color:white;outline:none;font-size:14px}
-#searchResults{margin-top:8px;background:#0f2110;border:1px solid #1f4a28;border-radius:12px;padding:6px;display:none;max-height:220px;overflow:auto}
-.joruri{background:#b91c1c;border-radius:10px;padding:10px 12px;margin:12px 0;position:relative;overflow:hidden}
-.joruri b{font-size:14px}.joruri p{margin:2px 0 0 0;font-size:12px;opacity:0.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#searchResults{margin-top:-6px;background:#0f2110;border:1px solid #1f4a28;border-radius:12px;padding:6px;display:none;max-height:220px;overflow:auto}
+.joruri{background:#b91c1c;border-radius:10px;padding:10px 12px;margin:12px 0;display:flex;justify-content:space-between;align-items:center}
 .brain{background:linear-gradient(90deg,#0a7a2a,#12a03a);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.brain .ico{background:white;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.folders h3{margin:0 0 10px 0}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:rgba(255,255,255,0.92);color:#0f2110;border-radius:18px;padding:18px 8px;text-align:center;box-shadow:0 4px 12px #0003;cursor:pointer}
-.icon{font-size:38px;display:block}.t1{font-weight:900;color:#0a4d0a;font-size:12px;margin-top:8px}.t2{font-size:11px;color:#777;margin-top:4px}
-.recent{margin-top:18px}
-.recentBox{background:#e8e8e8;color:#222;border-radius:16px;padding:12px}
-.act{font-size:12.5px;margin-bottom:8px;display:flex;gap:8px}
-.dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#0f2110;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:10px 0;z-index:20}
+.card{background:rgba(255,255,255,0.92);color:#0f2110;border-radius:18px;padding:18px 8px;text-align:center;cursor:pointer}
+.icon{font-size:36px}.t1{font-weight:900;color:#0a4d0a;font-size:12px;margin-top:6px}.t2{font-size:11px;color:#777}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#0f2110;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:10px 0}
 .bottom div{text-align:center;font-size:11px;color:#777;cursor:pointer}.bottom div.active{color:#c8a951}
-@keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 </style>
 </head>
 <body>
+
 <div class="top">
-<div><b>4 BR —<br>MT Platoon</b><br><small>4 BIR • Premium Dashboard</small></div>
-<div style="display:flex;gap:14px;align-items:center">
-<div class="bell">🔔<span>3</span></div>
-<div class="avatar">RH</div>
-<button onclick="localStorage.clear();location.href='index.html'" style="background:#d50000;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:900;margin-left:4px">LOGOUT</button>
+<div style="display:flex;align-items:center;gap:8px"><div class="menuBtn" onclick="openDrawer()">☰</div><div><b>4 BIR —<br>MT PLATOON</b></div></div>
+<div style="display:flex;gap:10px;align-items:center"><div>🔔<span style="background:#d00;color:white;font-size:10px;padding:2px 5px;border-radius:10px;margin-left:-6px">3</span></div><div class="avatar">RH</div><button onclick="localStorage.clear();location.href='index.html'" style="background:#d50000;color:white;border:none;padding:7px 12px;border-radius:8px;font-weight:900">LOGOUT</button></div>
 </div>
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+<h3 style="margin:0 0 10px 0">📁 FOLDERS</h3>
+<div class="d-item" onclick="location.href='vehicle.html'">🚚 VEHICLE UPDATE</div>
+<div class="d-item" onclick="location.href='communication.html'">☎️ COMMUNICATION</div>
+<div class="d-item" onclick="location.href='duty.html'">👮‍♂️ DUTY ROSTER</div>
+<div class="d-item" onclick="location.href='seniority.html'">⭐ SUTY SENIORITY</div>
+<div class="d-item" onclick="location.href='instruction.html'">📝 INSTRUCTION</div>
+<div class="d-item" onclick="location.href='contact.html'">📞 MT PLATOON MOBILE</div>
+<div class="d-item" onclick="location.href='mt-brain-final.html'">🧠 MT BRAIN AI</div>
+<div style="margin-top:20px"><button onclick="closeDrawer()" style="width:100%;padding:10px;background:#1f4a28;color:white;border:none;border-radius:10px">✖️ Close</button></div>
 </div>
 
 <div class="wrap">
-<div class="greet"><h2>Good Morning, Captain</h2><p>Duty Status: <span style="color:#22c55e">Active •</span> <span id="todayDate"></span></p></div>
+<div class="greet"><h2>ASSALAMUALAIKUM</h2><p>Duty Status: <span style="color:#22c55e">Active •</span> <span id="todayDate"></span></p></div>
 
 <div class="stats">
 <div class="s-card"><p>Total Vehicles</p><h3>🚚 18</h3></div>
-<div class="s-card"><p>Fuel</p><h3>⛽ 1240L</h3></div>
+<div class="s-card"><p>Communication</p><h3>☎️ 42</h3></div>
 <div class="s-card"><p>Personnel</p><h3>👥 42</h3></div>
 <div class="s-card"><p>Officer on Duty</p><h3>👮 1</h3></div>
 </div>
 
-<div class="qsearch">
-<h3>Quick Search</h3>
-<div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Vehicle, Fuel, Person, Number... লিখুন" onkeyup="doSearch(this.value)"></div>
+<div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Quick Search... Vehicle, Person, Number" onkeyup="doSearch(this.value)"></div>
 <div id="searchResults"></div>
-</div>
 
 <div class="joruri">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<div style="flex:1;overflow:hidden">
-<b>🚨 জরুরি আদেশ: <span id="joruriText">লোড হচ্ছে...</span></b>
-</div>
-<span id="editJoruriBtn" onclick="editJoruri()" style="display:none;background:white;color:#b91c1c;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900;margin-left:8px;cursor:pointer">✏️ Edit</span>
-</div>
+<div style="flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis"><b>🚨 জরুরি: <span id="joruriText">লোড হচ্ছে...</span></b></div>
+<span id="editJoruriBtn" onclick="editJoruri()" style="display:none;background:white;color:#b91c1c;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900;margin-left:8px">✏️ Edit</span>
 </div>
 
-<a href="mt-brain-final.html" style="text-decoration:none;">
-<div class="brain">
-<div class="ico">🧠</div>
-<div style="flex:1"><div style="color:white;font-weight:900;font-size:15px">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div>
-<div style="background:white;color:#0a6a0a;padding:6px 12px;border-radius:20px;font-weight:900;font-size:12px">ASK →</div>
-</div>
-</a>
+<a href="mt-brain-final.html" style="text-decoration:none;"><div class="brain"><div style="background:white;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">🧠</div><div style="flex:1"><div style="color:white;font-weight:900">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div><div style="background:white;color:#0a6a0a;padding:6px 12px;border-radius:20px;font-weight:900;font-size:12px">ASK →</div></div></a>
 
-<div class="folders">
-<h3>Folders</h3>
+<div style="margin-top:14px"><h3>Folders</h3>
 <div class="grid">
-<div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div><div class="t2">All Vehicle Information</div></div>
+<div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div><div class="t2">All Vehicle Info</div></div>
 <div class="card" onclick="location.href='communication.html'"><span class="icon">☎️</span><div class="t1">COMMUNICATION</div><div class="t2">All Required Number</div></div>
 <div class="card" onclick="location.href='duty.html'"><span class="icon">👮‍♂️</span><div class="t1">DUTY ROSTER</div><div class="t2">Platoon Duty List</div></div>
-<div class="card" onclick="location.href='seniority.html'"><span class="icon">⭐</span><div class="t1">SUTY SENIORITY</div><div class="t2">Seniority List & Updates</div></div>
-<div class="card" onclick="location.href='instruction.html'"><span class="icon">📝</span><div class="t1">INSTRUCTION</div><div class="t2">Other Updates</div></div>
-<div class="card" onclick="location.href='contact.html'"><span class="icon">📞</span><div class="t1">MT PLATOON MOBILE</div><div class="t2">Contact List • 01769-013433</div></div>
-</div>
-</div>
+<div class="card" onclick="location.href='seniority.html'"><span class="icon">⭐</span><div class="t1">SUTY SENIORITY</div><div class="t2">Seniority List</div></div>
+</div></div>
 
-<div class="recent">
-<h3>Recent Activities</h3>
-<div class="recentBox" id="recentList">
-<div class="act"><div class="dot" style="background:#22c55e"></div><div><b>Vehicle B-112 fueled</b><br>1240L added • 08:12 AM</div></div>
-<div class="act"><div class="dot" style="background:#f59e0b"></div><div><b>Maintenance scheduled: Vehicle C-07</b> • 07:55 AM</div></div>
-<div class="act"><div class="dot" style="background:#3b82f6"></div><div><b>New personnel assigned</b><br>Pvt. Rahman • 07:30 AM</div></div>
-<div class="act"><div class="dot" style="background:#ef4444"></div><div><b>Emergency order issued for convoy movement</b><br>Fuel low warning D-14 • Yesterday 9:40 PM</div></div>
-</div>
+<div style="margin-top:18px;background:#e8e8e8;color:#222;border-radius:14px;padding:12px" id="recentList">
+<div style="font-weight:900;margin-bottom:6px">Recent Activities</div>
+<div style="font-size:12.5px">🟢 Vehicle B-112 fueled - 08:12 AM<br>🟠 Maintenance C-07 - 07:55 AM<br>🔵 Pvt. Rahman joined - 07:30 AM</div>
 </div>
 </div>
 
 <div class="bottom">
-<div class="active" onclick="location.href='dashboard.html'">🏠<br>Dashboard</div>
-<div onclick="location.href='vehicle.html'">🚚<br>Vehicles</div>
-<div onclick="location.href='fuel.html'">⛽<br>Fuel</div>
-<div onclick="location.href='duty.html'">📋<br>Roster</div>
-<div onclick="location.href='profile.html'">👤<br>Profile</div>
+<div class="active">🏠<br>Dashboard</div><div onclick="location.href='vehicle.html'">🚚<br>Vehicles</div><div onclick="location.href='communication.html'">☎️<br>Comms</div><div onclick="location.href='duty.html'">📋<br>Roster</div><div>👤<br>Profile</div>
 </div>
 
 <script>
 const SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
-document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-
-// Joruri Adesh Load
-try{
- fetch(SHEET_URL).then(r=>r.json()).then(d=>{ if(d&&d.text){ document.getElementById('joruriText').innerText=d.text; } }).catch(()=>{});
-}catch(e){}
-if(localStorage.getItem('role')==='clk'){ document.getElementById('editJoruriBtn').style.display='block'; }
-function editJoruri(){ let t=prompt("নতুন জরুরি আদেশ লিখুন:"); if(!t)return; fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({text:t})}).then(()=>{ alert("✅ সেভ হয়েছে"); location.reload(); }); }
-
-// Quick Search - সব জায়গা থেকে খুঁজবে
-let allData=[
- {type:"VEHICLE",name:"BA-402 - Truck",link:"vehicle.html"},
- {type:"VEHICLE",name:"B-112 - Jeep - 1240L",link:"vehicle.html"},
- {type:"FUEL",name:"D-14 - 200L Refill",link:"fuel.html"},
- {type:"PERSONNEL",name:"Pvt. Rahman - New Joined",link:"seniority.html"},
- {type:"COMMUNICATION",name:"CO Sir - 01769-000001",link:"communication.html"},
- {type:"DUTY",name:"Night Duty - Platoon",link:"duty.html"},
- {type:"JORURI ADESH",name:"Convoy Movement Ordered",link:"#"},
-];
-function doSearch(q){
- let res=document.getElementById("searchResults");
- if(!q){ res.style.display="none"; return; }
- let low=q.toLowerCase();
- let filt=allData.filter(d=>d.name.toLowerCase().includes(low)||d.type.toLowerCase().includes(low));
- if(!filt.length){ res.innerHTML="<p style='color:#888;font-size:12px;padding:6px'>কিছু পাওয়া যায়নি...</p>"; }
- else{ res.innerHTML=filt.map(d=>`<div onclick="location.href='${d.link}'" style="padding:8px;border-bottom:1px solid #1f4a28;cursor:pointer"><b style="color:#c8a951;font-size:10px">${d.type}</b><br><span style="color:white;font-size:13px">${d.name}</span></div>`).join(""); }
- res.style.display="block";
-}
+document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+try{fetch(SHEET_URL).then(r=>r.json()).then(d=>{if(d&&d.text)document.getElementById('joruriText').innerText=d.text}) }catch(e){}
+if(localStorage.getItem('role')==='clk')document.getElementById('editJoruriBtn').style.display='block';
+function editJoruri(){let t=prompt("নতুন জরুরি আদেশ:"); if(!t)return; fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({text:t})}).then(()=>{alert("✅ Saved");location.reload()})}
+function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('overlay').classList.add('show')}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
+let allData=[{type:"VEHICLE",name:"BA-402 Truck",link:"vehicle.html"},{type:"COMMUNICATION",name:"CO Sir 01769-000001",link:"communication.html"},{type:"DUTY",name:"Night Duty",link:"duty.html"}];
+function doSearch(q){let res=document.getElementById("searchResults"); if(!q){res.style.display="none";return;} let low=q.toLowerCase(); let filt=allData.filter(d=>d.name.toLowerCase().includes(low)); res.innerHTML=filt.map(d=>`<div onclick="location.href='${d.link}'" style="padding:8px;border-bottom:1px solid #1f4a28;cursor:pointer"><b style="color:#c8a951;font-size:10px">${d.type}</b><br><span style="color:white;font-size:13px">${d.name}</span></div>`).join(""); res.style.display="block";}
 </script>
 </body>
 </html>
