@@ -1,12 +1,17 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Platoon Profile - 4 BIR</title>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MT Platoon Profile - 4 BIR</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070a14;color:#fff}
 .phone{max-width:430px;margin:0 auto;background:#0a1025;min-height:100vh;border:1px solid #1a2a40;padding-bottom:20px}
 .top{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #1e2f4a;background:#0a1025;position:sticky;top:0;z-index:10}
 .top b{color:#d4b56a;font-size:16px;letter-spacing:1px;display:block}
 .top small{color:#8a9bb5;font-size:10px}
-.back{font-size:28px;color:#d4b56a;background:none;border:none}
-.title{padding:14px 14px 8px;text-align:center;color:#d4b56a;font-weight:900;font-size:20px;letter-spacing:1px;border-bottom:1px dashed #2a3a5a}
+.back{font-size:28px;color:#d4b56a;background:none;border:2px solid #d4b56a;border-radius:50%;width:36px;height:36px;cursor:pointer}
+.title{padding:14px;text-align:center;color:#d4b56a;font-weight:900;font-size:20px;letter-spacing:1px;border-bottom:1px dashed #2a3a5a}
 .hero{display:flex;gap:12px;padding:14px}
 .logoBox{width:115px;height:115px;background:radial-gradient(#142040,#0a0f20);border:2px solid #d4b56a;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
 .logoBox b{font-size:38px;color:#d4b56a;line-height:1}.logoBox small{font-size:8px;color:#d4b56a;font-weight:900;text-align:center;margin-top:5px;line-height:1.2}
@@ -18,29 +23,30 @@
 .manCard{background:#0e1430;border:1px solid #1e2f4a;border-radius:8px;padding:8px;text-align:center}
 .manCard b{font-size:20px;color:#d4b56a;display:block}.manCard small{font-size:9px;color:#8a9bb5}
 .section{padding:12px 14px 0 14px}
-.sectionTitle{color:#d4b56a;font-size:12px;font-weight:900;letter-spacing:1px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.editBtnSmall{background:#2a1a0a;border:1px solid #d4b56a;color:#d4b56a;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:900}
+.sectionTitle{color:#d4b56a;font-size:11px;font-weight:900;letter-spacing:0.5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.editBtnSmall{background:#2a1a0a;border:1px solid #d4b56a;color:#d4b56a;border-radius:6px;padding:5px 10px;font-size:10px;font-weight:900;cursor:pointer}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .vCard{background:#111832;border:1px solid #c8a951;border-radius:10px;padding:10px;position:relative}
 .vCard b{font-size:12px;display:block}.vCard small{font-size:9px;color:#8a9bb5;display:block;margin-top:2px}
-.vType{font-size:14px} .vCount{font-size:18px;color:#d4b56a;font-weight:900}
-.vActions{margin-top:6px;display:flex;gap:5px}.vActions button{flex:1;font-size:9px;padding:4px;border-radius:5px;font-weight:900;border:1px solid}
+.vCount{font-size:18px;color:#d4b56a;font-weight:900}
+.vActions{margin-top:6px;display:flex;gap:5px}.vActions button{flex:1;font-size:9px;padding:5px;border-radius:5px;font-weight:900;border:1px solid;cursor:pointer}
 .contactBox{background:#111832;border:1px solid #1e2f4a;border-radius:10px;padding:10px}
 .contactRow{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #1a2a40;font-size:11px}.contactRow:last-child{border:none}
 .dutyBox{background:#111832;border:1px solid #1e2f4a;border-radius:10px;overflow:hidden}
 .dutyItem{display:flex;gap:10px;padding:10px;border-bottom:1px solid #1a2a40;position:relative}.dutyItem:last-child{border:none}
 .dot{width:7px;height:7px;background:#d4b56a;border-radius:50%;margin-top:6px;flex-shrink:0}
-.emergency{margin:14px;background:#d4b56a;color:#000;border:none;width:calc(100% - 28px);padding:13px;border-radius:30px;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;gap:10px}
+.emergency{margin:14px;background:#d4b56a;color:#000;border:none;width:calc(100% - 28px);padding:13px;border-radius:30px;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
 #formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:100;align-items:center;justify-content:center;padding:12px}
 #formBox{background:#0f172a;border:1px solid #d4b56a;border-radius:14px;width:100%;max-width:400px;max-height:90vh;overflow:auto}
 #formBox h3{margin:0;padding:12px;background:#2a1a0a;color:#d4b56a;text-align:center;font-size:13px}
 .formInner{padding:12px}.formInner label{font-size:10px;color:#d4b56a;font-weight:900;display:block;margin:8px 0 3px}
-.formInner input,.formInner select{width:100%;padding:8px;border-radius:6px;border:1px solid #1e2f4a;background:#111a2d;color:#fff;font-size:12px}
-</style></head><body>
+.formInner input,.formInner select{width:100%;padding:9px;border-radius:6px;border:1px solid #1e2f4a;background:#111a2d;color:#fff;font-size:12px}
+</style>
+</head>
+<body>
 <div class="phone">
-<div class="top"><button class="back" onclick="location.href='contact.html'">‹</button><div><b>MT PLATOON - 4 BIR</b><small>Profile • Only MT CLK Can Edit</small></div></div>
+<div class="top"><button class="back" onclick="history.back()">‹</button><div><b>MT PLATOON - 4 BIR</b><small>Profile • Only MT CLK Can Edit</small></div></div>
 <div class="title">MT PLATOON PROFILE</div>
-
 <div class="hero">
 <div class="logoBox"><b>MT</b><small>4 BIR<br>MECHANIZED TRANSPORT</small></div>
 <div class="heroInfo">
@@ -58,168 +64,41 @@
 </div>
 </div>
 </div>
-
 <div class="section">
-<div class="sectionTitle"><span>🚛 VEHICLES - MC, JEEP, MICRO, PICKUP, 3TON, BUS, W/T, F/V</span><button id="addVehBtn" class="editBtnSmall" onclick="openVehAdd()">+ Add</button></div>
+<div class="sectionTitle"><span>🚛 MC • JEEP • MICRO • PICKUP • 3TON • BUS • W/T • F/V</span><button id="addVehBtn" class="editBtnSmall" onclick="openVehAdd()">+ Add</button></div>
 <div id="vehList" class="grid2"></div>
 </div>
-
 <div class="section">
 <div class="sectionTitle"><span>📞 CONTACT INFO</span><button id="editContactBtn" class="editBtnSmall" onclick="openContactEdit()">✏️ Edit</button></div>
 <div class="contactBox" id="contactBox"></div>
 </div>
-
 <div class="section">
 <div class="sectionTitle"><span>📅 DUTY ROSTER - TODAY</span><button id="addDutyBtn" class="editBtnSmall" onclick="openDutyAdd()">+ Add</button></div>
 <div class="dutyBox" id="dutyBox"></div>
 </div>
-
 <button class="emergency" onclick="location.href='tel:+880288914420'">EMERGENCY CONTACT 📞</button>
 </div>
-
-<!-- Modals -->
 <div id="formModal" onclick="if(event.target==this)closeForm()"><div id="formBox"><h3 id="modalTitle">Edit</h3><div class="formInner" id="modalInner"></div></div></div>
-
 <script>
 let role=(localStorage.getItem('role')||'').toLowerCase();
 let isMTClk = role.includes('mt') && role.includes('clk') || role=='mt clk' || role.includes('mtclk') || role.includes('clk');
-function checkPerm(){
-  let display = isMTClk ? 'block' : 'none';
-  document.querySelectorAll('.editBtnSmall').forEach(b=>b.style.display=display);
-}
-function loadData(){
-  let d=localStorage.getItem('mt_profile_4bir');
-  if(d){try{return JSON.parse(d)}catch(e){}}
-  return {
-    cmd:{name:"Capt. Md. Rakib Hossain",no:"BA-28473",com:"2019"},
-    manpower:{total:32,officer:1,jco:2,vehicle:14},
-    vehicles:[
-      {type:"MC",count:"02",status:"ACTIVE",note:"Runner Duty"},
-      {type:"Jeep",count:"02",status:"ACTIVE",note:"Staff Duty"},
-      {type:"Micro",count:"01",status:"ACTIVE",note:"Officer Carry"},
-      {type:"Pickup",count:"02",status:"ACTIVE",note:"Logistics"},
-      {type:"3Ton",count:"03",status:"ACTIVE",note:"Truck 979,980,981"},
-      {type:"Bus",count:"01",status:"MAINTENANCE",note:"Troops Carry"},
-      {type:"W/T",count:"01",status:"ACTIVE",note:"Water Trailer"},
-      {type:"F/V",count:"02",status:"ACTIVE",note:"Fuel Vehicle"}
-    ],
-    contact:{base:"Dhaka Cantonment, Bangladesh",phone:"+880 2-8891-4420",email:"mt4bir@army.mil.bd"},
-    duty:[
-      {name:"Pvt. Alam",duty:"Guard Duty • 0600-1400"},
-      {name:"Sgt. Karim",duty:"Logistics • 1400-2200"},
-      {name:"LCpl. Nayeem",duty:"Patrol Route B • 2200-0600"}
-    ]
-  };
-}
-let data=loadData();
-function save(){localStorage.setItem('mt_profile_4bir',JSON.stringify(data)); render();}
-
-function render(){
-  document.getElementById('cmdName').innerText=data.cmd.name;
-  document.getElementById('cmdInfo').innerText=`Service No: ${data.cmd.no} • Commissioned: ${data.cmd.com}`;
-  document.getElementById('mTotal').innerText=data.manpower.total;
-  document.getElementById('mOfficer').innerText=data.manpower.officer<10?'0'+data.manpower.officer:data.manpower.officer;
-  document.getElementById('mJCO').innerText=data.manpower.jco<10?'0'+data.manpower.jco:data.manpower.jco;
-  document.getElementById('mVehicle').innerText=data.manpower.vehicle<10?'0'+data.manpower.vehicle:data.manpower.vehicle;
-
-  // Vehicles
-  let vhtml=''; data.vehicles.forEach((v,i)=>{
-    let color=v.status=='ACTIVE'?'#d4b56a':'#ffaa00';
-    let actions=isMTClk?`<div class="vActions"><button style="background:#2a1a0a;color:#d4b56a;border-color:#d4b56a" onclick="openVehEdit(${i})">Edit</button><button style="background:#4a0a0a;color:#ff6666;border-color:#ff4444" onclick="delVeh(${i})">Del</button></div>`:'';
-    vhtml+=`<div class="vCard"><div style="display:flex;justify-content:space-between"><span class="vType">🚚</span><span style="font-size:8px;background:${color};color:#000;font-weight:900;padding:2px 6px;border-radius:10px">${v.status}</span></div><b>${v.type}</b><div class="vCount">${v.count} Nos</div><small>${v.note}</small>${actions}</div>`;
-  });
-  document.getElementById('vehList').innerHTML=vhtml;
-
-  // Contact
-  document.getElementById('contactBox').innerHTML=`
-    <div class="contactRow">📍 Base: ${data.contact.base}</div>
-    <div class="contactRow">📞 Phone: ${data.contact.phone}</div>
-    <div class="contactRow">✉️ Email: ${data.contact.email}</div>`;
-
-  // Duty
-  let dhtml=''; data.duty.forEach((d,i)=>{
-    let act=isMTClk?`<div style="position:absolute;right:8px;top:8px;display:flex;gap:4px"><button style="font-size:9px;background:#2a1a0a;color:#d4b56a;border:1px solid #d4b56a;border-radius:4px;padding:2px 6px" onclick="openDutyEdit(${i})">Edit</button><button style="font-size:9px;background:#4a0a0a;color:#ff6666;border:1px solid #ff4444;border-radius:4px;padding:2px 6px" onclick="delDuty(${i})">X</button></div>`:'';
-    dhtml+=`<div class="dutyItem"><div class="dot"></div><div><b>${d.name}</b><small>${d.duty}</small></div>${act}</div>`;
-  });
-  document.getElementById('dutyBox').innerHTML=dhtml;
-  checkPerm();
-}
-render();
-
-let editType=''; let editIdx=-1;
-function openModal(title,html){document.getElementById('modalTitle').innerText=title;document.getElementById('modalInner').innerHTML=html;document.getElementById('formModal').style.display='flex';}
-function closeForm(){document.getElementById('formModal').style.display='none';}
-
-// Manpower
-function openManEdit(){
-  openModal('Edit Total Manpower',`
-  <label>Commander Name</label><input id="f_cmdName" value="${data.cmd.name}">
-  <label>Service No</label><input id="f_cmdNo" value="${data.cmd.no}">
-  <label>Commissioned</label><input id="f_cmdCom" value="${data.cmd.com}">
-  <label>Total Manpower</label><input type="number" id="f_total" value="${data.manpower.total}">
-  <label>Officers</label><input type="number" id="f_off" value="${data.manpower.officer}">
-  <label>JCO</label><input type="number" id="f_jco" value="${data.manpower.jco}">
-  <label>Total Vehicle</label><input type="number" id="f_veh" value="${data.manpower.vehicle}">
-  <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveMan()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);
-}
-function saveMan(){
-  data.cmd.name=document.getElementById('f_cmdName').value; data.cmd.no=document.getElementById('f_cmdNo').value; data.cmd.com=document.getElementById('f_cmdCom').value;
-  data.manpower.total=document.getElementById('f_total').value; data.manpower.officer=document.getElementById('f_off').value; data.manpower.jco=document.getElementById('f_jco').value; data.manpower.vehicle=document.getElementById('f_veh').value;
-  save(); closeForm();
-}
-
-// Vehicles
-function openVehAdd(){
-  editIdx=-1; openModal('Add Vehicle',`
-  <label>Type - MC,Jeep,Micro,Pickup,3Ton,Bus,W/T,F/V</label><select id="f_vtype"><option>MC</option><option>Jeep</option><option>Micro</option><option>Pickup</option><option>3Ton</option><option>Bus</option><option>W/T</option><option>F/V</option></select>
-  <label>Count</label><input id="f_vcount" placeholder="02">
-  <label>Status</label><select id="f_vstatus"><option>ACTIVE</option><option>MAINTENANCE</option></select>
-  <label>Note</label><input id="f_vnote" placeholder="Truck 979...">
-  <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveVeh()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);
-}
-function openVehEdit(i){
-  editIdx=i; let v=data.vehicles[i];
-  openModal('Edit Vehicle',`
-  <label>Type</label><select id="f_vtype"><option ${v.type=='MC'?'selected':''}>MC</option><option ${v.type=='Jeep'?'selected':''}>Jeep</option><option ${v.type=='Micro'?'selected':''}>Micro</option><option ${v.type=='Pickup'?'selected':''}>Pickup</option><option ${v.type=='3Ton'?'selected':''}>3Ton</option><option ${v.type=='Bus'?'selected':''}>Bus</option><option ${v.type=='W/T'?'selected':''}>W/T</option><option ${v.type=='F/V'?'selected':''}>F/V</option></select>
-  <label>Count</label><input id="f_vcount" value="${v.count}">
-  <label>Status</label><select id="f_vstatus"><option ${v.status=='ACTIVE'?'selected':''}>ACTIVE</option><option ${v.status=='MAINTENANCE'?'selected':''}>MAINTENANCE</option></select>
-  <label>Note</label><input id="f_vnote" value="${v.note}">
-  <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveVeh()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Update</button></div>`);
-}
-function saveVeh(){
-  let obj={type:document.getElementById('f_vtype').value,count:document.getElementById('f_vcount').value,status:document.getElementById('f_vstatus').value,note:document.getElementById('f_vnote').value};
-  if(editIdx==-1) data.vehicles.push(obj); else data.vehicles[editIdx]=obj; save(); closeForm();
-}
+function checkPerm(){let d=isMTClk?'block':'none';document.querySelectorAll('.editBtnSmall').forEach(b=>b.style.display=d);}
+function loadData(){let d=localStorage.getItem('mt_profile_4bir');if(d){try{return JSON.parse(d)}catch(e){}}return{cmd:{name:"Capt. Md. Rakib Hossain",no:"BA-28473",com:"2019"},manpower:{total:32,officer:1,jco:2,vehicle:14},vehicles:[{type:"MC",count:"02",status:"ACTIVE",note:"Runner Duty"},{type:"Jeep",count:"02",status:"ACTIVE",note:"Staff Duty"},{type:"Micro",count:"01",status:"ACTIVE",note:"Officer Carry"},{type:"Pickup",count:"02",status:"ACTIVE",note:"Logistics"},{type:"3Ton",count:"03",status:"ACTIVE",note:"Truck 979,980,981"},{type:"Bus",count:"01",status:"MAINTENANCE",note:"Troops Carry"},{type:"W/T",count:"01",status:"ACTIVE",note:"Water Trailer"},{type:"F/V",count:"02",status:"ACTIVE",note:"Fuel Vehicle"}],contact:{base:"Dhaka Cantonment, Bangladesh",phone:"+880 2-8891-4420",email:"mt4bir@army.mil.bd"},duty:[{name:"Pvt. Alam",duty:"Guard Duty • 0600-1400"},{name:"Sgt. Karim",duty:"Logistics • 1400-2200"},{name:"LCpl. Nayeem",duty:"Patrol Route B • 2200-0600"}]}};let data=loadData();
+function save(){localStorage.setItem('mt_profile_4bir',JSON.stringify(data));render();}
+function render(){document.getElementById('cmdName').innerText=data.cmd.name;document.getElementById('cmdInfo').innerText=`Service No: ${data.cmd.no} • Commissioned: ${data.cmd.com}`;document.getElementById('mTotal').innerText=data.manpower.total;document.getElementById('mOfficer').innerText=data.manpower.officer<10?'0'+data.manpower.officer:data.manpower.officer;document.getElementById('mJCO').innerText=data.manpower.jco<10?'0'+data.manpower.jco:data.manpower.jco;document.getElementById('mVehicle').innerText=data.manpower.vehicle<10?'0'+data.manpower.vehicle:data.manpower.vehicle;let vhtml='';data.vehicles.forEach((v,i)=>{let color=v.status=='ACTIVE'?'#d4b56a':'#ffaa00';let actions=isMTClk?`<div class="vActions"><button style="background:#2a1a0a;color:#d4b56a;border-color:#d4b56a" onclick="openVehEdit(${i})">Edit</button><button style="background:#4a0a0a;color:#ff6666;border-color:#ff4444" onclick="delVeh(${i})">Del</button></div>`:'';vhtml+=`<div class="vCard"><div style="display:flex;justify-content:space-between"><span>🚚</span><span style="font-size:8px;background:${color};color:#000;font-weight:900;padding:2px 6px;border-radius:10px">${v.status}</span></div><b>${v.type}</b><div class="vCount">${v.count} Nos</div><small>${v.note}</small>${actions}</div>`;});document.getElementById('vehList').innerHTML=vhtml;document.getElementById('contactBox').innerHTML=`<div class="contactRow">📍 Base: ${data.contact.base}</div><div class="contactRow">📞 Phone: ${data.contact.phone}</div><div class="contactRow">✉️ Email: ${data.contact.email}</div>`;let dhtml='';data.duty.forEach((d,i)=>{let act=isMTClk?`<div style="position:absolute;right:8px;top:8px;display:flex;gap:4px"><button style="font-size:9px;background:#2a1a0a;color:#d4b56a;border:1px solid #d4b56a;border-radius:4px;padding:2px 6px" onclick="openDutyEdit(${i})">Edit</button><button style="font-size:9px;background:#4a0a0a;color:#ff6666;border:1px solid #ff4444;border-radius:4px;padding:2px 6px" onclick="delDuty(${i})">X</button></div>`:'';dhtml+=`<div class="dutyItem"><div class="dot"></div><div><b>${d.name}</b><small>${d.duty}</small></div>${act}</div>`;});document.getElementById('dutyBox').innerHTML=dhtml;checkPerm();}render();
+let editIdx=-1;function openModal(t,h){document.getElementById('modalTitle').innerText=t;document.getElementById('modalInner').innerHTML=h;document.getElementById('formModal').style.display='flex';}function closeForm(){document.getElementById('formModal').style.display='none';}
+function openManEdit(){openModal('Edit Total Manpower',`<label>Commander Name</label><input id="f_cmdName" value="${data.cmd.name}"><label>Service No</label><input id="f_cmdNo" value="${data.cmd.no}"><label>Commissioned</label><input id="f_cmdCom" value="${data.cmd.com}"><label>Total Manpower</label><input type="number" id="f_total" value="${data.manpower.total}"><label>Officers</label><input type="number" id="f_off" value="${data.manpower.officer}"><label>JCO</label><input type="number" id="f_jco" value="${data.manpower.jco}"><label>Total Vehicle</label><input type="number" id="f_veh" value="${data.manpower.vehicle}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveMan()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);}
+function saveMan(){data.cmd.name=document.getElementById('f_cmdName').value;data.cmd.no=document.getElementById('f_cmdNo').value;data.cmd.com=document.getElementById('f_cmdCom').value;data.manpower.total=document.getElementById('f_total').value;data.manpower.officer=document.getElementById('f_off').value;data.manpower.jco=document.getElementById('f_jco').value;data.manpower.vehicle=document.getElementById('f_veh').value;save();closeForm();}
+function openVehAdd(){editIdx=-1;openModal('Add Vehicle',`<label>Type</label><select id="f_vtype"><option>MC</option><option>Jeep</option><option>Micro</option><option>Pickup</option><option>3Ton</option><option>Bus</option><option>W/T</option><option>F/V</option></select><label>Count</label><input id="f_vcount" placeholder="02"><label>Status</label><select id="f_vstatus"><option>ACTIVE</option><option>MAINTENANCE</option></select><label>Note</label><input id="f_vnote" placeholder="Truck 979..."><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveVeh()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);}
+function openVehEdit(i){editIdx=i;let v=data.vehicles[i];openModal('Edit Vehicle',`<label>Type</label><select id="f_vtype"><option ${v.type=='MC'?'selected':''}>MC</option><option ${v.type=='Jeep'?'selected':''}>Jeep</option><option ${v.type=='Micro'?'selected':''}>Micro</option><option ${v.type=='Pickup'?'selected':''}>Pickup</option><option ${v.type=='3Ton'?'selected':''}>3Ton</option><option ${v.type=='Bus'?'selected':''}>Bus</option><option ${v.type=='W/T'?'selected':''}>W/T</option><option ${v.type=='F/V'?'selected':''}>F/V</option></select><label>Count</label><input id="f_vcount" value="${v.count}"><label>Status</label><select id="f_vstatus"><option ${v.status=='ACTIVE'?'selected':''}>ACTIVE</option><option ${v.status=='MAINTENANCE'?'selected':''}>MAINTENANCE</option></select><label>Note</label><input id="f_vnote" value="${v.note}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveVeh()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Update</button></div>`);}
+function saveVeh(){let obj={type:document.getElementById('f_vtype').value,count:document.getElementById('f_vcount').value,status:document.getElementById('f_vstatus').value,note:document.getElementById('f_vnote').value};if(editIdx==-1)data.vehicles.push(obj);else data.vehicles[editIdx]=obj;save();closeForm();}
 function delVeh(i){if(confirm('Delete?')){data.vehicles.splice(i,1);save();}}
-
-// Contact
-function openContactEdit(){
-  openModal('Edit Contact Info',`
-  <label>Base</label><input id="f_base" value="${data.contact.base}">
-  <label>Phone</label><input id="f_phone" value="${data.contact.phone}">
-  <label>Email</label><input id="f_email" value="${data.contact.email}">
-  <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveContact()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);
-}
+function openContactEdit(){openModal('Edit Contact',`<label>Base</label><input id="f_base" value="${data.contact.base}"><label>Phone</label><input id="f_phone" value="${data.contact.phone}"><label>Email</label><input id="f_email" value="${data.contact.email}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveContact()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);}
 function saveContact(){data.contact.base=document.getElementById('f_base').value;data.contact.phone=document.getElementById('f_phone').value;data.contact.email=document.getElementById('f_email').value;save();closeForm();}
-
-// Duty
-function openDutyAdd(){
-  editIdx=-1; openModal('Add Duty',`
-  <label>Name</label><input id="f_dname" placeholder="Pvt. Alam">
-  <label>Duty • Time</label><input id="f_dduty" placeholder="Guard Duty • 0600-1400">
-  <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveDuty()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);
-}
-function openDutyEdit(i){
-  editIdx=i; let d=data.duty[i];
-  openModal('Edit Duty',`
-  <label>Name</label><input id="f_dname" value="${d.name}">
-  <label>Duty • Time</label><input id="f_dduty" value="${d.duty}">
-  <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveDuty()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Update</button></div>`);
-}
-function saveDuty(){
-  let obj={name:document.getElementById('f_dname').value,duty:document.getElementById('f_dduty').value};
-  if(editIdx==-1) data.duty.push(obj); else data.duty[editIdx]=obj; save(); closeForm();
-}
+function openDutyAdd(){editIdx=-1;openModal('Add Duty',`<label>Name</label><input id="f_dname" placeholder="Pvt. Alam"><label>Duty</label><input id="f_dduty" placeholder="Guard Duty • 0600-1400"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveDuty()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);}
+function openDutyEdit(i){editIdx=i;let d=data.duty[i];openModal('Edit Duty',`<label>Name</label><input id="f_dname" value="${d.name}"><label>Duty</label><input id="f_dduty" value="${d.duty}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveDuty()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Update</button></div>`);}
+function saveDuty(){let obj={name:document.getElementById('f_dname').value,duty:document.getElementById('f_dduty').value};if(editIdx==-1)data.duty.push(obj);else data.duty[editIdx]=obj;save();closeForm();}
 function delDuty(i){if(confirm('Delete?')){data.duty.splice(i,1);save();}}
 </script>
-</body></html>
+</body>
+</html>
