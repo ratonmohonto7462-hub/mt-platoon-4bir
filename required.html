@@ -1,89 +1,13 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=0.85">
-<title>Required Mobile Number</title>
-<style>
-body{margin:0;font-family:Arial;min-height:100vh;background:linear-gradient(180deg,#1e3a1a 0%,#2d5a27 50%,#3a6b35 100%);padding-bottom:30px;zoom:0.88}
-.top{background:#0f2110;color:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.top b{font-size:14px;font-weight:900}.backBtn{background:#7d0000;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:12px}
-.wrap{padding:10px}
-.input{width:100%;padding:12px 16px;border-radius:20px;border:none;box-sizing:border-box;margin-bottom:8px;font-size:14px;font-weight:600;box-shadow:0 2px 6px #0002;outline:none}
-.addBtn{width:100%;padding:12px;background:#0f2e0f;color:white;border:none;border-radius:18px;font-weight:900;font-size:16px;margin:8px 0;box-shadow:0 3px 8px #0003}
-.title{color:white;text-align:center;font-weight:900;font-size:16px;margin:12px 0 6px 0;text-shadow:0 1px 2px #000}
-.printBtn{background:#2d4a28;color:white;border:none;padding:6px 14px;border-radius:10px;font-weight:900;display:block;margin:0 auto 10px auto;font-size:12px;border:1px solid #fff3}
-.tableWrap{background:white;border-radius:12px;overflow:auto;box-shadow:0 4px 12px #0003;margin-top:6px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:#0f2e0f;color:white;padding:8px 4px;font-weight:900;font-size:11px;position:sticky;top:0}
-td{padding:7px 4px;border-bottom:1px solid #ddd;text-align:center;font-weight:600;font-size:11px;word-break:break-word}
-.editBtn{background:#ffaa00;color:white;border:none;padding:4px 8px;border-radius:6px;font-weight:900;font-size:10px;margin:1px}.delBtn{background:#7d0000;color:white;border:none;padding:4px 8px;border-radius:6px;font-weight:900;font-size:10px;margin:1px}
-.viewOnly{font-size:9px;background:#eee;color:#555;padding:2px 4px;border-radius:4px}
-
-/* PRINT FIX - Title এখন আসবে */
-@media print{
- body{zoom:1;background:white !important;padding:0}
- .top,#formArea,.printBtn,.backBtn{display:none !important}
- .title{display:block !important;color:black !important;text-shadow:none !important;font-size:18px !important;margin:10px 0 !important}
- .tableWrap{box-shadow:none;border-radius:0;margin:0;border:1px solid #000}
- th{background:#000 !important;color:white !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-}
-</style>
-</head>
-<body>
-<div class="top"><b>REQUIRED MOBILE NUMBER</b><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div>
-<div class="wrap">
-<div id="formArea">
-<input id="f_podobi" class="input" placeholder="পদবী">
-<input id="f_name" class="input" placeholder="নাম">
-<input id="f_niyojito" class="input" placeholder="নিয়োজিত">
-<input id="f_mobile" class="input" type="number" placeholder="মোবাইল নম্বর">
-<input id="f_montobbo" class="input" placeholder="মন্তব্য">
-<button id="addBtnMain" class="addBtn" onclick="saveForm()">Add করুন</button>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Required - 4 BIR</title>
+<style>/* Same style as above */*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070d1a;color:#fff}.phone{max-width:430px;margin:0 auto;background:#0a1120;min-height:100vh;padding-bottom:80px;border:1px solid #1a2a40}.top{padding:14px;display:flex;align-items:center;gap:12px}.top b{color:#ffcc00;font-size:17px;display:block}.top small{color:#8a9bb5;font-size:11px}.searchWrap{padding:10px 14px}.search{width:100%;background:#111a2d;border:1px solid #ffcc00;border-radius:20px;padding:11px 14px;display:flex;gap:8px}.search input{flex:1;background:transparent;border:none;color:#fff;outline:none}.stats{background:#2a1a0a;border:1px solid #ffcc00;border-radius:12px;margin:8px 14px;padding:10px 14px;font-size:12px}.stats b{color:#ffcc00}.card{background:#111a2d;border-left:4px solid #ffcc00;border-radius:14px;margin:12px 14px;overflow:hidden;border:1px solid #3a2a0a;position:relative}.card::before{content:'';position:absolute;top:0;left:0;right:40%;height:3px;background:#ffcc00}.rankBadge{width:52px;height:60px;background:linear-gradient(#ffcc00,#a07a00);border-radius:0 0 50% 50%;display:flex;align-items:center;justify-content:center;float:left;margin:10px 12px;font-weight:900;font-size:16px}.cardHead{padding:14px 14px 0 0;display:flex;justify-content:space-between}.details{clear:both;padding:8px 14px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px}.label{color:#8a9bb5}.val{color:#fff;font-weight:700}.full{grid-column:1/span 2}.btns{display:flex;gap:10px;padding:0 14px 14px}.callBtn{flex:1;background:#0f172a;border:1px solid #ffcc00;color:#ffcc00;border-radius:10px;padding:10px;text-align:center;text-decoration:none;font-weight:900}</style></head><body>
+<div class="phone">
+<div class="top"><button onclick="history.back()" style="background:none;border:none;color:#ffcc00;font-size:28px">‹</button><div><b>REQUIRED CONTACT LIST</b><small>⭐ EMERGENCY • 4 BIR</small></div></div>
+<div class="searchWrap"><div class="search">🔍 <input id="s" placeholder="Search emergency numbers..." oninput="render()"></div></div>
+<div class="stats"><b>Total Required:</b> <span id="total">12</span> — Emergency: 8 • 24/7</div>
+<div id="list"></div>
 </div>
-
-<div class="title">⚔️ REQUIRED MOBILE NUMBER ⚔️</div>
-<button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-
-<div class="tableWrap">
-<table>
-<thead>
-<tr><th>পদবী</th><th>নাম</th><th>নিয়োজিত</th><th>মোবাইল</th><th>মন্তব্য</th><th>একশন</th></tr>
-</thead>
-<tbody id="list"></tbody>
-</table>
-</div>
-</div>
-
 <script>
-let role = (localStorage.getItem('role') || '').toLowerCase();
-let isClk = role === 'clk';
-let contacts = JSON.parse(localStorage.getItem('mt_required_v2') || localStorage.getItem('mt_required') || '[]');
-let editIndex = -1;
-function saveLS(){ localStorage.setItem('mt_required_v2', JSON.stringify(contacts)); }
-function saveForm(){
- if(!isClk){ alert("⛔ শুধু MT CLK ID থেকে Add করা যাবে"); return; }
- let podobi=document.getElementById('f_podobi').value.trim();
- let name=document.getElementById('f_name').value.trim();
- let niyojito=document.getElementById('f_niyojito').value.trim();
- let mobile=document.getElementById('f_mobile').value.trim();
- let montobbo=document.getElementById('f_montobbo').value.trim();
- if(!mobile){ alert("মোবাইল নম্বর দাও"); return; }
- let c={podobi,name,niyojito,mobile,montobbo};
- if(editIndex==-1){ contacts.push(c); }
- else{ contacts[editIndex]=c; editIndex=-1; document.getElementById('addBtnMain').innerText="Add করুন"; }
- saveLS(); clearForm(); render();
-}
-function clearForm(){ document.getElementById('f_podobi').value=""; document.getElementById('f_name').value=""; document.getElementById('f_niyojito').value=""; document.getElementById('f_mobile').value=""; document.getElementById('f_montobbo').value=""; }
-function render(){
- let tbody=document.getElementById('list'); tbody.innerHTML='';
- document.getElementById('formArea').style.display = isClk ? 'block' : 'none';
- contacts.forEach((c,idx)=>{
-   let btns = isClk ? `<button class="editBtn" onclick="editContact(${idx})">Edit</button><button class="delBtn" onclick="deleteContact(${idx})">Del</button>` : `<span class="viewOnly">View</span>`;
-   tbody.innerHTML+=`<tr><td>${c.podobi}</td><td>${c.name}</td><td>${c.niyojito}</td><td>${c.mobile}</td><td>${c.montobbo}</td><td>${btns}</td></tr>`;
- });
-}
-function editContact(i){ if(!isClk){ alert("Permission নেই"); return; } editIndex=i; let c=contacts[i]; document.getElementById('f_podobi').value=c.podobi; document.getElementById('f_name').value=c.name; document.getElementById('f_niyojito').value=c.niyojito; document.getElementById('f_mobile').value=c.mobile; document.getElementById('f_montobbo').value=c.montobbo; document.getElementById('addBtnMain').innerText="Update করুন"; window.scrollTo(0,0); }
-function deleteContact(i){ if(!isClk){ alert("Permission নেই"); return; } if(confirm("Delete?")){ contacts.splice(i,1); saveLS(); render(); } }
+let data=[{icon:"🚑",name:"MEDICAL - MI ROOM",mobile:"01769-123456",remarks:"24 Hours Medical Support"},{icon:"🔧",name:"MT WORKSHOP",mobile:"01769-123457",remarks:"Vehicle Emergency Repair"},{icon:"🚨",name:"DUTY OFFICER",mobile:"01769-123458",remarks:"Night Duty Officer - 4 BIR"}];
+function render(){let q=document.getElementById('s').value.toLowerCase();let f=data.filter(d=>d.name.toLowerCase().includes(q));document.getElementById('total').innerText=f.length;document.getElementById('list').innerHTML=f.map(o=>`<div class="card"><div class="cardHead"><div style="display:flex;gap:0"><div class="rankBadge">${o.icon}</div><div><b style="color:#fff">${o.name}</b><br><small style="color:#ffcc00">${o.remarks}</small></div></div></div><div class="details"><div class="full"><span class="label">MOBILE:</span> <span class="val" style="font-size:14px;color:#ffcc00">${o.mobile}</span></div></div><div class="btns"><a class="callBtn" href="tel:${o.mobile}">📞 Call Now</a><a class="callBtn" href="https://wa.me/${o.mobile.replace(/\D/g,'')}">💬 WhatsApp</a></div></div>`).join('')}
 render();
-</script>
-</body>
-</html>
+</script></body></html>
