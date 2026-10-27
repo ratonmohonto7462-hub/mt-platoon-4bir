@@ -4,41 +4,66 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MT PLATOON 4 BIR</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#0a1a0f;color:white;min-height:100vh}
-.top{background:#0f2815;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;border-bottom:1px solid #1a3d22}
-.menuBtn{font-size:26px;font-weight:900;cursor:pointer;padding:2px 8px}
-.top b{font-size:18px;font-weight:900;line-height:1}
-.avatar{width:38px;height:38px;border-radius:50%;background:#c8a951;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0f2110;border:2px solid #c8a951}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#0a1a0f;color:white;min-height:100vh}
+.top{background:#122e18;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;border-bottom:1px solid #1a4a28}
+.menuBtn{font-size:28px;font-weight:900;cursor:pointer;padding:0 8px 0 0}
+.top b{font-size:18px;font-weight:900;line-height:1.1}
+.bell{font-size:22px;position:relative}
+.bell i{position:absolute;top:-6px;right:-8px;background:#ff1a1a;color:white;font-size:11px;padding:1px 6px;border-radius:10px;font-style:normal;font-weight:900}
+.avatar{width:38px;height:38px;border-radius:50%;background:#c8a951;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0f2110;border:2px solid #d4b15e}
+.logout{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900;cursor:pointer}
 .drawer{position:fixed;top:0;left:-100%;width:78%;max-width:300px;height:100%;background:#0f2110;border-right:1px solid #1f4a28;z-index:100;transition:0.3s;padding:16px;overflow:auto}
-.drawer.open{left:0}.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:90;display:none}.overlay.show{display:block}
-.d-item{padding:14px 10px;border-bottom:1px solid #1a3d22;cursor:pointer;font-weight:700;display:flex;gap:10px;align-items:center}
+.drawer.open{left:0}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:90;display:none}
+.overlay.show{display:block}
+.d-item{padding:14px 10px;border-bottom:1px solid #1a3d22;cursor:pointer;font-weight:700;display:flex;gap:10px;align-items:center;font-size:14px}
 .wrap{padding:14px 14px 90px 14px}
-.greet h2{margin:0;font-size:28px;font-weight:900;text-align:center;letter-spacing:1px}.greet p{text-align:center;margin:4px 0 14px 0;color:#c8a951;font-size:13px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.s-card{background:#132a18;border:1px solid #1f4a28;border-radius:14px;padding:12px}
-.s-card p{margin:0;color:#8aa88f;font-size:12px}.s-card h3{margin:6px 0 0 0;font-size:22px;display:flex;gap:8px;align-items:center}
-.searchBox{display:flex;align-items:center;gap:8px;background:#132a18;border:1px solid #c8a951;border-radius:12px;padding:10px 14px;margin:14px 0}
+.assalam{font-size:27px;font-weight:900;text-align:center;letter-spacing:0.5px;margin:8px 0 4px 0;white-space:nowrap}
+.dutyStatus{text-align:center;color:#c8a951;font-size:13px;margin-bottom:14px}
+.dutyStatus span{color:#22c55e}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.s-card{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:14px 14px}
+.s-card p{margin:0;color:#8aa88f;font-size:12px}
+.s-card h3{margin:8px 0 0 0;font-size:24px;display:flex;gap:8px;align-items:center}
+.searchBox{display:flex;align-items:center;gap:8px;background:#132a18;border:1px solid #c8a951;border-radius:12px;padding:12px 14px;margin:14px 0 10px 0}
 .searchBox input{flex:1;background:transparent;border:none;color:white;outline:none;font-size:14px}
-#searchResults{margin-top:-6px;background:#0f2110;border:1px solid #1f4a28;border-radius:12px;padding:6px;display:none;max-height:220px;overflow:auto}
-.joruri{background:#b91c1c;border-radius:10px;padding:10px 12px;margin:12px 0;display:flex;justify-content:space-between;align-items:center}
-.brain{background:linear-gradient(90deg,#0a7a2a,#12a03a);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:rgba(255,255,255,0.92);color:#0f2110;border-radius:18px;padding:18px 8px;text-align:center;cursor:pointer}
-.icon{font-size:36px}.t1{font-weight:900;color:#0a4d0a;font-size:12px;margin-top:6px}.t2{font-size:11px;color:#777}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#0f2110;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:10px 0}
-.bottom div{text-align:center;font-size:11px;color:#777;cursor:pointer}.bottom div.active{color:#c8a951}
+#searchResults{margin-bottom:10px;background:#0f2110;border:1px solid #1f4a28;border-radius:12px;padding:6px;display:none;max-height:220px;overflow:auto}
+.ticker{overflow:hidden;white-space:nowrap;position:relative;border-radius:12px;padding:12px 0;margin:10px 0;display:flex;align-items:center}
+.ticker-track{display:inline-block;white-space:nowrap;will-change:transform;animation:marqueeRTL 18s linear infinite}
+.ticker-track.slow{animation-duration:28s}
+@keyframes marqueeRTL{0%{transform:translateX(100%)}100%{transform:translateX(-120%)}}
+.joruri-bg{background:#b91c1c;color:white}
+.seniority-bg{background:#0a4d0a;color:#c8ffc8;border:1px solid #1f8a1f}
+.brain{background:linear-gradient(90deg,#0a7a2a,#12a03a);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin:12px 0}
+.brain .ico{background:white;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.folders h3{margin:14px 0 10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:#f2f2f2;color:#0f2110;border-radius:22px;padding:28px 8px 18px 8px;text-align:center;cursor:pointer;box-shadow:0 4px 10px #0003}
+.icon{font-size:44px;display:block}
+.t1{font-weight:900;color:#0a4d0a;font-size:12px;margin-top:10px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#0a1a0f;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:8px 0;z-index:40}
+.bottom div{text-align:center;font-size:11px;color:#6b8a70;cursor:pointer;line-height:1.2}
+.bottom div.active{color:#c8a951}
 </style>
 </head>
 <body>
 
 <div class="top">
-<div style="display:flex;align-items:center;gap:8px"><div class="menuBtn" onclick="openDrawer()">☰</div><div><b>4 BIR —<br>MT PLATOON</b></div></div>
-<div style="display:flex;gap:10px;align-items:center"><div>🔔<span style="background:#d00;color:white;font-size:10px;padding:2px 5px;border-radius:10px;margin-left:-6px">3</span></div><div class="avatar">RH</div><button onclick="localStorage.clear();location.href='index.html'" style="background:#d50000;color:white;border:none;padding:7px 12px;border-radius:8px;font-weight:900">LOGOUT</button></div>
+<div style="display:flex;align-items:center;gap:6px">
+<div class="menuBtn" onclick="openDrawer()">☰</div>
+<div><b>4 BIR —<br>MT PLATOON</b></div>
+</div>
+<div style="display:flex;gap:12px;align-items:center">
+<div class="bell">🔔<i>3</i></div>
+<div class="avatar">RH</div>
+<button class="logout" onclick="localStorage.clear();location.href='index.html'">LOGOUT</button>
+</div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
-<h3 style="margin:0 0 10px 0">📁 FOLDERS</h3>
+<h3 style="margin:0 0 12px 0">📁 FOLDERS</h3>
 <div class="d-item" onclick="location.href='vehicle.html'">🚚 VEHICLE UPDATE</div>
 <div class="d-item" onclick="location.href='communication.html'">☎️ COMMUNICATION</div>
 <div class="d-item" onclick="location.href='duty.html'">👮‍♂️ DUTY ROSTER</div>
@@ -46,191 +71,126 @@
 <div class="d-item" onclick="location.href='instruction.html'">📝 INSTRUCTION</div>
 <div class="d-item" onclick="location.href='contact.html'">📞 MT PLATOON MOBILE</div>
 <div class="d-item" onclick="location.href='mt-brain-final.html'">🧠 MT BRAIN AI</div>
-<div style="margin-top:20px"><button onclick="closeDrawer()" style="width:100%;padding:10px;background:#1f4a28;color:white;border:none;border-radius:10px">✖️ Close</button></div>
+<button onclick="closeDrawer()" style="width:100%;margin-top:20px;padding:10px;background:#1f4a28;color:white;border:none;border-radius:10px">✖️ Close</button>
 </div>
 
 <div class="wrap">
-<div class="greet"><h2>ASSALAMUALAIKUM</h2><p>Duty Status: <span style="color:#22c55e">Active •</span> <span id="todayDate"></span></p></div>
+<div class="assalam">ASSALAMUALAIKUM</div>
+<div class="dutyStatus">Duty Status: <span>Active •</span> <span id="todayDate"></span></div>
 
 <div class="stats">
-<div class="s-card"><p>Total Vehicles</p><h3>🚚 40</h3></div>
-<div class="s-card"><p>Communication</p><h3>☎️ 52</h3></div>
+<div class="s-card"><p>Total Vehicles</p><h3>🚚 18</h3></div>
+<div class="s-card"><p>Communication</p><h3>☎️ 42</h3></div>
 <div class="s-card"><p>Personnel</p><h3>👥 42</h3></div>
-<div class="s-card"><p>On Duty</p><h3>👮 1</h3></div>
+<div class="s-card"><p>Officer on Duty</p><h3>👮 1</h3></div>
 </div>
 
 <div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Quick Search... Vehicle, Person, Number" onkeyup="doSearch(this.value)"></div>
 <div id="searchResults"></div>
 
-<style>
-.ticker{overflow:hidden;white-space:nowrap;position:relative;border-radius:10px;padding:10px 0;margin:8px 0}
-.ticker-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:marqueeRightToLeft 20s linear infinite}
-.ticker-track.slow{animation-duration:28s}
-@keyframes marqueeRightToLeft{
-  0%{transform:translateX(100%)}
-  100%{transform:translateX(-100%)}
-}
-.joruri-bg{background:#b91c1c;color:white}
-.seniority-bg{background:#0a4d0a;color:#c8ffc8;border:1px solid #1f8a1f}
-</style>
-
-<!-- 1st - JORURI ADESH - ডান থেকে বামে -->
+<!-- JORURI ADESH - ডান থেকে বামে -->
 <div class="ticker joruri-bg">
-  <div class="ticker-track" id="joruriTrack">
-    <span id="joruriText">🚨 জরুরি আদেশ লোড হচ্ছে... 🚨</span>
-  </div>
-  <span id="editJoruriBtn" onclick="editJoruri()" style="display:none;position:absolute;right:8px;top:6px;background:white;color:#b91c1c;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:900;cursor:pointer">✏️ Edit</span>
+<div class="ticker-track" id="joruriTrack"><span id="joruriText">🚨 জরুরি আদেশ লোড হচ্ছে... 🚨</span></div>
+<span id="editJoruriBtn" onclick="editJoruri()" style="display:none;position:absolute;right:8px;top:6px;background:white;color:#b91c1c;padding:4px 10px;border-radius:10px;font-size:11px;font-weight:900;cursor:pointer">✏️ Edit</span>
 </div>
 
-<!-- 2nd - SUTY SENIORITY - ডান থেকে বামে 1-5 -->
+<!-- SUTY SENIORITY - ডান থেকে বামে Google Sheet থেকে -->
 <div class="ticker seniority-bg">
-  <div class="ticker-track slow" id="seniorityTrack">
-    <span id="seniorityText">⭐ Suty Seniority লোড হচ্ছে... ⭐</span>
-  </div>
+<div class="ticker-track slow"><span id="seniorityText">⭐ Seniority List লোড হচ্ছে... ⭐</span></div>
 </div>
 
-<script>
-// তোমার Joruri Sheet
-const SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
+<a href="mt-brain-final.html" style="text-decoration:none;">
+<div class="brain">
+<div class="ico">🧠</div>
+<div style="flex:1"><div style="color:white;font-weight:900;font-size:15px">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div>
+<div style="background:white;color:#0a6a0a;padding:7px 14px;border-radius:20px;font-weight:900;font-size:13px">ASK →</div>
+</div>
+</a>
 
-// তোমার Seniority Sheet এর লিংকটা এখানে বসাও - যেটা থেকে seniority.html সেভ করে
-const SENIORITY_SHEET_URL = "https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec?action=getSeniority"; 
-// যদি একই Sheet হয়, তাহলে ?action=seniority দিয়ে ট্রাই করো, না হলে তোমার seniority sheet এর লিংক দাও
-
-// SENIORITY - Google Sheet থেকে ডান থেকে বামে
-function loadSeniorityFromSheet(){
-  fetch(SENIORITY_SHEET_URL)
-  .then(r=>r.json())
-  .then(data=>{
-    console.log("Sheet Seniority:", data);
-    let list = data;
-    if(data.data) list = data.data; // যদি {data:[...]} আসে
-    if(data.seniority) list = data.seniority;
-    
-    if(!list || list.length==0){
-      document.getElementById('seniorityText').innerText = "⭐ Seniority Sheet খালি ⭐";
-      return;
-    }
-    
-    let txt = list.slice(0,5).map((s,i)=>{
-      let name = s.name || s.Name || s[1] || s[0] || "Unknown";
-      let rank = s.rank || s.Rank || "";
-      let no = s.no || s.No || s.serial || (i+1);
-      return `⭐ ${no} No: ${rank} ${name}`;
-    }).join("  •  ");
-    
-    document.getElementById('seniorityText').innerText = txt + "  •  " + txt + "  •  ";
-    // লোকালেও সেভ রাখলাম, নেট না থাকলেও চলবে
-    localStorage.setItem("sutySenioritySheet", JSON.stringify(list));
-  })
-  .catch(e=>{
-    console.log("Sheet Fail, local try:", e);
-    // নেট ফেল হলে লোকাল থেকে দেখাবে
-    let local = localStorage.getItem("sutySenioritySheet");
-    if(local){
-      let list = JSON.parse(local);
-      let txt = list.slice(0,5).map((s,i)=>`⭐ ${i+1} No: ${s.name||s.Name}`).join("  •  ");
-      document.getElementById('seniorityText').innerText = txt + "  •  " + txt;
-    }else{
-      document.getElementById('seniorityText').innerText = "⭐ নেট চেক করুন - Seniority লোড হচ্ছে না ⭐";
-    }
-  });
-}
-
-loadSeniorityFromSheet();
-setInterval(loadSeniorityFromSheet, 60000); // ১ মিনিট পর পর অটো আপডেট
-</script>
-
-// JORURI - ডান থেকে বামে
-try{
- fetch(SHEET_URL).then(r=>r.json()).then(d=>{
-   if(d && d.text){
-     let txt = "🚨 " + d.text + " 🚨";
-     document.getElementById('joruriText').innerText = txt + "  •  " + txt + "  •  ";
-   }
- });
-}catch(e){}
-
-// SUTY SENIORITY - তোমার আসল ডাটা থেকে
-function getSeniorityData(){
-  // তোমার seniority.html যেই Key তে সেভ করে, সবগুলা চেক করবো
-  let keys = ["sutySeniority","seniority","seniorityList","suty_list","mt_seniority"];
-  for(let k of keys){
-    let data = localStorage.getItem(k);
-    if(data){
-      try{
-        let parsed = JSON.parse(data);
-        if(parsed && parsed.length>0) return parsed;
-      }catch(e){}
-    }
-  }
-  return null;
-}
-
-function updateSeniorityTicker(){
-  let list = getSeniorityData();
-  console.log("Seniority Found:", list); // Debug
-
-  if(!list || list.length===0){
-    // যদি কিছু না পায়, তোমার seniority.html থেকে একবার লোড করে দেখাও
-    document.getElementById('seniorityText').innerText = "⚠️ Seniority List পাওয়া যায়নি - seniority.html চেক করুন • ";
-    return;
-  }
-
-  // 1-5 টা নিবে, নাম বের করবে
-  let text = list.slice(0,5).map((s,i)=>{
-    let name = s.name || s.soldierName || s.rankName || s.fullName || JSON.stringify(s);
-    let no = s.no || s.serial || (i+1);
-    return `⭐ ${no} No: ${name}`;
-  }).join("  •  ");
-
-  document.getElementById('seniorityText').innerText = text + "  •  " + text + "  •  ";
-}
-
-updateSeniorityTicker();
-
-// Edit Button
-if(localStorage.getItem('role')==='clk'){
-  document.getElementById('editJoruriBtn').style.display='block';
-}
-function editJoruri(){
-  let t=prompt("নতুন জরুরি আদেশ লিখুন:");
-  if(!t)return;
-  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({text:t})}).then(()=>{alert("✅ সেভ হয়েছে");location.reload();});
-}
-</script>
-</script>
-
-<a href="mt-brain-final.html" style="text-decoration:none;"><div class="brain"><div style="background:white;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">🧠</div><div style="flex:1"><div style="color:white;font-weight:900">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div><div style="background:white;color:#0a6a0a;padding:6px 12px;border-radius:20px;font-weight:900;font-size:12px">ASK →</div></div></a>
-
-<div style="margin-top:14px"><h3>Folders</h3>
+<div class="folders">
+<h3>Folders</h3>
 <div class="grid">
-<div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div><div class="t2">All Vehicle Info</div></div>
-<div class="card" onclick="location.href='communication.html'"><span class="icon">☎️</span><div class="t1">COMMUNICATION</div><div class="t2">All Required Number</div></div>
-<div class="card" onclick="location.href='duty.html'"><span class="icon">👮‍♂️</span><div class="t1">DUTY ROSTER</div><div class="t2">Platoon Duty List</div></div>
-<div class="card" onclick="location.href='seniority.html'"><span class="icon">⭐</span><div class="t1">SUTY SENIORITY</div><div class="t2">Seniority List</div></div>
-</div></div>
-
-<div style="margin-top:18px;background:#e8e8e8;color:#222;border-radius:14px;padding:12px" id="recentList">
-<div style="font-weight:900;margin-bottom:6px">Recent Activities</div>
-<div style="font-size:12.5px">🟢 Vehicle B-112 fueled - 08:12 AM<br>🟠 Maintenance C-07 - 07:55 AM<br>🔵 Pvt. Rahman joined - 07:30 AM</div>
+<div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div></div>
+<div class="card" onclick="location.href='communication.html'"><span class="icon">☎️</span><div class="t1">COMMUNICATION</div></div>
+</div>
 </div>
 </div>
 
 <div class="bottom">
-<div class="active">🏠<br>Dashboard</div><div onclick="location.href='vehicle.html'">🚚<br>Vehicles</div><div onclick="location.href='communication.html'">☎️<br>Comms</div><div onclick="location.href='duty.html'">📋<br>Roster</div><div>👤<br>Profile</div>
+<div class="active">🏠<br>Dashboard</div>
+<div onclick="location.href='vehicle.html'">🚚<br>Vehicles</div>
+<div onclick="location.href='communication.html'">☎️<br>Comms</div>
+<div onclick="location.href='duty.html'">📋<br>Roster</div>
+<div onclick="location.href='profile.html'">👤<br>Profile</div>
 </div>
 
 <script>
 const SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
-document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-try{fetch(SHEET_URL).then(r=>r.json()).then(d=>{if(d&&d.text)document.getElementById('joruriText').innerText=d.text}) }catch(e){}
-if(localStorage.getItem('role')==='clk')document.getElementById('editJoruriBtn').style.display='block';
-function editJoruri(){let t=prompt("নতুন জরুরি আদেশ:"); if(!t)return; fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({text:t})}).then(()=>{alert("✅ Saved");location.reload()})}
+const SENIORITY_SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
+
+document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+
+// Drawer
 function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('overlay').classList.add('show')}
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
-let allData=[{type:"VEHICLE",name:"BA-402 Truck",link:"vehicle.html"},{type:"COMMUNICATION",name:"CO Sir 01769-000001",link:"communication.html"},{type:"DUTY",name:"Night Duty",link:"duty.html"}];
-function doSearch(q){let res=document.getElementById("searchResults"); if(!q){res.style.display="none";return;} let low=q.toLowerCase(); let filt=allData.filter(d=>d.name.toLowerCase().includes(low)); res.innerHTML=filt.map(d=>`<div onclick="location.href='${d.link}'" style="padding:8px;border-bottom:1px solid #1f4a28;cursor:pointer"><b style="color:#c8a951;font-size:10px">${d.type}</b><br><span style="color:white;font-size:13px">${d.name}</span></div>`).join(""); res.style.display="block";}
+
+// Joruri - ডান থেকে বামে
+let savedJoruri=localStorage.getItem("joruriAdesh");
+if(savedJoruri){ document.getElementById('joruriText').innerText="🚨 "+savedJoruri+" 🚨  •  "; }
+try{
+ fetch(SHEET_URL).then(r=>r.json()).then(d=>{
+   if(d&&d.text){
+     document.getElementById('joruriText').innerText="🚨 "+d.text+" 🚨  •  🚨 "+d.text+" 🚨  •  ";
+     localStorage.setItem("joruriAdesh", d.text);
+   }
+ });
+}catch(e){}
+if(localStorage.getItem('role')==='clk') document.getElementById('editJoruriBtn').style.display='block';
+function editJoruri(){let t=prompt("নতুন জরুরি আদেশ লিখুন:"); if(!t)return; localStorage.setItem("joruriAdesh",t); document.getElementById('joruriText').innerText="🚨 "+t+" 🚨"; fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({text:t})}).then(()=>{alert("✅ সেভ হয়েছে")})}
+
+// Seniority - Google Sheet থেকে ডান থেকে বামে 1-5
+function loadSeniority(){
+  fetch(SENIORITY_SHEET_URL).then(r=>r.json()).then(data=>{
+    let list=data;
+    if(data.data) list=data.data;
+    if(data.seniority) list=data.seniority;
+    if(Array.isArray(list) && list.length>0){
+      let txt=list.slice(0,5).map((s,i)=>{
+        let name=s.name||s.Name||s[1]||s[0]||"";
+        let rank=s.rank||s.Rank||"";
+        let no=s.no||s.No||s.serial||(i+1);
+        return `⭐ ${no} No: ${rank} ${name}`;
+      }).join("  •  ");
+      document.getElementById('seniorityText').innerText=txt+"  •  "+txt;
+      localStorage.setItem("sutySenioritySheet", JSON.stringify(list));
+    }
+  }).catch(e=>{
+    let local=localStorage.getItem("sutySenioritySheet");
+    if(local){
+      let list=JSON.parse(local);
+      let txt=list.slice(0,5).map((s,i)=>`⭐ ${i+1} No: ${s.name||s.Name}`).join("  •  ");
+      document.getElementById('seniorityText').innerText=txt+"  •  "+txt;
+    }
+  });
+}
+loadSeniority();
+
+// Quick Search - সব জায়গা থেকে
+let allData=[
+ {type:"VEHICLE",name:"BA-402 Truck",link:"vehicle.html"},
+ {type:"COMMUNICATION",name:"CO Sir 01769-000001",link:"communication.html"},
+ {type:"DUTY",name:"Night Duty",link:"duty.html"},
+ {type:"SENIORITY",name:"Sgt. Rahman",link:"seniority.html"},
+];
+function doSearch(q){
+ let res=document.getElementById("searchResults");
+ if(!q){res.style.display="none";return;}
+ let low=q.toLowerCase();
+ let filt=allData.filter(d=>d.name.toLowerCase().includes(low)||d.type.toLowerCase().includes(low));
+ if(filt.length==0){res.innerHTML="<p style='color:#888;font-size:12px;padding:6px'>কিছু পাওয়া যায়নি...</p>"}
+ else{res.innerHTML=filt.map(d=>`<div onclick="location.href='${d.link}'" style="padding:8px;border-bottom:1px solid #1f4a28;cursor:pointer"><b style="color:#c8a951;font-size:10px">${d.type}</b><br><span style="color:white;font-size:13px">${d.name}</span></div>`).join("")}
+ res.style.display="block";
+}
 </script>
 </body>
 </html>
