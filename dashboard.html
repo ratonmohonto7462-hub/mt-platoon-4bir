@@ -1,196 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT PLATOON 4 BIR</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#0a1a0f;color:white;min-height:100vh}
-.top{background:#122e18;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;border-bottom:1px solid #1a4a28}
-.menuBtn{font-size:28px;font-weight:900;cursor:pointer;padding:0 8px 0 0}
-.top b{font-size:18px;font-weight:900;line-height:1.1}
-.bell{font-size:22px;position:relative}
-.bell i{position:absolute;top:-6px;right:-8px;background:#ff1a1a;color:white;font-size:11px;padding:1px 6px;border-radius:10px;font-style:normal;font-weight:900}
-.avatar{width:38px;height:38px;border-radius:50%;background:#c8a951;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0f2110;border:2px solid #d4b15e}
-.logout{background:#d50000;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:900;cursor:pointer}
-.drawer{position:fixed;top:0;left:-100%;width:78%;max-width:300px;height:100%;background:#0f2110;border-right:1px solid #1f4a28;z-index:100;transition:0.3s;padding:16px;overflow:auto}
-.drawer.open{left:0}
-.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:90;display:none}
-.overlay.show{display:block}
-.d-item{padding:14px 10px;border-bottom:1px solid #1a3d22;cursor:pointer;font-weight:700;display:flex;gap:10px;align-items:center;font-size:14px}
-.wrap{padding:14px 14px 90px 14px}
-.assalam{font-size:27px;font-weight:900;text-align:center;letter-spacing:0.5px;margin:8px 0 4px 0;white-space:nowrap}
-.dutyStatus{text-align:center;color:#c8a951;font-size:13px;margin-bottom:14px}
-.dutyStatus span{color:#22c55e}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.s-card{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:14px 14px}
-.s-card p{margin:0;color:#8aa88f;font-size:12px}
-.s-card h3{margin:8px 0 0 0;font-size:24px;display:flex;gap:8px;align-items:center}
-.searchBox{display:flex;align-items:center;gap:8px;background:#132a18;border:1px solid #c8a951;border-radius:12px;padding:12px 14px;margin:14px 0 10px 0}
-.searchBox input{flex:1;background:transparent;border:none;color:white;outline:none;font-size:14px}
-#searchResults{margin-bottom:10px;background:#0f2110;border:1px solid #1f4a28;border-radius:12px;padding:6px;display:none;max-height:220px;overflow:auto}
-.ticker{overflow:hidden;white-space:nowrap;position:relative;border-radius:12px;padding:12px 0;margin:10px 0;display:flex;align-items:center}
-.ticker-track{display:inline-block;white-space:nowrap;will-change:transform;animation:marqueeRTL 18s linear infinite}
-.ticker-track.slow{animation-duration:28s}
-@keyframes marqueeRTL{0%{transform:translateX(100%)}100%{transform:translateX(-120%)}}
-.joruri-bg{background:#b91c1c;color:white}
-.seniority-bg{background:#0a4d0a;color:#c8ffc8;border:1px solid #1f8a1f}
-.brain{background:linear-gradient(90deg,#0a7a2a,#12a03a);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin:12px 0}
-.brain .ico{background:white;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
-.folders h3{margin:14px 0 10px 0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{background:#f2f2f2;color:#0f2110;border-radius:22px;padding:28px 8px 18px 8px;text-align:center;cursor:pointer;box-shadow:0 4px 10px #0003}
-.icon{font-size:44px;display:block}
-.t1{font-weight:900;color:#0a4d0a;font-size:12px;margin-top:10px}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#0a1a0f;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:8px 0;z-index:40}
-.bottom div{text-align:center;font-size:11px;color:#6b8a70;cursor:pointer;line-height:1.2}
-.bottom div.active{color:#c8a951}
-</style>
-</head>
-<body>
-
-<div class="top">
-<div style="display:flex;align-items:center;gap:6px">
-<div class="menuBtn" onclick="openDrawer()">☰</div>
-<div><b>4 BIR —<br>MT PLATOON</b></div>
-</div>
-<div style="display:flex;gap:12px;align-items:center">
-<div class="bell">🔔<i>3</i></div>
-<div class="avatar">RH</div>
-<button class="logout" onclick="localStorage.clear();location.href='index.html'">LOGOUT</button>
-</div>
-</div>
-
-<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
-<div class="drawer" id="drawer">
-<h3 style="margin:0 0 12px 0">📁 FOLDERS</h3>
-<div class="d-item" onclick="location.href='vehicle.html'">🚚 VEHICLE UPDATE</div>
-<div class="d-item" onclick="location.href='communication.html'">☎️ COMMUNICATION</div>
-<div class="d-item" onclick="location.href='duty.html'">👮‍♂️ DUTY ROSTER</div>
-<div class="d-item" onclick="location.href='seniority.html'">⭐ SUTY SENIORITY</div>
-<div class="d-item" onclick="location.href='instruction.html'">📝 INSTRUCTION</div>
-<div class="d-item" onclick="location.href='contact.html'">📞 MT PLATOON MOBILE</div>
-<div class="d-item" onclick="location.href='mt-brain-final.html'">🧠 MT BRAIN AI</div>
-<button onclick="closeDrawer()" style="width:100%;margin-top:20px;padding:10px;background:#1f4a28;color:white;border:none;border-radius:10px">✖️ Close</button>
-</div>
-
-<div class="wrap">
-<div class="assalam">ASSALAMUALAIKUM</div>
-<div class="dutyStatus">Duty Status: <span>Active •</span> <span id="todayDate"></span></div>
-
-<div class="stats">
-<div class="s-card"><p>Total Vehicles</p><h3>🚚 18</h3></div>
-<div class="s-card"><p>Communication</p><h3>☎️ 42</h3></div>
-<div class="s-card"><p>Personnel</p><h3>👥 42</h3></div>
-<div class="s-card"><p>Officer on Duty</p><h3>👮 1</h3></div>
-</div>
-
-<div class="searchBox"><span>🔍</span><input id="globalSearch" type="text" placeholder="Quick Search... Vehicle, Person, Number" onkeyup="doSearch(this.value)"></div>
-<div id="searchResults"></div>
-
-<!-- JORURI ADESH - ডান থেকে বামে -->
-<div class="ticker joruri-bg">
-<div class="ticker-track" id="joruriTrack"><span id="joruriText">🚨 জরুরি আদেশ লোড হচ্ছে... 🚨</span></div>
-<span id="editJoruriBtn" onclick="editJoruri()" style="display:none;position:absolute;right:8px;top:6px;background:white;color:#b91c1c;padding:4px 10px;border-radius:10px;font-size:11px;font-weight:900;cursor:pointer">✏️ Edit</span>
-</div>
-
-<!-- SUTY SENIORITY - ডান থেকে বামে Google Sheet থেকে -->
-<div class="ticker seniority-bg">
-<div class="ticker-track slow"><span id="seniorityText">⭐ Seniority List লোড হচ্ছে... ⭐</span></div>
-</div>
-
-<a href="mt-brain-final.html" style="text-decoration:none;">
-<div class="brain">
-<div class="ico">🧠</div>
-<div style="flex:1"><div style="color:white;font-weight:900;font-size:15px">MT BRAIN - AI Assistant</div><div style="color:#c8ffc8;font-size:12px">যেকোনো প্রশ্ন করো, সাথে সাথে উত্তর</div></div>
-<div style="background:white;color:#0a6a0a;padding:7px 14px;border-radius:20px;font-weight:900;font-size:13px">ASK →</div>
-</div>
-</a>
-
-<div class="folders">
-<h3>Folders</h3>
-<div class="grid">
-<div class="card" onclick="location.href='vehicle.html'"><span class="icon">🚚</span><div class="t1">VEHICLE UPDATE</div></div>
-<div class="card" onclick="location.href='communication.html'"><span class="icon">☎️</span><div class="t1">COMMUNICATION</div></div>
-</div>
-</div>
-</div>
-
-<div class="bottom">
-<div class="active">🏠<br>Dashboard</div>
-<div onclick="location.href='vehicle.html'">🚚<br>Vehicles</div>
-<div onclick="location.href='communication.html'">☎️<br>Comms</div>
-<div onclick="location.href='duty.html'">📋<br>Roster</div>
-<div onclick="location.href='profile.html'">👤<br>Profile</div>
-</div>
-
 <script>
-const SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
-const SENIORITY_SHEET_URL="https://script.google.com/macros/s/AKfycbx7G1ssKkFX83T38zNRibDh3p8K87G8olL-qfcEKJxL_PS19re2P4kar_ywQ4hxG_k_OQ/exec";
+const DUTY_ID="1cGdPNeo-G1Xx1USo6KZlvYTKVzMcQ_t8V9eUlGADL-I";
+const SENIORITY_ID="1H0aSiqMyxn9bg9PLyjAt6dXPGLMNAWFN7v8hTrj1TZg";
+const MOBILE_ID="1CvMdG_fTG4mGnL-epIh3fsPhGVwwBX0rbkMPN7AqHJE";
 
-document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+const DUTY_CSV=`https://docs.google.com/spreadsheets/d/${DUTY_ID}/gviz/tq?tqx=out:csv`;
+const SENIORITY_CSV=`https://docs.google.com/spreadsheets/d/${SENIORITY_ID}/gviz/tq?tqx=out:csv`;
+const MOBILE_CSV=`https://docs.google.com/spreadsheets/d/${MOBILE_ID}/gviz/tq?tqx=out:csv`;
 
-// Drawer
-function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('overlay').classList.add('show')}
-function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
+let DUTY_DATA=[], SENIORITY_DATA=[], MOBILE_DATA=[], ALL_SEARCH=[];
 
-// Joruri - ডান থেকে বামে
-let savedJoruri=localStorage.getItem("joruriAdesh");
-if(savedJoruri){ document.getElementById('joruriText').innerText="🚨 "+savedJoruri+" 🚨  •  "; }
-try{
- fetch(SHEET_URL).then(r=>r.json()).then(d=>{
-   if(d&&d.text){
-     document.getElementById('joruriText').innerText="🚨 "+d.text+" 🚨  •  🚨 "+d.text+" 🚨  •  ";
-     localStorage.setItem("joruriAdesh", d.text);
-   }
- });
-}catch(e){}
-if(localStorage.getItem('role')==='clk') document.getElementById('editJoruriBtn').style.display='block';
-function editJoruri(){let t=prompt("নতুন জরুরি আদেশ লিখুন:"); if(!t)return; localStorage.setItem("joruriAdesh",t); document.getElementById('joruriText').innerText="🚨 "+t+" 🚨"; fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({text:t})}).then(()=>{alert("✅ সেভ হয়েছে")})}
+function parseCSV(text){
+  let lines=text.split("\n").filter(l=>l.trim().length>0);
+  let result=[];
+  for(let i=1;i<lines.length;i++){
+    let cols=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c=>c.replace(/^"|"$/g,'').trim());
+    if(cols[0]||cols[1]||cols[2]) result.push(cols);
+  }
+  return result;
+}
 
-// Seniority - Google Sheet থেকে ডান থেকে বামে 1-5
-function loadSeniority(){
-  fetch(SENIORITY_SHEET_URL).then(r=>r.json()).then(data=>{
-    let list=data;
-    if(data.data) list=data.data;
-    if(data.seniority) list=data.seniority;
-    if(Array.isArray(list) && list.length>0){
-      let txt=list.slice(0,5).map((s,i)=>{
-        let name=s.name||s.Name||s[1]||s[0]||"";
-        let rank=s.rank||s.Rank||"";
-        let no=s.no||s.No||s.serial||(i+1);
-        return `⭐ ${no} No: ${rank} ${name}`;
-      }).join("  •  ");
-      document.getElementById('seniorityText').innerText=txt+"  •  "+txt;
-      localStorage.setItem("sutySenioritySheet", JSON.stringify(list));
-    }
-  }).catch(e=>{
-    let local=localStorage.getItem("sutySenioritySheet");
-    if(local){
-      let list=JSON.parse(local);
-      let txt=list.slice(0,5).map((s,i)=>`⭐ ${i+1} No: ${s.name||s.Name}`).join("  •  ");
-      document.getElementById('seniorityText').innerText=txt+"  •  "+txt;
+async function loadAll(){
+  // Seniority
+  try{
+    let sCSV=await fetch(SENIORITY_CSV).then(r=>r.text());
+    let sRows=parseCSV(sCSV);
+    SENIORITY_DATA=sRows.map(c=>({no:c[0], rank:c[1], name:c[2], sutyStart:c[3], mobile:c[4]})).filter(x=>x.name);
+    localStorage.setItem("senioritySheetCache",JSON.stringify(SENIORITY_DATA));
+  }catch(e){ SENIORITY_DATA=JSON.parse(localStorage.getItem("senioritySheetCache")||"[]"); }
+  
+  // Duty
+  try{
+    let dCSV=await fetch(DUTY_CSV).then(r=>r.text());
+    let dRows=parseCSV(dCSV);
+    DUTY_DATA=dRows.map(c=>({no:c[0], rank:c[1], name:c[2], duty:c[3], date:c[4], sutyStart:c[5]})).filter(x=>x.name);
+    localStorage.setItem("dutySheetCache",JSON.stringify(DUTY_DATA));
+  }catch(e){ DUTY_DATA=JSON.parse(localStorage.getItem("dutySheetCache")||"[]"); }
+  
+  // Mobile Number - নতুন
+  try{
+    let mCSV=await fetch(MOBILE_CSV).then(r=>r.text());
+    let mRows=parseCSV(mCSV);
+    MOBILE_DATA=mRows.map(c=>({no:c[0], rank:c[1], name:c[2], mobile:c[3], group:c[4]})).filter(x=>x.name||x.mobile);
+    localStorage.setItem("mobileSheetCache",JSON.stringify(MOBILE_DATA));
+    console.log("Mobile Loaded:", MOBILE_DATA);
+  }catch(e){ MOBILE_DATA=JSON.parse(localStorage.getItem("mobileSheetCache")||"[]"); }
+
+  updateSeniorityTicker();
+  buildSearchCache();
+  checkNotifications();
+}
+
+function updateSeniorityTicker(){
+  if(SENIORITY_DATA.length==0){document.getElementById('seniorityText').innerText="⭐ Seniority Sheet Publish করুন ⭐";return;}
+  let txt=SENIORITY_DATA.slice(0,5).map((s,i)=>`⭐ ${s.no||i+1} No: ${s.rank} ${s.name}`).join("  •  ");
+  document.getElementById('seniorityText').innerText=txt+"  •  "+txt+"  •  ";
+}
+
+function buildSearchCache(){
+  ALL_SEARCH=[];
+  SENIORITY_DATA.forEach(s=>ALL_SEARCH.push({type:"SUTY SENIORITY", name:`${s.no} No: ${s.rank} ${s.name}`, sub:`Mobile: ${s.mobile||''} Suty: ${s.sutyStart||''}`, link:"seniority.html"}));
+  DUTY_DATA.forEach(d=>ALL_SEARCH.push({type:"DUTY ROSTER", name:`${d.rank} ${d.name} - ${d.duty}`, sub:`Date: ${d.date||''}`, link:"duty.html"}));
+  MOBILE_DATA.forEach(m=>ALL_SEARCH.push({type:"MT MOBILE", name:`${m.rank} ${m.name} - ${m.mobile}`, sub:`Group: ${m.group||''}`, link:"contact.html"}));
+  // Vehicle local cache
+  let veh=JSON.parse(localStorage.getItem("vehicleSheetCache")||"[]");
+  veh.forEach(v=>ALL_SEARCH.push({type:"VEHICLE", name:`${v.ba||v[0]||''} - ${v.km||''}`, link:"vehicle.html"}));
+}
+
+function doSearch(q){
+  let res=document.getElementById("searchResults");
+  if(!q||q.trim().length<1){res.style.display="none";return;}
+  let low=q.toLowerCase();
+  let filt=ALL_SEARCH.filter(d=>d.name.toLowerCase().includes(low)||d.type.toLowerCase().includes(low)||(d.sub&&d.sub.toLowerCase().includes(low)));
+  if(filt.length==0){res.innerHTML=`<div style='padding:10px;color:#888'>🔍 "${q}" পাওয়া যায়নি কোনো Sheet এ</div>`}
+  else{res.innerHTML=filt.slice(0,20).map(d=>`<div onclick="location.href='${d.link}'" style="padding:10px;border-bottom:1px solid #1a3d22;cursor:pointer"><b style="color:#c8a951;font-size:10px">${d.type}</b><br><span style="color:white;font-size:13px">${d.name}</span><br><span style="color:#8aa88f;font-size:11px">${d.sub||''}</span></div>`).join("")}
+  res.style.display="block";
+}
+
+function checkNotifications(){
+  let notifs=[];let today=new Date();
+  SENIORITY_DATA.forEach(p=>{
+    if(p.sutyStart){
+      let start=new Date(p.sutyStart); if(isNaN(start)) return;
+      let ret=new Date(start); ret.setDate(ret.getDate()+75);
+      let diff=Math.ceil((ret-today)/(1000*60*60*24));
+      if(diff<=7 && diff>=0) notifs.push(`👤 <b>${p.rank} ${p.name}</b> - Suty 2M 15D - ${diff} দিন বাকি`);
+      if(diff<0 && diff>=-2) notifs.push(`🔔 <b>${p.rank} ${p.name}</b> - Suty Return Overdue!`);
     }
   });
+  DUTY_DATA.forEach(p=>{
+    if(p.sutyStart){let start=new Date(p.sutyStart); if(isNaN(start)) return; let ret=new Date(start); ret.setDate(ret.getDate()+75); let diff=Math.ceil((ret-today)/(1000*60*60*24)); if(diff<=7 && diff>=0) notifs.push(`📋 Duty: <b>${p.rank} ${p.name}</b> - Suty 2M 15D - ${diff} দিন বাকি`);}
+  });
+  let vehicles=JSON.parse(localStorage.getItem("vehicleSheetCache")||"[]");
+  vehicles.forEach(v=>{if(v.nextOil){let next=new Date(v.nextOil); let diff=Math.ceil((next-today)/(1000*60*60*24)); if(diff<=7 && diff>=0) notifs.push(`🚚 <b>Vehicle ${v.ba||v[0]}</b> - Oil বদলির ${diff} দিন বাকি`);}});
+  if(notifs.length==0) notifs.push("✅ কোনো নতুন Notification নেই - সব OK");
+  document.getElementById('notifCount').innerText=notifs[0].includes("কোনো")?0:notifs.length;
+  document.getElementById('notifList').innerHTML=notifs.map(n=>`<div style="padding:10px;border-bottom:1px solid #1a3d22;font-size:13px">${n}</div>`).join("");
 }
-loadSeniority();
 
-// Quick Search - সব জায়গা থেকে
-let allData=[
- {type:"VEHICLE",name:"BA-402 Truck",link:"vehicle.html"},
- {type:"COMMUNICATION",name:"CO Sir 01769-000001",link:"communication.html"},
- {type:"DUTY",name:"Night Duty",link:"duty.html"},
- {type:"SENIORITY",name:"Sgt. Rahman",link:"seniority.html"},
-];
-function doSearch(q){
- let res=document.getElementById("searchResults");
- if(!q){res.style.display="none";return;}
- let low=q.toLowerCase();
- let filt=allData.filter(d=>d.name.toLowerCase().includes(low)||d.type.toLowerCase().includes(low));
- if(filt.length==0){res.innerHTML="<p style='color:#888;font-size:12px;padding:6px'>কিছু পাওয়া যায়নি...</p>"}
- else{res.innerHTML=filt.map(d=>`<div onclick="location.href='${d.link}'" style="padding:8px;border-bottom:1px solid #1f4a28;cursor:pointer"><b style="color:#c8a951;font-size:10px">${d.type}</b><br><span style="color:white;font-size:13px">${d.name}</span></div>`).join("")}
- res.style.display="block";
-}
+loadAll();
+setInterval(loadAll,60000);
 </script>
-</body>
-</html>
