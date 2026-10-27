@@ -1,132 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MT PLATOON - 4 BIR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT PLATOON - Mobile Number</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070d1a;color:#fff}
 .phone{max-width:430px;margin:0 auto;background:#0a1120;min-height:100vh;padding-bottom:20px}
-.top{padding:14px;display:flex;gap:10px;border-bottom:1px solid #1e2f4a;position:sticky;top:0;background:#0a1120;z-index:10}
-.top b{color:#c8a951;font-size:15px}
-.back{font-size:28px;color:#c8a951;background:none;border:none;cursor:pointer}
-.loginBox{margin:40px 14px;background:#111a2d;border:1px solid #c8a951;border-radius:16px;padding:20px;text-align:center}
-.loginBox input{width:100%;padding:12px;border-radius:10px;border:1px solid #c8a951;background:#0a1120;color:#fff;margin:10px 0;outline:none;text-align:center;font-size:16px}
-.loginBtn{width:100%;padding:12px;background:#c8a951;color:#000;border:none;border-radius:10px;font-weight:900;cursor:pointer}
-.addBox{margin:14px;background:#111a2d;border:1px solid #25D366;border-radius:14px;padding:14px;display:none}
-.addBox h3{margin:0 0 10px;color:#25D366;font-size:14px}
-.addBox input{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:1px solid #2a3a5a;background:#0a1120;color:#fff;outline:none}
+.top{padding:14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #1e2f4a;position:sticky;top:0;background:#0a1120;z-index:10}
+.back{font-size:32px;color:#c8a951;background:none;border:none;cursor:pointer}
+.top b{color:#c8a951;font-size:14px}
+.addBox{margin:14px;background:#111a2d;border:1px solid #25D366;border-radius:14px;padding:14px}
+.addBox input{width:100%;padding:10px;margin:5px 0;border-radius:8px;border:1px solid #2a3a5a;background:#0a1120;color:#fff;outline:none}
 .row{display:flex;gap:8px}.row input{flex:1}
-.saveBtn{width:100%;margin-top:10px;padding:11px;background:#25D366;color:#000;border:none;border-radius:10px;font-weight:900;cursor:pointer}
+.saveBtn{width:100%;margin-top:10px;padding:12px;background:#25D366;color:#000;border:none;border-radius:10px;font-weight:900;cursor:pointer}
 .searchWrap{padding:10px 14px}.search{width:100%;background:#111a2d;border:1px solid #c8a951;border-radius:20px;padding:11px 14px;display:flex;gap:8px}
 .search input{flex:1;background:transparent;border:none;color:#fff;outline:none}
-.card{background:#111a2d;border-left:4px solid #c8a951;border-radius:14px;margin:12px 14px;border:1px solid #2a3a5a}
-.details{padding:8px 14px;display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:11px}
-.label{color:#8a9bb5}.val{color:#fff;font-weight:700}.full{grid-column:1/span 2}
-.btns{display:flex;gap:8px;padding:8px 12px 12px}
-.callBtn{flex:1;background:#0f172a;border:1px solid #c8a951;color:#c8a951;border-radius:8px;padding:9px;text-align:center;text-decoration:none;font-weight:900;font-size:12px}
-.waBtn{flex:1;background:#0a1a0a;border:1px solid #25D366;color:#25D366;border-radius:8px;padding:9px;text-align:center;text-decoration:none;font-weight:900;font-size:12px}
-.loading{padding:40px;text-align:center;color:#c8a951}
-.logout{font-size:11px;color:#ff6666;background:none;border:none;cursor:pointer;float:right}
+.card{background:#111a2d;border-left:4px solid #c8a951;border-radius:14px;margin:12px 14px;border:1px solid #2a3a5a;overflow:hidden}
+.details{padding:8px 14px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px}
+.label{color:#8a9bb5;font-size:10px}.val{color:#fff;font-weight:700}
+.btns{display:flex;gap:6px;padding:10px 12px 12px;flex-wrap:wrap}
+.btn{flex:1;border-radius:8px;padding:10px;text-align:center;text-decoration:none;font-weight:900;font-size:12px;border:1px solid;display:block}
+.callBtn{background:#0f172a;border-color:#c8a951;color:#c8a951}
+.waBtn{background:#0a1a0a;border-color:#25D366;color:#25D366}
+.editBtn{background:#1a160a;border-color:orange;color:orange;cursor:pointer}
+.delBtn{background:#1a0a0a;border-color:#ff4444;color:#ff4444;cursor:pointer}
+.viewOnly{margin:14px;padding:10px;background:#0f172a;border-radius:10px;text-align:center;font-size:12px;color:#8a9bb5;border:1px dashed #2a3a5a}
 </style>
 </head>
 <body>
 <div class="phone">
-<div class="top"><button class="back" onclick="location.href='contact.html'">‹</button><div style="flex:1"><b>MT PLATOON - Mobile Number</b><small id="cnt" style="color:#8a9bb5;display:block">Loading...</small></div><button id="logoutBtn" class="logout" onclick="logout()" style="display:none">Logout</button></div>
+  <div class="top">
+    <button class="back" onclick="location.href='index.html'">‹</button>
+    <div><b>MT PLATOON - MOBILE NUMBER</b><small id="roleInfo" style="display:block;color:#8a9bb5">Loading...</small></div>
+  </div>
 
-<!-- LOGIN -->
-<div id="loginBox" class="loginBox">
-<h3 style="color:#c8a951">🔐 Command Login Required</h3>
-<p style="font-size:12px;color:#8a9bb5">Command ID দিয়ে Login করো</p>
-<input id="cmdId" type="password" placeholder="Command ID লিখো">
-<button class="loginBtn" onclick="login()">LOGIN</button>
-<p id="loginErr" style="color:#ff6666;font-size:12px;display:none;margin-top:10px">Wrong Command ID!</p>
-<small style="color:#666">Hint: MT4BIR</small>
-</div>
+  <div id="clkBox" style="display:none">
+    <div class="addBox">
+      <h3 style="margin:0 0 10px;color:#25D366;font-size:14px">➕ Add / Edit Number - Sheet এ যাবে</h3>
+      <input type="hidden" id="editRow">
+      <div class="row"><input id="no" placeholder="No"><input id="rank" placeholder="Rank"></div>
+      <input id="name" placeholder="Name *">
+      <div class="row"><input id="army" placeholder="Army No *"><input id="licence" placeholder="Licence (MC/3Ton)"></div>
+      <input id="mobile" placeholder="Mobile No *">
+      <button class="saveBtn" onclick="saveData()">💾 Save to Google Sheet</button>
+      <p id="msg" style="text-align:center;font-size:12px;margin-top:8px"></p>
+    </div>
+  </div>
 
-<!-- ADD FORM -->
-<div id="addBox" class="addBox">
-<h3>➕ নতুন Number Add করো (Sheet এ যাবে)</h3>
-<div class="row"><input id="no" placeholder="No"><input id="rank" placeholder="Rank"></div>
-<input id="name" placeholder="Name *">
-<div class="row"><input id="army" placeholder="Army No *"><input id="licence" placeholder="Licence (MC/3Ton)"></div>
-<input id="mobile" placeholder="Mobile No *">
-<button class="saveBtn" onclick="addData()">💾 Sheet এ Save করো</button>
-<p id="saveMsg" style="text-align:center;font-size:12px;margin-top:8px"></p>
-</div>
+  <div id="commandBox" class="viewOnly" style="display:none">👁️ COMMAND View - শুধু দেখতে পারবেন, Add/Edit পারবেন না</div>
 
-<div class="searchWrap" id="searchWrap" style="display:none"><div class="search">🔍 <input id="s" placeholder="Search Name / Army No..." oninput="render()"></div></div>
-<div id="list"><div class="loading">⏳ Sheet থেকে Data আসছে...</div></div>
+  <div class="searchWrap"><div class="search">🔍 <input id="s" placeholder="Search Name / Army No..." oninput="render()"></div></div>
+  <div id="list"><p style="padding:40px;text-align:center;color:#c8a951">⏳ Loading from Sheet...</p></div>
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbw2sl41kOPN1meSmv2B1TL5mYNlFp9xAR9jVCwMQeDV-A7EBAp1CwoeKiy21QbBe8IfpA/exec";
-const COMMAND_ID = "MT4BIR";
-let data=[];
-let isLogged = localStorage.getItem("mt_login") === "yes";
+let data = [];
+let role = localStorage.getItem("userRole") || "COMMAND"; // COMMAND or MT CLK
 
-function login(){
-  let v = document.getElementById('cmdId').value.trim();
-  if(v === COMMAND_ID){
-    localStorage.setItem("mt_login","yes");
-    isLogged = true;
-    showApp();
-  }else{
-    document.getElementById('loginErr').style.display="block";
-  }
-}
-function logout(){
-  localStorage.removeItem("mt_login");
-  location.reload();
-}
-function showApp(){
-  document.getElementById('loginBox').style.display="none";
-  document.getElementById('addBox').style.display="block";
-  document.getElementById('searchWrap').style.display="block";
-  document.getElementById('logoutBtn').style.display="block";
-  load();
-}
+// Role Check
+let isCLK = role.toUpperCase().includes("CLK");
+document.getElementById('roleInfo').innerText = "Login: " + role + (isCLK ? " - Full Control" : " - View Only");
+document.getElementById('clkBox').style.display = isCLK ? "block" : "none";
+document.getElementById('commandBox').style.display = isCLK ? "none" : "block";
+
 async function load(){
   try{
     let res = await fetch(API_URL);
     data = await res.json();
-    document.getElementById('cnt').innerText = data.length + " Numbers - Live";
     render();
   }catch(e){
-    document.getElementById('list').innerHTML = "<p style='padding:20px;text-align:center;color:#ff6666'>Failed to fetch! <br> Apps Script টা আবার Deploy > New Version করো</p>";
+    document.getElementById('list').innerHTML = "<p style='padding:20px;text-align:center;color:red'>Failed! Apps Script Deploy > New Version করো</p>";
   }
 }
+
 function render(){
-  let q=document.getElementById('s').value.toLowerCase();
-  let h='';
+  let q = document.getElementById('s').value.toLowerCase();
+  let html = "";
   data.forEach(o=>{
-    if(q && !(`${o.name} ${o.army} ${o.mobile} ${o.licence}`.toLowerCase().includes(q))) return;
-    let wa=(o.mobile||'').replace(/\D/g,'');
-    if(wa.startsWith('0')) wa='88'+wa;
-    h+=`<div class="card"><div style="padding:12px"><b>${o.rank||''} ${o.name||''}</b><br><small style="color:#c8a951">No: ${o.no||''} • ${o.army||''}</small></div><div class="details"><div><span class="label">Army No:</span></div><div><span class="label">Licence:</span></div><div><span class="val" style="color:#c8a951">${o.army||'-'}</span></div><div><span class="val" style="color:#22c55e;font-weight:900">${o.licence||'-'}</span></div><div class="full"><span class="label">Mobile:</span> <span class="val">${o.mobile||'-'}</span></div></div><div class="btns"><a class="callBtn" href="tel:${o.mobile}">📞 Call</a><a class="waBtn" href="https://wa.me/${wa}">💬 WhatsApp</a></div></div>`;
+    if(q && !`${o.name} ${o.army} ${o.mobile} ${o.licence}`.toLowerCase().includes(q)) return;
+    let wa = (o.mobile||'').replace(/\D/g,''); if(wa.startsWith('0')) wa='88'+wa;
+    let editBtns = isCLK ? `<button class="btn editBtn" onclick="editData(${o.row})">✏️ Edit</button><button class="btn delBtn" onclick="deleteData(${o.row})">🗑️ Del</button>` : "";
+    html += `<div class="card"><div style="padding:12px"><b>${o.rank||''} ${o.name||''}</b><br><small style="color:#c8a951">No: ${o.no||''} | Army: ${o.army||''}</small></div><div class="details"><div><span class="label">ARMY NO</span><br><span class="val" style="color:#c8a951">${o.army||'-'}</span></div><div><span class="label">LICENCE</span><br><span class="val" style="color:#22c55e">${o.licence||'-'}</span></div><div style="grid-column:1/span 2"><span class="label">MOBILE</span> <span class="val">${o.mobile||'-'}</span></div></div><div class="btns"><a class="btn callBtn" href="tel:${o.mobile}">📞 Call</a><a class="btn waBtn" href="https://wa.me/${wa}">💬 WhatsApp</a>${editBtns}</div></div>`;
   });
-  document.getElementById('list').innerHTML=h||"<p style='padding:20px;text-align:center'>No Data - উপরে Form থেকে Add করো</p>";
+  document.getElementById('list').innerHTML = html || "<p style='padding:20px;text-align:center'>No Data Found</p>";
 }
-async function addData(){
-  let no=document.getElementById('no').value;
-  let rank=document.getElementById('rank').value;
-  let name=document.getElementById('name').value;
-  let army=document.getElementById('army').value;
-  let mobile=document.getElementById('mobile').value;
-  let licence=document.getElementById('licence').value;
-  if(!name || !mobile){alert("Name & Mobile লাগবে!");return;}
-  document.getElementById('saveMsg').innerText="⏳ Saving...";
-  try{
-    await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({no,rank,name,army,mobile,licence})});
-    document.getElementById('saveMsg').innerText="✅ Sheet এ Add হয়েছে! 2 সেকেন্ডে দেখা যাবে";
-    // clear
-    document.getElementById('name').value="";document.getElementById('mobile').value="";document.getElementById('army').value="";
-    setTimeout(()=>{load();document.getElementById('saveMsg').innerText="";},2000);
-  }catch(e){
-    document.getElementById('saveMsg').innerText="❌ Error: "+e;
-  }
+
+async function saveData(){
+  let row = document.getElementById('editRow').value;
+  let payload = {
+    no: document.getElementById('no').value,
+    rank: document.getElementById('rank').value,
+    name: document.getElementById('name').value,
+    army: document.getElementById('army').value,
+    mobile: document.getElementById('mobile').value,
+    licence: document.getElementById('licence').value,
+    action: row ? "edit" : "add",
+    row: row ? parseInt(row) : 0
+  };
+  if(!payload.name || !payload.mobile){ alert("Name & Mobile লাগবে!"); return; }
+  document.getElementById('msg').innerText = "⏳ Saving...";
+  await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(payload)});
+  document.getElementById('msg').innerText = "✅ Saved! Reloading...";
+  setTimeout(()=>location.reload(),1500);
 }
-if(isLogged){showApp();}
+
+function editData(r){
+  let o = data.find(x=>x.row===r);
+  document.getElementById('editRow').value = o.row;
+  document.getElementById('no').value = o.no;
+  document.getElementById('rank').value = o.rank;
+  document.getElementById('name').value = o.name;
+  document.getElementById('army').value = o.army;
+  document.getElementById('mobile').value = o.mobile;
+  document.getElementById('licence').value = o.licence;
+  window.scrollTo(0,0);
+}
+
+async function deleteData(r){
+  if(!confirm("Delete করবা?")) return;
+  await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:r})});
+  alert("Deleted!");
+  location.reload();
+}
+
+load();
 </script>
 </body>
 </html>
