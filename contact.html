@@ -1,13 +1,33 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Communication</title>
-<style>body{margin:0;background:#0a1a0f;color:#fff;font-family:Arial}.top{background:#122e18;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1e4a28}.top b{color:#c8a951}.backBtn{background:#1a3d22;border:1px solid #c8a951;color:#c8a951;padding:7px 12px;border-radius:8px;font-weight:900}.wrap{padding:14px 14px 80px 14px}.search{width:100%;padding:12px;background:#132a18;border:1px solid #c8a951;border-radius:12px;color:#fff;margin-bottom:14px}.folders{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{background:#132a18;border:1px solid #c8a951;border-radius:18px;padding:24px 8px;text-align:center;cursor:pointer}.box:active{transform:scale(0.97)}.box div{font-size:42px}.box b{color:#c8a951;font-size:13px;display:block;margin-top:8px}.box small{color:#8aa88f;font-size:10px}</style></head><body>
-<div class="top"><b>COMMUNICATION</b><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div>
-<div class="wrap">
-<input class="search" placeholder="🔍 Search..." disabled>
-<div class="folders">
-<div class="box" onclick="location.href='mt-platoon.html'"><div>👥</div><b>MT PLATOON<br>MOBILE NUMBER</b></div>
-<div class="box" onclick="location.href='required.html'"><div>⭐</div><b>REQUIRED<br>MOBILE NUMBER</b></div>
-<div class="box" onclick="location.href='4bir.html'"><div>🪖</div><b>4 BIR<br>MOBILE NUMBER</b></div>
-<div class="box" onclick="location.href='officers.html'"><div>👮</div><b>OFFICERS<br>MOBILE NUMBER</b></div>
-</div>
-</div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Communication</title> 
+<style>body{margin:0;background:#0a1a0f;color:#fff;font-family:Arial}.top{background:#122e18;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1e4a28}.top b{color:#c8a951}.backBtn{background:#1a3d22;border:1px solid #c8a951;color:#c8a951;padding:7px 12px;border-radius:8px;font-weight:900}.wrap{padding:14px 14px 80px 14px}.search{width:100%;padding:12px;background:#132a18;border:1px solid #c8a951;border-radius:12px;color:#fff;margin-bottom:14px}.folders{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{background:#132a18;border:1px solid #c8a951;border-radius:18px;padding:24px 8px;text-align:center;cursor:pointer}.box:active{transform:scale(0.97)}.box div{font-size:42px}.box b{color:#c8a951;font-size:13px;display:block;margin-top:8px}</style></head><body> 
+<div class="top"><b>COMMUNICATION</b><button class="backBtn" onclick="goPage('dashboard.html')">BACK</button></div> 
+<div class="wrap"> 
+<input class="search" id="s" placeholder="🔍 Search..." oninput="filter()"> 
+<div class="folders"> 
+<div class="box" onclick="goPage('mt-platoon.html')"><div>👥</div><b>MT PLATOON<br>MOBILE NUMBER</b></div> 
+<div class="box" onclick="goPage('required.html')"><div>⭐</div><b>REQUIRED<br>MOBILE NUMBER</b></div> 
+<div class="box" onclick="goPage('4bir.html')"><div>🪖</div><b>4 BIR<br>MOBILE NUMBER</b></div> 
+<div class="box" onclick="goPage('officers.html')"><div>👮</div><b>OFFICERS<br>MOBILE NUMBER</b></div> 
+</div> 
+</div> 
+<script>
+function getRole(){
+  let urlRole = new URLSearchParams(window.location.search).get('role');
+  if(urlRole) return urlRole;
+  return localStorage.getItem("userRole") || localStorage.getItem("role") || localStorage.getItem("mtRole") || localStorage.getItem("loginType") || "COMMAND";
+}
+function goPage(page){
+  let r = getRole();
+  // save again for safety
+  localStorage.setItem("userRole", r);
+  localStorage.setItem("role", r);
+  location.href = page + "?role=" + encodeURIComponent(r);
+}
+function filter(){
+  let q = document.getElementById('s').value.toLowerCase();
+  document.querySelectorAll('.box').forEach(b=>{
+    b.style.display = b.innerText.toLowerCase().includes(q) ? "block" : "none";
+  });
+}
+</script>
 </body></html>
