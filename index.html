@@ -1,65 +1,47 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT PLATOON 4 BIR</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MT PLATOON 4 BIR | TACTICAL COMMAND CENTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
-body{margin:0;min-height:100vh;background:#eef2f5;display:flex;align-items:center;justify-content:center;font-family:Arial}
-.box{width:90%;max-width:380px;background:white;border-radius:28px;overflow:hidden;box-shadow:0 10px 30px #0002;text-align:center}
-.top{background:#0a7e07;color:white;padding:22px 10px}
-.top h1{margin:0;font-size:26px;font-weight:900;letter-spacing:1px}
-.top p{margin:6px 0 0 0;letter-spacing:2px;font-size:13px;opacity:.9}
-.body{padding:22px 18px}
-.title{font-size:22px;font-weight:900;margin:10px 0 16px 0}
-.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.rbtn{padding:16px 8px;border-radius:16px;border:2px solid #ddd;font-weight:900;font-size:16px;cursor:pointer;background:#f3f3f3;transition:.2s}
-.rbtn.active{background:#7d0000;color:white;border-color:#7d0000}
-.label{margin:20px 0 8px 0;font-weight:900;font-size:16px}
-.inp{width:100%;padding:14px;border:2px solid #d0d7e2;border-radius:14px;background:#eaf2ff;font-size:18px;box-sizing:border-box;outline:none;text-align:center}
-.login{width:100%;margin-top:18px;padding:14px;background:#0a7e07;color:white;border:none;border-radius:14px;font-size:20px;font-weight:900;cursor:pointer}
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;background:#020b10;color:#c8f3ff;font-family:'Rajdhani',sans-serif;display:flex;flex-direction:column}
+.hud{border:1px solid rgba(100,220,255,0.35);box-shadow:0 0 15px rgba(100,220,255,0.15), inset 0 0 30px rgba(100,220,255,0.05)}
+.header{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;margin:8px;background:rgba(5,20,30,0.9)}
+.main{display:grid;grid-template-columns:1.7fr 0.9fr;gap:8px;margin:0 8px 8px;flex:1}
+.left{position:relative;background:#000;min-height:600px;overflow:hidden}.left img{width:100%;height:100%;object-fit:cover;opacity:0.7}
+.label{position:absolute;font-size:9px;background:rgba(0,20,30,0.85);border:1px solid rgba(100,220,255,0.3);padding:5px 9px;color:#7de8ff}
+.live-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(2,20,35,0.95);border-top:1px solid rgba(100,220,255,0.3);padding:9px 14px;display:flex;justify-content:space-between}
+.right{background:rgba(3,15,25,0.97);padding:18px;display:flex;flex-direction:column;gap:22px;justify-content:center}
+.role-wrap{position:relative}
+.role-main{width:100%;background:rgba(0,30,45,0.85);border:1.5px solid #7de8ff;color:#7de8ff;padding:15px 18px;font-family:'Orbitron';font-size:19px;font-weight:900;display:flex;justify-content:space-between;cursor:pointer;clip-path:polygon(3% 0, 100% 0, 97% 100%, 0 100%)}
+.role-dropdown{display:none;position:absolute;top:calc(100% + 10px);left:0;right:0;background:rgba(2,12,20,0.99);border:1px solid rgba(125,232,255,0.5);z-index:200;clip-path:polygon(2% 0, 100% 0, 98% 100%, 0 100%)}
+.role-dropdown.show{display:block}
+.role-opt{padding:14px 18px;font-size:17px;font-weight:700;cursor:pointer;border-bottom:1px solid rgba(125,232,255,0.12);display:flex;justify-content:space-between;color:#c8f3ff}
+.role-opt.active{background:rgba(125,232,255,0.22);color:#7de8ff}
+.input{display:flex;align-items:center;gap:10px;background:rgba(0,10,15,0.9);border:1.5px solid rgba(125,232,255,0.35);padding:12px 14px;clip-path:polygon(2% 0, 100% 0, 98% 100%, 0 100%)}
+.input input{flex:1;background:transparent;border:none;outline:none;color:#7de8ff;letter-spacing:6px;font-size:18px;text-align:center;font-family:'Orbitron'}
+.login{width:100%;background:transparent;border:1.5px solid #7de8ff;color:#7de8ff;font-family:'Orbitron';font-size:22px;font-weight:900;padding:13px;letter-spacing:4px;clip-path:polygon(5% 0, 100% 0, 95% 100%, 0 100%);cursor:pointer}
 </style>
 </head>
 <body>
-<div class="box">
-<div class="top">
-<h1>MT PLATOON 4 BIR</h1>
-<p>AUTHORISED ACCESS ONLY</p>
-</div>
-<div class="body">
-<div class="title">ROLE SELECT করুন</div>
-<div class="roles">
-<button id="btn-mt" class="rbtn active" onclick="setRole('mt')">MT PLATOON<br>4 BIR</button>
-<button id="btn-clk" class="rbtn" onclick="setRole('clk')">MT CLK<br>Admin</button>
-</div>
-<div class="label">PASSWORD</div>
-<input id="pass" class="inp" type="password" placeholder="••••••">
-<button class="login" onclick="doLogin()">LOGIN</button>
-</div>
+<div class="header hud"><div style="display:flex;align-items:center;gap:14px"><div style="width:58px;height:58px;border:1px solid #d4b86a;border-radius:50%;display:grid;place-items:center;background:#0a1a00">⚔️</div><div><h1 style="font-family:'Orbitron';font-size:19px;color:#a8f0ff">MT PLATOON 4<br>BIR BANGLADESH ARMY</h1><p style="font-size:8.5px;letter-spacing:2px;opacity:0.6">TACTICAL COMMAND CENTER • 2026</p></div></div><div style="text-align:right;font-size:11px"><div style="color:#5aff8a;font-weight:700">● SECURE CONNECTION</div><div id="dt" style="opacity:0.7">DATE: 27 OCT 2026 | TIME: 22:41:03 UTC+6</div></div></div>
+<div class="main">
+  <div class="left hud"><img src="https://images.unsplash.com/photo-1485575301923-ff75c30d54ab?q=80&w=1200&auto=format&fit=crop"><div class="label" style="top:14px;left:14px">CONVOY ALPHA - VEH-04</div><div class="label" style="right:18px;top:50%">62 KPH</div><div class="label" style="right:18px;bottom:28%">1.2KM TO WP-BRAVO<br>COORD: 23.8105°N, 90.4125°E<br>THREAT: LOW - CLEAR<br>FUEL: 87%</div><div class="live-bar"><div><h2 style="font-family:'Orbitron';color:#7de8ff">LIVE CONVOY FEED</h2><p style="font-size:11px;opacity:0.6">NIGHT OPERATIONS | CAM-03 THERMAL/LOWLIGHT</p></div><div style="font-size:10px;opacity:0.5">● REC LIVE</div></div></div>
+  <div class="right hud">
+    <div class="role-wrap" id="roleWrap"><button class="role-main" id="roleMain" onclick="toggleDrop()"><span id="roleText">COMMAND</span><span>▼</span></button><div class="role-dropdown" id="roleDropdown"><div class="role-opt active" data-val="mt" onclick="setRole('mt')">COMMAND <span>✓</span></div><div class="role-opt" data-val="clk" onclick="setRole('clk')">MT CLK</div></div></div>
+    <div><h3 style="font-family:'Orbitron';font-size:13px;color:#7de8ff;margin-bottom:10px">PASSWORD LOGIN</h3><div class="input"><span>🔒</span><input id="pass" type="password" placeholder="••••••"></div></div>
+    <div><button class="login" onclick="doLogin()">LOGIN</button><div style="text-align:center;color:#ff4a4a;font-size:11px;margin-top:10px">UNAUTHORIZED ACCESS IS PROHIBITED</div></div>
+  </div>
 </div>
 <script>
 let selectedRole = "mt";
-function setRole(r){
- selectedRole = r;
- document.getElementById("btn-mt").classList.remove("active");
- document.getElementById("btn-clk").classList.remove("active");
- if(r==="mt") document.getElementById("btn-mt").classList.add("active");
- else document.getElementById("btn-clk").classList.add("active");
-}
-function doLogin(){
- let p = document.getElementById("pass").value;
- if(selectedRole==="mt" && p==="mt4bir"){
-   localStorage.setItem("role","mt");
-   location.href="dashboard.html";
-   return;
- }
- if(selectedRole==="clk" && p==="admin7462"){
-   localStorage.setItem("role","clk");
-   location.href="dashboard.html";
-   return;
- }
- alert("ভুল পাসওয়ার্ড!");
-}
+function toggleDrop(){document.getElementById('roleDropdown').classList.toggle('show')}
+function setRole(r){selectedRole=r;document.getElementById('roleText').innerText=r==='mt'?'COMMAND':'MT CLK';document.querySelectorAll('.role-opt').forEach(o=>o.classList.toggle('active',o.dataset.val===r));document.getElementById('roleDropdown').classList.remove('show')}
+function doLogin(){let p=document.getElementById("pass").value;if(selectedRole==="mt" && p==="mt4bir"){localStorage.setItem("role","mt");location.href="dashboard.html";return;}if(selectedRole==="clk" && p==="admin7462"){localStorage.setItem("role","clk");location.href="dashboard.html";return;}alert("ভুল পাসওয়ার্ড!");}
+function tick(){const n=new Date();document.getElementById('dt').innerText=`DATE: ${n.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Dhaka'}).toUpperCase()} | TIME: ${n.toLocaleTimeString('en-GB',{hour12:false,timeZone:'Asia/Dhaka'})} UTC+6`;}tick();setInterval(tick,1000);
+window.addEventListener('click',e=>{if(!document.getElementById('roleWrap').contains(e.target))document.getElementById('roleDropdown').classList.remove('show')});
 </script>
 </body>
 </html>
