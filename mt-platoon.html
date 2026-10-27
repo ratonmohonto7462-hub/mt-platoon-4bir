@@ -4,7 +4,6 @@
 </head><body>
 <div class="phone">
 <div class="top"><button class="back" onclick="location.href='communication.html'">‹</button><div style="flex:1"><b>MT PLATOON</b><small style="display:block;color:#25D366">MT CLK - Full Access</small></div></div>
-
 <div class="addBox">
 <h3 style="margin:0 0 10px;color:#25D366;font-size:14px">➕ Add / Edit Number</h3>
 <input type="hidden" id="editRow">
@@ -13,29 +12,28 @@
 <div class="row"><input id="mobile" placeholder="মোবাইল নং *"><input id="licence" placeholder="লাইসেন্স"></div>
 <button class="saveBtn" onclick="saveData()">💾 Save to Sheet</button><p id="msg" style="text-align:center;font-size:12px"></p>
 </div>
-
 <div class="search">🔍 <input id="s" placeholder="Search নাম / সেনা নং..." oninput="render()"></div>
 <div id="list"><p style="padding:40px;text-align:center;color:#c8a951">⏳ Loading...</p></div>
 </div>
-
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxx_76hlM74drJ3I9D98O7PsPdlCVWdwDIh8ATULd-WlrIzTSbgVavPlaXwHeLk17M-Mw/exec";
 let data=[];
 async function load(){
   try{
     let res = await fetch(API_URL);
-    data = await res.json();
+    let txt = await res.text();
+    data = JSON.parse(txt);
     render();
   }catch(e){
-    document.getElementById('list').innerHTML = "<div style='padding:20px;text-align:center'><p style='color:#ff4444'>❌ Failed!</p><button onclick='load()' style='margin-top:10px;padding:8px 16px'>🔄 Retry</button></div>";
+    document.getElementById('list').innerHTML = "<p style='padding:20px;text-align:center;color:#ff4444'>❌ "+e+"<br><button onclick='load()'>Retry</button></p>";
   }
 }
 function render(){
   let q=document.getElementById('s').value.toLowerCase();
   let h='';
   data.forEach(o=>{
-    if(q && !`${o.name} ${o.army} ${o.mobile} ${o.rank}`.toLowerCase().includes(q)) return;
-    let wa=(o.mobile||'').replace(/\D/g,'');
+    if(q && !`${o.name} ${o.army} ${o.mobile}`.toLowerCase().includes(q)) return;
+    let wa=(o.mobile||'').toString().replace(/\D/g,'');
     if(wa.startsWith('0')) wa='88'+wa;
     h+=`<div class="card"><div style="padding:12px"><b>${o.rank||''} ${o.name||''}</b><br><small style="color:#c8a951">সেনা নং: ${o.army||''} • লাইসেন্স: ${o.licence||''}</small></div><div style="padding:0 12px 8px;font-size:12px">📱 ${o.mobile||''}</div><div class="btns"><a class="btn" style="background:#0f172a;border-color:#c8a951;color:#c8a951" href="tel:${o.mobile}">📞 Call</a><a class="btn" style="background:#0a1a0a;border-color:#25D366;color:#25D366" href="https://wa.me/${wa}">💬 WA</a><a class="btn" style="border-color:orange;color:orange;cursor:pointer" onclick="editData(${o.row})">✏️ Edit</a><a class="btn" style="border-color:#ff4444;color:#ff4444;cursor:pointer" onclick="deleteData(${o.row})">🗑️ Del</a></div></div>`;
   });
@@ -43,14 +41,14 @@ function render(){
 }
 async function saveData(){
   let r=document.getElementById('editRow').value;
-  let p={army:army.value, rank:rank.value, name:name.value, mobile:mobile.value, licence:licence.value, action:r?"edit":"add", row:r?parseInt(r):0};
+  let p={army:document.getElementById('army').value, rank:document.getElementById('rank').value, name:document.getElementById('name').value, mobile:document.getElementById('mobile').value, licence:document.getElementById('licence').value, action:r?"edit":"add", row:r?parseInt(r):0};
   if(!p.name||!p.mobile||!p.army){alert("সেনা নং, নাম ও মোবাইল লাগবে!");return;}
-  msg.innerText="⏳ Saving...";
+  document.getElementById('msg').innerText="⏳ Saving...";
   await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(p)});
-  msg.innerText="✅ Saved!";
+  document.getElementById('msg').innerText="✅ Saved! Reloading...";
   setTimeout(()=>location.reload(),1200);
 }
-function editData(r){let o=data.find(x=>x.row===r);editRow.value=o.row;army.value=o.army;rank.value=o.rank;name.value=o.name;mobile.value=o.mobile;licence.value=o.licence;window.scrollTo(0,0);}
+function editData(r){let o=data.find(x=>x.row===r);document.getElementById('editRow').value=o.row;document.getElementById('army').value=o.army;document.getElementById('rank').value=o.rank;document.getElementById('name').value=o.name;document.getElementById('mobile').value=o.mobile;document.getElementById('licence').value=o.licence;window.scrollTo(0,0);}
 async function deleteData(r){if(!confirm("Delete করবা?"))return;await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row:r})});alert("Deleted!");location.reload();}
 load();
 </script></body></html>
