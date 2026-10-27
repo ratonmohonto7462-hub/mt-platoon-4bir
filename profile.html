@@ -24,16 +24,18 @@
 .manCard{background:#0e1430;border:1px solid #1e2f4a;border-radius:8px;padding:10px;text-align:center}
 .manCard b{font-size:22px;color:#d4b56a;display:block}.manCard small{font-size:10px;color:#8a9bb5}
 .section{padding:12px 14px 0 14px}
-.sectionTitle{color:#d4b56a;font-size:12px;font-weight:900;letter-spacing:0.5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .editBtnSmall{background:#2a1a0a;border:1px solid #d4b56a;color:#d4b56a;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:900;cursor:pointer}
 .vehicleTotalBox{background:#111832;border:1px solid #d4b56a;border-radius:12px;padding:10px;margin-top:10px}
 .vGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
 .vGrid .manCard b{font-size:18px}
+.okBox{background:#102a18;border:1px solid #22c55e;border-radius:12px;padding:10px;margin-top:12px}
+.okBox .manCard{background:#0a1f14;border-color:#145a28}
+.okBox .manCard b{color:#22c55e}
 #formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:100;align-items:center;justify-content:center;padding:12px}
 #formBox{background:#0f172a;border:1px solid #d4b56a;border-radius:14px;width:100%;max-width:400px;max-height:90vh;overflow:auto}
 #formBox h3{margin:0;padding:12px;background:#2a1a0a;color:#d4b56a;text-align:center;font-size:13px}
 .formInner{padding:12px}.formInner label{font-size:10px;color:#d4b56a;font-weight:900;display:block;margin:8px 0 3px}
-.formInner input,.formInner select{width:100%;padding:9px;border-radius:6px;border:1px solid #1e2f4a;background:#111a2d;color:#fff;font-size:12px}
+.formInner input{width:100%;padding:9px;border-radius:6px;border:1px solid #1e2f4a;background:#111a2d;color:#fff;font-size:12px}
 </style>
 </head>
 <body>
@@ -41,16 +43,16 @@
 <div class="top"><button class="back" onclick="history.back()">‹</button><div><b>MT PLATOON - 4 BIR</b><small>Profile • Only MT CLK Can Edit</small></div></div>
 
 <div class="hero">
-<div class="logoBox" onclick="if(isMTClk) document.getElementById('logoInput').click()">
+<div class="logoBox" onclick="document.getElementById('logoInput').click()">
 <img id="logoImg"><div class="logoText" id="logoText"><b>MT</b><small>4 BIR<br>MECHANIZED TRANSPORT</small></div><div class="cam" id="camIcon">📷 Add Pic</div>
 <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="uploadLogo(event)">
 </div>
 <div class="heroInfo">
 <span class="badge">PLATOON COMMANDER</span>
 <h2 id="cmdName">Capt. Mohammad Ali Akbor Arko</h2>
-<p id="cmdInfo">Service No: BA-11585 • Commissioned: 2019</p>
+<p id="cmdInfo">Service No: BA-11585 • 2019</p>
 <div class="manpowerBox">
-<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:#d4b56a;font-weight:900">🚛 TOTAL MANPOWER</span><button class="editBtnSmall" onclick="openManEdit()">✏️ Edit</button></div>
+<div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:#d4b56a;font-weight:900">🚛 TOTAL MANPOWER</span><button class="editBtnSmall" onclick="openManEdit()">✏️ Edit</button></div>
 <div class="manRow">
 <div class="manCard"><b id="mTotal">52</b><small>Total Manpower</small></div>
 <div class="manCard"><b id="mOfficer">01</b><small>Officers</small></div>
@@ -63,91 +65,66 @@
 
 <div class="section">
 <div class="vehicleTotalBox">
-<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:#d4b56a;font-weight:900">🚚 TOTAL VEHICLE</span><button class="editBtnSmall" onclick="openVehicleEdit()">✏️ Edit</button></div>
+<div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:#d4b56a;font-weight:900">🚚 TOTAL VEHICLE</span><button class="editBtnSmall" onclick="openVehicleEdit()">✏️ Edit</button></div>
 <div class="vGrid">
+<div class="manCard"><b id="vTotal">40</b><small>Total Vehicle</small></div>
 <div class="manCard"><b id="vMC">02</b><small>MC</small></div>
 <div class="manCard"><b id="vJeep">09</b><small>Jeep</small></div>
 <div class="manCard"><b id="vMicro">01</b><small>Micro</small></div>
 <div class="manCard"><b id="vPickup">13</b><small>Pickup</small></div>
 <div class="manCard"><b id="v3Ton">03</b><small>3 Ton</small></div>
 <div class="manCard"><b id="vBus">01</b><small>Bus</small></div>
-</div>
+<div class="manCard"><b id="vWT">01</b><small>W/T</small></div>
+<div class="manCard"><b id="vFT">02</b><small>F/T</small></div>
 </div>
 </div>
 
+<div class="okBox">
+<div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:#22c55e;font-weight:900">✅ TODAY OK REPORT</span><button class="editBtnSmall" style="border-color:#22c55e;color:#22c55e;background:#0a2a14" onclick="openOkEdit()">✏️ Edit</button></div>
+<div class="vGrid" style="margin-top:8px">
+<div class="manCard"><b id="okTotal">38</b><small>Total OK</small></div>
+<div class="manCard"><b id="okMC">02</b><small>MC OK</small></div>
+<div class="manCard"><b id="okJeep">09</b><small>Jeep OK</small></div>
+<div class="manCard"><b id="okMicro">01</b><small>Micro OK</small></div>
+<div class="manCard"><b id="okPickup">12</b><small>Pickup OK</small></div>
+<div class="manCard"><b id="ok3Ton">03</b><small>3 Ton OK</small></div>
+<div class="manCard"><b id="okBus">01</b><small>Bus OK</small></div>
+<div class="manCard"><b id="okWT">01</b><small>W/T OK</small></div>
+<div class="manCard"><b id="okFT">02</b><small>F/T OK</small></div>
+</div>
+</div>
+
+</div>
 </div>
 
 <div id="formModal" onclick="if(event.target==this)closeForm()"><div id="formBox"><h3 id="modalTitle">Edit</h3><div class="formInner" id="modalInner"></div></div></div>
 
 <script>
-let role=(localStorage.getItem('role')||'').toLowerCase();
-let isMTClk = role.includes('mt') && role.includes('clk') || role=='mt clk' || role.includes('mtclk') || role.includes('clk') || true; // test er jonno true
 function loadData(){
- let d=localStorage.getItem('mt_profile_final');
+ let d=localStorage.getItem('mt_profile_final_v3');
  if(d){try{return JSON.parse(d)}catch(e){}}
- return {cmd:{name:"Capt. Mohammad Ali Akbor Arko",no:"BA-11585",com:"2019"},man:{total:52,officer:1,jco:1,or:40},veh:{mc:2,jeep:9,micro:1,pickup:13,ton3:3,bus:1},logo:""}
+ return {cmd:{name:"Capt. Mohammad Ali Akbor Arko",no:"BA-11585",com:"2019"},man:{total:52,officer:1,jco:1,or:40},veh:{total:40,mc:2,jeep:9,micro:1,pickup:13,ton3:3,bus:1,wt:1,ft:2},ok:{total:38,mc:2,jeep:9,micro:1,pickup:12,ton3:3,bus:1,wt:1,ft:2},logo:""}
 }
 let data=loadData();
-function save(){localStorage.setItem('mt_profile_final',JSON.stringify(data));render();}
-
+function save(){localStorage.setItem('mt_profile_final_v3',JSON.stringify(data));render();}
 function render(){
  document.getElementById('cmdName').innerText=data.cmd.name;
- document.getElementById('cmdInfo').innerText=`Service No: ${data.cmd.no} • Commissioned: ${data.cmd.com}`;
- document.getElementById('mTotal').innerText=data.man.total;
- document.getElementById('mOfficer').innerText=data.man.officer<10?'0'+data.man.officer:data.man.officer;
- document.getElementById('mJCO').innerText=data.man.jco<10?'0'+data.man.jco:data.man.jco;
- document.getElementById('mOR').innerText=data.man.or<10?'0'+data.man.or:data.man.or;
- document.getElementById('vMC').innerText=data.veh.mc<10?'0'+data.veh.mc:data.veh.mc;
- document.getElementById('vJeep').innerText=data.veh.jeep<10?'0'+data.veh.jeep:data.veh.jeep;
- document.getElementById('vMicro').innerText=data.veh.micro<10?'0'+data.veh.micro:data.veh.micro;
- document.getElementById('vPickup').innerText=data.veh.pickup<10?'0'+data.veh.pickup:data.veh.pickup;
- document.getElementById('v3Ton').innerText=data.veh.ton3<10?'0'+data.veh.ton3:data.veh.ton3;
- document.getElementById('vBus').innerText=data.veh.bus<10?'0'+data.veh.bus:data.veh.bus;
- // logo
+ document.getElementById('cmdInfo').innerText=`Service No: ${data.cmd.no} • ${data.cmd.com}`;
+ document.getElementById('mTotal').innerText=data.man.total;document.getElementById('mOfficer').innerText=String(data.man.officer).padStart(2,'0');document.getElementById('mJCO').innerText=String(data.man.jco).padStart(2,'0');document.getElementById('mOR').innerText=String(data.man.or).padStart(2,'0');
+ document.getElementById('vTotal').innerText=data.veh.total;document.getElementById('vMC').innerText=String(data.veh.mc).padStart(2,'0');document.getElementById('vJeep').innerText=String(data.veh.jeep).padStart(2,'0');document.getElementById('vMicro').innerText=String(data.veh.micro).padStart(2,'0');document.getElementById('vPickup').innerText=String(data.veh.pickup).padStart(2,'0');document.getElementById('v3Ton').innerText=String(data.veh.ton3).padStart(2,'0');document.getElementById('vBus').innerText=String(data.veh.bus).padStart(2,'0');document.getElementById('vWT').innerText=String(data.veh.wt).padStart(2,'0');document.getElementById('vFT').innerText=String(data.veh.ft).padStart(2,'0');
+ document.getElementById('okTotal').innerText=data.ok.total;document.getElementById('okMC').innerText=String(data.ok.mc).padStart(2,'0');document.getElementById('okJeep').innerText=String(data.ok.jeep).padStart(2,'0');document.getElementById('okMicro').innerText=String(data.ok.micro).padStart(2,'0');document.getElementById('okPickup').innerText=String(data.ok.pickup).padStart(2,'0');document.getElementById('ok3Ton').innerText=String(data.ok.ton3).padStart(2,'0');document.getElementById('okBus').innerText=String(data.ok.bus).padStart(2,'0');document.getElementById('okWT').innerText=String(data.ok.wt).padStart(2,'0');document.getElementById('okFT').innerText=String(data.ok.ft).padStart(2,'0');
  if(data.logo){document.getElementById('logoImg').src=data.logo;document.getElementById('logoImg').style.display='block';document.getElementById('logoText').style.display='none';document.getElementById('camIcon').innerText='📷 Change';}
 }
 render();
-
-function uploadLogo(e){
- let file=e.target.files[0]; if(!file) return;
- let reader=new FileReader();
- reader.onload=function(ev){data.logo=ev.target.result; save();};
- reader.readAsDataURL(file);
-}
-
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>{data.logo=ev.target.result;save();};r.readAsDataURL(f);}
 function openModal(t,h){document.getElementById('modalTitle').innerText=t;document.getElementById('modalInner').innerHTML=h;document.getElementById('formModal').style.display='flex';}
 function closeForm(){document.getElementById('formModal').style.display='none';}
-
-function openManEdit(){
- openModal('Edit Manpower',`
- <label>Commander Name</label><input id="f_cmdName" value="${data.cmd.name}">
- <label>Service No</label><input id="f_cmdNo" value="${data.cmd.no}">
- <label>Commissioned</label><input id="f_cmdCom" value="${data.cmd.com}">
- <label>Total Manpower</label><input type="number" id="f_total" value="${data.man.total}">
- <label>Officers</label><input type="number" id="f_off" value="${data.man.officer}">
- <label>JCO</label><input type="number" id="f_jco" value="${data.man.jco}">
- <label>OR'S</label><input type="number" id="f_or" value="${data.man.or}">
- <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveMan()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);
-}
-function saveMan(){
- data.cmd.name=document.getElementById('f_cmdName').value; data.cmd.no=document.getElementById('f_cmdNo').value; data.cmd.com=document.getElementById('f_cmdCom').value;
- data.man.total=document.getElementById('f_total').value; data.man.officer=document.getElementById('f_off').value; data.man.jco=document.getElementById('f_jco').value; data.man.or=document.getElementById('f_or').value;
- save(); closeForm();
-}
-function openVehicleEdit(){
- openModal('Edit Total Vehicle',`
- <label>MC</label><input type="number" id="f_mc" value="${data.veh.mc}">
- <label>Jeep</label><input type="number" id="f_jeep" value="${data.veh.jeep}">
- <label>Micro</label><input type="number" id="f_micro" value="${data.veh.micro}">
- <label>Pickup</label><input type="number" id="f_pickup" value="${data.veh.pickup}">
- <label>3 Ton</label><input type="number" id="f_ton" value="${data.veh.ton3}">
- <label>Bus</label><input type="number" id="f_bus" value="${data.veh.bus}">
- <div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveVeh()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);
-}
-function saveVeh(){
- data.veh.mc=document.getElementById('f_mc').value; data.veh.jeep=document.getElementById('f_jeep').value; data.veh.micro=document.getElementById('f_micro').value; data.veh.pickup=document.getElementById('f_pickup').value; data.veh.ton3=document.getElementById('f_ton').value; data.veh.bus=document.getElementById('f_bus').value;
- save(); closeForm();
-}
+function openManEdit(){openModal('Edit Manpower',`<label>Commander</label><input id="f_cmdName" value="${data.cmd.name}"><label>Service No</label><input id="f_cmdNo" value="${data.cmd.no}"><label>Year</label><input id="f_cmdCom" value="${data.cmd.com}"><label>Total Manpower</label><input type="number" id="f_total" value="${data.man.total}"><label>Officers</label><input type="number" id="f_off" value="${data.man.officer}"><label>JCO</label><input type="number" id="f_jco" value="${data.man.jco}"><label>OR'S</label><input type="number" id="f_or" value="${data.man.or}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveMan()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);}
+function saveMan(){data.cmd.name=document.getElementById('f_cmdName').value;data.cmd.no=document.getElementById('f_cmdNo').value;data.cmd.com=document.getElementById('f_cmdCom').value;data.man.total=document.getElementById('f_total').value;data.man.officer=document.getElementById('f_off').value;data.man.jco=document.getElementById('f_jco').value;data.man.or=document.getElementById('f_or').value;save();closeForm();}
+function openVehicleEdit(){openModal('Edit Total Vehicle',`<label>Total Vehicle</label><input type="number" id="f_vtotal" value="${data.veh.total}"><label>MC</label><input type="number" id="f_mc" value="${data.veh.mc}"><label>Jeep</label><input type="number" id="f_jeep" value="${data.veh.jeep}"><label>Micro</label><input type="number" id="f_micro" value="${data.veh.micro}"><label>Pickup</label><input type="number" id="f_pickup" value="${data.veh.pickup}"><label>3 Ton</label><input type="number" id="f_ton" value="${data.veh.ton3}"><label>Bus</label><input type="number" id="f_bus" value="${data.veh.bus}"><label>W/T</label><input type="number" id="f_wt" value="${data.veh.wt}"><label>F/T</label><input type="number" id="f_ft" value="${data.veh.ft}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveVeh()" style="flex:1;padding:10px;border-radius:8px;background:#d4b56a;color:#000;font-weight:900;border:none">Save</button></div>`);}
+function saveVeh(){data.veh.total=document.getElementById('f_vtotal').value;data.veh.mc=document.getElementById('f_mc').value;data.veh.jeep=document.getElementById('f_jeep').value;data.veh.micro=document.getElementById('f_micro').value;data.veh.pickup=document.getElementById('f_pickup').value;data.veh.ton3=document.getElementById('f_ton').value;data.veh.bus=document.getElementById('f_bus').value;data.veh.wt=document.getElementById('f_wt').value;data.veh.ft=document.getElementById('f_ft').value;save();closeForm();}
+function openOkEdit(){openModal('Edit Today OK Report',`<label>Total OK</label><input type="number" id="f_oktotal" value="${data.ok.total}"><label>MC OK</label><input type="number" id="f_okmc" value="${data.ok.mc}"><label>Jeep OK</label><input type="number" id="f_okjeep" value="${data.ok.jeep}"><label>Micro OK</label><input type="number" id="f_okmicro" value="${data.ok.micro}"><label>Pickup OK</label><input type="number" id="f_okpickup" value="${data.ok.pickup}"><label>3 Ton OK</label><input type="number" id="f_okton" value="${data.ok.ton3}"><label>Bus OK</label><input type="number" id="f_okbus" value="${data.ok.bus}"><label>W/T OK</label><input type="number" id="f_okwt" value="${data.ok.wt}"><label>F/T OK</label><input type="number" id="f_okft" value="${data.ok.ft}"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveOk()" style="flex:1;padding:10px;border-radius:8px;background:#22c55e;color:#000;font-weight:900;border:none">Save</button></div>`);}
+function saveOk(){data.ok.total=document.getElementById('f_oktotal').value;data.ok.mc=document.getElementById('f_okmc').value;data.ok.jeep=document.getElementById('f_okjeep').value;data.ok.micro=document.getElementById('f_okmicro').value;data.ok.pickup=document.getElementById('f_okpickup').value;data.ok.ton3=document.getElementById('f_okton').value;data.ok.bus=document.getElementById('f_okbus').value;data.ok.wt=document.getElementById('f_okwt').value;data.ok.ft=document.getElementById('f_okft').value;save();closeForm();}
 </script>
 </body>
 </html>
