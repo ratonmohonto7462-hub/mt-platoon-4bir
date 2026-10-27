@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Officer Contact List - 4 BIR</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070d1a;color:#fff;min-height:100vh}
+.phone{max-width:430px;margin:0 auto;background:#0a1120;min-height:100vh;position:relative;padding-bottom:90px;border:1px solid #1a2a40}
+.top{padding:14px 14px 8px 14px;display:flex;justify-content:space-between;align-items:center}
+.top b{color:#d4b56a;font-size:18px;letter-spacing:0.5px;display:block;line-height:1.1}
+.top small{color:#8a9bb5;font-size:11px;letter-spacing:0.5px}
+.back{font-size:28px;color:#d4b56a;background:none;border:none}
+.iconBtn{color:#d4b56a;font-size:20px;background:none;border:none;margin-left:10px}
+.searchWrap{padding:10px 14px}
+.search{width:100%;background:#111a2d;border:1px solid #c8a951;border-radius:20px;padding:12px 14px;color:#fff;display:flex;gap:10px;align-items:center}
+.search input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:13px}
+.search input::placeholder{color:#6b7a90}
+.stats{background:#111a2d;border:1px solid #1e2f4a;border-radius:12px;margin:8px 14px;padding:10px 14px;display:flex;gap:14px;font-size:12px}
+.stats b{color:#d4b56a}
+.card{background:#111a2d;border:1px solid #2a3a5a;border-radius:14px;margin:12px 14px;padding:0;overflow:hidden;position:relative;border-left:4px solid #d4b56a}
+.card::before{content:'';position:absolute;top:0;left:0;right:40%;height:3px;background:#d4b56a}
+.rankBadge{width:58px;height:68px;background:linear-gradient(#d4b56a,#8a6a2a);border-radius:0 0 50% 50% / 0 0 40% 40%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:10px 12px 0 12px;float:left;position:relative;border:1px solid #f0d080}
+.rankBadge::after{content:'';position:absolute;top:8px;left:6px;right:6px;bottom:12px;border:1px solid #5a4a1a;border-radius:50% 50% 40% 40% / 30% 30% 40% 40%}
+.rankBadge span{font-size:8px;font-weight:900;color:#1a1a0a;z-index:1;line-height:1}.rankBadge i{font-size:14px;z-index:1}
+.cardHead{display:flex;justify-content:space-between;padding:14px 14px 0 0}
+.cardHead h3{margin:0;color:#fff;font-size:16px;line-height:1.2}
+.cardHead h3 small{color:#d4b56a;font-size:13px;display:block;font-weight:700}
+.dots{color:#8a9bb5}
+.details{clear:both;padding:8px 14px 10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px}
+.details .label{color:#8a9bb5}.details .val{color:#fff;font-weight:700}
+.details .full{grid-column:1 / span 2}
+.details .val.gold{color:#d4b56a}
+.btns{display:flex;gap:10px;padding:0 14px 14px 14px}
+.callBtn{flex:1;background:#0f172a;border:1px solid #d4b56a;color:#d4b56a;border-radius:10px;padding:10px;font-weight:900;display:flex;justify-content:center;align-items:center;gap:6px;text-decoration:none;font-size:13px}
+.waBtn{flex:1;background:#0f172a;border:1px solid #d4b56a;color:#d4b56a;border-radius:10px;padding:10px;font-weight:900;display:flex;justify-content:center;align-items:center;gap:6px;text-decoration:none;font-size:13px}
+.waBtn i{color:#25D366;font-size:18px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#0a1120;border-top:1px solid #1e2f4a;display:flex;justify-content:space-around;padding:8px 0 14px 0;z-index:20}
+.bottom div{font-size:11px;text-align:center;color:#6b7a90;padding:8px 16px;border-radius:12px;border:1px solid transparent}
+.bottom div.active{background:#111a2d;border-color:#d4b56a;color:#d4b56a}
+</style></head><body>
+<div class="phone">
+<div class="top">
+<button class="back" onclick="history.back()">‹</button>
+<div style="flex:1;margin-left:12px"><b>OFFICER CONTACT LIST</b><small>🛡️ BANGLADESH ARMY • 4 BIR</small></div>
+<button class="iconBtn">🔍</button><button class="iconBtn">☰</button>
+</div>
+
+<div class="searchWrap"><div class="search">🔍 <input id="s" placeholder="Search by name, rank, BA No..." oninput="render()"></div></div>
+
+<div class="stats"><span><b>Total Officers:</b> <span id="total">3</span></span><span style="color:#4a5a70">—</span><span>Active: 22 • On Duty: 15</span></div>
+
+<div id="list"></div>
+
+<div class="bottom"><div class="active">👥 Contacts</div><div>📍 Map</div><div>🛡️ Duty</div><div>👤 Profile</div></div>
+</div>
+
+<script>
+let officers=[
+{rank:"MAJOR",name:"MAJ. RAHMAN AHMED",ba:"BA-12847",batch:"BMA — 74TH BMA (2014)",mobile:"+880 1712-345678",remarks:"Company Commander — Alpha Coy | Active Duty"},
+{rank:"CAPTAIN",name:"CAPT. SANJIDA HAQUE",ba:"BA-13592",batch:"BMA — 79TH BMA (2019)",mobile:"+880 1811-998877",remarks:"Signals Officer — Communication Wing | On Leave"},
+{rank:"LIEUTENANT",name:"LT. TANVIR KHAN",ba:"BA-14203",batch:"BMA — 82ND BMA (2022)",mobile:"+880 1913-225544",remarks:"Platoon Commander — Infantry | On Duty"}
+];
+
+function render(){
+let q=document.getElementById('s').value.toLowerCase();
+let f=officers.filter(o=>(o.name+o.rank+o.ba).toLowerCase().includes(q));
+document.getElementById('total').innerText=f.length;
+document.getElementById('list').innerHTML=f.map(o=>`
+<div class="card">
+<div class="cardHead">
+<div style="display:flex;gap:0"><div class="rankBadge"><span>${o.rank}</span></div><h3><small>${o.rank}</small>${o.name}</h3></div>
+<div class="dots">•••</div>
+</div>
+<div class="details">
+<div><span class="label">BA No:</span></div><div><span class="label">BATCH:</span></div>
+<div><span class="val">${o.ba}</span></div><div><span class="val">${o.batch}</span></div>
+<div><span class="label">MOBILE:</span></div><div class="full"><span class="val">${o.mobile}</span></div>
+<div class="full"><span class="label">REMARKS:</span> <span class="val gold">${o.remarks.split('—')[0]}</span> <span class="val" style="color:#a0aec0">— ${o.remarks.split('—')[1]||''}</span></div>
+</div>
+<div class="btns">
+<a class="callBtn" href="tel:${o.mobile.replace(/\s/g,'')}">📞 Call</a>
+<a class="waBtn" href="https://wa.me/${o.mobile.replace(/\D/g,'')}"><i>🟢</i> WhatsApp</a>
+</div>
+</div>`).join('');
+}
+render();
+</script>
+</body></html>
