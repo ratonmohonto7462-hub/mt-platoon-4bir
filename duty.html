@@ -1,34 +1,18 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Duty Roster - Folder</title><style>
-body{margin:0;background:#dbeafe;font-family:sans-serif;zoom:0.85}
-.card{margin:10px;padding:0;border-radius:16px;border:3px solid #000;background:#fff;overflow:hidden}
-.card-head{padding:14px;text-align:center;font-weight:900;font-size:20px;border-bottom:3px solid #000;background:#fff}
-.folder-wrap{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.folder{padding:35px 15px;border-radius:18px;border:3px solid #000;text-align:center;cursor:pointer;box-shadow:0 6px 15px #0002;display:block;text-decoration:none;color:#000}
-.folder h2{margin:12px 0 0 0;font-size:20px;font-weight:900} .folder p{margin:5px 0 0 0;font-size:13px;opacity:.7}
-.f-night{background:#facc15} .f-day{background:#14532d;color:#fff !important}
-.role-badge{padding:6px 12px;border-radius:20px;font-weight:800;font-size:12px}.role-platoon{background:#fef08a;border:2px solid #000}.role-clk{background:#14532d;color:#fff;border:2px solid #000}
-</style></head><body>
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Duty Roster - Folder</title><style> body{margin:0;background:#dbeafe;font-family:sans-serif;zoom:0.85} .card{margin:10px;padding:0;border-radius:16px;border:3px solid #000;background:#fff;overflow:hidden} .card-head{padding:14px;text-align:center;font-weight:900;font-size:20px;border-bottom:3px solid #000;background:#fff} .folder-wrap{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px} .folder{padding:35px 15px;border-radius:18px;border:3px solid #000;text-align:center;cursor:pointer;box-shadow:0 6px 15px #0002;display:block;text-decoration:none;color:#000} .folder h2{margin:12px 0 0 0;font-size:20px;font-weight:900} .folder p{margin:5px 0 0 0;font-size:13px;opacity:.7} .f-night{background:#facc15} .f-day{background:#14532d;color:#fff !important} .role-badge{padding:6px 12px;border-radius:20px;font-weight:800;font-size:12px}.role-platoon{background:#fef08a;border:2px solid #000}.role-clk{background:#14532d;color:#fff;border:2px solid #000} </style></head><body> <div class="card" style="padding:10px;display:flex;align-items:center;gap:8px"><span id="roleShow" class="role-badge"></span><b style="margin-left:auto">Duty Roster</b><button onclick="location.href='dashboard.html'" style="margin-left:10px;padding:6px 12px;background:#000;color:#fff;border-radius:8px">Back</button></div> <div class="card"><div class="card-head">Duty Roster ফোল্ডার সিলেক্ট করুন</div> <div class="folder-wrap"> <a class="folder f-night" id="linkNight" href="ratri.html"><div style="font-size:50px">🌙</div><h2>রাত্রিকালীন কর্তব্য</h2><p>Night Duty Roster</p></a> <a class="folder f-day" id="linkDay" href="diba.html"><div style="font-size:50px">☀️</div><h2>দিবাকালীন কর্তব্য</h2><p>Day Duty Roster</p></a> </div></div> <script>
+ // === FINAL ROLE FIX - NO ?role= ===
+ let mtRoleRaw = localStorage.getItem("mt_role") || localStorage.getItem("role") || "";
+ if(!mtRoleRaw){ location.href='index.html'; }
+ let ROLE_UP = mtRoleRaw.toUpperCase().trim();
+ let CAN_EDIT = ROLE_UP.includes("MT CLK") || ROLE_UP.includes("ADMIN");
+ if(ROLE_UP.includes("COMMAND")) CAN_EDIT = false;
+ let IS_VIEWER = !CAN_EDIT;
 
-<div class="card" style="padding:10px;display:flex;align-items:center;gap:8px"><span id="roleShow" class="role-badge"></span><b style="margin-left:auto">Duty Roster</b></div>
+ let txt = IS_VIEWER ? '👁️ VIEW - COMMAND' : '✏️ EDIT - MT CLK';
+ let cls = IS_VIEWER ? 'role-badge role-platoon' : 'role-badge role-clk';
+ document.getElementById('roleShow').innerText=txt;
+ document.getElementById('roleShow').className=cls;
 
-<div class="card"><div class="card-head">Duty Roster ফোল্ডার সিলেক্ট করুন</div>
-<div class="folder-wrap">
-<a class="folder f-night" id="linkNight" href="ratri.html"><div style="font-size:50px">🌙</div><h2>রাত্রিকালীন কর্তব্য</h2><p>Night Duty Roster</p></a>
-<a class="folder f-day" id="linkDay" href="diba.html"><div style="font-size:50px">☀️</div><h2>দিবাকালীন কর্তব্য</h2><p>Day Duty Roster</p></a>
-</div></div>
-
-<script>
-// role টা ধরে রাখবে যাতে index থেকে আসলে view/edit ঠিক থাকে
-var urlRole = new URLSearchParams(location.search).get('role');
-var storedRole = localStorage.getItem('role');
-var USER_ROLE = (urlRole || storedRole || 'mt').toLowerCase();
-var IS_VIEWER = (USER_ROLE === 'mt');
-if(urlRole) localStorage.setItem('role', USER_ROLE);
-var txt = IS_VIEWER ? '👁️ VIEW - MT Platoon' : '✏️ EDIT - MT CLK';
-var cls = IS_VIEWER ? 'role-badge role-platoon' : 'role-badge role-clk';
-document.getElementById('roleShow').innerText=txt; document.getElementById('roleShow').className=cls;
-// link এ role যোগ করে দে
-document.getElementById('linkNight').href='ratri.html?role='+USER_ROLE;
-document.getElementById('linkDay').href='diba.html?role='+USER_ROLE;
-</script>
-</body></html>
+ // Link থেকে ?role= পুরা তুলে দিলাম - এখন localStorage থেকেই role চলবে
+ document.getElementById('linkNight').href='ratri.html';
+ document.getElementById('linkDay').href='diba.html';
+ </script> </body></html>
