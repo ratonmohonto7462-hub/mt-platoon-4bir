@@ -1,96 +1,70 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MT PLATOON 4 BIR - LOGIN</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#080808;color:#d4af37;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;font-family:'Inter',Arial}
-.wrap{width:100%;max-width:480px;text-align:center}
-.logo-top{width:115px;height:115px;margin:0 auto 22px;filter:drop-shadow(0 0 15px rgba(212,175,55,0.4))}
-.logo-top img{width:100%;height:100%;object-fit:contain}
-.title{font-family:'Cinzel',serif;font-size:22px;letter-spacing:1px;color:#e8c766;text-shadow:0 0 10px rgba(212,175,55,0.3)}
-.divider{width:100%;height:1px;background:linear-gradient(90deg, transparent, #8a7a3a, #d4af37, #8a7a3a, transparent);margin:22px 0;position:relative;display:flex;justify-content:center;align-items:center}
-.divider::after{content:'◆  ❧  ◆';background:#080808;padding:0 15px;color:#c8a43a;font-size:12px;letter-spacing:4px}
-.card{border:1.2px solid #c8a43a;border-radius:18px;background:linear-gradient(180deg, rgba(18,18,18,0.95), rgba(8,8,8,0.98));padding:32px 28px;text-align:left;position:relative;box-shadow:0 0 0 1px rgba(200,164,58,0.15), 0 0 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(212,175,55,0.05);overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;border-radius:18px;border:1px solid rgba(200,164,58,0.1);pointer-events:none}
-.corner{position:absolute;width:80px;height:80px;border:1px solid rgba(200,164,58,0.25);pointer-events:none}
-.corner-tl{top:12px;left:12px;border-right:none;border-bottom:none;border-top-left-radius:12px}
-.corner-br{bottom:12px;right:12px;border-left:none;border-top:none;border-bottom-right-radius:12px}
-.label{font-size:13px;letter-spacing:1px;color:#d6b86a;font-weight:700;margin:0 0 10px 4px}
-.select-area{position:relative}
-.main-box{border:1.2px solid #b89b4a;background:#111111;padding:16px 18px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#b8a46a;font-size:15px;transition:0.2s}
-.main-box:hover{border-color:#d4af37;box-shadow:0 0 15px rgba(212,175,55,0.15)}
-.arrow{width:38px;height:32px;background:#1a1a1a;border:1px solid #5a4d2a;border-radius:8px;display:flex;justify-content:center;align-items:center;color:#d4af37;font-size:14px}
-.dropdown{position:absolute;top:110%;left:0;right:0;background:#161616;border:1px solid #8a7a3a;border-radius:12px;display:none;z-index:99;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.8)}
+*{box-sizing:border-box;margin:0;padding:0;font-family: Arial}
+body{background:#0a0a0a;color:#d4af37;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
+.wrap{width:100%;max-width:420px;text-align:center}
+.logo{width:145px;height:145px;margin:0 auto 18px;border-radius:50%;background:#fff;padding:5px;box-shadow:0 0 0 2px #d4af37, 0 0 30px rgba(212,175,55,0.8);overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.title{font-weight:900;font-size:24px;color:#e5c15a}
+.title small{display:block;font-size:12px;letter-spacing:3px;color:#b89b4a;margin-top:4px}
+.divider{width:100%;height:1px;background:linear-gradient(90deg, transparent, #d4af37, transparent);margin:20px 0;position:relative}
+.divider::after{content:'❧';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#0a0a0a;padding:0 10px;color:#d4af37}
+.card{border:1.5px solid #d4af37;background:rgba(15,15,15,0.9);padding:28px 22px;border-radius:6px;box-shadow:0 0 30px rgba(212,175,55,0.15);text-align:left}
+.login-head{font-size:32px;font-weight:900;color:#e5c15a}
+.login-sub{font-size:12px;color:#a08a4a;margin:8px 0 22px}
+.label{font-size:13px;color:#e5c15a;margin:18px 0 7px;font-weight:700}
+.select-area{position:relative;z-index:100}
+.main-box{border:1px solid #b89b4a;background:#111;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#ddd}
+.dropdown{position:absolute;top:105%;left:0;right:0;background:#151515;border:1px solid #8a7a3a;display:none;z-index:200}
 .dropdown.open{display:block}
-.opt{padding:14px 18px;cursor:pointer;color:#aaa;border-bottom:1px solid #222;transition:0.15s}
-.opt:hover,.opt.sel{background:#211e0a;color:#e5c15a}
-.pwd-box{position:relative}
-.pwd-box input{width:100%;padding:16px 48px 16px 44px;border:1.2px solid #b89b4a;background:#111;border-radius:12px;color:#ddd;outline:none;font-size:15px}
-.pwd-box input:focus{border-color:#d4af37;box-shadow:0 0 12px rgba(212,175,55,0.15)}
-.icon-left{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#d4af37;font-size:18px}
-.icon-right{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#c8a43a;cursor:pointer;font-size:18px}
-.loginBtn{margin:28px auto 0;display:block;width:72%;background:linear-gradient(180deg,#f8e29a 0%, #e9c86a 20%, #c8a43a 50%, #b48f2e 100%);color:#1a1500;font-weight:900;font-size:22px;letter-spacing:1.5px;padding:15px;border:none;border-radius:14px;cursor:pointer;box-shadow:0 4px 0 #8a6d1f, 0 8px 20px rgba(212,175,55,0.35);transition:0.1s}
-.loginBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #8a6d1f, 0 4px 10px rgba(212,175,55,0.3)}
-.footer{margin-top:28px;font-size:10px;letter-spacing:1.5px;color:#7a6a3a;text-align:center}
+.opt{padding:14px 16px;cursor:pointer;color:#ccc;border-bottom:1px solid #222}
+.opt.sel{background:#201e0a;color:#e5c15a}
+.pwd-box{position:relative;margin-top:5px}
+.pwd-box input{width:100%;padding:14px 16px 14px 42px;border:1px solid #b89b4a;background:#111;color:#ddd;outline:none}
+.lock{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#d4af37}
+.loginBtn{margin:28px auto 0;display:block;width:200px;background:linear-gradient(180deg,#f3d67a,#c8a43a);color:#1a1a0a;font-weight:900;font-size:20px;letter-spacing:2px;padding:14px;border:none;cursor:pointer}
+.footer{margin-top:26px;font-size:9px;letter-spacing:2px;color:#6b5d2e;text-align:center}
+.creator{margin-top:8px;font-size:11px;color:#8a7a3a;text-align:center;font-weight:600}
+.creator span{color:#d4af37}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <!-- TOP 4BR LOGO -->
-  <div class="logo-top">
-    <img src="https://i.ibb.co/7dK1pL1X/4BR-LOGO.png" alt="4BR AJEO CHAR" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%2250%25%22 x=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2220%22>4BR</text></svg>'">
-  </div>
-  <div class="title">MT PLATOON 4 BIR BANGLADESH ARMY</div>
+  <div class="logo"><img src="logo.png" alt="MT GARAGE"></div>
+  <div class="title">MT PLATOON 4 BIR<small>BANGLADESH ARMY</small></div>
   <div class="divider"></div>
   <div class="card">
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-br"></div>
+    <div class="login-head">LOGIN</div>
+    <div class="login-sub">Authorized Personnel Only • Secure Access</div>
     <div class="label">ROLE / UNIT</div>
     <div class="select-area">
-      <div class="main-box" onclick="document.getElementById('drop').classList.toggle('open')">
-        <span id="selText" style="color:#8a7d4a">Select ROLE / UNIT</span>
-        <span class="arrow">⌄</span>
-      </div>
+      <div class="main-box" onclick="toggleDrop()"><span id="selText">COMMAND / MT CLK</span><span class="arrow">▼</span></div>
       <div class="dropdown" id="drop">
         <div class="opt" onclick="selectOpt('COMMAND',this)">COMMAND</div>
         <div class="opt" onclick="selectOpt('MT CLK',this)">MT CLK</div>
       </div>
     </div>
-    <div class="label" style="margin-top:22px">PASSWORD</div>
-    <div class="pwd-box">
-      <span class="icon-left">🔒</span>
-      <input type="password" id="pwd" placeholder="Enter your password">
-      <span class="icon-right" onclick="togglePass()">👁️</span>
-    </div>
+    <div class="label">PASSWORD</div>
+    <div class="pwd-box"><span class="lock">🔒</span><input type="password" id="pwd" placeholder="পাসওয়ার্ড লিখুন"></div>
     <button class="loginBtn" onclick="doLogin()">LOGIN</button>
   </div>
-  <div class="footer">Secure Access • Bangladesh Army • MT Garage</div>
+  <div class="footer">MT PLATOON 4 • BIR • BANGLADESH ARMY • CONFIDENTIAL</div>
+  <div class="creator">Create By <span>Snk Raton 4 Bir MT</span></div>
 </div>
 <script>
-let cur="";
-function selectOpt(v,el){
-  cur=v;
-  document.getElementById('selText').innerText=v;
-  document.getElementById('selText').style.color='#e5c15a';
-  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('drop').classList.remove('open');
-}
-function togglePass(){
-  let i=document.getElementById('pwd');
-  i.type = i.type==='password' ? 'text' : 'password';
-}
+let cur="";function toggleDrop(){document.getElementById('drop').classList.toggle('open')}
+function selectOpt(v,el){cur=v;document.getElementById('selText').innerText=v;document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');document.getElementById('drop').classList.remove('open');}
 function doLogin(){
-  let p=document.getElementById('pwd').value;
-  if(!cur){alert('ROLE / UNIT Select করুন');return;}
-  if(!p){alert('Password দিন');return;}
-  if(cur==="COMMAND" && p==="4-Bir-mt"){localStorage.setItem('mt_role','COMMAND');location.href="dashboard.html";}
-  else if(cur==="MT CLK" && p==="Admin7462"){localStorage.setItem('mt_role','MT CLK');location.href="dashboard.html";}
-  else{alert('Password ভুল!\nCOMMAND = 4-Bir-mt\nMT CLK = Admin7462');}
+ let p=document.getElementById('pwd').value;
+ if(!cur){alert('ROLE / UNIT Select করুন');return;}
+ if(!p){alert('পাসওয়ার্ড দিন');return;}
+ if(cur==="COMMAND" && p==="4-Bir-mt"){localStorage.setItem('mt_role','COMMAND');location.href="dashboard.html";}
+ else if(cur==="MT CLK" && p==="Admin7462"){localStorage.setItem('mt_role','MT CLK');location.href="dashboard.html";}
+ else{alert('Password ভুল!\\nCOMMAND = 4-Bir-mt\\nMT CLK = Admin7462');}
 }
 window.addEventListener('click',e=>{if(!e.target.closest('.select-area')) document.getElementById('drop').classList.remove('open')});
 </script>
