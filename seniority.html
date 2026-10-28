@@ -1,53 +1,129 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Seniority - Sheet Only</title>
+<html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SUTY SENIORITY</title>
 <style>
-body{margin:0;background:#0a1a0f;color:#fff;font-family:Arial;padding:12px}
-.top{background:#122e18;padding:12px;border-radius:12px;display:flex;justify-content:space-between}
-table{width:100%;border-collapse:collapse;background:#132a18;border-radius:12px;overflow:hidden;margin-top:12px}
-th,td{padding:9px;border-bottom:1px solid #1e4a28;font-size:13px}
-th{background:#1e4a28;color:#c8a951}
-input{padding:10px;border-radius:10px;border:1px solid #c8a951;background:#0f2312;color:#fff}
-.btn{background:#c8a951;color:#000;border:none;border-radius:8px;padding:8px 14px;font-weight:900;cursor:pointer}
-.add{margin-top:12px;background:#132a18;border:1px solid #1e4a28;padding:10px;border-radius:12px;display:flex;gap:6px;flex-wrap:wrap}
+:root{--bg:#08121a;--card:#101f2e;--gold:#c8a951;--gold2:#ffdb70;--text:#e8f0ff}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial;padding:0}
+.topBar{background:#0e1e2f;padding:12px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10;border-bottom:1px solid #1a324d}
+.topBar h2{margin:0;color:var(--gold2);font-size:16px;line-height:1.2}
+.topBar small{color:#8aa0bd}
+.searchWrap{padding:12px}
+.search{width:100%;box-sizing:border-box;padding:13px 14px;border-radius:24px;border:1.5px solid var(--gold);background:#0e1e2f;color:#fff;outline:none;font-size:14px}
+.addBtn{margin:0 12px;width:calc(100% - 24px);padding:13px;border-radius:14px;border:1.5px solid var(--gold);background:linear-gradient(180deg,#2a2310,#1a160a);color:var(--gold2);font-weight:900;font-size:15px;cursor:pointer}
+.card{margin:12px;background:var(--card);border:1px solid #1a324d;border-radius:18px;padding:12px}
+.cardHead{display:flex;gap:12px;align-items:flex-start}
+.badge{width:72px;height:72px;background:linear-gradient(180deg,#c8a951,#8a6d1e);border-radius:18px 18px 18px 2px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;text-align:center;font-size:13px;line-height:1.1}
+.cardTitle{flex:1}
+.cardTitle b{font-size:16px;color:#fff;display:block}
+.cardTitle .sub{font-size:13px;color:var(--gold2);margin-top:3px}
+.fieldGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;font-size:13px}
+.field{background:#0c1a28;border:1px solid #1a324d;border-radius:10px;padding:8px}
+.field span{color:#8aa0bd;font-size:11px;display:block}
+.field b{color:#e8f0ff;font-size:13px}
+.full{grid-column:1/-1}
+.btnRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.btn{padding:10px;border-radius:12px;border:1.5px solid var(--gold);font-weight:900;cursor:pointer}
+.btnEdit{background:#1e1705;color:var(--gold2)}
+.btnDel{background:#2a0f14;color:#ff6b6b;border-color:#5a1a23}
+.btnCall{background:#0e1e2f;color:var(--gold2)}
+.btnWa{background:#0a2516;color:#25d366;border-color:#1a5a32}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+.modalBox{background:#101f2e;border:1px solid var(--gold);border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
+.modalBox input{width:100%;box-sizing:border-box;margin-top:8px}
 </style>
 </head><body>
-<div class="top"><b>⭐ SENIORITY - Sheet Only</b><button class="btn" onclick="location.href='dashboard.html'">Back</button></div>
 
-<input id="q" style="width:100%;margin-top:12px;box-sizing:border-box" placeholder="Search..." oninput="doFilter()" class="search">
-
-<div class="add">
-<input id="no" placeholder="No" style="width:80px">
-<input id="podobi" placeholder="পদবী" style="width:100px">
-<input id="nam" placeholder="নাম" style="flex:1">
-<input id="date" type="date" style="width:140px">
-<button class="btn" onclick="addToSheet()">Sheet এ Save</button>
+<div class="topBar">
+<span onclick="location.href='dashboard.html'" style="font-size:20px;cursor:pointer"><</span>
+<div><h2>SUTY SENIORITY</h2><small id="count">0 Numbers</small></div>
 </div>
 
-<table><thead><tr><th>No</th><th>পদবী</th><th>নাম</th><th>ছুটি</th><th>ফেরত</th></tr></thead>
-<tbody id="tb"><tr><td colspan=5>Loading Sheet...</td></tr></tbody></table>
+<div class="searchWrap"><input id="q" class="search" placeholder="🔍 Search..." oninput="filter()"></div>
+<button class="addBtn" onclick="openAdd()">+ ADD SUTY SENIORITY</button>
+
+<div id="list"></div>
+
+<div id="addModal" class="modal">
+<div class="modalBox">
+<h3 style="margin:0;color:var(--gold2)">Add Seniority</h3>
+<input id="f_no" placeholder="সেনা নং: 8240804">
+<input id="f_podobi" placeholder="পদবী: সৈনিক / কর্পোরাল">
+<input id="f_nam" placeholder="নাম: মোঃ মশিউর">
+<input id="f_jogdan" type="date" placeholder="যোগদানের তারিখ">
+<input id="f_suty" type="date" placeholder="শেষ ছুটির তারিখ">
+<input id="f_motChuti" placeholder="মোট ছুটি: 45">
+<input id="f_gram" placeholder="গ্রাম:">
+<input id="f_post" placeholder="পোস্ট:">
+<input id="f_thana" placeholder="থানা:">
+<input id="f_zilla" placeholder="জেলা:">
+<input id="f_moba" placeholder="মোবা: 01XXXXXXXXX">
+<div style="display:flex;gap:8px;margin-top:12px">
+<button class="btn btnEdit" style="flex:1" onclick="saveToSheet()">Save to Sheet</button>
+<button class="btn btnDel" style="flex:1" onclick="closeAdd()">Cancel</button>
+</div>
+</div>
+</div>
 
 <script>
 const SHEET_ID="1H0aSiqMyxn9bg9PLyjAt6dXPGLMNAWFN7v8hTrj1TZg";
 const CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-// এখানে তোমার Apps Script Link বসাও
-const SCRIPT_URL="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+// তোমার Apps Script Link এখানে বসাবে
+const SCRIPT_URL="https://script.google.com/macros/s/YOUR_ID/exec";
 
 let DATA=[];
 
-function render(arr){
- let h="";
- arr.forEach(r=>{
-  let back=""; if(r.date){ let d=new Date(r.date); if(!isNaN(d)){ d.setDate(d.getDate()+75); back=d.toLocaleDateString('en-GB'); } }
-  h+=`<tr><td>${r.no}</td><td>${r.rank}</td><td>${r.name}</td><td>${r.date}</td><td>${back}</td></tr>`;
- });
- document.getElementById("tb").innerHTML=h||"<tr><td colspan=5>No data in Sheet</td></tr>";
+function calcDays(jogdan){
+ if(!jogdan) return "-";
+ let d=new Date(jogdan);
+ if(isNaN(d)) return "-";
+ let diff=Math.floor((new Date()-d)/86400000);
+ return diff+" দিন";
 }
 
-function doFilter(){
- let q=document.getElementById("q").value.toLowerCase();
- render(DATA.filter(r=> (r.no+r.rank+r.name+r.date).toLowerCase().includes(q)));
+function render(arr){
+ document.getElementById("count").innerText=arr.length+" Numbers";
+ let html="";
+ arr.forEach((r,i)=>{
+  let motDin=calcDays(r.jogdan);
+  html+=`
+  <div class="card">
+    <div class="cardHead">
+      <div class="badge">${r.podobi||'সৈনিক'}</div>
+      <div class="cardTitle">
+        <b>${r.podobi||''} ${r.nam||''}</b>
+        <div class="sub">সেনা নং: ${r.no||'-'} • #${i+1}</div>
+      </div>
+    </div>
+    <div class="fieldGrid">
+      <div class="field"><span>যোগদানের তারিখ:</span><b>${r.jogdan||'-'}</b></div>
+      <div class="field"><span>মোট দিন:</span><b>${motDin}</b></div>
+      <div class="field"><span>মোট ছুটি:</span><b>${r.motChuti||'0'} দিন</b></div>
+      <div class="field"><span>শেষ ছুটি:</span><b>${r.suty||'-'}</b></div>
+      <div class="field"><span>গ্রাম:</span><b>${r.gram||'-'}</b></div>
+      <div class="field"><span>পোস্ট:</span><b>${r.post||'-'}</b></div>
+      <div class="field"><span>থানা:</span><b>${r.thana||'-'}</b></div>
+      <div class="field"><span>জেলা:</span><b>${r.zilla||'-'}</b></div>
+      <div class="field full"><span>মোবা:</span><b>${r.moba||'-'}</b></div>
+    </div>
+    <div class="btnRow">
+      <button class="btn btnEdit" onclick="edit(${i})">✏️ Edit</button>
+      <button class="btn btnDel" onclick="del(${i})">🗑️ Del</button>
+      <button class="btn btnCall" onclick="location.href='tel:${r.moba}'">📞 Call</button>
+      <button class="btn btnWa" onclick="window.open('https://wa.me/88${r.moba}')">💬 WhatsApp</button>
+    </div>
+  </div>`;
+ });
+ document.getElementById("list").innerHTML=html||"<div style='padding:20px;text-align:center;color:#8aa0bd'>No data</div>";
 }
+
+function filter(){
+ let q=document.getElementById("q").value.toLowerCase();
+ render(DATA.filter(r=> JSON.stringify(r).toLowerCase().includes(q)));
+}
+
+function openAdd(){ document.getElementById("addModal").style.display="flex"; }
+function closeAdd(){ document.getElementById("addModal").style.display="none"; }
 
 function loadSheet(){
  fetch(CSV_URL).then(r=>r.text()).then(t=>{
@@ -55,24 +131,38 @@ function loadSheet(){
   let out=[];
   for(let i=1;i<lines.length;i++){
    let c=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x=>x.replace(/^"|"$/g,'').trim());
-   if(c[2]) out.push({no:c[0],rank:c[1],name:c[2],date:c[3]});
+   if(!c[2]) continue;
+   out.push({
+    no:c[0], podobi:c[1], nam:c[2], suty:c[3]||"", 
+    jogdan:c[4]||"", motChuti:c[5]||"", gram:c[6]||"", post:c[7]||"", thana:c[8]||"", zilla:c[9]||"", moba:c[10]||c[4]||""
+   });
   }
   DATA=out; render(DATA);
  });
 }
 
-function addToSheet(){
- let no=document.getElementById("no").value;
- let podobi=document.getElementById("podobi").value;
- let nam=document.getElementById("nam").value;
- let date=document.getElementById("date").value;
- if(!nam){ alert("নাম লিখো"); return; }
- if(SCRIPT_URL.includes("YOUR_SCRIPT_ID")){ alert("আগে SCRIPT_URL এ তোমার Apps Script Link বসাও"); return; }
- 
- fetch(`${SCRIPT_URL}?no=${encodeURIComponent(no)}&podobi=${encodeURIComponent(podobi)}&nam=${encodeURIComponent(nam)}&date=${encodeURIComponent(date)}`, {mode:'no-cors'})
- .then(()=>{ alert("Sheet এ Save হয়ে গেছে! 2 সেকেন্ড পর List Update হবে"); setTimeout(loadSheet,2000); })
- .catch(()=>{ alert("Save হয়েছে, Sheet Check করো"); });
+function saveToSheet(){
+ let p={
+  no:document.getElementById("f_no").value,
+  podobi:document.getElementById("f_podobi").value,
+  nam:document.getElementById("f_nam").value,
+  jogdan:document.getElementById("f_jogdan").value,
+  suty:document.getElementById("f_suty").value,
+  motChuti:document.getElementById("f_motChuti").value,
+  gram:document.getElementById("f_gram").value,
+  post:document.getElementById("f_post").value,
+  thana:document.getElementById("f_thana").value,
+  zilla:document.getElementById("f_zilla").value,
+  moba:document.getElementById("f_moba").value
+ };
+ if(!p.nam){ alert("নাম লিখো"); return; }
+ if(SCRIPT_URL.includes("YOUR_ID")){ alert("আগে SCRIPT_URL বসাও"); return; }
+ let q=`?no=${encodeURIComponent(p.no)}&podobi=${encodeURIComponent(p.podobi)}&nam=${encodeURIComponent(p.nam)}&jogdan=${encodeURIComponent(p.jogdan)}&suty=${encodeURIComponent(p.suty)}&motChuti=${encodeURIComponent(p.motChuti)}&gram=${encodeURIComponent(p.gram)}&post=${encodeURIComponent(p.post)}&thana=${encodeURIComponent(p.thana)}&zilla=${encodeURIComponent(p.zilla)}&moba=${encodeURIComponent(p.moba)}`;
+ fetch(SCRIPT_URL+q,{mode:'no-cors'}).then(()=>{ alert("Sheet এ Save হয়েছে!"); closeAdd(); setTimeout(loadSheet,2000); });
 }
+
+function del(i){ if(confirm("Delete?")){ alert("Google Sheet থেকে Manual Delete করতে হবে, Row: "+(i+2)); } }
+function edit(i){ openAdd(); let r=DATA[i]; document.getElementById("f_no").value=r.no; document.getElementById("f_podobi").value=r.podobi; document.getElementById("f_nam").value=r.nam; document.getElementById("f_jogdan").value=r.jogdan; document.getElementById("f_suty").value=r.suty; document.getElementById("f_motChuti").value=r.motChuti; document.getElementById("f_gram").value=r.gram; document.getElementById("f_post").value=r.post; document.getElementById("f_thana").value=r.thana; document.getElementById("f_zilla").value=r.zilla; document.getElementById("f_moba").value=r.moba; }
 
 loadSheet();
 </script>
