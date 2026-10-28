@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SUTY SENIORITY - Role</title>
+<title>SUTY SENIORITY</title>
 <style>
 :root{--bg:#08121a;--card:#101f2e;--gold:#c8a951;--gold2:#ffdb70}
 body{margin:0;background:var(--bg);color:#e8f0ff;font-family:Arial;padding:0}
@@ -11,10 +11,11 @@ body{margin:0;background:var(--bg);color:#e8f0ff;font-family:Arial;padding:0}
 .search{width:100%;box-sizing:border-box;padding:13px;border-radius:24px;border:1.5px solid var(--gold);background:#0e1e2f;color:#fff;outline:none}
 .addBtn{margin:0 12px;width:calc(100% - 24px);padding:13px;border-radius:14px;border:1.5px solid var(--gold);background:linear-gradient(180deg,#2a2310,#1a160a);color:var(--gold2);font-weight:900;cursor:pointer}
 .card{margin:12px;background:var(--card);border:1px solid #1a324d;border-radius:18px;padding:12px}
-.badge{width:72px;height:72px;background:linear-gradient(180deg,#c8a951,#8a6d1e);border-radius:18px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900}
+.badge{width:72px;height:72px;background:linear-gradient(180deg,#c8a951,#8a6d1e);border-radius:18px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:15px}
 .fieldGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;font-size:13px}
 .field{background:#0c1a28;border:1px solid #1a324d;border-radius:10px;padding:8px}
 .field span{color:#8aa0bd;font-size:11px;display:block}
+.field b{color:#fff;font-size:13px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
 .modalBox{background:#101f2e;border:1px solid var(--gold);border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:92vh;overflow:auto}
 .modalBox label{color:var(--gold2);font-size:13px;margin-top:10px;display:block}
@@ -27,17 +28,12 @@ body{margin:0;background:var(--bg);color:#e8f0ff;font-family:Arial;padding:0}
 </style>
 </head><body>
 
-<div class="topBar">
-<span onclick="location.href='dashboard.html'" style="font-size:22px;cursor:pointer"><</span>
-<h2>SUTY SENIORITY</h2>
-<span id="roleBadge" class="roleTag"></span>
-</div>
+<div class="topBar"><span onclick="location.href='dashboard.html'" style="font-size:22px;cursor:pointer"><</span><h2>SUTY SENIORITY</h2><span id="roleBadge" class="roleTag"></span></div>
 
 <div class="searchWrap"><input id="q" class="search" placeholder="🔍 Search..." oninput="filter()"></div>
 <button id="addBtn" class="addBtn" onclick="openAdd()">+ ADD SENIORITY</button>
 <div id="list"></div>
 
-<!-- Add Modal Same As Before -->
 <div id="addModal" class="modal">
 <div class="modalBox">
 <h3 style="margin:0;color:var(--gold2)">Add Seniority</h3>
@@ -64,28 +60,15 @@ const SHEET_ID="1H0aSiqMyxn9bg9PLyjAt6dXPGLMNAWFN7v8hTrj1TZg";
 const CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 const SCRIPT_URL="https://script.google.com/macros/s/YOUR_ID/exec";
 
-// ===== ROLE SYSTEM =====
-// dashboard.html থেকে role set হয় - localStorage এ থাকে
-// Test করার জন্য URL এ ?role=command বা ?role=mt_clk দিতে পারো
 let urlRole = new URLSearchParams(window.location.search).get("role");
-if(urlRole){ localStorage.setItem("role", urlRole); }
+if(urlRole) localStorage.setItem("role", urlRole);
+let ROLE = (localStorage.getItem("role")||"mt_clk").toLowerCase();
+let IS_COMMAND = ROLE.includes("command")||ROLE.includes("cmd")||ROLE.includes("co");
+let IS_MT = !IS_COMMAND;
 
-let ROLE = (localStorage.getItem("role") || localStorage.getItem("userRole") || "mt_clk").toLowerCase();
-let IS_COMMAND = ROLE.includes("command") || ROLE.includes("cmd") || ROLE.includes("co") || ROLE.includes("officer");
-let IS_MT = !IS_COMMAND; // mt_clk, admin, clerk সবাই Edit করতে পারবে
-
-// UI Update as per Role
-let roleBadge = document.getElementById("roleBadge");
-let addBtn = document.getElementById("addBtn");
-if(IS_COMMAND){
-  roleBadge.innerText="COMMAND - View Only";
-  roleBadge.className="roleTag role-command";
-  addBtn.style.display="none";
-}else{
-  roleBadge.innerText="MT CLK - Editor";
-  roleBadge.className="roleTag role-mt";
-  addBtn.style.display="block";
-}
+document.getElementById("roleBadge").innerText = IS_COMMAND ? "COMMAND - View Only" : "MT CLK - Editor";
+document.getElementById("roleBadge").className = IS_COMMAND ? "roleTag role-command" : "roleTag role-mt";
+document.getElementById("addBtn").style.display = IS_COMMAND ? "none" : "block";
 
 let DATA = JSON.parse(localStorage.getItem("seniorityCache")||"[]");
 if(DATA.length==0){
@@ -93,29 +76,31 @@ if(DATA.length==0){
 }
 function saveLocal(){ localStorage.setItem("seniorityCache", JSON.stringify(DATA)); }
 
-function render(arr){
- let h="";
- arr.forEach((r,i)=>{
-  let motDin="-"; if(r.jogdan){ let d=new Date(r.jogdan); if(!isNaN(d)) motDin=Math.floor((new Date()-d)/86400000)+" দিন"; }
-  // Command হলে Edit/Del Button দেখাবে না
-  let editBtns = IS_COMMAND ? "" : `
-    <div class="btnRow">
-      <button class="btn" style="background:#1e1705;color:var(--gold2)" onclick="editItem(${i})">✏️ Edit</button>
-      <button class="btn" style="background:#2a0f14;color:#ff6b6b;border-color:#5a1a23" onclick="delItem(${i})">🗑️ Del</button>
-      <button class="btn" style="background:#0e1e2f;color:var(--gold2)" onclick="location.href='tel:${r.moba}'">📞 Call</button>
-      <button class="btn" style="background:#0a2516;color:#25d366;border-color:#1a5a32" onclick="window.open('https://wa.me/88${r.moba}')">💬 WhatsApp</button>
-    </div>`;
-  let viewOnlyBtns = IS_COMMAND ? `
-    <div class="btnRow">
-      <button class="btn" style="background:#0e1e2f;color:var(--gold2)" onclick="location.href='tel:${r.moba}'">📞 Call</button>
-      <button class="btn" style="background:#0a2516;color:#25d366;border-color:#1a5a32" onclick="window.open('https://wa.me/88${r.moba}')">💬 WhatsApp</button>
-    </div>` : "";
+// মোট দিন অনুযায়ী Sort - যোগদান আগে হলে Senior
+function sortBySeniority(arr){
+ return arr.sort((a,b)=>{
+  let da=new Date(a.jogdan), db=new Date(b.jogdan);
+  if(isNaN(da)) return 1;
+  if(isNaN(db)) return -1;
+  return da - db; // আগে যোগদান = #1
+ });
+}
 
+function render(arr){
+ let sorted = sortBySeniority([...arr]);
+ let h="";
+ sorted.forEach((r,i)=>{
+  let motDin="-"; if(r.jogdan){ let d=new Date(r.jogdan); if(!isNaN(d)) motDin=Math.floor((new Date()-d)/86400000)+" দিন"; }
+  let btns = IS_COMMAND ? "" : `
+    <div class="btnRow">
+      <button class="btn" style="background:#1e1705;color:var(--gold2)" onclick="editItem(${DATA.indexOf(r)})">✏️ Edit</button>
+      <button class="btn" style="background:#2a0f14;color:#ff6b6b;border-color:#5a1a23" onclick="delItem(${DATA.indexOf(r)})">🗑️ Del</button>
+    </div>`;
   h+=`<div class="card">
-   <div style="display:flex;gap:12px"><div class="badge">${r.podobi||'সৈনিক'}</div><div><b>${r.nam}</b><div style="color:var(--gold2);font-size:13px;margin-top:3px">সেনা নং: ${r.no} • #${i+1}</div></div></div>
+   <div style="display:flex;gap:12px"><div class="badge">${r.podobi||'সৈনিক'}</div><div><b>${r.nam}</b><div style="color:var(--gold2);font-size:13px;margin-top:3px">সেনা নং: ${r.no} • #${i+1} - ${motDin} Senior</div></div></div>
    <div class="fieldGrid">
     <div class="field"><span>যোগদানের তারিখ:</span><b>${r.jogdan||'-'}</b></div>
-    <div class="field"><span>মোট দিন:</span><b>${motDin}</b></div>
+    <div class="field"><span>মোট দিন:</span><b style="color:var(--gold2)">${motDin}</b></div>
     <div class="field"><span>মোট ছুটি:</span><b>${r.mot||'-'} দিন</b></div>
     <div class="field"><span>গ্রাম:</span><b>${r.gram||'-'}</b></div>
     <div class="field"><span>পোস্ট:</span><b>${r.post||'-'}</b></div>
@@ -123,16 +108,17 @@ function render(arr){
     <div class="field"><span>জেলা:</span><b>${r.zilla||'-'}</b></div>
     <div class="field"><span>মোবা:</span><b>${r.moba||'-'}</b></div>
    </div>
-   ${IS_COMMAND?viewOnlyBtns:editBtns}
+   ${btns}
   </div>`;
  });
  document.getElementById("list").innerHTML=h;
 }
+
 function filter(){ let q=document.getElementById("q").value.toLowerCase(); render(DATA.filter(r=>JSON.stringify(r).toLowerCase().includes(q))); }
-function openAdd(){ if(IS_COMMAND){ alert("Command শুধু দেখতে পারবে, Add করতে পারবে না"); return; } document.getElementById("addModal").style.display="flex"; }
+function openAdd(){ if(IS_COMMAND){ alert("Command শুধু দেখতে পারবে"); return; } document.getElementById("addModal").style.display="flex"; }
 function closeAdd(){ document.getElementById("addModal").style.display="none"; }
 function saveBoth(){
- if(IS_COMMAND){ alert("Command এর Add Permission নাই"); return; }
+ if(IS_COMMAND) return;
  let r={no:f_no.value,podobi:f_podobi.value,nam:f_nam.value,jogdan:f_jogdan.value,suty:f_suty.value,mot:f_mot.value,gram:f_gram.value,post:f_post.value,thana:f_thana.value,zilla:f_zilla.value,moba:f_moba.value};
  if(!r.nam){ alert("নাম লিখো"); return; }
  DATA.push(r); saveLocal(); render(DATA); closeAdd();
@@ -141,9 +127,19 @@ function saveBoth(){
   fetch(SCRIPT_URL+qs,{mode:'no-cors'});
  }
 }
-function delItem(i){ if(IS_COMMAND) return; if(confirm("Delete?")){ DATA.splice(i,1); saveLocal(); render(DATA); alert("Local থেকে Delete হলো, Sheet থেকে Manual Delete করো"); } }
-function editItem(i){ if(IS_COMMAND) return; openAdd(); let r=DATA[i]; f_no.value=r.no; f_podobi.value=r.podobi; f_nam.value=r.nam; f_jogdan.value=r.jogdan; f_suty.value=r.suty; f_mot.value=r.mot; f_gram.value=r.gram; f_post.value=r.post; f_thana.value=r.thana; f_zilla.value=r.zilla; f_moba.value=r.moba; DATA.splice(i,1); }
-function loadFromSheet(){ fetch(CSV_URL).then(r=>r.text()).then(t=>{ let lines=t.split("\n").filter(l=>l.trim()); let out=[]; for(let i=1;i<lines.length;i++){ let c=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x=>x.replace(/^"|"$/g,'').trim()); if(c[2]) out.push({no:c[0],podobi:c[1],nam:c[2],suty:c[3],jogdan:c[4],mot:c[5],gram:c[6],post:c[7],thana:c[8],zilla:c[9],moba:c[10]}); } if(out.length>0){ DATA=out; saveLocal(); render(DATA); } }); }
+function delItem(idx){ if(IS_COMMAND) return; if(confirm("Delete?")){ DATA.splice(idx,1); saveLocal(); render(DATA); } }
+function editItem(idx){ if(IS_COMMAND) return; openAdd(); let r=DATA[idx]; f_no.value=r.no; f_podobi.value=r.podobi; f_nam.value=r.nam; f_jogdan.value=r.jogdan; f_suty.value=r.suty; f_mot.value=r.mot; f_gram.value=r.gram; f_post.value=r.post; f_thana.value=r.thana; f_zilla.value=r.zilla; f_moba.value=r.moba; DATA.splice(idx,1); }
+function loadFromSheet(){
+ fetch(CSV_URL).then(r=>r.text()).then(t=>{
+  let lines=t.split("\n").filter(l=>l.trim());
+  let out=[];
+  for(let i=1;i<lines.length;i++){
+   let c=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x=>x.replace(/^"|"$/g,'').trim());
+   if(c[2]) out.push({no:c[0],podobi:c[1],nam:c[2],suty:c[3],jogdan:c[4],mot:c[5],gram:c[6],post:c[7],thana:c[8],zilla:c[9],moba:c[10]});
+  }
+  if(out.length>0){ DATA=out; saveLocal(); render(DATA); }
+ });
+}
 render(DATA); loadFromSheet();
 </script>
 </body></html>
