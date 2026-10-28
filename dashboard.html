@@ -22,20 +22,20 @@ let editBtn = document.getElementById('editJoruriBtn');
 let adminFolder = document.getElementById('adminFolder');
 
 if(role==="COMMAND"){
-  roleBadge.innerHTML='<span class="role-badge role-cmd">VIEW ONLY</span>';
-  roleText.innerHTML='COMMAND - VIEW ONLY 👁️';
+  roleBadge.innerHTML='<span class="role-badge role-cmd"></span>';
+ 
   roleText.style.color='#7CFC00';
   if(editBtn) editBtn.style.display='none';
   if(adminFolder) adminFolder.style.display='none';
 } else {
   roleBadge.innerHTML='<span class="role-badge role-clk">ADMIN</span>';
-  roleText.innerHTML='MT CLK - ADMIN ACCESS ✏️';
+  roleText.innerHTML='';
   roleText.style.color='#f3d67a';
   if(editBtn) editBtn.style.display='block';
   if(adminFolder) adminFolder.style.display='block';
 }
 
-document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'}); 
+document.getElementById('todayDate and time').innerText=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'}); 
 function closeAll(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show');document.getElementById('notifPanel').style.display='none';} 
 function toggleNotif(){let p=document.getElementById('notifPanel');p.style.display=p.style.display==='block'?'none':'block';document.getElementById('overlay').classList.add('show');} 
 function bnToEn(s){return s.replace(/[০-৯]/g,d=>String.fromCharCode(d.charCodeAt(0)-2486));} 
