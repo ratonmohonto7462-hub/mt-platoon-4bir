@@ -20,4 +20,21 @@ async function saveForm(){
   p.action=p.row?"edit":"add";
   if(!p.name||!p.mobile){alert("Name & Mobile লাগবে");return;}
   document.getElementById('msg').innerText="⏳ Saving...";
-  await fetch(API_URL,{method:"POST",mode:"no-cors
+  await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(p)});
+  document.getElementById('msg').innerText="✅ Saved! Reloading...";
+  setTimeout(()=>location.reload(),1000);
+}
+async function del(row){if(!confirm('Delete?'))return;await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row})});location.reload();}
+function render(){
+  data.sort((a,b)=>armyNoVal(a.ba)-armyNoVal(b.ba));
+  let q=document.getElementById('s').value.toLowerCase();document.getElementById('total').innerText=data.length;document.getElementById('count').innerText=`4 BIR - ${data.length} Officers`;
+  let html='';
+  data.forEach((o,idx)=>{
+    if(q&&!(String(o.name)+String(o.ba)+String(o.mobile)).toLowerCase().includes(q))return;
+    let wa=String(o.mobile||'').replace(/\D/g,'');if(wa.startsWith('0'))wa='88'+wa;if(!wa.startsWith('88')&&wa.length==11)wa='88'+wa;
+    html+=`<div class="card"><div class="cardHead"><div style="display:flex"><div class="rankBadge">${String(o.rank).slice(0,4)}</div><div><b style="font-size:13px">${o.rank} ${o.name}</b><br><small style="color:#c8a951">${o.ba} • ${o.batch} • #${idx+1}</small></div></div></div><div class="details"><div><span class="label">BA No:</span></div><div><span class="label">Batch:</span></div><div><span class="val" style="color:#c8a951">${o.ba}</span></div><div><span class="val">${o.batch}</span></div><div class="full"><span class="label">Mobile:</span> <span class="val">${o.mobile}</span> • ${o.remarks}</div></div><div class="btns"><div class="btnRow"><button class="editBtn" onclick="openEdit(${o.row})">✏️ Edit</button><button class="delBtn" onclick="del(${o.row})">🗑️ Del</button></div><div class="btnRow"><a class="callBtn" href="tel:${o.mobile}">📞 Call</a><a class="waBtn" href="https://wa.me/${wa}">💬 WhatsApp</a></div></div></div>`;
+  });
+  document.getElementById('list').innerHTML=html||'<div style="padding:20px;text-align:center;color:#6b7a90">No Data in Sheet</div>';
+}
+loadFromSheet();
+</script></body></html>
