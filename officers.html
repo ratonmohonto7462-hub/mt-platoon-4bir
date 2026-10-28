@@ -1,28 +1,77 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Officers - 4 BIR</title> 
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#070d1a;color:#fff}.phone{max-width:430px;margin:0 auto;background:#0a1120;min-height:100vh;padding-bottom:90px;border:1px solid #1a2a40}.top{padding:14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #1e2f4a;position:sticky;top:0;background:#0a1120;z-index:10}.top b{color:#d4b56a;font-size:15px;display:block}.top small{color:#8a9bb5;font-size:10px}.back{font-size:28px;color:#d4b56a;background:none;border:none}.searchWrap{padding:10px 14px}.search{width:100%;background:#111a2d;border:1px solid #c8a951;border-radius:20px;padding:11px 14px;display:flex;gap:8px}.search input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:12px}.addBtn{margin:0 14px 10px;width:calc(100% - 28px);padding:12px;background:#132a18;border:1px solid #c8a951;color:#c8a951;border-radius:12px;font-weight:900}.stats{background:#111a2d;border:1px solid #1e2f4a;border-radius:12px;margin:8px 14px;padding:8px 12px;font-size:11px}.stats b{color:#d4b56a}.card{background:#111a2d;border-left:4px solid #d4b56a;border-radius:14px;margin:12px 14px;overflow:hidden;border:1px solid #2a3a5a;position:relative}.card::before{content:'';position:absolute;top:0;left:0;right:40%;height:3px;background:#d4b56a}.rankBadge{width:52px;height:60px;background:linear-gradient(#d4b56a,#8a6a2a);border-radius:0 0 50% 50%;float:left;margin:10px 12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:8px;color:#000;text-align:center;line-height:1}.cardHead{padding:12px 12px 0 0}.details{clear:both;padding:8px 14px;display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:11px}.label{color:#8a9bb5}.val{color:#fff;font-weight:700}.full{grid-column:1/span 2}.btns{display:flex;flex-direction:column;gap:8px;padding:0 12px 12px}.btnRow{display:flex;gap:8px}.callBtn{flex:1;background:#0f172a;border:1px solid #c8a951;color:#c8a951;border-radius:8px;padding:9px;text-align:center;text-decoration:none;font-weight:900;font-size:12px}.waBtn{flex:1;background:#0a1a0a;border:1px solid #25D366;color:#25D366;border-radius:8px;padding:9px;text-align:center;text-decoration:none;font-weight:900;font-size:12px}.editBtn{flex:1;background:#1a3d22;border:1px solid #c8a951;color:#c8a951;border-radius:8px;padding:9px;font-weight:900;font-size:12px}.delBtn{flex:1;background:#4a0a0a;border:1px solid #ff4444;color:#ff6666;border-radius:8px;padding:9px;font-weight:900;font-size:12px}#formModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;padding:12px}#formBox{background:#0f172a;border:1px solid #c8a951;border-radius:18px;width:100%;max-width:400px;max-height:90vh;overflow:auto}#formBox h3{margin:0;padding:12px;background:#122e18;color:#c8a951;text-align:center;font-size:14px}.formInner{padding:12px}.formInner label{font-size:11px;color:#c8a951;font-weight:900;display:block;margin:8px 0 3px 0}.formInner input{width:100%;padding:9px;border-radius:8px;border:1px solid #1e2f4a;background:#111a2d;color:#fff}</style></head><body> <div class="phone"><div class="top"><button class="back" onclick="location.href='contact.html'">‹</button><div><b>OFFICERS CONTACT LIST</b><small id="count">4 BIR - Loading...</small></div></div> <div class="searchWrap"><div class="search">🔍 <input id="s" placeholder="Search..." oninput="render()"></div></div> <button id="addBtn" class="addBtn" onclick="openAdd()">+ ADD OFFICER</button> <div class="stats"><b>Total:</b> <span id="total">0</span> • <span id="roleShow">Loading...</span></div><div id="list"><p style="padding:40px;text-align:center;color:#d4b56a">⏳ Loading from Sheet...</p></div></div> <div id="formModal" onclick="if(event.target==this)closeForm()"><div id="formBox"><h3 id="ftitle">Add Officer</h3><div class="formInner"><label>Rank</label><input id="f_rank"><label>Name</label><input id="f_name"><label>BA No</label><input id="f_ba"><label>Batch</label><input id="f_batch"><label>Mobile</label><input id="f_mob"><label>Remarks</label><input id="f_rem"><input type="hidden" id="f_row"><div style="display:flex;gap:8px;margin-top:12px"><button onclick="closeForm()" style="flex:1;padding:10px;border-radius:8px;background:#1e2f4a;color:#fff;border:none">Cancel</button><button onclick="saveForm()" style="flex:1;padding:10px;border-radius:8px;background:#c8a951;color:#000;font-weight:900;border:none">Save to Sheet</button></div><p id="msg" style="text-align:center;font-size:11px"></p></div></div></div> 
+
 <script>
- // === ROLE SYSTEM - এই 5 লাইন শুরুতে বসাও ===
- const urlRole = new URLSearchParams(location.search).get('role');
- if(urlRole) localStorage.setItem('role', urlRole);
- const ROLE = (localStorage.getItem('role') || 'mt_clk').toLowerCase();
- const IS_COMMAND_VIEW = ROLE.includes('command') || ROLE.includes('cmd') || ROLE.includes('co') || ROLE.includes('dsto') || ROLE.includes('officer_view');
- const CAN_EDIT = !IS_COMMAND_VIEW;
+// === FIXED ROLE SYSTEM ===
+let urlRole = new URLSearchParams(location.search).get('role');
+if(urlRole) localStorage.setItem('role', urlRole);
+let ROLE = (localStorage.getItem('role') || 'mt_clk').toLowerCase();
+let IS_COMMAND_VIEW = ROLE.includes('command') || ROLE.includes('cmd') || ROLE.includes('co') || ROLE.includes('dsto');
+let CAN_EDIT = !IS_COMMAND_VIEW;
 
- function applyRole(){
-   document.getElementById('roleShow').innerText = IS_COMMAND_VIEW ? '👁️ VIEW - COMMAND' : '✏️ EDIT - MT CLK';
-   document.getElementById('addBtn').style.display = CAN_EDIT ? 'block' : 'none';
+function applyRole(){
+  let rs = document.getElementById('roleShow');
+  let ab = document.getElementById('addBtn');
+  if(rs) rs.innerText = IS_COMMAND_VIEW ? '👁️ VIEW - COMMAND' : '✏️ EDIT - MT CLK';
+  if(ab) ab.style.display = CAN_EDIT ? 'block' : 'none';
+}
+
+const API_URL = "https://script.google.com/macros/s/AKfycbwkFuuHd2ALnjNiR5bhfOcsDBjpCVzOtKTrHqjKku1bb3dNu0fejpQ2lQ_DdirnuwIt/exec";
+function armyNoVal(s){if(!s)return 999999999;let m=String(s).match(/\d+/g);if(!m)return 999999999;return parseInt(m.join('').slice(-8));}
+let data=[];
+async function loadFromSheet(){
+ try{
+  let res=await fetch(API_URL+"?t="+Date.now());
+  let txt=await res.text();
+  data=JSON.parse(txt);
+  render();
+ }catch(e){
+  document.getElementById('list').innerHTML=`<p style='padding:20px;text-align:center;color:#ff4444'>❌ ${e}<br><button onclick='loadFromSheet()'>Retry</button></p>`;
  }
-
- function armyNoVal(s){if(!s)return 999999999;let m=String(s).match(/\d+/g);if(!m)return 999999999;return parseInt(m.join('').slice(-8));}
- let data=[];
- async function loadFromSheet(){ ... } // তোমার আগের function Same থাকবে
-
- function render(){ 
-   data.sort((a,b)=>armyNoVal(a.ba)-armyNoVal(b.ba)); 
-   // ...
-   // Edit/Del Button এ Role Check
-   let editDelHtml = CAN_EDIT ? `<div class="btnRow"><button class="editBtn" onclick="openEdit(${o.row})">✏️ Edit</button><button class="delBtn" onclick="del(${o.row})">🗑️ Del</button></div>` : '';
-   
-   html+=`<div class="card">...<div class="btns">${editDelHtml}<div class="btnRow"><a class="callBtn" href="tel:${o.mobile}">📞 Call</a><a class="waBtn" href="https://wa.me/${wa}">💬 WhatsApp</a></div></div></div>`;
- }
- // load এর পরে applyRole() call করো
- loadFromSheet().then(()=>{ applyRole(); });
-</script>
+}
+function openAdd(){
+ if(!CAN_EDIT) return;
+ document.getElementById('f_row').value='';['f_rank','f_name','f_ba','f_batch','f_mob','f_rem'].forEach(id=>document.getElementById(id).value='');
+ document.getElementById('ftitle').innerText='Add Officer';document.getElementById('formModal').style.display='flex'
+}
+function openEdit(row){
+ if(!CAN_EDIT) return;
+ let o=data.find(x=>x.row==row);
+ document.getElementById('f_row').value=o.row;document.getElementById('f_rank').value=o.rank;document.getElementById('f_name').value=o.name;document.getElementById('f_ba').value=o.ba;document.getElementById('f_batch').value=o.batch;document.getElementById('f_mob').value=o.mobile;document.getElementById('f_rem').value=o.remarks;
+ document.getElementById('ftitle').innerText='Edit Officer';document.getElementById('formModal').style.display='flex'
+}
+function closeForm(){document.getElementById('formModal').style.display='none'}
+async function saveForm(){
+ if(!CAN_EDIT) return;
+ let p={rank:document.getElementById('f_rank').value.trim(),name:document.getElementById('f_name').value.trim(),ba:document.getElementById('f_ba').value.trim(),batch:document.getElementById('f_batch').value.trim(),mobile:document.getElementById('f_mob').value.trim(),remarks:document.getElementById('f_rem').value.trim(),row:document.getElementById('f_row').value?parseInt(document.getElementById('f_row').value):0};
+ p.action=p.row?"edit":"add";
+ if(!p.name||!p.mobile){alert("Name & Mobile লাগবে");return;}
+ document.getElementById('msg').innerText="⏳ Saving...";
+ await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(p)});
+ document.getElementById('msg').innerText="✅ Saved! Reloading...";
+ setTimeout(()=>location.reload(),1000);
+}
+async function del(row){
+ if(!CAN_EDIT) return;
+ if(!confirm('Delete?'))return;
+ await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"delete",row})});
+ location.reload();
+}
+function render(){
+ data.sort((a,b)=>armyNoVal(a.ba)-armyNoVal(b.ba));
+ let q=document.getElementById('s').value.toLowerCase();
+ document.getElementById('total').innerText=data.length;
+ document.getElementById('count').innerText=`4 BIR - ${data.length} Officers`;
+ let html='';
+ data.forEach((o,idx)=>{
+  if(q&&!(String(o.name)+String(o.ba)+String(o.mobile)).toLowerCase().includes(q))return;
+  let wa=String(o.mobile||'').replace(/\D/g,'');if(wa.startsWith('0'))wa='88'+wa;if(!wa.startsWith('88')&&wa.length==11)wa='88'+wa;
+  let editDel = CAN_EDIT ? `<div class="btnRow"><button class="editBtn" onclick="openEdit(${o.row})">✏️ Edit</button><button class="delBtn" onclick="del(${o.row})">🗑️ Del</button></div>` : '';
+  html+=`<div class="card"><div class="cardHead"><div style="display:flex"><div class="rankBadge">${String(o.rank).slice(0,4)}</div><div><b style="font-size:13px">${o.rank} ${o.name}</b><br><small style="color:#c8a951">${o.ba} • ${o.batch} • #${idx+1}</small></div></div></div><div class="details"><div><span class="label">BA No:</span></div><div><span class="label">Batch:</span></div><div><span class="val" style="color:#c8a951">${o.ba}</span></div><div><span class="val">${o.batch}</span></div><div class="full"><span class="label">Mobile:</span> <span class="val">${o.mobile}</span> • ${o.remarks}</div></div><div class="btns">${editDel}<div class="btnRow"><a class="callBtn" href="tel:${o.mobile}">📞 Call</a><a class="waBtn" href="https://wa.me/${wa}">💬 WhatsApp</a></div></div></div>`;
+ });
+ document.getElementById('list').innerHTML=html||'<div style="padding:20px;text-align:center;color:#6b7a90">No Data in Sheet</div>';
+ applyRole();
+}
+applyRole();
+loadFromSheet();
+</script></body></html>
