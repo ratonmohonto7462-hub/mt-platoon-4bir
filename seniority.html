@@ -1,85 +1,79 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Seniority - ছুটি</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seniority - Sheet Only</title>
 <style>
-body{margin:0;font-family:Arial;background:#0a1a0f;color:#fff;padding:14px}
-.top{background:#122e18;padding:12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-table{width:100%;border-collapse:collapse;background:#132a18;border-radius:12px;overflow:hidden}
-th,td{padding:10px;border-bottom:1px solid #1e4a28;text-align:left;font-size:13px}
+body{margin:0;background:#0a1a0f;color:#fff;font-family:Arial;padding:12px}
+.top{background:#122e18;padding:12px;border-radius:12px;display:flex;justify-content:space-between}
+table{width:100%;border-collapse:collapse;background:#132a18;border-radius:12px;overflow:hidden;margin-top:12px}
+th,td{padding:9px;border-bottom:1px solid #1e4a28;font-size:13px}
 th{background:#1e4a28;color:#c8a951}
-.search{width:100%;padding:12px;border-radius:12px;border:1px solid #c8a951;background:#132a18;color:#fff;margin-bottom:12px;outline:none}
-.badge{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:900}
-.green{background:#22c55e;color:#000}
-.red{background:#ef4444;color:#fff}
-.yellow{background:#eab308;color:#000}
+input{padding:10px;border-radius:10px;border:1px solid #c8a951;background:#0f2312;color:#fff}
+.btn{background:#c8a951;color:#000;border:none;border-radius:8px;padding:8px 14px;font-weight:900;cursor:pointer}
+.add{margin-top:12px;background:#132a18;border:1px solid #1e4a28;padding:10px;border-radius:12px;display:flex;gap:6px;flex-wrap:wrap}
 </style>
-</head>
-<body>
-<div class="top">
-<b>⭐ SENIORITY - ছুটির হিসাব</b>
-<button onclick="location.href='dashboard.html'" style="padding:6px 12px;border-radius:8px;border:none;background:#c8a951;font-weight:900">Back</button>
+</head><body>
+<div class="top"><b>⭐ SENIORITY - Sheet Only</b><button class="btn" onclick="location.href='dashboard.html'">Back</button></div>
+
+<input id="q" style="width:100%;margin-top:12px;box-sizing:border-box" placeholder="Search..." oninput="doFilter()" class="search">
+
+<div class="add">
+<input id="no" placeholder="No" style="width:80px">
+<input id="podobi" placeholder="পদবী" style="width:100px">
+<input id="nam" placeholder="নাম" style="flex:1">
+<input id="date" type="date" style="width:140px">
+<button class="btn" onclick="addToSheet()">Sheet এ Save</button>
 </div>
 
-<input id="s" class="search" placeholder="নাম লিখো: মশিউর, আজিজুল..." oninput="filter()">
-
-<table id="tbl">
-<thead><tr><th>No</th><th>Rank & Name</th><th>ছুটি গিয়েছে</th><th>ফেরত</th><th>বাকি</th></tr></thead>
-<tbody id="body"><tr><td colspan="5">Loading...</td></tr></tbody>
-</table>
+<table><thead><tr><th>No</th><th>পদবী</th><th>নাম</th><th>ছুটি</th><th>ফেরত</th></tr></thead>
+<tbody id="tb"><tr><td colspan=5>Loading Sheet...</td></tr></tbody></table>
 
 <script>
-const ID="1H0aSiqMyxn9bg9PLyjAt6dXPGLMNAWFN7v8hTrj1TZg";
-const CSV="https://docs.google.com/spreadsheets/d/"+ID+"/export?format=csv";
+const SHEET_ID="1H0aSiqMyxn9bg9PLyjAt6dXPGLMNAWFN7v8hTrj1TZg";
+const CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+// এখানে তোমার Apps Script Link বসাও
+const SCRIPT_URL="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
 let DATA=[];
 
-function parseCSV(t){
- let lines=t.split("\n").filter(l=>l.trim());
- let out=[];
- for(let i=1;i<lines.length;i++){
-  let c=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x=>x.replace(/^"|"$/g,'').trim());
-  if(c[2]) out.push({no:c[0],rank:c[1],name:c[2],suty:c[3],mob:c[4]});
- }
- return out;
-}
-async function load(){
- try{
-  let txt=await fetch(CSV).then(r=>r.text());
-  DATA=parseCSV(txt);
-  localStorage.setItem("seniorityCache",JSON.stringify(DATA));
- }catch(e){
-  DATA=JSON.parse(localStorage.getItem("seniorityCache")||"[]");
- }
- render(DATA);
-}
 function render(arr){
- let today=new Date();
- let html="";
+ let h="";
  arr.forEach(r=>{
-  let sutyDate = r.suty ? new Date(r.suty) : null;
-  let retDate = null;
-  let diff = "";
-  let cls="green";
-  if(sutyDate && !isNaN(sutyDate)){
-   retDate = new Date(sutyDate);
-   retDate.setDate(retDate.getDate()+75);
-   let d = Math.ceil((retDate-today)/86400000);
-   if(d<0){ diff=d+" দিন আগে"; cls="red"; }
-   else if(d<=7){ diff=d+" দিন বাকি"; cls="yellow"; }
-   else { diff=d+" দিন বাকি"; cls="green"; }
-  }
-  html+=`<tr><td>${r.no}</td><td>${r.rank} ${r.name}<br><small style="color:#8aa88f">${r.mob||''}</small></td><td>${r.suty||'-'}</td><td>${retDate?retDate.toLocaleDateString('en-GB'):''}</td><td><span class="badge ${cls}">${diff||'-'}</span></td></tr>`;
+  let back=""; if(r.date){ let d=new Date(r.date); if(!isNaN(d)){ d.setDate(d.getDate()+75); back=d.toLocaleDateString('en-GB'); } }
+  h+=`<tr><td>${r.no}</td><td>${r.rank}</td><td>${r.name}</td><td>${r.date}</td><td>${back}</td></tr>`;
  });
- document.getElementById("body").innerHTML=html||"<tr><td colspan=5>No data</td></tr>";
+ document.getElementById("tb").innerHTML=h||"<tr><td colspan=5>No data in Sheet</td></tr>";
 }
-function filter(){
- let q=document.getElementById("s").value.toLowerCase();
- let f=DATA.filter(r=>(r.name+r.rank+r.no).toLowerCase().includes(q) || r.name.includes(document.getElementById("s").value));
- render(f);
+
+function doFilter(){
+ let q=document.getElementById("q").value.toLowerCase();
+ render(DATA.filter(r=> (r.no+r.rank+r.name+r.date).toLowerCase().includes(q)));
 }
-load();
+
+function loadSheet(){
+ fetch(CSV_URL).then(r=>r.text()).then(t=>{
+  let lines=t.split("\n").filter(l=>l.trim());
+  let out=[];
+  for(let i=1;i<lines.length;i++){
+   let c=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x=>x.replace(/^"|"$/g,'').trim());
+   if(c[2]) out.push({no:c[0],rank:c[1],name:c[2],date:c[3]});
+  }
+  DATA=out; render(DATA);
+ });
+}
+
+function addToSheet(){
+ let no=document.getElementById("no").value;
+ let podobi=document.getElementById("podobi").value;
+ let nam=document.getElementById("nam").value;
+ let date=document.getElementById("date").value;
+ if(!nam){ alert("নাম লিখো"); return; }
+ if(SCRIPT_URL.includes("YOUR_SCRIPT_ID")){ alert("আগে SCRIPT_URL এ তোমার Apps Script Link বসাও"); return; }
+ 
+ fetch(`${SCRIPT_URL}?no=${encodeURIComponent(no)}&podobi=${encodeURIComponent(podobi)}&nam=${encodeURIComponent(nam)}&date=${encodeURIComponent(date)}`, {mode:'no-cors'})
+ .then(()=>{ alert("Sheet এ Save হয়ে গেছে! 2 সেকেন্ড পর List Update হবে"); setTimeout(loadSheet,2000); })
+ .catch(()=>{ alert("Save হয়েছে, Sheet Check করো"); });
+}
+
+loadSheet();
 </script>
-</body>
-</html>
+</body></html>
