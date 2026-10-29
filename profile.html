@@ -1,97 +1,28 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile - MT Platoon</title>
-<style>
-:root{--bg:#0a1a0f;--card:#132a1b;--gold:#c8a951;--border:#1e4a2d}
-body{margin:0;background:var(--bg);font-family:system-ui;color:#fff;padding:15px 15px 100px}
-.top{text-align:center;color:var(--gold);font-size:22px;font-weight:900;margin:10px 0}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;margin-top:10px}
-.label{font-size:12px;color:#8fb398;margin:12px 0 5px;font-weight:700}
-input,select{width:100%;padding:13px;border-radius:11px;border:1px solid var(--border);background:#0f2116;color:#fff;box-sizing:border-box}
-.btn{width:100%;padding:14px;background:var(--gold);color:#000;font-weight:900;border:none;border-radius:12px;margin-top:16px;font-size:15px}
-.imgBox{width:100px;height:100px;border-radius:50%;background:#0f2116;border:2px dashed var(--gold);display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0 auto}
-.imgBox img{width:100%;height:100%;object-fit:cover}
-.row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #1a3a25;font-size:14px}
-.row b{color:var(--gold)}
-</style>
-</head>
-<body>
-<div class="top">👤 প্রোফাইল তৈরি</div>
+<label>সেনা নং</label>
+<input id="senaNo" required>
 
-<!-- তৈরি করার ফর্ম -->
-<div id="createForm" class="card">
-  <div class="imgBox" onclick="photo.click()"><span id="txt">📷<br>ছবি</span><img id="prev" style="display:none"></div>
-  <input type="file" id="photo" accept="image/*" hidden>
+<label>পদবী</label>
+<input id="podobi" required>
 
-  <div class="label">সেনা নং</div><input id="senaNo" placeholder="যেমন: 1234567">
-  <div class="label">পদবী</div><select id="rank"><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option><option>MT CLK</option></select>
-  <div class="label">নাম</div><input id="name" placeholder="যেমন: মো: রতন">
-  <div class="label">কোম্পানি</div><select id="company"><option>Alpha</option><option>Bravo</option><option>Charlie</option><option>Delta</option><option>MT Platoon</option></select>
-  <div class="label">রক্তের গ্রুপ</div><select id="blood"><option>A+</option><option>B+</option><option>O+</option><option>AB+</option><option>A-</option><option>B-</option><option>O-</option><option>AB-</option></select>
-  <div class="label">মোবাইল নাম্বার</div><input id="mobile" placeholder="01XXXXXXXXX">
+<label>নাম</label>
+<input id="name" required>
 
-  <button class="btn" id="otpBtn" onclick="sendOtp()">OTP পাঠান</button>
+<label>কোম্পানি</label>
+<select id="company" required>
+  <option>এ</option>
+  <option>বি</option>
+  <option>সি</option>
+  <option>ডি</option>
+  <option>সদর</option>
+</select>
 
-  <div id="otpSection" style="display:none;margin-top:15px;border-top:1px solid #1e4a2d;padding-top:15px">
-    <div class="label">মোবাইলে আসা 6 সংখ্যার OTP দিন</div>
-    <input id="otpInput" placeholder="OTP লিখুন">
-    <p style="font-size:11px;color:#c8a951">টেস্ট OTP: <span id="showOtp"></span></p>
-    <button class="btn" onclick="verifyOtp()">OTP যাচাই করে প্রোফাইল তৈরি করুন</button>
-  </div>
-</div>
+<label>রক্তের গ্রুপ</label>
+<select id="blood" required>
+  <option>A+</option> <option>A-</option>
+  <option>B+</option> <option>B-</option>
+  <option>AB+</option> <option>AB-</option>
+  <option>O+</option> <option>O-</option>
+</select>
 
-<!-- দেখার ফর্ম -->
-<div id="viewForm" class="card" style="display:none">
-  <div class="imgBox"><img id="vPhoto"></div>
-  <h2 id="vName" style="text-align:center;color:var(--gold)"></h2>
-  <div style="margin-top:15px">
-    <div class="row"><span>সেনা নং</span><b id="vSena"></b></div>
-    <div class="row"><span>পদবী</span><b id="vRank2"></b></div>
-    <div class="row"><span>নাম</span><b id="vName2"></b></div>
-    <div class="row"><span>কোম্পানি</span><b id="vComp"></b></div>
-    <div class="row"><span>রক্ত</span><b id="vBlood"></b></div>
-    <div class="row"><span>মোবাইল</span><b id="vMob"></b></div>
-  </div>
-  <button class="btn" onclick="location.href='dashboard.html'">ড্যাশবোর্ড</button>
-  <button class="btn" style="background:transparent;border:1px solid var(--gold);color:var(--gold)" onclick="edit()">এডিট</button>
-</div>
-
-<script>
-let generatedOtp="";
-photo.onchange=e=>{let r=new FileReader();r.onload=()=>{prev.src=r.result;prev.style.display='block';txt.style.display='none'};r.readAsDataURL(e.target.files[0])};
-
-let saved=localStorage.getItem('mt_final_profile');
-if(saved) show(JSON.parse(saved));
-
-function sendOtp(){
-  if(mobile.value.length<11){alert("সঠিক মোবাইল দিন");return;}
-  generatedOtp=Math.floor(100000+Math.random()*900000).toString();
-  alert("আপনার OTP: "+generatedOtp); // টেস্ট, পরে Bulk SMS BD API বসবে
-  showOtp.innerText=generatedOtp;
-  otpSection.style.display='block';
-  otpBtn.innerText="OTP আবার পাঠান";
-}
-
-function verifyOtp(){
-  if(otpInput.value==generatedOtp){
-    let d={senaNo:senaNo.value,rank:rank.value,name:name.value,company:company.value,blood:blood.value,mobile:mobile.value,photo:prev.src||""};
-    if(!d.senaNo||!d.name){alert("সেনা নং, নাম দিন");return;}
-    localStorage.setItem('mt_final_profile',JSON.stringify(d));
-    localStorage.setItem('myProfileData',JSON.stringify(d));
-    show(d); alert("✓ প্রোফাইল তৈরি হয়েছে!");
-  } else {alert("ভুল OTP");}
-}
-
-function show(d){
-  createForm.style.display='none';viewForm.style.display='block';
-  vName.innerText=d.name;vName2.innerText=d.name;vRank2.innerText=d.rank;
-  vSena.innerText=d.senaNo;vComp.innerText=d.company;vBlood.innerText=d.blood;vMob.innerText=d.mobile;
-  if(d.photo) vPhoto.src=d.photo;
-}
-function edit(){localStorage.removeItem('mt_final_profile');location.reload();}
-</script>
-</body>
-</html>
+<label>মোবাইল নাম্বার</label>
+<input id="mobile" required>
