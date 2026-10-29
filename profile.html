@@ -3,64 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Profile Login</title>
+<title>Profile</title>
 <style>
 body{margin:0;font-family:Arial;background:#0a1a0f;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.box{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:20px;width:90%;max-width:380px}
+.box{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:20px;width:90%;max-width:380px;text-align:center}
 input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #c8a951;background:#0f2110;color:#fff;box-sizing:border-box}
 button{width:100%;padding:12px;background:#c8a951;color:#0a1a0f;border:none;border-radius:10px;font-weight:900;margin-top:10px;cursor:pointer}
+.avatar-big{width:70px;height:70px;border-radius:50%;background:#c8a951;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:30px;color:#0f2110;margin:0 auto 10px auto}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#0a1a0f;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:8px 0}
+.bottom div{text-align:center;font-size:11px;color:#6b8a70}.bottom div.active{color:#c8a951}
 </style>
 </head>
 <body>
-<div class="box">
-<h3 style="text-align:center;color:#c8a951">SENA LOGIN</h3>
-<input id="sena_no" placeholder="Sena No (eg 4521328)">
-<input id="mobile" placeholder="Mobile Number">
-<button onclick="doLogin()">LOGIN</button>
-<p id="msg" style="text-align:center;font-size:13px;margin-top:10px"></p>
+<div class="box" id="box"></div>
+
+<div class="bottom">
+<div onclick="location.href='command-dashboard.html'">🏠<br>Dashboard</div>
+<div onclick="location.href='vehicle.html'">🛻<br>Vehicles</div>
+<div onclick="location.href='contact.html'">📳<br>Comms</div>
+<div onclick="location.href='duty.html'">📄<br>Roster</div>
+<div class="active">👤<br>Profile</div>
 </div>
+
 <script>
-const MOBILE_ID="1CvMdG_fTG4mGnL-epIh3fsPhGVwwBX0rbkMPN7AqHJE";
-const MOBILE_CSV="https://docs.google.com/spreadsheets/d/"+MOBILE_ID+"/export?format=csv";
+const SENIORITY_SCRIPT="https://script.google.com/macros/s/AKfycby8BQ0Dyo5s4otJEbRJcZXNiW3pyqDY9800nm8X7kGeOz49RVlQ1bdoF5IdByxL-l226w/exec";
 
-function parseCSV(t){
-  let lines=t.split("\n").filter(l=>l.trim().length>0);
-  let out=[];
-  for(let i=1;i<lines.length;i++){
-    let cols=lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c=>c.replace(/^"|"$/g,'').trim());
-    out.push(cols);
-  }
-  return out;
+function render(){
+ let sena = localStorage.getItem('sena_no');
+ let mobile = localStorage.getItem('mobile_no');
+ let role = localStorage.getItem('mt_role');
+ let box = document.getElementById('box');
+
+ if(!sena){
+   // LOGIN FORM
+   box.innerHTML=`
+   <h3 style="color:#c8a951">SENA LOGIN</h3>
+   <input id="sena_no" placeholder="Sena No (eg 4521328)">
+   <input id="mobile" placeholder="Mobile Number">
+   <button onclick="doLogin()">LOGIN</button>
+   <p id="msg" style="font-size:13px;margin-top:10px"></p>
+   `;
+ } else {
+   // PROFILE VIEW - Right last a click korle eitai dekhabe
+   box.innerHTML=`
+   <div class="avatar-big">${sena.slice(-2)}</div>
+   <h3 id="pName" style="color:#c8a951;margin:5px 0">Loading...</h3>
+   <p style="margin:4px 0;color:#8aa88f">Sena No: ${sena}</p>
+   <p style="margin:4px 0;color:#8aa88f">Mobile: ${mobile||'N/A'}</p>
+   <p style="margin:8px 0"><span style="background:#1a2a1a;color:#7CFC00;border:1px solid #22c55e;padding:4px 10px;border-radius:10px;font-size:11px">${role||'COMMAND'} - VIEW ONLY</span></p>
+   <button onclick="location.href='command-dashboard.html'" style="background:#132a18;color:#c8a951;border:1px solid #c8a951">Go to Dashboard</button>
+   <button onclick="doLogout()" style="background:#d50000;color:#fff">LOGOUT</button>
+   `;
+   loadName(sena);
+ }
 }
 
-async function doLogin(){
-  let sena=document.getElementById('sena_no').value.trim();
-  let mobile=document.getElementById('mobile').value.trim();
-  let msg=document.getElementById('msg');
-  if(!sena || !mobile){ msg.innerText="Sena No & Mobile দিন"; return; }
-  msg.innerText="Checking...";
-  try{
-    let csv=await fetch(MOBILE_CSV+"?t="+Date.now()).then(r=>r.text());
-    let rows=parseCSV(csv);
-    let found=rows.find(r=> r[0]==sena || r[1]==sena || r[2]==sena || String(r).includes(sena));
-    // Mobile check optional - তোমার Sheet এ Mobile কলাম থাকলে এখানে চেক হবে
-    if(found){
-      localStorage.setItem('sena_no', sena);
-      localStorage.setItem('mt_role', 'COMMAND');
-      msg.innerText="Success! Going to Command Dashboard...";
-      setTimeout(()=>{ location.href='command-dashboard.html'; }, 500);
-    } else {
-      // Sheet এ না পেলেও ঢুকতে দিবে COMMAND হিসেবে
-      localStorage.setItem('sena_no', sena);
-      localStorage.setItem('mt_role', 'COMMAND');
-      location.href='command-dashboard.html';
-    }
-  }catch(e){
-    localStorage.setItem('sena_no', sena);
-    localStorage.setItem('mt_role', 'COMMAND');
-    location.href='command-dashboard.html';
-  }
+function doLogin(){
+ let sena=document.getElementById('sena_no').value.trim();
+ let mobile=document.getElementById('mobile').value.trim();
+ if(!sena||!mobile){document.getElementById('msg').innerText="Sena & Mobile দিন";return;}
+ localStorage.setItem('sena_no',sena);
+ localStorage.setItem('mobile_no',mobile);
+ localStorage.setItem('mt_role','COMMAND');
+ location.href='command-dashboard.html';
 }
+
+function doLogout(){
+ localStorage.clear();
+ render();
+}
+
+async function loadName(sena){
+ try{
+   let txt=await fetch(SENIORITY_SCRIPT+"?t="+Date.now()).then(r=>r.text());
+   let rows=JSON.parse(txt);
+   let me = rows.find(r=> String(r[0]).includes(sena));
+   if(me){
+     document.getElementById('pName').innerText = me[1]+' '+me[2];
+   } else {
+     document.getElementById('pName').innerText = 'Sena - '+sena;
+   }
+ }catch(e){
+   document.getElementById('pName').innerText = 'Sena - '+sena;
+ }
+}
+
+render();
 </script>
 </body>
 </html>
