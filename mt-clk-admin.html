@@ -1,70 +1,25 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MT CLK ADMIN</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#000;color:#d4af37;font-family:system-ui;display:flex;justify-content:center;min-height:100vh}
-.main{width:100%;max-width:420px;padding:20px 15px 40px}
-.logo-wrap{display:flex;justify-content:center;margin:20px 0}
-.logo{width:210px;height:210px;background:#fff;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 3px #d4af37, 0 0 30px rgba(212,175,55,.6);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-.logo b{font-size:28px;line-height:1}.red{color:#d00}.green{color:#0a6d2b}.small{font-size:11px;background:#5a6a7a;color:#fff;padding:2px 12px;border-radius:20px;margin-top:4px}
-.title{text-align:center;margin:10px 0 20px}.title h1{color:#d4af37;font-size:26px}.title p{color:#d4af37;opacity:.8;letter-spacing:3px;font-size:12px;margin-top:4px}
-.box{border:1.5px solid #d4af37;border-radius:10px;padding:22px 18px;background:#0a0a0a}
-.box h2{font-size:32px;color:#d4af37}.sub{font-size:12px;color:#9a8a5a;margin:4px 0 18px}
-.label{color:#d4af37;font-weight:700;font-size:13px;margin:14px 0 6px}
-.select{width:100%;background:#000;border:1.5px solid #d4af37;color:#fff;padding:14px 12px;font-size:16px;outline:none}
-.input-white{background:#eef4ff;color:#000;display:flex;align-items:center;gap:10px;border:1.5px solid #d4af37;padding:0 12px}
-.input-white input{border:none;outline:none;width:100%;background:transparent;padding:14px 0;color:#000;font-size:15px}
-.btn{width:70%;margin:22px auto 0;display:block;background:linear-gradient(180deg,#f3d26a,#d4af37);color:#000;border:none;padding:14px;font-weight:900;letter-spacing:2px;font-size:18px;cursor:pointer}
-#msg{text-align:center;margin-top:12px;font-weight:700;display:none;color:#ffeb3b}
-.footer{text-align:center;margin-top:18px;font-size:10px;color:#6a5a32;letter-spacing:1px}
-</style>
-</head>
-<body>
-<div class="main">
-<div class="logo-wrap"><div class="logo"><div>4 BIR</div><div><b class="red">MT</b> <b class="green">GARAGE</b></div><div class="small">AJEO CHAR</div></div></div>
-<div class="title"><h1>MT PLATOON 4 BIR</h1><p>BANGLADESH ARMY</p></div>
-<div class="box">
-<h2>LOGIN</h2><div class="sub">Authorized Personnel Only • Secure Access</div>
-<div class="label">ROLE / UNIT</div>
-<select id="role" class="select">
-<option>COMMAND</option>
-<option>MT CLK</option>
-<option>ADMIN</option>
-</select>
-<div class="label">PASSWORD</div>
-<div class="input-white"><span>🔒</span><input id="adminPass" type="password" placeholder="পাসওয়ার্ড লিখুন"></div>
-<button class="btn" id="adminLoginBtn">LOGIN</button>
-<div id="msg"></div>
-</div>
-<div class="footer">MT PLATOON 4 • BIR • BANGLADESH ARMY • CONFIDENTIAL<br>Create By Snk Raton 4 Bir MT</div>
-</div>
-
-<script>
-const PASSWORDS = {
-  "COMMAND": "COMMAND2026",
-  "MT CLK": "MTCLK2026",
-  "ADMIN": "Admin2026"
-};
-document.getElementById('adminLoginBtn').onclick=()=>{
- const role=document.getElementById('role').value;
- const pass=document.getElementById('adminPass').value;
- const msg=document.getElementById('msg');
- if(PASSWORDS[role]===pass){
-  localStorage.setItem("mt_clk","ok");
-  localStorage.setItem("mt_role",role);
-  msg.style.display='block';
-  msg.style.color='#0f0';
-  msg.innerText='✅ '+role+' LOGIN SUCCESS';
-  setTimeout(()=>{window.location.href='mt-clk-admin-panel.html';},800);
- } else {
-  msg.style.display='block';
-  msg.style.color='#ff4444';
-  msg.innerText='❌ ভুল পাসওয়ার্ড';
- }
-};
+<script> 
+let cur="";function toggleDrop(){document.getElementById('drop').classList.toggle('open')} 
+function selectOpt(v,el){cur=v;document.getElementById('selText').innerText=v;document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');document.getElementById('drop').classList.remove('open');} 
+function doLogin(){ 
+  let p=document.getElementById('pwd').value; 
+  if(!cur){alert('ROLE / UNIT Select করুন');return;} 
+  if(!p){alert('পাসওয়ার্ড দিন');return;} 
+  if(cur==="COMMAND" && p==="4-Bir-mt"){
+    localStorage.setItem('mt_role','COMMAND');
+    location.href="dashboard.html";
+  } 
+  else if(cur==="MT CLK" && p==="Admin7462"){
+    localStorage.setItem('mt_role','MT CLK');
+    location.href="dashboard.html";
+  } 
+  else if(cur==="ADMIN" && p==="Admin2026"){
+    localStorage.setItem('mt_role','ADMIN');
+    location.href="mt-clk-admin.html";
+  } 
+  else{
+    alert('Password ভুল!\nCOMMAND = 4-Bir-mt\nMT CLK = Admin7462\nADMIN = Admin2026');
+  } 
+} 
+window.addEventListener('click',e=>{if(!e.target.closest('.select-area')) document.getElementById('drop').classList.remove('open')}); 
 </script>
-</body>
-</html>
