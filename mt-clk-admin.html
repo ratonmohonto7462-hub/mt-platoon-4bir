@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT CLK Admin - MT Platoon</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui;background:#f0f2f5;padding:12px}
+.header{background:#0a2e18;color:#c9a84c;padding:15px;border-radius:12px;text-align:center;font-weight:800;font-size:18px}
+.card{background:white;padding:14px;border-radius:12px;margin-top:12px;box-shadow:0 2px 10px rgba(0,0,0,.1);border-left:5px solid #ff9800}
+.card.approved{border-left-color:#0a7a3a}
+.card.declined{border-left-color:#d32f2f}
+.info{font-size:14px; line-height:1.6}
+.info b{color:#0a2e18}
+.btns{display:flex; gap:10px; margin-top:10px}
+.btn{flex:1;padding:10px;border:none;border-radius:8px;font-weight:800;cursor:pointer}
+.approve{background:#0a7a3a;color:white}
+.decline{background:#d32f2f;color:white}
+.filter{display:flex; gap:8px; margin-top:12px}
+.filter select, .filter input{padding:10px;border-radius:8px;border:1px solid #ccc;flex:1}
+.loginBox{max-width:360px;margin:60px auto;background:white;padding:25px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.15);text-align:center}
+.loginBox input{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ccc}
+#adminView{display:none}
+</style>
+</head>
+<body>
+
+<div id="loginAdmin" class="loginBox">
+<h3>MT CLK Login</h3>
+<p style="font-size:13px;color:#666">শুধু MT CLK ID এর জন্য</p>
+<input id="adminPass" type="password" placeholder="MT CLK পাসওয়ার্ড দিন">
+<button class="btn approve" style="width:100%;margin-top:15px" id="adminLoginBtn">লগইন</button>
+<p style="font-size:12px;margin-top:10px;color:#999">Default Pass: MTCLK2026</p>
+</div>
+
+<div id="adminView">
+<div class="header">MT CLK ADMIN PANEL - MT PLATOON 4 BIR</div>
+<div class="filter">
+<select id="filterStatus"><option value="pending">Pending</option><option value="approved">Approved</option><option value="declined">Declined</option><option value="all">All</option></select>
+<select id="filterCompany"><option value="all">সব কোম্পানি</option><option value="এ">এ</option><option value="বি">বি</option><option value="সি">সি</option><option value="ডি">ডি</option><option value="সদর">সদর</option></select>
+</div>
+<div id="list">লোড হচ্ছে...</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs, updateDoc, doc, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",
+  authDomain: "mt-platoon-c408a.firebaseapp.com",
+  projectId: "mt-platoon-c408a",
+  storageBucket: "mt-platoon-c408a.firebasestorage.app",
+  messagingSenderId: "431652749602",
+  appId: "1:431652749602:web:7214305714f2d75995657b"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// SIMPLE MT CLK LOGIN
+const ADMIN_PASSWORD = "MTCLK2026"; // তুমি চাইলে এটা চেঞ্জ করে দিতে পারো
+document.getElementById('adminLoginBtn').onclick = ()=>{
+ if(document.getElementById('adminPass').value === ADMIN_PASSWORD){
+  localStorage.setItem("mt_clk","ok");
+  document.getElementById('loginAdmin').style.display='none';
+  document.getElementById('adminView').style.display='block';
+  loadProfiles();
+ }else{ alert("ভুল পাসওয়ার্ড!"); }
+}
+if(localStorage.getItem("mt_clk")==="ok"){
+ document.getElementById('loginAdmin').style.display='none';
+ document.getElementById('adminView').style.display='block';
+ loadProfiles();
+}
+
+async function loadProfiles(){
+ const status = document.getElementById('filterStatus').value;
+ const company = document.getElementById('filterCompany').value;
+ const list = document.getElementById('list');
+ list.innerHTML="লোড হচ্ছে...";
+ let q;
+ if(status==="all"){
+  q = collection(db,"profiles");
+ }else{
+  q = query(collection(db,"profiles"), where("status","==",status));
+ }
+ const snap = await getDocs(q);
+ list.innerHTML="";
+ if(snap.empty){ list.innerHTML="<p style='text-align:center;margin-top:20px'>কোনো ডাটা নেই</p>"; return; }
+ snap.forEach(d=>{
+  const data = d.data();
+  if(company!=="all" && data.company!==company) return;
+  const div = document.createElement('div');
+  div.className = `card ${data.status}`;
+  div.innerHTML = `
+   <div class="info">
+   <b>সেনা নং:</b> ${data.sena_no} | <b>পদবী:</b> ${data.podobi}<br>
+   <b>নাম:</b> ${data.name}<br>
+   <b>কোম্পানি:</b> ${data.company} | <b>রক্ত:</b> ${data.blood}<br>
+   <b>মোবাইল:</b> ${data.mobile}<br>
+   <b>স্ট্যাটাস:</b> ${data.status}
+   </div>
+   <div class="btns">
+   <button class="btn approve" onclick="updateStatus('${d.id}','approved')">Approve</button>
+   <button class="btn decline" onclick="updateStatus('${d.id}','declined')">Decline</button>
+   </div>
+  `;
+  list.appendChild(div);
+ });
+}
+window.updateStatus = async (id, newStatus)=>{
+ if(!confirm(`${newStatus} করতে চাও?`)) return;
+ await updateDoc(doc(db,"profiles",id), {status:newStatus});
+ alert(`✅ ${newStatus} করা হয়েছে!`);
+ loadProfiles();
+}
+document.getElementById('filterStatus').onchange = loadProfiles;
+document.getElementById('filterCompany').onchange = loadProfiles;
+</script>
+</body>
+</html>
