@@ -1,66 +1,74 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MT PLATOON 4 BIR - HELMET ACCESS</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT PLATOON 4 BIR - PROFILE LOGIN</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:radial-gradient(circle at top, #1a3523 0%, #070f0a 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px;font-family:'Rajdhani',sans-serif}
-.phone{width:100%;max-width:390px;background:#0e1f15;border-radius:28px;border:2px solid #2a4a32;overflow:hidden;box-shadow:0 0 0 4px #000, 0 20px 60px rgba(0,0,0,.8);position:relative}
-.top-bar{text-align:center;padding:18px 15px 0;color:#c8d8b8;font-size:13px;letter-spacing:3px}
-.helmet-wrap{position:relative;display:flex;justify-content:center;margin-top:10px}
-.helmet{width:260px;height:190px;background:linear-gradient(180deg,#5a6b4a 0%, #3a4a30 50%, #2a3522 100%);border-radius:120px 120px 40px 40px;position:relative;border:3px solid #6b7d5e;box-shadow:inset 0 -10px 20px rgba(0,0,0,.6)}
-.visor{position:absolute;bottom:-25px;left:50%;transform:translateX(-50%);width:180px;height:180px;background:radial-gradient(circle, #0a1f14 20%, #000 70%);border:2px solid #3a5a3a;border-radius:50%;display:flex;justify-content:center;align-items:center;box-shadow:0 0 30px rgba(80,255,120,.3)}
-.login-text{position:absolute;color:#7aff8a;font-weight:700;font-size:13px;text-align:center;line-height:1.2;text-shadow:0 0 10px #7aff8a}
-.content{padding:70px 22px 22px}
-.label{color:#8aff8a;font-size:14px;letter-spacing:1px;margin:16px 0 6px;display:flex;justify-content:space-between}
-.input-box{width:100%;background:rgba(0,0,0,.6);border:1.5px solid #4a7a4a;border-radius:10px;padding:14px 15px;color:#aaffaa;font-size:16px;outline:none;box-shadow:inset 0 0 15px rgba(0,255,80,.1)}
-.input-box:focus{border-color:#7aff8a;box-shadow:0 0 20px rgba(122,255,138,.4)}
-.btn{width:100%;margin-top:22px;padding:16px;background:linear-gradient(90deg, rgba(0,0,0,.8) 0%, rgba(20,60,30,.9) 100%);border:1.5px solid #7aff8a;border-radius:12px;color:#7aff8a;font-size:18px;font-weight:800;letter-spacing:2px;cursor:pointer;box-shadow:0 0 20px rgba(122,255,138,.3);text-transform:uppercase}
-.small-row{display:flex;justify-content:space-between;color:#7a9a7a;font-size:12px;margin-top:12px}
-.footer{text-align:center;margin-top:18px;color:#5a7a5a;font-size:11px;letter-spacing:1px}
-#msg{text-align:center;margin-top:10px;color:#ffeb3b;font-weight:700;display:none}
-.view{display:none} .view.active{display:block}
-.back{color:#7aff8a;text-align:center;margin-top:14px;cursor:pointer;font-size:13px;text-decoration:underline}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial}
+body{background:#0a0f0a;color:#7eff9a;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
+.wrap{width:100%;max-width:420px;background:linear-gradient(180deg,#132a1e,#0a1a12);border:1.5px solid #2a4a32;border-radius:28px;padding:22px 22px 28px;box-shadow:0 0 40px rgba(110,255,138,0.15)}
+.top{font-size:11px;letter-spacing:3px;color:#8abf92;text-align:center;margin-bottom:18px}
+.helmet{width:260px;height:260px;margin:0 auto 30px;position:relative;display:flex;justify-content:center;align-items:center}
+.helmet-bg{position:absolute;width:100%;height:75%;background:linear-gradient(180deg,#3a5a42,#1a2f22);border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;border:2px solid #4a6a52;opacity:0.9}
+.helmet-inner{position:absolute;width:85%;height:78%;background:#050a07;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;box-shadow:inset 0 0 30px rgba(0,0,0,0.8), 0 0 20px rgba(110,255,138,0.3);z-index:2}
+.helmet-inner div{color:#6eff8a;font-weight:900;font-size:16px;letter-spacing:1px;line-height:1.4;text-align:center;text-shadow:0 0 10px #6eff8a}
+.label{color:#7eff9a;font-size:13px;font-weight:700;letter-spacing:2px;margin:18px 0 8px}
+.input-box{width:100%;background:#0a1a0f;border:1.5px solid #3a5a42;border-radius:14px;padding:16px 18px;color:#8abf92;outline:none;font-size:15px}
+.input-box::placeholder{color:#4a6a52}
+.btn{width:100%;margin-top:22px;background:#050a07;border:1.5px solid #6eff8a;border-radius:14px;padding:16px;color:#6eff8a;font-weight:900;letter-spacing:2px;font-size:18px;cursor:pointer;box-shadow:0 0 20px rgba(110,255,138,0.25)}
+.bottom-row{display:flex;justify-content:space-between;margin-top:14px;font-size:12px;color:#5a7a62}
+.bottom-row a{color:#5a7a62;text-decoration:none}
+.footer-links{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding:0 4px}
+.footer-links a{font-size:13px;font-weight:700;text-decoration:none}
+.admin-link{color:#d4af37 !important}
+.create-link{color:#6eff8a !important}
+.creator{margin-top:14px;text-align:center;font-size:11px;color:#6a7a52;letter-spacing:1px}
+.creator span{color:#d4af37;font-weight:700}
 </style>
 </head>
 <body>
-<div class="phone">
-<div class="top-bar">HELMET ACCESS • MT PLATOON 4 BIR</div>
-<div class="helmet-wrap"><div class="helmet"><div class="visor"><div class="login-text">SECURE<br>LOGIN<br>NODE</div></div></div></div>
-<div class="content">
-<div id="loginView" class="view active">
-<div class="label">SENA NO</div><input id="loginSena" class="input-box" placeholder="Enter Sena No • 7238105">
-<div class="label">MOBILE PASSWORD</div><input id="loginPass" class="input-box" type="password" placeholder="Enter mobile number">
-<button class="btn" id="loginBtn">[ ENGAGE LOGIN ]</button>
-<div class="small-row"><span>Remember me</span><span>Forgot password?</span></div>
-<div id="msg"></div>
-<div class="footer">BIOMETRIC STANDBY • HELMET LINKED<br><span style="color:#7aff8a;cursor:pointer" id="goCreate">→ Create New Profile</span></div>
-</div>
-<div id="formView" class="view">
-<div class="label">SENA NO</div><input id="sena" class="input-box">
-<div class="label">PODOBI</div><input id="podobi" class="input-box" placeholder="সৈনিক">
-<div class="label">NAME</div><input id="name" class="input-box">
-<div class="label">COMPANY</div><select id="company" class="input-box"><option value="" disabled selected>নির্বাচন</option><option>এ</option><option>বি</option><option>সি</option><option>ডি</option><option>সদর</option></select>
-<div class="label">BLOOD</div><select id="blood" class="input-box"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
-<div class="label">MOBILE (Will be password)</div><input id="mobile" class="input-box" type="tel">
-<button class="btn" id="submitBtn">[ SUBMIT PROFILE ]</button>
-<div class="back" id="goLogin">← Back to Login</div>
+<div class="wrap">
+<div class="top">HELMET ACCESS • MT PLATOON 4 BIR</div>
+
+<div class="helmet">
+<div class="helmet-bg"></div>
+<div class="helmet-inner">
+<div>SECURE</div>
+<div>LOGIN</div>
+<div>NODE</div>
 </div>
 </div>
+
+<div class="label">SENA NO</div>
+<input class="input-box" id="senaNo" type="text" placeholder="Enter Sena No • 7238105">
+
+<div class="label">MOBILE PASSWORD</div>
+<input class="input-box" id="mobilePass" type="password" placeholder="Enter mobile number">
+
+<button class="btn" onclick="doLogin()">[ ENGAGE LOGIN ]</button>
+
+<div class="bottom-row">
+<span>Remember me</span>
+<a href="#">Forgot password?</a>
 </div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = {apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",authDomain: "mt-platoon-c408a.firebaseapp.com",projectId: "mt-platoon-c408a",storageBucket: "mt-platoon-c408a.firebasestorage.app",messagingSenderId: "431652749602",appId: "1:431652749602:web:7214305714f2d75995657b"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-const msg=document.getElementById('msg');
-document.getElementById('goCreate').onclick=()=>{document.getElementById('loginView').classList.remove('active');document.getElementById('formView').classList.add('active')}
-document.getElementById('goLogin').onclick=()=>{document.getElementById('formView').classList.remove('active');document.getElementById('loginView').classList.add('active')}
-document.getElementById('submitBtn').addEventListener('click', async ()=>{const btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerText="UPLOADING...";await addDoc(collection(db,"profiles"),{sena_no:document.getElementById('sena').value.trim(),podobi:document.getElementById('podobi').value.trim(),name:document.getElementById('name').value.trim(),company:document.getElementById('company').value,blood:document.getElementById('blood').value,mobile:document.getElementById('mobile').value.trim(),status:"pending",created_at:serverTimestamp()});alert("✅ জমা হয়েছে! MT CLK Approve করলে লগইন করতে পারবে।");document.getElementById('formView').classList.remove('active');document.getElementById('loginView').classList.add('active');btn.disabled=false;btn.innerText="[ SUBMIT PROFILE ]";});
-document.getElementById('loginBtn').addEventListener('click', async ()=>{const sena=document.getElementById('loginSena').value.trim();const pass=document.getElementById('loginPass').value.trim();if(!sena||!pass){msg.innerText="সেনা নং ও মোবাইল দিন";msg.style.display='block';return;}msg.innerText="SCANNING BIOMETRIC...";msg.style.display='block';const q=query(collection(db,"profiles"),where("sena_no","==",sena),where("mobile","==",pass));const snap=await getDocs(q);if(snap.empty){msg.innerText="❌ ভুল সেনা নং বা পাসওয়ার্ড";return;}const data=snap.docs[0].data();if(data.status!=="approved"){msg.innerText="⏳ Pending আছে, MT CLK অনুমোদনের জন্য অপেক্ষা করুন";return;}localStorage.setItem("mt_user",JSON.stringify(data));msg.innerText="✅ ACCESS GRANTED";window.location.href="dashboard.html";});
+
+<div class="footer-links">
+<a href="mt-clk-admin.html" class="admin-link">→ Admin</a>
+<a href="create-profile.html" class="create-link">→ Create New Profile</a>
+</div>
+
+<div class="creator">Create By <span>Snk Roton 4 bir mt</span></div>
+
+</div>
+
+<script>
+function doLogin(){
+  let sena = document.getElementById('senaNo').value.trim();
+  let pass = document.getElementById('mobilePass').value.trim();
+  if(!sena || !pass){alert('Sena No & Mobile Password দিন');return;}
+  localStorage.setItem('sena_no', sena);
+  location.href='dashboard.html';
+}
 </script>
 </body>
 </html>
