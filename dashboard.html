@@ -30,7 +30,7 @@
  let t=prompt("নতুন জরুরি আদেশ লিখুন:",cur);
  if(!t)return;
  localStorage.setItem("joruriAdesh",t);
- document.getElementById('joruriText').innerText="🚨 "+জরুরী আদেশ+" 🚨 • 🔊 "+t+" 🔊 • ";
+ document.getElementById('joruriText').innerText="🚨 "+t+" 🚨 • 🔊 "+t+" 🔊 • ";
  alert("✅ Saved!");
  }
  let savedJ=localStorage.getItem("joruriAdesh");
