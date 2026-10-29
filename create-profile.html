@@ -4,37 +4,37 @@
 </head><body>
 <div class="wrap">
 <h3 style="text-align:center">Create New Profile</h3>
-<label>সেনা নং</label><input id="sena_no" placeholder="">
-<label>পদবি</label><select id="podobi"><option></option><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option>সৈনিক</option></select>
-<label>নাম</label><input id="" placeholder="">
-<label>কোম্পানি</label><select id=""><option>এ</option><option>বি</option><option>সি</option><option>ডি</option><option>সদর</option></select>
-<label>মোবাইল</label><input id="" placeholder="">
+<label>সেনা নং</label><input id="sena_no" placeholder="৪৫২১৩২৮">
+<label>পদবি</label><select id="podobi"><option value="">-- পদবি --</option><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option>সৈনিক</option></select>
+<label>নাম</label><input id="name" placeholder="রতন চন্দ্র মহন্ত">
+<label>কোম্পানি</label><select id="company"><option>এ</option><option>বি</option><option>সি</option><option>ডি</option><option>সদর</option></select>
+<label>মোবাইল</label><input id="mobile" placeholder="01...">
 <label>রক্তের গ্রুপ</label><input id="blood" placeholder="A+, B+...">
 <button class="btn" onclick="createProfile()">SUBMIT FOR APPROVAL</button>
 <p style="text-align:center;margin-top:12px"><a href="profile.html" style="color:#d4af37;text-decoration:none">← Back to Login</a></p>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",authDomain: "mt-platoon-c408a.firebaseapp.com",projectId: "mt-platoon-c408a",storageBucket: "mt-platoon-c408a.firebasestorage.app",messagingSenderId: "431652749602",appId: "1:431652749602:web:7214305714f2d75995657b"};
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-
 window.createProfile=async()=>{
-  const data={
-    sena_no:document.getElementById('sena_no').value.trim(),
-    podobi:document.getElementById('podobi').value,
-    name:document.getElementById('name').value.trim(),
-    company:document.getElementById('company').value,
-    mobile:document.getElementById('mobile').value.trim(),
-    blood:document.getElementById('blood').value.trim(),
-    status:"pending",
-    created_at:new Date()
-  };
-  if(!data.sena_no || !data.name || !data.mobile){alert("সব ঘর পূরণ করুন");return;}
-  await addDoc(collection(db,"profiles"), data);
-  alert("প্রোফাইল সাবমিট হয়েছে! Admin Approve করলে Login করতে পারবেন।");
-  location.href="profile.html";
+const data={
+sena_no:document.getElementById('sena_no').value.trim(),
+podobi:document.getElementById('podobi').value,
+name:document.getElementById('name').value.trim(),
+company:document.getElementById('company').value,
+mobile:document.getElementById('mobile').value.trim(),
+blood:document.getElementById('blood').value.trim(),
+status:"pending",
+created_at:new Date()
+};
+if(!data.sena_no || !data.name || !data.mobile){alert("সব ঘর পূরণ করুন");return;}
+try{
+await addDoc(collection(db,"profiles"), data);
+alert("প্রোফাইল সাবমিট হয়েছে! Admin Approve করলে Login করতে পারবেন।");
+location.href="profile.html";
+}catch(e){alert("Error: "+e.message);console.log(e);}
 }
 </script>
 </body></html>
