@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Create Profile - MT PLATOON 4 BIR</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#070f0a;color:#7aff8a;font-family:system-ui;padding:15px}.wrap{max-width:420px;margin:auto;background:#111;padding:22px;border-radius:18px;border:1px solid #7aff8a}input,select{width:100%;padding:12px;margin-top:8px;background:#000;color:#7aff8a;border:1px solid #7aff8a;border-radius:8px}label{font-size:12px;margin-top:12px;display:block}.btn{width:100%;margin-top:18px;padding:14px;background:#7aff8a;color:#000;font-weight:900;border:none;border-radius:10px;cursor:pointer}</style>
+</head><body>
+<div class="wrap">
+<h3 style="text-align:center">Create New Profile</h3>
+<label>সেনা নং</label><input id="sena_no" placeholder="যেমন: 7238105">
+<label>পদবি</label><select id="podobi"><option>Sepoy</option><option>LCpl</option><option>Cpl</option><option>Snk</option></select>
+<label>নাম</label><input id="name" placeholder="নাম লিখুন">
+<label>কোম্পানি</label><select id="company"><option>এ</option><option>বি</option><option>সি</option><option>ডি</option><option>সদর</option></select>
+<label>মোবাইল</label><input id="mobile" placeholder="মোবাইল নং (পাসওয়ার্ড হিসেবে ব্যবহার হবে)">
+<label>রক্তের গ্রুপ</label><input id="blood" placeholder="A+, B+...">
+<button class="btn" onclick="createProfile()">SUBMIT FOR APPROVAL</button>
+<p style="text-align:center;margin-top:12px"><a href="profile.html" style="color:#d4af37;text-decoration:none">← Back to Login</a></p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",authDomain: "mt-platoon-c408a.firebaseapp.com",projectId: "mt-platoon-c408a",storageBucket: "mt-platoon-c408a.firebasestorage.app",messagingSenderId: "431652749602",appId: "1:431652749602:web:7214305714f2d75995657b"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+
+window.createProfile=async()=>{
+  const data={
+    sena_no:document.getElementById('sena_no').value.trim(),
+    podobi:document.getElementById('podobi').value,
+    name:document.getElementById('name').value.trim(),
+    company:document.getElementById('company').value,
+    mobile:document.getElementById('mobile').value.trim(),
+    blood:document.getElementById('blood').value.trim(),
+    status:"pending",
+    created_at:new Date()
+  };
+  if(!data.sena_no || !data.name || !data.mobile){alert("সব ঘর পূরণ করুন");return;}
+  await addDoc(collection(db,"profiles"), data);
+  alert("প্রোফাইল সাবমিট হয়েছে! Admin Approve করলে Login করতে পারবেন।");
+  location.href="profile.html";
+}
+</script>
+</body></html>
