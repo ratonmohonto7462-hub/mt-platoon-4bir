@@ -3,64 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>প্রোফাইল - MT Platoon</title>
+<title>MT PLATOON</title>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:system-ui;background:#eef2f7;padding:15px}
-.box{max-width:480px;margin:25px auto;background:#fff;padding:24px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
-h2{text-align:center;color:#0a4d2a;margin:0 0 5px} p.sub{text-align:center;color:#666;margin:0 0 18px;font-size:13px}
-label{display:block;margin-top:14px;font-weight:700;font-size:14px} 
-input,select{width:100%;padding:13px;margin-top:6px;border:1.5px solid #cbd5e1;border-radius:11px;font-size:16px}
-button{width:100%;margin-top:22px;padding:14px;background:#0a4d2a;color:#fff;border:none;border-radius:11px;font-size:17px;font-weight:800}
-#ok{display:none;text-align:center;margin-top:15px;color:#0a7a3a;font-weight:800}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
+*{box-sizing:border-box; font-family:'Noto Sans Bengali', sans-serif; margin:0; padding:0}
+body{background:#0a2e18; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:15px}
+.card{width:100%; max-width:380px; background:#123b22; border:2px solid #c9a84c; border-radius:25px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.header{background:#c9a84c; padding:14px 20px; display:flex; align-items:center; gap:10px; color:#1a2e18; font-weight:800; font-size:18px}
+.header span{font-size:22px}
+.body{padding:25px 22px}
+.title{text-align:center; color:#f5e6a3; line-height:1.2}
+.title .bn{font-size:32px; font-weight:800}
+.title .en{font-size:26px; font-weight:700; color:white}
+.title .sm{font-size:16px; margin-top:4px}
+label{display:block; margin-top:18px; color:#f5e6a3; font-weight:700; font-size:15px}
+input{width:100%; padding:12px 15px; margin-top:6px; border:none; border-radius:12px; background:#f5f1d8; font-size:15px; outline:none}
+.btn-row{display:flex; gap:12px; margin-top:22px}
+.btn{flex:1; padding:12px; border:none; border-radius:12px; background:#c9a84c; color:#1a2e18; font-weight:800; font-size:15px; cursor:pointer; text-align:center; line-height:1.1}
+.btn small{display:block; font-size:12px; font-weight:600}
+.footer{text-align:center; margin-top:20px; color:#d9d9d9; font-size:13px}
+#formView{display:none}
+.back{color:#c9a84c; text-align:center; margin-top:15px; cursor:pointer; font-size:14px; text-decoration:underline}
+select{width:100%; padding:12px 15px; margin-top:6px; border:none; border-radius:12px; background:#f5f1d8; font-size:15px}
+#msg{color:#ffcc00; text-align:center; margin-top:12px; font-weight:700; display:none}
 </style>
 </head>
 <body>
-<div class="box">
-<h2>MT Platoon 4 BIR</h2>
-<p class="sub">নতুন প্রোফাইল ফর্ম</p>
-<form id="form">
-<label>সেনা নং</label><input id="sena" required placeholder="যেমন: 12345">
+<div class="card">
+<div class="header"><span>☆</span> MT PLATOON</div>
+<div class="body">
+
+<!-- LOGIN VIEW -->
+<div id="loginView">
+<div class="title">
+<div class="bn">স্বাগতম</div>
+<div class="en">Welcome</div>
+<div class="sm">লগইন করুন<br>Login to your account</div>
+</div>
+
+<label>সেনা নং / Sena No</label>
+<input id="loginSena" placeholder="আপনার সেনা নং দিন">
+
+<label>পাসওয়ার্ড / Password</label>
+<input id="loginPass" type="password" placeholder="মোবাইল নাম্বার দিন">
+
+<div class="btn-row">
+<button class="btn" id="loginBtn">লগইন<br><small>Login</small></button>
+<button class="btn" id="goCreate">প্রোফাইল তৈরি<br><small>Create Profile</small></button>
+</div>
+<div class="footer">নতুন ব্যবহারকারী?<br>Create your profile</div>
+<div id="msg"></div>
+</div>
+
+<!-- CREATE FORM VIEW -->
+<div id="formView">
+<div class="title"><div class="bn" style="font-size:24px">প্রোফাইল তৈরি</div><div class="sm">Create your profile</div></div>
+
+<label>সেনা নং</label><input id="sena" required>
 <label>পদবী</label><input id="podobi" required placeholder="যেমন: সৈনিক">
-<label>নাম</label><input id="name" required placeholder="পুরো নাম">
+<label>নাম</label><input id="name" required>
 <label>কোম্পানি</label>
 <select id="company" required>
-<option value="" disabled selected>কোম্পানি নির্বাচন করুন</option>
-<option value="এ">এ</option>
-<option value="বি">বি</option>
-<option value="সি">সি</option>
-<option value="ডি">ডি</option>
-<option value="সদর">সদর</option>
+<option value="" disabled selected>নির্বাচন করুন</option>
+<option value="এ">এ</option><option value="বি">বি</option><option value="সি">সি</option><option value="ডি">ডি</option><option value="সদর">সদর</option>
 </select>
 <label>রক্তের গ্রুপ</label>
 <select id="blood" required>
 <option value="" disabled selected>নির্বাচন করুন</option>
 <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
 </select>
-<label>মোবাইল নাম্বার</label><input id="mobile" type="tel" required placeholder="01XXXXXXXXX">
-<button type="submit" id="btn">সাবমিট করুন</button>
-</form>
-<div id="ok">✅ সফলভাবে জমা হয়েছে! MT CLK অনুমোদনের জন্য অপেক্ষা করুন।</div>
+<label>মোবাইল নাম্বার (এটাই পাসওয়ার্ড হবে)</label><input id="mobile" type="tel" required>
+
+<div class="btn-row">
+<button class="btn" id="submitBtn">সাবমিট<br><small>Submit</small></button>
+</div>
+<div class="back" id="goLogin">← লগইন পেজে ফিরে যান</div>
+</div>
+
+</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",
   authDomain: "mt-platoon-c408a.firebaseapp.com",
   projectId: "mt-platoon-c408a",
   storageBucket: "mt-platoon-c408a.firebasestorage.app",
   messagingSenderId: "431652749602",
-  appId: "1:431652749602:web:7214305714f2d75995657b",
-  measurementId: "G-T37KJERJ3K"
+  appId: "1:431652749602:web:7214305714f2d75995657b"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const form = document.getElementById('form');
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const b = document.getElementById('btn'); b.disabled=true; b.innerText="জমা হচ্ছে...";
-  await addDoc(collection(db, "profiles_pending"), {
+
+const loginView = document.getElementById('loginView');
+const formView = document.getElementById('formView');
+const msg = document.getElementById('msg');
+
+document.getElementById('goCreate').onclick = ()=>{ loginView.style.display='none'; formView.style.display='block'; msg.style.display='none'; }
+document.getElementById('goLogin').onclick = ()=>{ formView.style.display='none'; loginView.style.display='block'; }
+
+document.getElementById('submitBtn').addEventListener('click', async (e)=>{
+ e.preventDefault();
+ const btn = document.getElementById('submitBtn');
+ btn.disabled=true; btn.innerHTML="জমা হচ্ছে...";
+ try{
+  await addDoc(collection(db, "profiles"), {
     sena_no: document.getElementById('sena').value.trim(),
     podobi: document.getElementById('podobi').value.trim(),
     name: document.getElementById('name').value.trim(),
@@ -70,8 +120,27 @@ form.addEventListener('submit', async (e)=>{
     status: "pending",
     created_at: serverTimestamp()
   });
-  form.reset(); document.getElementById('ok').style.display='block';
-  b.disabled=false; b.innerText="সাবমিট করুন";
+  alert("✅ সফলভাবে জমা হয়েছে! MT CLK অনুমোদনের জন্য অপেক্ষা করুন।");
+  formView.style.display='none'; loginView.style.display='block';
+ }catch(err){ alert(err.message); }
+ btn.disabled=false; btn.innerHTML="সাবমিট<br><small>Submit</small>";
+});
+
+// LOGIN LOGIC - সেনা নং + মোবাইল নাম্বার
+document.getElementById('loginBtn').addEventListener('click', async ()=>{
+ const sena = document.getElementById('loginSena').value.trim();
+ const pass = document.getElementById('loginPass').value.trim();
+ if(!sena || !pass){ msg.innerText="সেনা নং ও মোবাইল দিন"; msg.style.display='block'; return; }
+ msg.innerText="চেক করা হচ্ছে..."; msg.style.display='block';
+ const q = query(collection(db, "profiles"), where("sena_no","==",sena), where("mobile","==",pass));
+ const snap = await getDocs(q);
+ if(snap.empty){ msg.innerText="❌ সেনা নং বা মোবাইল ভুল!"; return; }
+ const data = snap.docs[0].data();
+ if(data.status !== "approved"){ msg.innerText="⏳ আপনার আইডি এখনো Pending আছে, MT CLK অনুমোদন করলে লগইন করতে পারবেন।"; return; }
+ // Success
+ localStorage.setItem("mt_user", JSON.stringify(data));
+ msg.innerText="✅ লগইন সফল!"; 
+ window.location.href = "dashboard.html"; // তোমার ড্যাশবোর্ড পেজ
 });
 </script>
 </body>
