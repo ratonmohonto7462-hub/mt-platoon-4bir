@@ -1,28 +1,78 @@
-<label>সেনা নং</label>
-<input id="senaNo" required>
-
-<label>পদবী</label>
-<input id="podobi" required>
-
-<label>নাম</label>
-<input id="name" required>
-
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>প্রোফাইল - MT Platoon</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui;background:#eef2f7;padding:15px}
+.box{max-width:480px;margin:25px auto;background:#fff;padding:24px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+h2{text-align:center;color:#0a4d2a;margin:0 0 5px} p.sub{text-align:center;color:#666;margin:0 0 18px;font-size:13px}
+label{display:block;margin-top:14px;font-weight:700;font-size:14px} 
+input,select{width:100%;padding:13px;margin-top:6px;border:1.5px solid #cbd5e1;border-radius:11px;font-size:16px}
+button{width:100%;margin-top:22px;padding:14px;background:#0a4d2a;color:#fff;border:none;border-radius:11px;font-size:17px;font-weight:800}
+#ok{display:none;text-align:center;margin-top:15px;color:#0a7a3a;font-weight:800}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>MT Platoon 4 BIR</h2>
+<p class="sub">নতুন প্রোফাইল ফর্ম</p>
+<form id="form">
+<label>সেনা নং</label><input id="sena" required placeholder="যেমন: 12345">
+<label>পদবী</label><input id="podobi" required placeholder="যেমন: সৈনিক">
+<label>নাম</label><input id="name" required placeholder="পুরো নাম">
 <label>কোম্পানি</label>
 <select id="company" required>
-  <option>এ</option>
-  <option>বি</option>
-  <option>সি</option>
-  <option>ডি</option>
-  <option>সদর</option>
+<option value="" disabled selected>কোম্পানি নির্বাচন করুন</option>
+<option value="এ">এ</option>
+<option value="বি">বি</option>
+<option value="সি">সি</option>
+<option value="ডি">ডি</option>
+<option value="সদর">সদর</option>
 </select>
-
 <label>রক্তের গ্রুপ</label>
 <select id="blood" required>
-  <option>A+</option> <option>A-</option>
-  <option>B+</option> <option>B-</option>
-  <option>AB+</option> <option>AB-</option>
-  <option>O+</option> <option>O-</option>
+<option value="" disabled selected>নির্বাচন করুন</option>
+<option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
 </select>
+<label>মোবাইল নাম্বার</label><input id="mobile" type="tel" required placeholder="01XXXXXXXXX">
+<button type="submit" id="btn">সাবমিট করুন</button>
+</form>
+<div id="ok">✅ সফলভাবে জমা হয়েছে! MT CLK অনুমোদনের জন্য অপেক্ষা করুন।</div>
+</div>
 
-<label>মোবাইল নাম্বার</label>
-<input id="mobile" required>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",
+  authDomain: "mt-platoon-c408a.firebaseapp.com",
+  projectId: "mt-platoon-c408a",
+  storageBucket: "mt-platoon-c408a.firebasestorage.app",
+  messagingSenderId: "431652749602",
+  appId: "1:431652749602:web:7214305714f2d75995657b",
+  measurementId: "G-T37KJERJ3K"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const form = document.getElementById('form');
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const b = document.getElementById('btn'); b.disabled=true; b.innerText="জমা হচ্ছে...";
+  await addDoc(collection(db, "profiles_pending"), {
+    sena_no: document.getElementById('sena').value.trim(),
+    podobi: document.getElementById('podobi').value.trim(),
+    name: document.getElementById('name').value.trim(),
+    company: document.getElementById('company').value,
+    blood: document.getElementById('blood').value,
+    mobile: document.getElementById('mobile').value.trim(),
+    status: "pending",
+    created_at: serverTimestamp()
+  });
+  form.reset(); document.getElementById('ok').style.display='block';
+  b.disabled=false; b.innerText="সাবমিট করুন";
+});
+</script>
+</body>
+</html>
