@@ -7,12 +7,12 @@
 body{font-family:sans-serif;background:#0f172a;color:#fff;margin:0;padding:10px}
 .card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px}
 .member{padding:10px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px}
-.avatar{width:40px;height:40px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;flex-shrink:0}
+.avatar{width:40px;height:40px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px}
 .avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .msg{padding:8px 10px;background:#334155;border-radius:12px;margin:6px 0;display:flex;gap:8px;align-items:flex-start}
 .msg .avatar{width:32px;height:32px;font-size:14px}
-.msg-content{flex:1}
-input,button{padding:12px;border-radius:10px;border:none;margin:4px 0}
+.msg-content{flex:1;word-break:break-word}
+input,button{padding:12px;border-radius:10px;border:none}
 button{background:#22c55e;color:#000;font-weight:bold}
 #chatBox{max-height:380px;overflow-y:auto;background:#1e293b;padding:10px;border-radius:10px}
 small{font-size:11px;opacity:.6}
@@ -38,60 +38,50 @@ const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_n
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
 const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
 
-function getAvatar(name, picUrl){
+function getAvatar(name){
   let initial = name ? name.charAt(0).toUpperCase() : "M";
-  if(picUrl && picUrl.startsWith("http")){
-    return `<div class="avatar"><img src="${picUrl}" onerror="this.parentElement.innerHTML='${initial}'"></div>`;
-  }
-  return `<div class="avatar">${initial}</div>`;
+  return '<div class="avatar">'+initial+'</div>';
 }
-
 function formatTime(t){
   try{
-    let d = new Date(t);
+    let d=new Date(t);
     if(isNaN(d)) return "";
-    return d.toLocaleString('en-BD', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+    return d.toLocaleString('en-BD',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
   }catch{ return ""; }
 }
-
 function loadMembers(){
-  fetch(API+"?action=getMembers")
-  .then(r=>r.json())
-  .then(data=>{
+  fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{
     let html="";
     data.forEach(m=>{
-      let st = (m.status||'Active').trim();
-      // যদি Sheet এ photo column থাকে, m.photo আসবে
-      html+=`<div class="member">${getAvatar(m.name, m.photo)}<div style="flex:1"><b>${m.name}</b><br><small>${m.sena} • ${st}</small></div></div>`;
+      let st=(m.status||'Active').trim();
+      html+='<div class="member">'+getAvatar(m.name)+'<div style="flex:1"><b>'+m.name+'</b><br><small>'+m.sena+' • '+st+'</small></div></div>';
     });
     document.getElementById("members").innerHTML=html||"No member";
-  });
+  }).catch(()=>{document.getElementById("members").innerHTML="API Error - Check Sheet";});
 }
-
 function loadChat(){
-  fetch(API+"?action=getMessages")
-  .then(r=>r.json())
-  .then(data=>{
+  fetch(API+"?action=getMessages").then(r=>r.json()).then(data=>{
     let html="";
     data.forEach(c=>{
-      let nice = formatTime(c.time);
-      html+=`<div class="msg">${getAvatar(c.name)}<div class="msg-content"><b>${c.name}</b><br>${c.text}<br><small>${nice}</small></div></div>`;
+      let nice=formatTime(c.time);
+      html+='<div class="msg">'+getAvatar(c.name)+'<div class="msg-content"><b>'+c.name+'</b><br>'+c.text+'<br><small>'+nice+'</small></div></div>';
     });
-    let box = document.getElementById("chatBox");
-    box.innerHTML=html;
-    box.scrollTop = box.scrollHeight;
+    let box=document.getElementById("chatBox");
+    box.innerHTML=html||"No message yet";
+    box.scrollTop=box.scrollHeight;
   });
 }
-
 function sendMsg(){
   let text=document.getElementById("msgInput").value;
   if(!text) return;
-  fetch(API,{method:"POST",body:JSON.stringify({action:"sendMessage", sena:MY_SENA, name:MY_NAME, text:text, time:new Date().toISOString())}}).then(()=>{
+  fetch(API,{
+    method:"POST",
+    body:JSON.stringify({action:"sendMessage", sena:MY_SENA, name:MY_NAME, text:text, time:new Date().toISOString()})
+  }).then(()=>{
     document.getElementById("msgInput").value="";
     loadChat();
   });
 }
-
 loadMembers();
 loadChat();
 setInterval(loadChat,4000);
