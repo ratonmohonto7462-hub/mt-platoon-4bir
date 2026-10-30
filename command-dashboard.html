@@ -23,9 +23,12 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 .card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px 0;text-align:center;color:#fff}
 .big{font-size:64px;font-weight:bold;color:#22c55e}
 .secTitle{color:#0e5d3e;font-weight:800;font-size:16px;margin:20px 0 10px 0;display:flex;justify-content:space-between;align-items:center;border-left:4px solid #ffc107;padding-left:8px}
-.noticeItem{background:#fffbe6;border-left:4px solid #ffc107;padding:10px;border-radius:6px;margin-bottom:8px;font-size:13px}
+.noticeItem{background:#fffbe6;border-left:4px solid #ffc107;padding:10px;border-radius:6px;margin-bottom:8px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .callCard{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #ddd;padding:12px;border-radius:10px;margin-bottom:8px}
 .callBtn{background:#0e5d3e;color:#ffc107;padding:6px 14px;border-radius:15px;text-decoration:none;font-size:12px;font-weight:bold}
+.actionBtn{border:none;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;margin-left:4px}
+.editBtn{background:#0e5d3e;color:#ffc107}
+.delBtn{background:#c62828;color:#fff}
 .footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff}
 .bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10}
 .bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px;color:#fff}
@@ -57,15 +60,13 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
       </div>
       <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
         <div style="width:100%;height:220px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('ncoInput').click()"><img id="ncoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover"><span id="ncoPh">👤<br><b>MT NCO</b></span><input type="file" id="ncoInput" accept="image/*" style="display:none" onchange="uploadHome('mtnco', this)"></div>
-        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT NCO</div><div id="ncoName" style="font-weight:bold">Name Here</div><button id="ncoBtn" class="hidden" onclick="editName('mtnco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
+        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT NCO</div><div id="ncoName" style="font-weight:bold">Cpl Md Mehedi Hasan</div><button id="ncoBtn" class="hidden" onclick="editName('mtnco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
       </div>
     </div>
 
-    <!-- 1. NOTICE BOARD ONLY -->
     <div class="secTitle"><span>📢 NOTICE BOARD</span><button id="noticeAddBtn" class="hidden" onclick="addNotice()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div>
-    <div id="noticeList"><div class="noticeItem">📅 31 Oct: Welcome to MT Platoon App! সব তথ্য এখানে পাবেন।</div></div>
+    <div id="noticeList"></div>
 
-    <!-- 2. EMERGENCY ONLY -->
     <div class="secTitle"><span>🚨 EMERGENCY CONTACTS</span><button id="emergencyAddBtn" class="hidden" onclick="addEmergency()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div>
     <div id="emergencyList"></div>
 
@@ -103,11 +104,15 @@ function loadHome(){
   bannerPics=[]; for(let i=0;i<10;i++){ let v=localStorage.getItem("home_banner_"+i); if(v) bannerPics[i]=v; }
   ['qm','mtjco','mtnco','qm_name','mtjco_name','mtnco_name'].forEach(k=>{ let v=localStorage.getItem("home_"+k); if(v) applyHome(k,v); });
   initSlider();
-  let notices=JSON.parse(localStorage.getItem("notices")||"[]"); if(notices.length>0) renderNotices(notices);
-  let em=JSON.parse(localStorage.getItem("emergency")||"null"); if(em) renderEmergency(em); else renderEmergency([{name:"QM Sir", num:"01769-013433"},{name:"MT JCO", num:"01769-013434"},{name:"MT NCO", num:"01769-013435"},{name:"Workshop", num:"01769-013436"}]);
+  let notices=JSON.parse(localStorage.getItem("notices")||"[]"); 
+  if(notices.length==0){ notices=[{date:"10/31/2026", text:"যারা নাইট পাশ যেতে ইচ্ছুক তারা লিভ কার্ড জমা করেন"}]; localStorage.setItem("notices", JSON.stringify(notices)); }
+  renderNotices(notices);
+  let em=JSON.parse(localStorage.getItem("emergency")||"null"); 
+  if(!em){ em=[{name:"QM", sub:"Mohammad Ali Akbor Arko", num:"01769-013433"}]; localStorage.setItem("emergency", JSON.stringify(em)); }
+  renderEmergency(em);
   fetch(API+"?action=getHomeImages").then(r=>r.json()).then(d=>{
     let ch=false; for(let i=0;i<10;i++){ if(d["banner_"+i]){ localStorage.setItem("home_banner_"+i, d["banner_"+i]); bannerPics[i]=d["banner_"+i]; ch=true; } }
-    for(let k in d){ if(k.includes("banner_")==false && d[k]){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); } }
+    for(let k in d){ if(k.includes("banner_")==false && d[k] && k!="notices" && k!="emergency"){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); } }
     if(ch) initSlider();
     if(d.notices){ localStorage.setItem("notices", d.notices); renderNotices(JSON.parse(d.notices)); }
     if(d.emergency){ localStorage.setItem("emergency", d.emergency); renderEmergency(JSON.parse(d.emergency)); }
@@ -117,10 +122,32 @@ function applyHome(k,v){ if(k=='qm'){ document.getElementById("qmImg").src=v; do
 document.getElementById("bannerFileInput").addEventListener("change", function(){ let f=this.files[0]; if(!f||editTarget<0) return; let r=new FileReader(); r.onload=e=>{ let b=e.target.result; localStorage.setItem("home_banner_"+editTarget, b); bannerPics[editTarget]=b; initSlider(); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"banner_"+editTarget, image:b})}); }; r.readAsDataURL(f);});
 function uploadHome(type, input){ let file=input.files[0]; if(!file) return; let reader=new FileReader(); reader.onload=e=>{ let b=e.target.result; localStorage.setItem("home_"+type, b); applyHome(type,b); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:b})}); }; reader.readAsDataURL(file);}
 function editName(type){ let cur=localStorage.getItem("home_"+type+"_name")||""; let nm=prompt("নাম লিখো:", cur); if(nm){ localStorage.setItem("home_"+type+"_name", nm); applyHome(type+"_name", nm); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type+"_name", image:nm})}); }}
-function renderNotices(list){ let h=""; list.forEach(n=>{ h+='<div class="noticeItem">📅 '+n.date+': '+n.text+'</div>'; }); document.getElementById("noticeList").innerHTML=h||'<div class="noticeItem">No Notice</div>'; }
+
+// NOTICE WITH EDIT DELETE
+function renderNotices(list){ 
+  let h=""; 
+  list.forEach((n,i)=>{ 
+    let adminBtns = IS_ADMIN ? `<div style="display:flex;gap:4px"><button class="actionBtn editBtn" onclick="editNotice(${i})">✏️ Edit</button><button class="actionBtn delBtn" onclick="deleteNotice(${i})">🗑️ Del</button></div>` : "";
+    h+=`<div class="noticeItem"><div style="flex:1">📅 ${n.date}: ${n.text}</div>${adminBtns}</div>`; 
+  }); 
+  document.getElementById("noticeList").innerHTML=h||'<div class="noticeItem">No Notice</div>'; 
+}
 function addNotice(){ let txt=prompt("Notice লিখো:"); if(!txt) return; let list=JSON.parse(localStorage.getItem("notices")||"[]"); list.unshift({date:new Date().toLocaleDateString(), text:txt}); localStorage.setItem("notices", JSON.stringify(list)); renderNotices(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"notices", image:JSON.stringify(list)})}); }
-function renderEmergency(list){ let h=""; list.forEach(e=>{ h+='<div class="callCard"><div><b>'+e.name+'</b><br><small>'+e.num+'</small></div><a class="callBtn" href="tel:'+e.num+'">📞 CALL</a></div>'; }); document.getElementById("emergencyList").innerHTML=h; }
-function addEmergency(){ let name=prompt("নাম লিখো (যেমন: CO Sir):"); if(!name) return; let num=prompt("নাম্বার লিখো:"); if(!num) return; let list=JSON.parse(localStorage.getItem("emergency")||"[]"); list.push({name:name, num:num}); localStorage.setItem("emergency", JSON.stringify(list)); renderEmergency(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"emergency", image:JSON.stringify(list)})}); }
+function editNotice(i){ let list=JSON.parse(localStorage.getItem("notices")||"[]"); let cur=list[i].text; let txt=prompt("Edit Notice:", cur); if(txt===null) return; list[i].text=txt; list[i].date=new Date().toLocaleDateString(); localStorage.setItem("notices", JSON.stringify(list)); renderNotices(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"notices", image:JSON.stringify(list)})}); }
+function deleteNotice(i){ if(!confirm("Delete করবা?")) return; let list=JSON.parse(localStorage.getItem("notices")||"[]"); list.splice(i,1); localStorage.setItem("notices", JSON.stringify(list)); renderNotices(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"notices", image:JSON.stringify(list)})}); }
+
+// EMERGENCY WITH EDIT DELETE
+function renderEmergency(list){ 
+  let h=""; 
+  list.forEach((e,i)=>{ 
+    let adminBtns = IS_ADMIN ? `<div style="display:flex;gap:4px"><button class="actionBtn editBtn" onclick="editEmergency(${i})">✏️</button><button class="actionBtn delBtn" onclick="deleteEmergency(${i})">🗑️</button></div>` : "";
+    h+=`<div class="callCard"><div><b>${e.name}</b><br><small>${e.sub||e.num}</small></div><div style="display:flex;align-items:center;gap:6px"><a class="callBtn" href="tel:${e.num}">📞 CALL</a>${adminBtns}</div></div>`; 
+  }); 
+  document.getElementById("emergencyList").innerHTML=h; 
+}
+function addEmergency(){ let name=prompt("পদবি (যেমন: QM):"); if(!name) return; let sub=prompt("নাম (যেমন: Mohammad Ali Akbor Arko):"); let num=prompt("নাম্বার:"); if(!num) return; let list=JSON.parse(localStorage.getItem("emergency")||"[]"); list.push({name:name, sub:sub||"", num:num}); localStorage.setItem("emergency", JSON.stringify(list)); renderEmergency(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"emergency", image:JSON.stringify(list)})}); }
+function editEmergency(i){ let list=JSON.parse(localStorage.getItem("emergency")||"[]"); let cur=list[i]; let name=prompt("পদবি Edit:", cur.name); if(name===null) return; let sub=prompt("নাম Edit:", cur.sub||""); let num=prompt("নাম্বার Edit:", cur.num); if(num===null) return; list[i]={name:name, sub:sub, num:num}; localStorage.setItem("emergency", JSON.stringify(list)); renderEmergency(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"emergency", image:JSON.stringify(list)})}); }
+function deleteEmergency(i){ if(!confirm("Delete করবা?")) return; let list=JSON.parse(localStorage.getItem("emergency")||"[]"); list.splice(i,1); localStorage.setItem("emergency", JSON.stringify(list)); renderEmergency(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"emergency", image:JSON.stringify(list)})}); }
 
 function loadMembers(){ fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{ data.sort((a,b)=> parseInt(a.sena) - parseInt(b.sena)); document.getElementById("memberCountHome").innerText=data.length; let html=""; data.forEach((m,i)=>{ let ini=m.name?m.name.charAt(0).toUpperCase():"M"; html+='<div style="padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px"><div style="opacity:.5">'+(i+1)+'.</div><div style="width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold">'+ini+'</div><div><b>'+m.name+'</b><br><span style="font-size:12px;opacity:.6">'+m.sena+'</span></div></div>'; }); document.getElementById("memberListBox").innerHTML=html; }); } 
 if(IS_ADMIN){ document.getElementById("adminEditBox").classList.remove("hidden"); document.getElementById("qmBtn").classList.remove("hidden"); document.getElementById("jcoBtn").classList.remove("hidden"); document.getElementById("ncoBtn").classList.remove("hidden"); document.getElementById("noticeAddBtn").classList.remove("hidden"); document.getElementById("emergencyAddBtn").classList.remove("hidden"); }
