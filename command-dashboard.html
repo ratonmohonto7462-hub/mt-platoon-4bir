@@ -6,7 +6,7 @@
 <style> 
 body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-bottom:80px} 
 .topArmy{background:#0a1a12;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;color:#fff}
-.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden}
+.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden;cursor:pointer}
 .greenBar{background:#0e5d3e;color:#ffc107;padding:10px 15px;font-weight:bold;font-size:14px}
 .bannerArmy{background:#1a2e1a;color:#fff;padding:14px 15px;display:flex;align-items:center;gap:12px;font-weight:bold;font-size:18px;border-bottom:3px solid #ffc107}
 .slider{width:100%;height:260px;background:#000;position:relative;overflow:hidden}
@@ -31,21 +31,19 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 </head> 
 <body> 
 
-<div class="topArmy"><b>4 BIR - MT PLATOON</b><div id="topProfile" class="profilePic">R</div></div> 
+<div class="topArmy"><b>4 BIR - MT PLATOON</b><div id="topProfile" class="profilePic" onclick="location.href='profile.html'">R</div></div> 
 
 <div id="homeView">
   <div class="greenBar">📞 Call Us: 01769-013433</div>
   <div class="bannerArmy"><div style="width:42px;height:42px;background:#ffc107;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000">⚔️</div> Welcome to Mt Platoon</div>
 
-  <!-- 10 PIC SLIDER - 2 SEC AUTO -->
   <div class="slider" id="sliderBox">
     <div id="sliderImgs"></div>
     <div class="dots" id="dots"></div>
   </div>
 
-  <!-- ADMIN EDIT 10 PIC -->
   <div id="adminEditBox" class="editPanel hidden">
-    <b style="color:#0e5d3e">📸 Edit 10 Banner Pics (Admin Only - Click to Change)</b>
+    <b style="color:#0e5d3e">📸 Edit 10 Banner Pics (Only You Can Edit)</b>
     <div class="editGrid" id="editGrid"></div>
     <input type="file" id="bannerFileInput" accept="image/*" style="display:none">
   </div>
@@ -54,28 +52,28 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
     <h3 style="text-align:center;margin:0 0 15px 0;color:#0e5d3e">PLATOON COMMAND</h3>
     <div style="display:flex;flex-direction:column;gap:18px">
       <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
-        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="document.getElementById('qmInput').click()">
+        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('qmInput').click()">
           <img id="qmImg" src="" style="display:none;width:100%;height:100%;object-fit:cover">
           <span id="qmPh">👤<br><b>QM</b></span>
           <input type="file" id="qmInput" accept="image/*" style="display:none" onchange="uploadHome('qm', this)">
         </div>
-        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">QM</div><div id="qmName" style="font-weight:bold;margin-top:4px">Name Here</div><button onclick="editName('qm')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
+        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">QM</div><div id="qmName" style="font-weight:bold;margin-top:4px">Name Here</div><button id="qmBtn" class="hidden" onclick="editName('qm')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
       </div>
       <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
-        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="document.getElementById('jcoInput').click()">
+        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('jcoInput').click()">
           <img id="jcoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover">
           <span id="jcoPh">👤<br><b>MT JCO</b></span>
           <input type="file" id="jcoInput" accept="image/*" style="display:none" onchange="uploadHome('mtjco', this)">
         </div>
-        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT JCO</div><div id="jcoName" style="font-weight:bold;margin-top:4px">Name Here</div><button onclick="editName('mtjco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
+        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT JCO</div><div id="jcoName" style="font-weight:bold;margin-top:4px">Name Here</div><button id="jcoBtn" class="hidden" onclick="editName('mtjco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
       </div>
       <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
-        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="document.getElementById('ncoInput').click()">
+        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('ncoInput').click()">
           <img id="ncoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover">
           <span id="ncoPh">👤<br><b>MT NCO</b></span>
           <input type="file" id="ncoInput" accept="image/*" style="display:none" onchange="uploadHome('mtnco', this)">
         </div>
-        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT NCO</div><div id="ncoName" style="font-weight:bold;margin-top:4px">Name Here</div><button onclick="editName('mtnco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
+        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT NCO</div><div id="ncoName" style="font-weight:bold;margin-top:4px">Name Here</div><button id="ncoBtn" class="hidden" onclick="editName('mtnco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
       </div>
     </div>
     <div class="card"><div style="opacity:.8">👥 Group Members</div><div class="big" id="memberCountHome">0</div></div> 
@@ -101,9 +99,11 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
 const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
-const MY_SENA = localStorage.getItem("sena_no") || "4521328";
 const IS_ADMIN = MY_SENA == "4521328";
+
 document.getElementById("topProfile").innerText = MY_NAME.charAt(0).toUpperCase(); 
+let savedPic = localStorage.getItem("profile_pic"); 
+if(savedPic){ document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'" style="width:100%;height:100%;border-radius:50%">'; }
 
 let bannerPics = [];
 let curIdx = 0;
@@ -127,20 +127,16 @@ function initSlider(){
   let dots = document.getElementById("dots");
   let grid = document.getElementById("editGrid");
   container.innerHTML=""; dots.innerHTML=""; grid.innerHTML="";
-  
   for(let i=0;i<10;i++){
     let img = document.createElement("img");
     img.id="banner_"+i;
-    if(bannerPics[i]) img.src=bannerPics[i];
-    else img.src="https://images.unsplash.com/photo-1540962351504-03099e0a754b";
+    img.src = bannerPics[i] || "https://images.unsplash.com/photo-1540962351504-03099e0a754b";
     if(i==0) img.classList.add("active");
     container.appendChild(img);
-
     let dot = document.createElement("span");
     if(i==0) dot.classList.add("active");
     dot.onclick=()=>{ showSlide(i); };
     dots.appendChild(dot);
-
     let box = document.createElement("div");
     box.innerHTML = bannerPics[i] ? '<img src="'+bannerPics[i]+'"><div style="position:absolute;top:0;left:0;background:#0e5d3e;color:#fff;font-size:8px;padding:1px 3px">'+(i+1)+'</div>' : '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:10px">'+(i+1)+'</div>';
     box.onclick=()=>{ editTarget=i; document.getElementById("bannerFileInput").click(); };
@@ -157,29 +153,17 @@ function showSlide(n){
 
 function startAuto(){
   clearInterval(sliderInterval);
-  sliderInterval = setInterval(()=>{
-    curIdx = (curIdx+1)%10;
-    showSlide(curIdx);
-  }, 2000);
+  sliderInterval = setInterval(()=>{ curIdx = (curIdx+1)%10; showSlide(curIdx); }, 2000);
 }
 
 function loadHome(){
   bannerPics=[];
-  for(let i=0;i<10;i++){
-    let v = localStorage.getItem("home_banner_"+i);
-    if(v) bannerPics[i]=v;
-  }
-  ['qm','mtjco','mtnco','qm_name','mtjco_name','mtnco_name'].forEach(k=>{
-    let v = localStorage.getItem("home_"+k);
-    if(v) applyHome(k,v);
-  });
+  for(let i=0;i<10;i++){ let v = localStorage.getItem("home_banner_"+i); if(v) bannerPics[i]=v; }
+  ['qm','mtjco','mtnco','qm_name','mtjco_name','mtnco_name'].forEach(k=>{ let v = localStorage.getItem("home_"+k); if(v) applyHome(k,v); });
   initSlider();
-  
   fetch(API+"?action=getHomeImages").then(r=>r.json()).then(d=>{
     let changed=false;
-    for(let i=0;i<10;i++){
-      if(d["banner_"+i]){ localStorage.setItem("home_banner_"+i, d["banner_"+i]); bannerPics[i]=d["banner_"+i]; changed=true; }
-    }
+    for(let i=0;i<10;i++){ if(d["banner_"+i]){ localStorage.setItem("home_banner_"+i, d["banner_"+i]); bannerPics[i]=d["banner_"+i]; changed=true; } }
     for(let k in d){ if(k.includes("banner_")==false){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); } }
     if(changed) initSlider();
   }).catch(()=>{});
@@ -202,7 +186,7 @@ document.getElementById("bannerFileInput").addEventListener("change", function()
     localStorage.setItem("home_banner_"+editTarget, b64);
     bannerPics[editTarget]=b64;
     initSlider();
-    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"banner_"+editTarget, image:b64})}).then(()=> alert((editTarget+1)+" নং ছবি Saved! সবাই দেখবে ✅"));
+    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"banner_"+editTarget, image:b64})}).then(()=> alert((editTarget+1)+" নং ছবি Saved!"));
   };
   reader.readAsDataURL(file);
 });
@@ -238,7 +222,12 @@ document.getElementById("memberListBox").innerHTML = html;
 }); 
 } 
 
-if(IS_ADMIN){ document.getElementById("adminEditBox").classList.remove("hidden"); }
+if(IS_ADMIN){ 
+  document.getElementById("adminEditBox").classList.remove("hidden"); 
+  document.getElementById("qmBtn").classList.remove("hidden");
+  document.getElementById("jcoBtn").classList.remove("hidden");
+  document.getElementById("ncoBtn").classList.remove("hidden");
+}
 loadHome();
 loadMembers(); 
 </script> 
