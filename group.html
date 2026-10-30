@@ -6,27 +6,31 @@
 <style>
 body{font-family:sans-serif;background:#0f172a;color:#fff;margin:0;padding:10px}
 .card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px}
-.member{padding:8px;border-bottom:1px solid #334155;display:flex;justify-content:space-between}
-.msg{padding:6px 10px;background:#334155;border-radius:8px;margin:5px 0}
-input,button{padding:10px;border-radius:8px;border:none;margin:4px 0}
-button{background:#22c55e;color:#000;font-weight:bold;width:100%}
-#chatBox{max-height:300px;overflow-y:auto;background:#1e293b;padding:10px;border-radius:10px}
+.member{padding:10px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px}
+.avatar{width:40px;height:40px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;flex-shrink:0}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.msg{padding:8px 10px;background:#334155;border-radius:12px;margin:6px 0;display:flex;gap:8px;align-items:flex-start}
+.msg .avatar{width:32px;height:32px;font-size:14px}
+.msg-content{flex:1}
+input,button{padding:12px;border-radius:10px;border:none;margin:4px 0}
+button{background:#22c55e;color:#000;font-weight:bold}
+#chatBox{max-height:380px;overflow-y:auto;background:#1e293b;padding:10px;border-radius:10px}
+small{font-size:11px;opacity:.6}
 </style>
 </head>
 <body>
-
 <h2>🇧🇩 MT Platoon 4 BIR - Group</h2>
-
 <div class="card">
 <h3>Members</h3>
 <div id="members">Loading members...</div>
 </div>
-
 <div class="card">
 <h3>Group Chat</h3>
 <div id="chatBox">Loading chat...</div>
-<input id="msgInput" placeholder="Message likho..." style="width:70%">
-<button onclick="sendMsg()" style="width:28%">Send</button>
+<div style="display:flex;gap:6px;margin-top:8px">
+<input id="msgInput" placeholder="Message likho..." style="flex:1">
+<button onclick="sendMsg()" style="width:80px">Send</button>
+</div>
 </div>
 
 <script>
@@ -34,41 +38,55 @@ const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_n
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
 const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
 
-// 1. Load Members
+function getAvatar(name, picUrl){
+  let initial = name ? name.charAt(0).toUpperCase() : "M";
+  if(picUrl && picUrl.startsWith("http")){
+    return `<div class="avatar"><img src="${picUrl}" onerror="this.parentElement.innerHTML='${initial}'"></div>`;
+  }
+  return `<div class="avatar">${initial}</div>`;
+}
+
+function formatTime(t){
+  try{
+    let d = new Date(t);
+    if(isNaN(d)) return "";
+    return d.toLocaleString('en-BD', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+  }catch{ return ""; }
+}
+
 function loadMembers(){
   fetch(API+"?action=getMembers")
   .then(r=>r.json())
   .then(data=>{
     let html="";
     data.forEach(m=>{
-      html+=`<div class="member"><span>${m.sena} - ${m.name}</span><span>${m.status||'Active'}</span></div>`;
+      let st = (m.status||'Active').trim();
+      // যদি Sheet এ photo column থাকে, m.photo আসবে
+      html+=`<div class="member">${getAvatar(m.name, m.photo)}<div style="flex:1"><b>${m.name}</b><br><small>${m.sena} • ${st}</small></div></div>`;
     });
-    if(data.length==0) html="No member found";
-    document.getElementById("members").innerHTML=html;
+    document.getElementById("members").innerHTML=html||"No member";
   });
 }
 
-// 2. Load Chat
 function loadChat(){
   fetch(API+"?action=getMessages")
   .then(r=>r.json())
   .then(data=>{
     let html="";
     data.forEach(c=>{
-      html+=`<div class="msg"><b>${c.name}:</b> ${c.text} <small style="opacity:.6">${c.time||''}</small></div>`;
+      let nice = formatTime(c.time);
+      html+=`<div class="msg">${getAvatar(c.name)}<div class="msg-content"><b>${c.name}</b><br>${c.text}<br><small>${nice}</small></div></div>`;
     });
-    document.getElementById("chatBox").innerHTML=html;
+    let box = document.getElementById("chatBox");
+    box.innerHTML=html;
+    box.scrollTop = box.scrollHeight;
   });
 }
 
-// 3. Send Message
 function sendMsg(){
   let text=document.getElementById("msgInput").value;
   if(!text) return;
-  fetch(API,{
-    method:"POST",
-    body:JSON.stringify({action:"sendMessage", sena:MY_SENA, name:MY_NAME, text:text, time:new Date().toLocaleString()})
-  }).then(()=>{
+  fetch(API,{method:"POST",body:JSON.stringify({action:"sendMessage", sena:MY_SENA, name:MY_NAME, text:text, time:new Date().toISOString())}}).then(()=>{
     document.getElementById("msgInput").value="";
     loadChat();
   });
@@ -76,8 +94,7 @@ function sendMsg(){
 
 loadMembers();
 loadChat();
-setInterval(loadChat,5000); // 5 sec por por auto refresh
+setInterval(loadChat,4000);
 </script>
-
 </body>
 </html>
