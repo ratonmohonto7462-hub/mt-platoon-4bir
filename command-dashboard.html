@@ -4,47 +4,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
 <title>MT Platoon</title> 
 <style> 
-body{margin:0;font-family:sans-serif;background:#0a1a12;color:#fff;padding-bottom:80px} 
-.top{background:#143d27;padding:12px 15px;display:flex;justify-content:space-between;align-items:center} 
+body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-bottom:80px} 
+.topArmy{background:#0a1a12;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;color:#fff}
 .profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden;cursor:pointer} 
-.profilePic img{width:100%;height:100%;object-fit:cover} 
-.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center} 
-.big{font-size:64px;font-weight:bold;color:#22c55e} 
-.sectionTitle{padding:0 15px;margin-top:20px;font-weight:bold;opacity:.8} 
-.memberList{background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px} 
-.member{padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px} 
-.member:last-child{border:none} 
-.avatar{width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0} 
-.sena{font-size:12px;opacity:.6} 
-.folder{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;cursor:pointer} 
-.bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10} 
-.bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px} 
-.bottom div.active{opacity:1;color:#22c55e;font-weight:bold} 
-.hidden{display:none} 
+.greenBar{background:#0e5d3e;color:#ffc107;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:bold}
+.bannerArmy{background:#1a2e1a;color:#fff;padding:14px 15px;display:flex;align-items:center;gap:12px;font-weight:bold;font-size:18px;letter-spacing:1px;border-bottom:3px solid #ffc107}
+.slider{width:100%;height:220px;background:#0e5d3e;overflow:hidden;position:relative}
+.slider img{width:100%;height:100%;object-fit:cover}
+.whiteBox{background:#fff;text-align:center;padding:20px 15px}
+.coasImg{width:260px;height:340px;margin:10px auto;background:#0e5d3e;border-radius:12px;overflow:hidden;border:3px solid #0e5d3e;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.coasImg img{width:100%;height:100%;object-fit:cover}
+.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center;color:#fff}
+.big{font-size:64px;font-weight:bold;color:#22c55e}
+.footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff;border-top:1px solid #eee}
+.memberList{background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px;color:#fff}
+.member{padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.folder{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;color:#fff}
+.bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10}
+.bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px;color:#fff}
+.bottom div.active{opacity:1;color:#22c55e;font-weight:bold}
+.hidden{display:none}
 </style> 
 </head> 
 <body> 
-<div class="top"> 
+
+<div class="topArmy"> 
 <b>4 BIR - MT PLATOON</b> 
 <div id="topProfile" class="profilePic" onclick="location.href='profile.html'">R</div> 
 </div> 
 
-<!-- HOME VIEW - Eta main Welcome page -->
+<!-- HOME VIEW - Tumar chaoa moto -->
 <div id="homeView">
-  <div style="padding:20px 15px 5px 15px"> 
-    <h1 style="margin:0;font-size:28px">Welcome to Mt Platoon</h1> 
-    <p style="opacity:.6;margin:5px 0;font-size:14px">Stay prepared. Everything up to date.</p> 
-  </div> 
-  <div class="card"> 
-    <div style="opacity:.8">👥 Group Members</div> 
-    <div class="big" id="memberCountHome">0</div> 
-  </div> 
+  <!-- 1 number - Call Us -->
+  <div class="greenBar">
+    <div>📞 Call Us: 01713 161979</div>
+    <div>⬇️ APPLY NOW</div>
+  </div>
+  
+  <!-- 3 number - Welcome to Mt Platoon -->
+  <div class="bannerArmy">
+    <div style="width:42px;height:42px;background:#ffc107;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000">⚔️</div>
+    <div>Welcome to Mt Platoon</div>
+  </div>
+
+  <!-- 4 number - Helicopter Slider -->
+  <div class="slider">
+    <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b" alt="army">
+  </div>
+
+  <!-- Baki - COAS + Members -->
+  <div class="whiteBox">
+    <div class="coasImg">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/General_Waker-Uz-Zaman.jpg/440px-General_Waker-Uz-Zaman.jpg" onerror="this.src='https://via.placeholder.com/260x340?text=MT+PLATOON'">
+    </div>
+
+    <div class="card"> 
+      <div style="opacity:.8">👥 Group Members</div> 
+      <div class="big" id="memberCountHome">1</div> 
+    </div> 
+  </div>
+  <div class="footerArmy">Copyright © 2026 <span style="color:#0e5d3e">BANGLADESH ARMY</span></div>
 </div>
 
-<!-- DASHBOARD VIEW - Vitore Group Chat Folder Hisebe Thakbe -->
-<div id="dashboardView" class="hidden"> 
-  <div style="padding:15px"><h3 style="margin:0">Dashboard</h3></div>
-  <a href="group.html" style="text-decoration:none;color:#fff"> 
+<!-- DASHBOARD VIEW -->
+<div id="dashboardView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
+  <div style="padding:15px;color:#fff"><h3 style="margin:0">Dashboard</h3></div>
+  <a href="group.html" style="text-decoration:none"> 
     <div class="folder"> 
       <div style="font-size:45px">💬</div> 
       <h2 style="margin:10px 0 0 0">GROUP CHAT</h2> 
@@ -52,9 +78,9 @@ body{margin:0;font-family:sans-serif;background:#0a1a12;color:#fff;padding-botto
   </a> 
 </div> 
 
-<!-- GROUP VIEW - Niche Dane Group er Vitore Seniority List -->
-<div id="groupView" class="hidden"> 
-  <div class="sectionTitle">Group Members - Seniority Wise</div> 
+<!-- GROUP VIEW -->
+<div id="groupView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
+  <div style="padding:15px;color:#fff;font-weight:bold">Group Members - Seniority Wise</div> 
   <div class="memberList" id="memberListBox"> 
     <div style="text-align:center;padding:20px;opacity:.7">Loading...</div> 
   </div> 
@@ -69,13 +95,9 @@ body{margin:0;font-family:sans-serif;background:#0a1a12;color:#fff;padding-botto
 <script> 
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
 const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto"; 
-let initial = MY_NAME.charAt(0).toUpperCase(); 
-document.getElementById("topProfile").innerText = initial; 
+document.getElementById("topProfile").innerText = MY_NAME.charAt(0).toUpperCase(); 
 let savedPic = localStorage.getItem("profile_pic"); 
-if(savedPic){ 
-document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'" style="width:100%;height:100%;border-radius:50%">'; 
-} 
-
+if(savedPic){ document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'" style="width:100%;height:100%;border-radius:50%">'; }
 function switchTab(tab){ 
   document.getElementById('dashboardView').classList.add('hidden'); 
   document.getElementById('homeView').classList.add('hidden'); 
@@ -83,27 +105,18 @@ function switchTab(tab){
   document.getElementById('btnDash').classList.remove('active'); 
   document.getElementById('btnHome').classList.remove('active'); 
   document.getElementById('btnGroup').classList.remove('active'); 
-
-  if(tab==='dash'){ 
-    document.getElementById('dashboardView').classList.remove('hidden'); 
-    document.getElementById('btnDash').classList.add('active'); 
-  }else if(tab==='home'){
-    document.getElementById('homeView').classList.remove('hidden'); 
-    document.getElementById('btnHome').classList.add('active'); 
-  }else{ 
-    document.getElementById('groupView').classList.remove('hidden'); 
-    document.getElementById('btnGroup').classList.add('active'); 
-  } 
+  if(tab==='dash'){ document.getElementById('dashboardView').classList.remove('hidden'); document.getElementById('btnDash').classList.add('active'); }
+  else if(tab==='home'){ document.getElementById('homeView').classList.remove('hidden'); document.getElementById('btnHome').classList.add('active'); }
+  else{ document.getElementById('groupView').classList.remove('hidden'); document.getElementById('btnGroup').classList.add('active'); }
 } 
-
 function loadMembers(){ 
 fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{ 
 data.sort((a,b)=> parseInt(a.sena) - parseInt(b.sena)); 
 document.getElementById("memberCountHome").innerText = data.length; 
 let html=""; 
-data.forEach((m, index)=>{ 
+data.forEach((m, i)=>{ 
 let ini = m.name ? m.name.charAt(0).toUpperCase() : "M"; 
-html+='<div class="member"><div style="min-width:20px;opacity:.5">'+(index+1)+'.</div><div class="avatar">'+ini+'</div><div><b>'+m.name+'</b><br><span class="sena">'+m.sena+'</span></div></div>'; 
+html+='<div class="member"><div style="opacity:.5">'+(i+1)+'.</div><div class="avatar">'+ini+'</div><div><b>'+m.name+'</b><br><span style="font-size:12px;opacity:.6">'+m.sena+'</span></div></div>'; 
 }); 
 document.getElementById("memberListBox").innerHTML = html; 
 }); 
