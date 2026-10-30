@@ -1,94 +1,77 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Profile</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profile - 4 BIR</title>
 <style>
-body{margin:0;font-family:Arial;background:#0a1a0f;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.box{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:20px;width:90%;max-width:380px;text-align:center}
-input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #c8a951;background:#0f2110;color:#fff;box-sizing:border-box}
-button{width:100%;padding:12px;background:#c8a951;color:#0a1a0f;border:none;border-radius:10px;font-weight:900;margin-top:10px;cursor:pointer}
-.avatar-big{width:70px;height:70px;border-radius:50%;background:#c8a951;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:30px;color:#0f2110;margin:0 auto 10px auto}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#0a1a0f;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:8px 0}
-.bottom div{text-align:center;font-size:11px;color:#6b8a70}.bottom div.active{color:#c8a951}
-</style>
-</head>
-<body>
-<div class="box" id="box"></div>
-
-<div class="bottom">
-<div onclick="location.href='command-dashboard.html'">🏠<br>Dashboard</div>
-<div onclick="location.href='vehicle.html'">🛻<br>Vehicles</div>
-<div onclick="location.href='contact.html'">📳<br>Comms</div>
-<div onclick="location.href='duty.html'">📄<br>Roster</div>
-<div class="active">👤<br>Profile</div>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#0a1a0f;display:flex;justify-content:center;padding:0 0 90px 0}
+.phone{width:100%;max-width:400px;min-height:100vh;background:#05140a;border:2px solid #c8a951;border-radius:28px;position:relative;padding:14px 14px 20px;box-shadow:0 0 0 6px #0a2a18}
+.top-time{display:flex;justify-content:space-between;color:#c8a951;font-size:12px;padding:6px 8px}
+.badge-wrap{text-align:center;margin:16px 0}
+.badge{display:inline-block;border:2px solid #c8a951;color:#c8a951;padding:7px 18px;border-radius:20px;font-size:12px;font-weight:900;letter-spacing:0.5px}
+.avatar-wrap{text-align:center;position:relative;margin:10px 0}
+.avatar{width:150px;height:150px;margin:0 auto;border-radius:50%;background:#0f2a18;border:3px solid #c8a951;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.avatar::before{content:'';position:absolute;left:-18px;top:20px;bottom:20px;width:40px;background:repeating-linear-gradient(180deg,transparent 0 8px,rgba(200,169,81,0.15) 8px 16px);mask:radial-gradient(circle)}
+.laurel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:190px;height:190px;opacity:0.25;pointer-events:none}
+.profile-label{text-align:center;color:#c8a951;letter-spacing:4px;font-size:13px;margin:16px 0 14px}
+.list{background:#0a1f11;border-radius:4px;padding:4px 12px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:18px 2px;border-bottom:1px solid #c8a95155}
+.row:last-child{border:none}
+.row b{color:#c8a951;font-size:13px;font-weight:800}
+.row span{color:#c8d7b8;font-size:13px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:400px;background:#0a1a0f;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:8px 0;z-index:10}
+.bottom div{text-align:center;font-size:11px;color:#6b8a70;cursor:pointer}.bottom div.active{color:#c8a951}
+.footer{text-align:center;color:#c8a951;font-size:8px;letter-spacing:1px;margin-top:18px;opacity:0.7}
+.btn{width:100%;padding:12px;border-radius:10px;border:1px solid #c8a951;background:#132a18;color:#c8a951;font-weight:900;margin-top:12px}
+</style></head><body>
+<div class="phone">
+<div class="top-time"><span>9:41</span><span>📶 📶 🔋 87%</span></div>
+<div class="badge-wrap"><div class="badge">COMMAND VIEW ONLY</div></div>
+<div class="avatar-wrap">
+<svg class="laurel" viewBox="0 0 100 100"><path d="M50 95 Q45 85 48 75 Q42 70 38 60 Q32 50 35 40 Q30 30 35 20" stroke="#4a5a3a" fill="none"/><path d="M50 95 Q55 85 52 75 Q58 70 62 60 Q68 50 65 40 Q70 30 65 20" stroke="#4a5a3a" fill="none"/></svg>
+<div class="avatar" id="avatarBox">
+<svg width="90" height="90" viewBox="0 0 80 80"><path d="M40 10 C25 10 18 22 18 32 L18 36 L14 38 L14 42 L18 42 L18 44 C18 52 25 60 40 60 C55 60 62 52 62 44 L62 42 L66 42 L66 38 L62 36 L62 32 C62 22 55 10 40 10 Z M20 42 L60 42" stroke="#c8a951" stroke-width="2" fill="none"/><circle cx="40" cy="48" r="16" stroke="#c8a951" stroke-width="2" fill="none"/><path d="M20 68 Q40 60 60 68" stroke="#c8a951" stroke-width="2" fill="none"/></svg>
 </div>
-
+</div>
+<div class="profile-label">PROFILE</div>
+<div class="list">
+<div class="row"><b>SENA NO</b><span id="sena">-</span></div>
+<div class="row"><b>PODOBI (RANK)</b><span id="podobi">-</span></div>
+<div class="row"><b>NAME</b><span id="name">-</span></div>
+<div class="row"><b>COMPANY</b><span id="company">-</span></div>
+<div class="row"><b>MOBILE NUMBER</b><span id="mobile">-</span></div>
+<div class="row"><b>BLOOD GROUP</b><span id="blood">-</span></div>
+</div>
+<div class="footer">SECURE • MILITARY PROFILE • CLASSIFIED</div>
+<button class="btn" onclick="location.href='command-dashboard.html'">← Back to Dashboard</button>
+<button class="btn" style="background:#d50000;color:#fff;border-color:#d50000" onclick="localStorage.clear();location.href='profile.html'">LOGOUT</button>
+</div>
+<div class="bottom"><div onclick="location.href='command-dashboard.html'">🏠<br>Dashboard</div><div onclick="location.href='vehicle.html'">🛻<br>Vehicles</div><div onclick="location.href='contact.html'">📳<br>Comms</div><div onclick="location.href='duty.html'">📄<br>Roster</div><div class="active">👤<br>Profile</div></div>
 <script>
 const SENIORITY_SCRIPT="https://script.google.com/macros/s/AKfycby8BQ0Dyo5s4otJEbRJcZXNiW3pyqDY9800nm8X7kGeOz49RVlQ1bdoF5IdByxL-l226w/exec";
+let sena=localStorage.getItem('sena_no')||'SN-12487-92';
+let mobile=localStorage.getItem('mobile_no')||'-';
+let podobi=localStorage.getItem('podobi')||'-';
+let company=localStorage.getItem('company')||'-';
+let blood=localStorage.getItem('blood')||'-';
+let nameLocal=localStorage.getItem('profile_name')||'-';
+document.getElementById('sena').innerText=sena;
+document.getElementById('mobile').innerText=mobile;
+document.getElementById('podobi').innerText=podobi;
+document.getElementById('company').innerText=company;
+document.getElementById('blood').innerText=blood;
+document.getElementById('name').innerText=nameLocal;
+let pic=localStorage.getItem('profile_pic');
+if(pic){document.getElementById('avatarBox').innerHTML=`<img src="${pic}" style="width:100%;height:100%;object-fit:cover">`;}
 
-function render(){
- let sena = localStorage.getItem('sena_no');
- let mobile = localStorage.getItem('mobile_no');
- let role = localStorage.getItem('mt_role');
- let box = document.getElementById('box');
-
- if(!sena){
-   // LOGIN FORM
-   box.innerHTML=`
-   <h3 style="color:#c8a951">SENA LOGIN</h3>
-   <input id="sena_no" placeholder="Sena No (eg 4521328)">
-   <input id="mobile" placeholder="Mobile Number">
-   <button onclick="doLogin()">LOGIN</button>
-   <p id="msg" style="font-size:13px;margin-top:10px"></p>
-   `;
- } else {
-   // PROFILE VIEW - Right last a click korle eitai dekhabe
-   box.innerHTML=`
-   <div class="avatar-big">${sena.slice(-2)}</div>
-   <h3 id="pName" style="color:#c8a951;margin:5px 0">Loading...</h3>
-   <p style="margin:4px 0;color:#8aa88f">Sena No: ${sena}</p>
-   <p style="margin:4px 0;color:#8aa88f">Mobile: ${mobile||'N/A'}</p>
-   <p style="margin:8px 0"><span style="background:#1a2a1a;color:#7CFC00;border:1px solid #22c55e;padding:4px 10px;border-radius:10px;font-size:11px">${role||'COMMAND'} - VIEW ONLY</span></p>
-   <button onclick="location.href='command-dashboard.html'" style="background:#132a18;color:#c8a951;border:1px solid #c8a951">Go to Dashboard</button>
-   <button onclick="doLogout()" style="background:#d50000;color:#fff">LOGOUT</button>
-   `;
-   loadName(sena);
- }
+async function loadAll(){
+try{
+let txt=await fetch(SENIORITY_SCRIPT+"?t="+Date.now()).then(r=>r.text());
+let rows=JSON.parse(txt);
+let me=rows.find(r=>String(r[0]).trim()==String(sena).trim());
+if(me){
+document.getElementById('name').innerText=me[2]||nameLocal;
+document.getElementById('podobi').innerText=me[1]||podobi;
+localStorage.setItem('profile_name',me[2]||'');
+localStorage.setItem('podobi',me[1]||'');
 }
-
-function doLogin(){
- let sena=document.getElementById('sena_no').value.trim();
- let mobile=document.getElementById('mobile').value.trim();
- if(!sena||!mobile){document.getElementById('msg').innerText="Sena & Mobile দিন";return;}
- localStorage.setItem('sena_no',sena);
- localStorage.setItem('mobile_no',mobile);
- localStorage.setItem('mt_role','COMMAND');
- location.href='command-dashboard.html';
+}catch(e){}
 }
-
-function doLogout(){
- localStorage.clear();
- render();
-}
-
-async function loadName(sena){
- try{
-   let txt=await fetch(SENIORITY_SCRIPT+"?t="+Date.now()).then(r=>r.text());
-   let rows=JSON.parse(txt);
-   let me = rows.find(r=> String(r[0]).includes(sena));
-   if(me){
-     document.getElementById('pName').innerText = me[1]+' '+me[2];
-   } else {
-     document.getElementById('pName').innerText = 'Sena - '+sena;
-   }
- }catch(e){
-   document.getElementById('pName').innerText = 'Sena - '+sena;
- }
-}
-
-render();
-</script>
-</body>
-</html>
+loadAll();
+</script></body></html>
