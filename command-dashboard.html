@@ -2,11 +2,11 @@
 <html> 
 <head> 
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
-<title>MT Platoon</title> 
+<title>MT Platoon - Full</title> 
 <style> 
 body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-bottom:80px} 
 .topArmy{background:#0a1a12;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;color:#fff}
-.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden}
+.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff}
 .greenBar{background:#0e5d3e;color:#ffc107;padding:10px 15px;font-weight:bold;font-size:14px}
 .bannerArmy{background:#1a2e1a;color:#fff;padding:14px 15px;display:flex;align-items:center;gap:12px;font-weight:bold;font-size:18px;border-bottom:3px solid #ffc107}
 .slider{width:100%;height:260px;background:#000;position:relative;overflow:hidden}
@@ -20,15 +20,18 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 .editGrid div{width:100%;height:50px;background:#eee;border-radius:6px;overflow:hidden;position:relative;cursor:pointer;border:1px solid #ccc}
 .editGrid div img{width:100%;height:100%;object-fit:cover}
 .whiteBox{background:#fff;padding:15px}
-.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px 0;text-align:center;color:#fff}
-.big{font-size:64px;font-weight:bold;color:#22c55e}
-.secTitle{color:#0e5d3e;font-weight:800;font-size:16px;margin:20px 0 10px 0;display:flex;justify-content:space-between;align-items:center;border-left:4px solid #ffc107;padding-left:8px}
+.secTitle{color:#0e5d3e;font-weight:800;font-size:15px;margin:22px 0 10px 0;display:flex;justify-content:space-between;align-items:center;border-left:4px solid #ffc107;padding-left:8px}
 .noticeItem{background:#fffbe6;border-left:4px solid #ffc107;padding:10px;border-radius:6px;margin-bottom:8px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .callCard{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #ddd;padding:12px;border-radius:10px;margin-bottom:8px}
 .callBtn{background:#0e5d3e;color:#ffc107;padding:6px 14px;border-radius:15px;text-decoration:none;font-size:12px;font-weight:bold}
 .actionBtn{border:none;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;margin-left:4px}
 .editBtn{background:#0e5d3e;color:#ffc107}
 .delBtn{background:#c62828;color:#fff}
+.boxCard{background:#fff;border:2px solid #0e5d3e;border-radius:12px;padding:15px;margin-top:10px}
+.boxCard input, .boxCard select{width:100%;padding:9px;margin:6px 0;border:1px solid #ccc;border-radius:6px;font-size:13px;box-sizing:border-box}
+.mainBtn{width:100%;background:#0e5d3e;color:#ffc107;border:none;padding:11px;border-radius:8px;font-weight:bold;margin-top:8px;cursor:pointer;font-size:14px}
+.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px 0;text-align:center;color:#fff}
+.big{font-size:64px;font-weight:bold;color:#22c55e}
 .footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff}
 .bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10}
 .bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px;color:#fff}
@@ -50,52 +53,71 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
   <div class="whiteBox">
     <h3 style="text-align:center;margin:0 0 15px 0;color:#0e5d3e">PLATOON COMMAND</h3>
     <div style="display:flex;flex-direction:column;gap:18px">
-      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
-        <div style="width:100%;height:220px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('qmInput').click()"><img id="qmImg" src="" style="display:none;width:100%;height:100%;object-fit:cover"><span id="qmPh">👤<br><b>QM</b></span><input type="file" id="qmInput" accept="image/*" style="display:none" onchange="uploadHome('qm', this)"></div>
-        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">QM</div><div id="qmName" style="font-weight:bold">Name Here</div><button id="qmBtn" class="hidden" onclick="editName('qm')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
-      </div>
-      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
-        <div style="width:100%;height:220px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('jcoInput').click()"><img id="jcoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover"><span id="jcoPh">👤<br><b>MT JCO</b></span><input type="file" id="jcoInput" accept="image/*" style="display:none" onchange="uploadHome('mtjco', this)"></div>
-        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT JCO</div><div id="jcoName" style="font-weight:bold">Name Here</div><button id="jcoBtn" class="hidden" onclick="editName('mtjco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
-      </div>
-      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
-        <div style="width:100%;height:220px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('ncoInput').click()"><img id="ncoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover"><span id="ncoPh">👤<br><b>MT NCO</b></span><input type="file" id="ncoInput" accept="image/*" style="display:none" onchange="uploadHome('mtnco', this)"></div>
-        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT NCO</div><div id="ncoName" style="font-weight:bold">Cpl Md Mehedi Hasan</div><button id="ncoBtn" class="hidden" onclick="editName('mtnco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
-      </div>
+      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px"><div style="width:100%;height:220px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('qmInput').click()"><img id="qmImg" src="" style="display:none;width:100%;height:100%;object-fit:cover"><span id="qmPh">👤<br><b>QM</b></span><input type="file" id="qmInput" accept="image/*" style="display:none" onchange="uploadHome('qm', this)"></div><div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">QM</div><div id="qmName" style="font-weight:bold">Name Here</div><button id="qmBtn" class="hidden" onclick="editName('qm')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div></div>
+      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px"><div style="width:100%;height:220px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('jcoInput').click()"><img id="jcoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover"><span id="jcoPh">👤<br><b>MT JCO</b></span><input type="file" id="jcoInput" accept="image/*" style="display:none" onchange="uploadHome('mtjco', this)"></div><div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT JCO</div><div id="jcoName" style="font-weight:bold">Name Here</div><button id="jcoBtn" class="hidden" onclick="editName('mtjco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div></div>
+      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px"><div style="width:100%;height:220px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="if(IS_ADMIN) document.getElementById('ncoInput').click()"><img id="ncoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover"><span id="ncoPh">👤<br><b>MT NCO</b></span><input type="file" id="ncoInput" accept="image/*" style="display:none" onchange="uploadHome('mtnco', this)"></div><div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT NCO</div><div id="ncoName" style="font-weight:bold">Cpl Md Mehedi Hasan</div><button id="ncoBtn" class="hidden" onclick="editName('mtnco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div></div>
     </div>
 
+    <!-- NOTICE -->
     <div class="secTitle"><span>📢 NOTICE BOARD</span><button id="noticeAddBtn" class="hidden" onclick="addNotice()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div>
     <div id="noticeList"></div>
 
+    <!-- EMERGENCY -->
     <div class="secTitle"><span>🚨 EMERGENCY CONTACTS</span><button id="emergencyAddBtn" class="hidden" onclick="addEmergency()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div>
     <div id="emergencyList"></div>
+
+    <!-- 3 NUMBER EDIT -->
+    <div id="waEditPanel" class="hidden boxCard" style="background:#fffbe6;border-style:dashed">
+      <b style="color:#0e5d3e">📱 WhatsApp 3 Number Edit (Admin)</b>
+      <input type="text" id="wa1" placeholder="Number 1 - MT JCO">
+      <input type="text" id="wa2" placeholder="Number 2 - QM">
+      <input type="text" id="wa3" placeholder="Number 3 - MT NCO">
+      <button onclick="saveWANumbers()" class="mainBtn">💾 Save 3 Numbers</button>
+      <div id="waShow" style="font-size:11px;color:#666;margin-top:6px"></div>
+    </div>
+
+    <!-- LEAVE CARD -->
+    <div class="secTitle"><span>📝 LEAVE CARD FORMAT</span></div>
+    <div class="boxCard">
+      <h4 style="margin:0 0 10px 0;color:#0e5d3e;text-align:center">ছুটির কার্ড / নাইট পাস</h4>
+      <input type="text" id="lvName" placeholder="নাম">
+      <input type="text" id="lvSena" placeholder="সেনা নং">
+      <select id="lvType"><option value="Night Pass">Night Pass</option><option value="Casual Leave">Casual Leave</option><option value="Annual Leave">Annual Leave</option></select>
+      <input type="date" id="lvDate">
+      <input type="text" id="lvReason" placeholder="কারণ">
+      <input type="text" id="lvPlace" placeholder="যাবার স্থান">
+      <button class="mainBtn" onclick="submitLeave()">✅ Leave জমা + WhatsApp</button>
+    </div>
+    <div class="secTitle"><span>📋 Leave List</span></div><div id="leaveList"></div>
+
+    <!-- COMPLAIN BOX -->
+    <div class="secTitle"><span>🔧 COMPLAIN BOX</span></div>
+    <div class="boxCard">
+      <h4 style="margin:0 0 10px 0;color:#0e5d3e;text-align:center">গাড়ি অভিযোগ বক্স</h4>
+      <input type="text" id="cpName" placeholder="নাম">
+      <input type="text" id="cpSena" placeholder="সেনা নং">
+      <input type="text" id="cpVehicle" placeholder="গাড়ি নং">
+      <select id="cpType"><option>Engine Problem</option><option>Break Problem</option><option>Tyre Problem</option><option>Battery Problem</option><option>Other</option></select>
+      <input type="text" id="cpDetails" placeholder="বিস্তারিত সমস্যা">
+      <button class="mainBtn" onclick="submitComplain()">🔧 Complain জমা + 3 WhatsApp</button>
+    </div>
+    <div class="secTitle"><span>📋 Complain List</span></div><div id="complainList"></div>
 
     <div class="card"><div style="opacity:.8">👥 Group Members</div><div class="big" id="memberCountHome">0</div></div> 
   </div>
   <div class="footerArmy">Copyright © 2026 BANGLADESH ARMY</div>
 </div>
 
-<div id="dashboardView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
-  <div style="padding:15px;color:#fff"><h3 style="margin:0">Dashboard</h3></div>
-  <a href="group.html" style="text-decoration:none"><div style="background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;color:#fff"><div style="font-size:45px">💬</div><h2>GROUP CHAT</h2></div></a> 
-</div> 
-<div id="groupView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
-  <div style="padding:15px;color:#fff;font-weight:bold">Group Members - Seniority Wise</div> 
-  <div id="memberListBox" style="background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px;color:#fff"></div> 
-</div> 
-<div class="bottom"> 
-<div id="btnDash" onclick="switchTab('dash')">🏠<br>Dashboard</div> 
-<div id="btnHome" class="active" onclick="switchTab('home')">🏡<br>Home Page</div> 
-<div id="btnGroup" onclick="switchTab('group')">👥<br>Group</div> 
-</div> 
+<div id="dashboardView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"><div style="padding:15px;color:#fff"><h3>Dashboard</h3></div><a href="group.html" style="text-decoration:none"><div style="background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;color:#fff"><div style="font-size:45px">💬</div><h2>GROUP CHAT</h2></div></a></div> 
+<div id="groupView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"><div style="padding:15px;color:#fff;font-weight:bold">Group Members</div><div id="memberListBox" style="background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px;color:#fff"></div></div> 
+<div class="bottom"><div id="btnDash" onclick="switchTab('dash')">🏠<br>Dashboard</div><div id="btnHome" class="active" onclick="switchTab('home')">🏡<br>Home Page</div><div id="btnGroup" onclick="switchTab('group')">👥<br>Group</div></div> 
 
 <script> 
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
-const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
 const IS_ADMIN = MY_SENA == "4521328";
 let bannerPics = []; let curIdx = 0; let editTarget = -1; let sliderInterval;
-
+let WA_NUMBERS = JSON.parse(localStorage.getItem("waNumbers") || '["8801769013434","8801769013433","8801769013432"]');
 function switchTab(tab){ document.getElementById('dashboardView').classList.add('hidden'); document.getElementById('homeView').classList.add('hidden'); document.getElementById('groupView').classList.add('hidden'); document.getElementById('btnDash').classList.remove('active'); document.getElementById('btnHome').classList.remove('active'); document.getElementById('btnGroup').classList.remove('active'); if(tab==='dash'){ document.getElementById('dashboardView').classList.remove('hidden'); document.getElementById('btnDash').classList.add('active'); } else if(tab==='home'){ document.getElementById('homeView').classList.remove('hidden'); document.getElementById('btnHome').classList.add('active'); } else{ document.getElementById('groupView').classList.remove('hidden'); document.getElementById('btnGroup').classList.add('active'); } } 
 function initSlider(){ let c=document.getElementById("sliderImgs"); let d=document.getElementById("dots"); let g=document.getElementById("editGrid"); c.innerHTML=""; d.innerHTML=""; g.innerHTML=""; for(let i=0;i<10;i++){ let img=document.createElement("img"); img.src=bannerPics[i]||"https://images.unsplash.com/photo-1540962351504-03099e0a754b"; if(i==0) img.classList.add("active"); c.appendChild(img); let dot=document.createElement("span"); if(i==0) dot.classList.add("active"); dot.onclick=()=>showSlide(i); d.appendChild(dot); let box=document.createElement("div"); box.innerHTML=bannerPics[i]?'<img src="'+bannerPics[i]+'"><div style="position:absolute;top:0;left:0;background:#0e5d3e;color:#fff;font-size:8px;padding:1px 3px">'+(i+1)+'</div>':'<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:10px">'+(i+1)+'</div>'; box.onclick=()=>{editTarget=i; document.getElementById("bannerFileInput").click();}; g.appendChild(box);} startAuto();}
 function showSlide(n){ curIdx=n; document.querySelectorAll("#sliderImgs img").forEach((im, idx)=>{ im.classList.toggle("active", idx==n); }); document.querySelectorAll("#dots span").forEach((d, idx)=>{ d.classList.toggle("active", idx==n); });}
@@ -104,54 +126,33 @@ function loadHome(){
   bannerPics=[]; for(let i=0;i<10;i++){ let v=localStorage.getItem("home_banner_"+i); if(v) bannerPics[i]=v; }
   ['qm','mtjco','mtnco','qm_name','mtjco_name','mtnco_name'].forEach(k=>{ let v=localStorage.getItem("home_"+k); if(v) applyHome(k,v); });
   initSlider();
-  let notices=JSON.parse(localStorage.getItem("notices")||"[]"); 
-  if(notices.length==0){ notices=[{date:"10/31/2026", text:"যারা নাইট পাশ যেতে ইচ্ছুক তারা লিভ কার্ড জমা করেন"}]; localStorage.setItem("notices", JSON.stringify(notices)); }
-  renderNotices(notices);
-  let em=JSON.parse(localStorage.getItem("emergency")||"null"); 
-  if(!em){ em=[{name:"QM", sub:"Mohammad Ali Akbor Arko", num:"01769-013433"}]; localStorage.setItem("emergency", JSON.stringify(em)); }
-  renderEmergency(em);
+  renderNotices(JSON.parse(localStorage.getItem("notices")||'[{"date":"10/31/2026","text":"যারা নাইট পাশ যেতে ইচ্ছুক তারা লিভ কার্ড জমা করেন"}]'));
+  renderEmergency(JSON.parse(localStorage.getItem("emergency")||'[{"name":"QM","sub":"Mohammad Ali Akbor Arko","num":"01769-013433"}]'));
+  renderLeave(JSON.parse(localStorage.getItem("leaveCards")||"[]"));
+  renderComplain(JSON.parse(localStorage.getItem("complainCards")||"[]"));
+  loadWANumbers();
   fetch(API+"?action=getHomeImages").then(r=>r.json()).then(d=>{
     let ch=false; for(let i=0;i<10;i++){ if(d["banner_"+i]){ localStorage.setItem("home_banner_"+i, d["banner_"+i]); bannerPics[i]=d["banner_"+i]; ch=true; } }
-    for(let k in d){ if(k.includes("banner_")==false && d[k] && k!="notices" && k!="emergency"){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); } }
+    for(let k in d){ if(d[k] && !k.includes("banner_") && !["notices","emergency","leaveCards","complainCards","waNumbers"].includes(k)){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); } }
     if(ch) initSlider();
     if(d.notices){ localStorage.setItem("notices", d.notices); renderNotices(JSON.parse(d.notices)); }
     if(d.emergency){ localStorage.setItem("emergency", d.emergency); renderEmergency(JSON.parse(d.emergency)); }
+    if(d.leaveCards){ localStorage.setItem("leaveCards", d.leaveCards); renderLeave(JSON.parse(d.leaveCards)); }
+    if(d.complainCards){ localStorage.setItem("complainCards", d.complainCards); renderComplain(JSON.parse(d.complainCards)); }
+    if(d.waNumbers){ localStorage.setItem("waNumbers", d.waNumbers); WA_NUMBERS=JSON.parse(d.waNumbers); loadWANumbers(); }
   }).catch(()=>{});
 }
 function applyHome(k,v){ if(k=='qm'){ document.getElementById("qmImg").src=v; document.getElementById("qmImg").style.display="block"; document.getElementById("qmPh").style.display="none"; } if(k=='mtjco'){ document.getElementById("jcoImg").src=v; document.getElementById("jcoImg").style.display="block"; document.getElementById("jcoPh").style.display="none"; } if(k=='mtnco'){ document.getElementById("ncoImg").src=v; document.getElementById("ncoImg").style.display="block"; document.getElementById("ncoPh").style.display="none"; } if(k=='qm_name') document.getElementById("qmName").innerText=v; if(k=='mtjco_name') document.getElementById("jcoName").innerText=v; if(k=='mtnco_name') document.getElementById("ncoName").innerText=v; }
 document.getElementById("bannerFileInput").addEventListener("change", function(){ let f=this.files[0]; if(!f||editTarget<0) return; let r=new FileReader(); r.onload=e=>{ let b=e.target.result; localStorage.setItem("home_banner_"+editTarget, b); bannerPics[editTarget]=b; initSlider(); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"banner_"+editTarget, image:b})}); }; r.readAsDataURL(f);});
 function uploadHome(type, input){ let file=input.files[0]; if(!file) return; let reader=new FileReader(); reader.onload=e=>{ let b=e.target.result; localStorage.setItem("home_"+type, b); applyHome(type,b); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:b})}); }; reader.readAsDataURL(file);}
 function editName(type){ let cur=localStorage.getItem("home_"+type+"_name")||""; let nm=prompt("নাম লিখো:", cur); if(nm){ localStorage.setItem("home_"+type+"_name", nm); applyHome(type+"_name", nm); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type+"_name", image:nm})}); }}
-
-// NOTICE WITH EDIT DELETE
-function renderNotices(list){ 
-  let h=""; 
-  list.forEach((n,i)=>{ 
-    let adminBtns = IS_ADMIN ? `<div style="display:flex;gap:4px"><button class="actionBtn editBtn" onclick="editNotice(${i})">✏️ Edit</button><button class="actionBtn delBtn" onclick="deleteNotice(${i})">🗑️ Del</button></div>` : "";
-    h+=`<div class="noticeItem"><div style="flex:1">📅 ${n.date}: ${n.text}</div>${adminBtns}</div>`; 
-  }); 
-  document.getElementById("noticeList").innerHTML=h||'<div class="noticeItem">No Notice</div>'; 
-}
-function addNotice(){ let txt=prompt("Notice লিখো:"); if(!txt) return; let list=JSON.parse(localStorage.getItem("notices")||"[]"); list.unshift({date:new Date().toLocaleDateString(), text:txt}); localStorage.setItem("notices", JSON.stringify(list)); renderNotices(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"notices", image:JSON.stringify(list)})}); }
-function editNotice(i){ let list=JSON.parse(localStorage.getItem("notices")||"[]"); let cur=list[i].text; let txt=prompt("Edit Notice:", cur); if(txt===null) return; list[i].text=txt; list[i].date=new Date().toLocaleDateString(); localStorage.setItem("notices", JSON.stringify(list)); renderNotices(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"notices", image:JSON.stringify(list)})}); }
-function deleteNotice(i){ if(!confirm("Delete করবা?")) return; let list=JSON.parse(localStorage.getItem("notices")||"[]"); list.splice(i,1); localStorage.setItem("notices", JSON.stringify(list)); renderNotices(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"notices", image:JSON.stringify(list)})}); }
-
-// EMERGENCY WITH EDIT DELETE
-function renderEmergency(list){ 
-  let h=""; 
-  list.forEach((e,i)=>{ 
-    let adminBtns = IS_ADMIN ? `<div style="display:flex;gap:4px"><button class="actionBtn editBtn" onclick="editEmergency(${i})">✏️</button><button class="actionBtn delBtn" onclick="deleteEmergency(${i})">🗑️</button></div>` : "";
-    h+=`<div class="callCard"><div><b>${e.name}</b><br><small>${e.sub||e.num}</small></div><div style="display:flex;align-items:center;gap:6px"><a class="callBtn" href="tel:${e.num}">📞 CALL</a>${adminBtns}</div></div>`; 
-  }); 
-  document.getElementById("emergencyList").innerHTML=h; 
-}
-function addEmergency(){ let name=prompt("পদবি (যেমন: QM):"); if(!name) return; let sub=prompt("নাম (যেমন: Mohammad Ali Akbor Arko):"); let num=prompt("নাম্বার:"); if(!num) return; let list=JSON.parse(localStorage.getItem("emergency")||"[]"); list.push({name:name, sub:sub||"", num:num}); localStorage.setItem("emergency", JSON.stringify(list)); renderEmergency(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"emergency", image:JSON.stringify(list)})}); }
-function editEmergency(i){ let list=JSON.parse(localStorage.getItem("emergency")||"[]"); let cur=list[i]; let name=prompt("পদবি Edit:", cur.name); if(name===null) return; let sub=prompt("নাম Edit:", cur.sub||""); let num=prompt("নাম্বার Edit:", cur.num); if(num===null) return; list[i]={name:name, sub:sub, num:num}; localStorage.setItem("emergency", JSON.stringify(list)); renderEmergency(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"emergency", image:JSON.stringify(list)})}); }
-function deleteEmergency(i){ if(!confirm("Delete করবা?")) return; let list=JSON.parse(localStorage.getItem("emergency")||"[]"); list.splice(i,1); localStorage.setItem("emergency", JSON.stringify(list)); renderEmergency(list); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"emergency", image:JSON.stringify(list)})}); }
-
-function loadMembers(){ fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{ data.sort((a,b)=> parseInt(a.sena) - parseInt(b.sena)); document.getElementById("memberCountHome").innerText=data.length; let html=""; data.forEach((m,i)=>{ let ini=m.name?m.name.charAt(0).toUpperCase():"M"; html+='<div style="padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px"><div style="opacity:.5">'+(i+1)+'.</div><div style="width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold">'+ini+'</div><div><b>'+m.name+'</b><br><span style="font-size:12px;opacity:.6">'+m.sena+'</span></div></div>'; }); document.getElementById("memberListBox").innerHTML=html; }); } 
-if(IS_ADMIN){ document.getElementById("adminEditBox").classList.remove("hidden"); document.getElementById("qmBtn").classList.remove("hidden"); document.getElementById("jcoBtn").classList.remove("hidden"); document.getElementById("ncoBtn").classList.remove("hidden"); document.getElementById("noticeAddBtn").classList.remove("hidden"); document.getElementById("emergencyAddBtn").classList.remove("hidden"); }
-loadHome(); loadMembers(); 
-</script> 
-</body> 
-</html>
+function save(type,data){ localStorage.setItem(type, JSON.stringify(data)); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:JSON.stringify(data)})}); }
+function renderNotices(list){ let h=""; list.forEach((n,i)=>{ let btn=IS_ADMIN?`<div><button class="actionBtn editBtn" onclick="editNotice(${i})">✏️</button><button class="actionBtn delBtn" onclick="deleteNotice(${i})">🗑️</button></div>`:""; h+=`<div class="noticeItem"><div style="flex:1">📅 ${n.date}: ${n.text}</div>${btn}</div>`; }); document.getElementById("noticeList").innerHTML=h; }
+function addNotice(){ let txt=prompt("Notice:"); if(!txt) return; let l=JSON.parse(localStorage.getItem("notices")||"[]"); l.unshift({date:new Date().toLocaleDateString(), text:txt}); save("notices",l); renderNotices(l); }
+function editNotice(i){ let l=JSON.parse(localStorage.getItem("notices")||"[]"); let t=prompt("Edit:", l[i].text); if(t===null) return; l[i].text=t; save("notices",l); renderNotices(l); }
+function deleteNotice(i){ if(!confirm("Delete?")) return; let l=JSON.parse(localStorage.getItem("notices")||"[]"); l.splice(i,1); save("notices",l); renderNotices(l); }
+function renderEmergency(list){ let h=""; list.forEach((e,i)=>{ let btn=IS_ADMIN?`<div style="display:flex;gap:4px"><button class="actionBtn editBtn" onclick="editEmergency(${i})">✏️</button><button class="actionBtn delBtn" onclick="deleteEmergency(${i})">🗑️</button></div>`:""; h+=`<div class="callCard"><div><b>${e.name}</b><br><small>${e.sub||""}</small><br><small>${e.num}</small></div><div style="display:flex;align-items:center;gap:6px"><a class="callBtn" href="tel:${e.num}">📞 CALL</a>${btn}</div></div>`; }); document.getElementById("emergencyList").innerHTML=h; }
+function addEmergency(){ let n=prompt("পদবি:"); if(!n) return; let s=prompt("নাম:"); let num=prompt("নাম্বার:"); if(!num) return; let l=JSON.parse(localStorage.getItem("emergency")||"[]"); l.push({name:n, sub:s, num:num}); save("emergency",l); renderEmergency(l); }
+function editEmergency(i){ let l=JSON.parse(localStorage.getItem("emergency")||"[]"); let c=l[i]; let n=prompt("পদবি:",c.name); if(n===null) return; let s=prompt("নাম:",c.sub); let num=prompt("নাম্বার:",c.num); l[i]={name:n, sub:s, num:num}; save("emergency",l); renderEmergency(l); }
+function deleteEmergency(i){ if(!confirm("Delete?")) return; let l=JSON.parse(localStorage.getItem("emergency")||"[]"); l.splice(i,1); save("emergency",l); renderEmergency(l); }
+function loadWANumbers(){ document.getElementById("wa1").value=WA_NUMBERS[0]||""; document.getElementById("wa2")
