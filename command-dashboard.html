@@ -1,47 +1,88 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT PLATOON</title> 
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#0a1a0f;color:#fff}.top{background:#122e18;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}.menuBtn{font-size:28px;font-weight:900;cursor:pointer}.bell{font-size:24px;position:relative;cursor:pointer}.bell i{position:absolute;top:-8px;right:-10px;background:red;color:#fff;font-size:11px;padding:2px 7px;border-radius:12px;font-style:normal;font-weight:900}.myProfileBtn{display:flex;align-items:center;gap:6px;background:#132a18;border:1px solid #c8a951;padding:5px 10px;border-radius:20px;cursor:pointer}.myProfileBtn b{color:#c8a951;font-size:11px}.avatarSmall{width:26px;height:26px;border-radius:50%;background:#0f2a18;border:1px solid #c8a951;display:flex;align-items:center;justify-content:center;overflow:hidden}.logout{background:#d50000;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:900}.wrap{padding:14px 14px 90px 14px}.assalam{font-size:27px;font-weight:900;text-align:center;margin:8px 0 4px 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.s-card{background:#132a18;border:1px solid #1e4a28;border-radius:16px;padding:14px;min-height:88px}.card{background:#132a18;border:1px solid #1e4a28;color:#fff;border-radius:22px;padding:28px 8px 18px 8px;text-align:center;cursor:pointer}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.t1{font-weight:900;color:#c8a951;font-size:12px;margin-top:10px}.drawer{position:fixed;top:0;left:-100%;width:78%;max-width:300px;height:100%;background:#0f2110;border-right:1px solid #1f4a28;z-index:100;transition:0.3s;padding:16px}.drawer.open{left:0}.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:90;display:none}.overlay.show{display:block}.bottom{position:fixed;bottom:0;left:0;right:0;background:#0a1a0f;border-top:1px solid #1f4a28;display:flex;justify-content:space-around;padding:8px 0;z-index:40}.bottom div{text-align:center;font-size:11px;color:#6b8a70;cursor:pointer}.bottom div.active{color:#c8a951}.myModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000000cc;z-index:200;justify-content:center;align-items:center;padding:12px}.myModal.show{display:flex}.ticker{overflow:hidden;white-space:nowrap;position:relative;border-radius:12px;padding:14px 0;margin:10px 0;display:flex;align-items:center}.ticker-track{white-space:nowrap;display:inline-block;animation:marqueeRTL 40s linear infinite}@keyframes marqueeRTL{0%{transform:translateX(100%)}100%{transform:translateX(-120%)}}.joruri-bg{background:#b91c1c;color:#fff;border:1px solid #ff4444}.seniority-bg{background:#0a4d0a;color:#c8ffc8;border:1px solid #1f8a1f}
+</style></head><body> 
+
+<div class="top">
+<div style="display:flex;gap:8px;align-items:center"><div class="menuBtn" onclick="document.getElementById('drawer').classList.add('open');document.getElementById('overlay').classList.add('show')">☰</div><b>4 BIR — MT PLATOON</b></div>
+<div style="display:flex;gap:10px;align-items:center">
+<div class="bell">🔔<i id="notifCount">0</i></div>
+<div class="myProfileBtn" onclick="openMyProfile()"><div class="avatarSmall" id="topPic">👤</div><b>My Profile</b></div>
+<button class="logout" onclick="localStorage.clear();location.href='index.html'">LOGOUT</button>
+</div>
+</div> 
+
+<div class="myModal" id="myProfileModal" onclick="if(event.target==this)closeMyProfile()">
+<div style="width:100%;max-width:340px;background:#05140a;border:2px solid #c8a951;border-radius:18px;padding:14px;text-align:center">
+<div style="color:#c8a951;font-size:11px;border:1px solid #c8a951;display:inline-block;padding:4px 12px;border-radius:14px;margin-bottom:10px">MY PROFILE</div>
+<div id="popPic" style="width:90px;height:90px;border-radius:50%;border:3px solid #c8a951;margin:0 auto;display:flex;align-items:center;justify-content:center;background:#0f2a18;overflow:hidden;font-size:40px">👤</div>
+<div id="popName" style="color:#fff;font-weight:900;margin-top:8px">Sainik Test</div>
+<div id="popSena" style="color:#c8a951;font-size:12px">Sena No: 4521328</div>
+<div style="margin-top:10px;text-align:left;background:#0a1f11;border-radius:10px;padding:10px">
+<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><b style="color:#6b8a70">পদবী</b><span id="popPod" style="color:#fff">Sainik</span></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><b style="color:#6b8a70">কোম্পানি</b><span id="popCom" style="color:#fff">MT</span></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><b style="color:#6b8a70">মোবাইল</b><span id="popMob" style="color:#fff">01737912094</span></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><b style="color:#6b8a70">রক্তের গ্রুপ</b><span id="popBlood" style="color:#ff7777">A+</span></div>
+</div>
+<button onclick="closeMyProfile()" style="width:100%;padding:10px;background:#1a4a2a;color:#fff;border:none;border-radius:8px;margin-top:12px">Close</button>
+<button onclick="location.href='group.html'" style="width:100%;padding:10px;background:#c8a951;color:#000;border:none;border-radius:8px;margin-top:8px;font-weight:900">👥 Go to Group Chat</button>
+</div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<div class="drawer" id="drawer">
+<h3 style="color:#c8a951">👤 MY PROFILE</h3>
+<div style="background:#132a18;border:1px solid #c8a951;border-radius:12px;padding:10px;margin:10px 0;text-align:center">
+<div id="drawerPic" style="width:60px;height:60px;border-radius:50%;background:#0f2a18;border:2px solid #c8a951;margin:0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden">👤</div>
+<div id="drawerName" style="color:#fff;font-weight:900;font-size:13px;margin-top:6px">Sainik</div>
+<div id="drawerSena" style="color:#c8a951;font-size:11px">4521328</div>
+</div>
+<div style="padding:12px 0" onclick="location.href='group.html'">👥 GROUP CHAT</div>
+<div style="padding:12px 0" onclick="location.href='vehicle.html'">🛻 VEHICLE</div>
+<div style="padding:12px 0" onclick="location.href='duty.html'">✍🏻 DUTY ROSTER</div>
+<div style="padding:12px 0" onclick="location.href='seniority.html'">⏬ SENIORITY</div>
+<button onclick="closeAll()" style="width:100%;margin-top:20px;padding:10px;background:#1f4a28;color:#fff;border:none;border-radius:10px">Close</button>
+</div> 
+
+<div class="wrap">
+<div class="assalam">Assalamualaikum</div>
+<div class="stats"><div class="s-card"><p>Total Vehicles</p><h3>🛻 0</h3></div><div class="s-card"><p>Group Members</p><h3>👥 <span id="totalPersonnel">0</span></h3></div></div>
+<div class="folders" style="margin-top:20px"><h3>Folders</h3><div class="grid"><div class="card" onclick="location.href='vehicle.html'"><div style="font-size:44px">🛻</div><div class="t1">VEHICLE</div></div><div class="card" onclick="location.href='group.html'" style="border-color:#c8a951"><div style="font-size:44px">👥</div><div class="t1">GROUP CHAT</div></div><div class="card" onclick="location.href='duty.html'"><div style="font-size:44px">📝</div><div class="t1">DUTY ROSTER</div></div><div class="card" onclick="location.href='seniority.html'"><div style="font-size:44px">⏬</div><div class="t1">SENIORITY LIST</div></div></div></div>
+</div> 
+
+<div class="bottom"><div class="active">🏠<br>Dashboard</div><div onclick="location.href='vehicle.html'">🛻<br>Vehicles</div><div onclick="location.href='group.html'" style="color:#c8a951">👥<br>Group</div><div onclick="location.href='duty.html'">📄<br>Roster</div><div onclick="location.href='profile.html'">👤<br>Profile</div></div> 
+
 <script>
-// REPLACE YOUR OLD openMyProfile FUNCTION WITH THIS NEW ONE
+// NO AUTO REDIRECT - যাতে সাদা না হয়
+function closeAll(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
 function openMyProfile(){
-let sena = localStorage.getItem('sena_no') || localStorage.getItem('senaNumber') || localStorage.getItem('army_no') || localStorage.getItem('sena') || '৪৫২১৩২৮';
-let nameL = localStorage.getItem('profile_name') || localStorage.getItem('name') || localStorage.getItem('fullName') || localStorage.getItem('userName') || '-';
-let pod = localStorage.getItem('podobi') || localStorage.getItem('rank') || localStorage.getItem('pod') || '-';
-let com = localStorage.getItem('company') || localStorage.getItem('comp') || '-';
-let mob = localStorage.getItem('mobile_no') || localStorage.getItem('mobile') || localStorage.getItem('phone') || '01737912094';
-let blood = localStorage.getItem('blood') || localStorage.getItem('blood_group') || '-';
-let pic = localStorage.getItem('profile_pic') || localStorage.getItem('photo') || '';
-
-document.getElementById('popName').innerText = nameL;
-document.getElementById('popSena').innerText = "Sena No: " + sena;
-document.getElementById('popPod').innerText = pod;
-document.getElementById('popCom').innerText = com;
-document.getElementById('popMob').innerText = mob;
-document.getElementById('popBlood').innerText = blood;
-
-if(pic){
- document.getElementById('popPic').innerHTML=`<img src="${pic}" style="width:100%;height:100%;object-fit:cover">`;
- document.getElementById('topPic').innerHTML=`<img src="${pic}" style="width:100%;height:100%;object-fit:cover">`;
- document.getElementById('drawerPic').innerHTML=`<img src="${pic}" style="width:100%;height:100%;object-fit:cover">`;
-}
-document.getElementById('drawerName').innerText=nameL;
-document.getElementById('drawerSena').innerText="Sena: "+sena;
-document.getElementById('myProfileModal').classList.add('show');
-
-// AUTO FIX: যদি নাম - থাকে তাহলে Sheet থেকে আনবে
-if(nameL=='-' || pod=='-'){
- fetch("https://script.google.com/macros/s/AKfycbx50AvsmCN5Pt-ROba7d4H3Us3YyUKj_UBb73-YvVToPQMRAM5MpLe_xfM5tWZfuds/exec?action=getMembers&t="+Date.now())
- .then(r=>r.text()).then(t=>{
-   try{
-     let data=JSON.parse(t);
-     let me = data.find(p=> String(p.sena).includes('4521328') || p.sena==sena);
-     if(me){
-       document.getElementById('popName').innerText = me.name;
-       document.getElementById('popPod').innerText = me.podobi;
-       document.getElementById('drawerName').innerText = me.name;
-       localStorage.setItem('profile_name', me.name);
-       localStorage.setItem('podobi', me.podobi);
-     }
-   }catch(e){}
- });
-}
+ let sena = localStorage.getItem('sena_no') || '4521328';
+ let nameL = localStorage.getItem('profile_name') || 'Sainik';
+ let pod = localStorage.getItem('podobi') || 'Sainik';
+ let com = localStorage.getItem('company') || 'MT';
+ let mob = localStorage.getItem('mobile_no') || '01737912094';
+ let blood = localStorage.getItem('blood') || 'A+';
+ document.getElementById('popName').innerText=nameL;
+ document.getElementById('popSena').innerText="Sena No: "+sena;
+ document.getElementById('popPod').innerText=pod;
+ document.getElementById('popCom').innerText=com;
+ document.getElementById('popMob').innerText=mob;
+ document.getElementById('popBlood').innerText=blood;
+ document.getElementById('drawerName').innerText=nameL;
+ document.getElementById('drawerSena').innerText="Sena: "+sena;
+ document.getElementById('myProfileModal').classList.add('show');
 }
 function closeMyProfile(){document.getElementById('myProfileModal').classList.remove('show');}
-</script>
+
+// যদি প্রোফাইল না থাকে ডিফল্ট বসিয়ে দাও
+if(!localStorage.getItem('sena_no')){
+ localStorage.setItem('sena_no','4521328');
+ localStorage.setItem('profile_name','Sainik Test');
+ localStorage.setItem('podobi','Sainik');
+ localStorage.setItem('company','MT Platoon');
+ localStorage.setItem('mobile_no','01737912094');
+ localStorage.setItem('blood','A+');
+ localStorage.setItem('mt_role','COMMAND');
+}
+document.getElementById('drawerName').innerText=localStorage.getItem('profile_name')||'Sainik';
+document.getElementById('drawerSena').innerText=localStorage.getItem('sena_no')||'4521328';
+</script></body></html>
