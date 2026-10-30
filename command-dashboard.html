@@ -4,24 +4,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
 <title>MT Platoon</title> 
 <style> 
-body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-bottom:80px} 
+body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-bottom:80px} 
 .topArmy{background:#0a1a12;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;color:#fff}
-.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden;cursor:pointer} 
-.greenBar{background:#0e5d3e;color:#ffc107;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold}
+.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden}
+.greenBar{background:#0e5d3e;color:#ffc107;padding:10px 15px;font-weight:bold;font-size:14px}
 .bannerArmy{background:#1a2e1a;color:#fff;padding:14px 15px;display:flex;align-items:center;gap:12px;font-weight:bold;font-size:18px;border-bottom:3px solid #ffc107}
-.slider{width:100%;height:240px;background:#000;overflow:hidden;position:relative}
+.slider{width:100%;height:240px;background:#000;position:relative;overflow:hidden}
 .slider img{width:100%;height:100%;object-fit:cover}
-.whiteBox{background:#fff;text-align:center;padding:20px 15px}
-.coasImg{width:280px;min-height:340px;margin:10px auto;background:#d9d9d9;border-radius:12px;overflow:hidden;border:3px solid #0e5d3e;position:relative;display:flex;align-items:center;justify-content:center}
-.coasImg img{width:100%;height:100%;object-fit:cover}
-.uploadBtn{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#0e5d3e;color:#ffc107;border:1px solid #ffc107;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer}
+.uploadBtn{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#0e5d3e;color:#ffc107;border:1px solid #ffc107;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;z-index:5}
+.whiteBox{background:#fff;padding:20px 10px}
+.qmGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+.qmCard{background:#fff;border:2px solid #0e5d3e;border-radius:12px;overflow:hidden;text-align:center;position:relative;padding-bottom:8px}
+.qmCard .picBox{width:100%;height:130px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.qmCard .picBox img{width:100%;height:100%;object-fit:cover}
+.qmCard .role{font-weight:800;font-size:13px;margin-top:6px;color:#0e5d3e}
+.qmCard .name{font-size:11px;color:#333;margin-top:2px;padding:0 4px;word-break:break-word}
+.qmCard .editBtn{font-size:10px;background:#0e5d3e;color:#fff;border:none;border-radius:10px;padding:2px 6px;margin-top:4px;cursor:pointer}
 .card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center;color:#fff}
 .big{font-size:64px;font-weight:bold;color:#22c55e}
 .footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff;border-top:1px solid #eee}
-.memberList{background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px;color:#fff}
-.member{padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px}
-.avatar{width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold}
-.folder{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;color:#fff}
 .bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10}
 .bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px;color:#fff}
 .bottom div.active{opacity:1;color:#22c55e;font-weight:bold}
@@ -36,28 +37,56 @@ body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-botto
 </div> 
 
 <div id="homeView">
-  <div class="greenBar">
-    <div>📞 Call Us: 01769-013433</div>
-  </div>
-  
-  <div class="bannerArmy">
-    <div style="width:42px;height:42px;background:#ffc107;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000">⚔️</div>
-    <div>Welcome to Mt Platoon</div>
-  </div>
+  <div class="greenBar">📞 Call Us: 01769-013433</div>
+  <div class="bannerArmy"><div style="width:42px;height:42px;background:#ffc107;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000">⚔️</div> Welcome to Mt Platoon</div>
 
   <div class="slider" id="bannerBox">
     <img id="bannerImg" src="" style="display:none">
     <div id="bannerPlaceholder" style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1540962351504-03099e0a754b') center/cover"></div>
     <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="uploadHome('banner', this)">
-    <div id="bannerUploadBtn" class="uploadBtn hidden" onclick="document.getElementById('bannerInput').click()">✏️ Change Banner (Admin)</div>
+    <div id="bannerUploadBtn" class="uploadBtn hidden" onclick="document.getElementById('bannerInput').click()">✏️ Change Banner</div>
   </div>
 
   <div class="whiteBox">
-    <div class="coasImg" id="platoonBox">
-      <img id="platoonImg" src="" style="display:none">
-      <div id="platoonPlaceholder" style="color:#888;font-size:22px;font-weight:bold;opacity:.6">MT PLATOON</div>
-      <input type="file" id="platoonInput" accept="image/*" style="display:none" onchange="uploadHome('platoon', this)">
-      <div id="platoonUploadBtn" class="uploadBtn hidden" onclick="document.getElementById('platoonInput').click()">✏️ Add Photo (Admin)</div>
+    <h3 style="text-align:center;margin:0 0 12px 0;color:#0e5d3e">PLATOON COMMAND</h3>
+    <div class="qmGrid">
+      
+      <!-- 1 - QM -->
+      <div class="qmCard">
+        <div class="picBox" onclick="if(IS_ADMIN) document.getElementById('qmInput').click()">
+          <img id="qmImg" src="" style="display:none">
+          <span id="qmPh" style="color:#888;font-weight:bold">QM</span>
+          <input type="file" id="qmInput" accept="image/*" style="display:none" onchange="uploadHome('qm', this)">
+        </div>
+        <div class="role">QM</div>
+        <div class="name" id="qmName">Name Here</div>
+        <button id="qmNameBtn" class="editBtn hidden" onclick="editName('qm')">Edit Name</button>
+      </div>
+
+      <!-- 2 - MT JCO -->
+      <div class="qmCard">
+        <div class="picBox" onclick="if(IS_ADMIN) document.getElementById('jcoInput').click()">
+          <img id="jcoImg" src="" style="display:none">
+          <span id="jcoPh" style="color:#888;font-weight:bold">MT JCO</span>
+          <input type="file" id="jcoInput" accept="image/*" style="display:none" onchange="uploadHome('mtjco', this)">
+        </div>
+        <div class="role">MT JCO</div>
+        <div class="name" id="jcoName">Name Here</div>
+        <button id="jcoNameBtn" class="editBtn hidden" onclick="editName('mtjco')">Edit Name</button>
+      </div>
+
+      <!-- 3 - MT NCO -->
+      <div class="qmCard">
+        <div class="picBox" onclick="if(IS_ADMIN) document.getElementById('ncoInput').click()">
+          <img id="ncoImg" src="" style="display:none">
+          <span id="ncoPh" style="color:#888;font-weight:bold">MT NCO</span>
+          <input type="file" id="ncoInput" accept="image/*" style="display:none" onchange="uploadHome('mtnco', this)">
+        </div>
+        <div class="role">MT NCO</div>
+        <div class="name" id="ncoName">Name Here</div>
+        <button id="ncoNameBtn" class="editBtn hidden" onclick="editName('mtnco')">Edit Name</button>
+      </div>
+
     </div>
 
     <div class="card"> 
@@ -65,22 +94,17 @@ body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-botto
       <div class="big" id="memberCountHome">0</div> 
     </div> 
   </div>
-  <div class="footerArmy">Copyright © 2026 <span style="color:#0e5d3e">BANGLADESH ARMY</span></div>
+  <div class="footerArmy">Copyright © 2026 BANGLADESH ARMY</div>
 </div>
 
 <div id="dashboardView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
   <div style="padding:15px;color:#fff"><h3 style="margin:0">Dashboard</h3></div>
-  <a href="group.html" style="text-decoration:none"> 
-    <div class="folder"> 
-      <div style="font-size:45px">💬</div> 
-      <h2 style="margin:10px 0 0 0">GROUP CHAT</h2> 
-    </div> 
-  </a> 
+  <a href="group.html" style="text-decoration:none"><div style="background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;color:#fff"><div style="font-size:45px">💬</div><h2>GROUP CHAT</h2></div></a> 
 </div> 
 
 <div id="groupView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
   <div style="padding:15px;color:#fff;font-weight:bold">Group Members - Seniority Wise</div> 
-  <div class="memberList" id="memberListBox"></div> 
+  <div id="memberListBox" style="background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px;color:#fff"></div> 
 </div> 
 
 <div class="bottom"> 
@@ -93,7 +117,7 @@ body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-botto
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
 const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
-const IS_ADMIN = MY_SENA == "4521328"; // sudu tumi admin
+const IS_ADMIN = true; // এখন সব সময় তুমি এডমিন - পরে MY_SENA=="4521328" করে দিবো
 
 document.getElementById("topProfile").innerText = MY_NAME.charAt(0).toUpperCase(); 
 let savedPic = localStorage.getItem("profile_pic"); 
@@ -101,7 +125,9 @@ if(savedPic){ document.getElementById("topProfile").innerHTML = '<img src="'+sav
 
 if(IS_ADMIN){
   document.getElementById("bannerUploadBtn").classList.remove("hidden");
-  document.getElementById("platoonUploadBtn").classList.remove("hidden");
+  document.getElementById("qmNameBtn").classList.remove("hidden");
+  document.getElementById("jcoNameBtn").classList.remove("hidden");
+  document.getElementById("ncoNameBtn").classList.remove("hidden");
 }
 
 function switchTab(tab){ 
@@ -116,35 +142,47 @@ function switchTab(tab){
   else{ document.getElementById('groupView').classList.remove('hidden'); document.getElementById('btnGroup').classList.add('active'); }
 } 
 
-function loadHomeImages(){
-  let b = localStorage.getItem("home_banner");
-  let p = localStorage.getItem("home_platoon");
-  if(b){ document.getElementById("bannerImg").src=b; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none"; }
-  if(p){ document.getElementById("platoonImg").src=p; document.getElementById("platoonImg").style.display="block"; document.getElementById("platoonPlaceholder").style.display="none"; }
-  // Sheet theke sobar jonno load
+function loadHome(){
+  let keys = ['banner','qm','mtjco','mtnco','qm_name','mtjco_name','mtnco_name'];
+  keys.forEach(k=>{
+    let v = localStorage.getItem("home_"+k);
+    if(v){ applyHome(k,v); }
+  });
   fetch(API+"?action=getHomeImages").then(r=>r.json()).then(d=>{
-    if(d.banner){ localStorage.setItem("home_banner", d.banner); document.getElementById("bannerImg").src=d.banner; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none"; }
-    if(d.platoon){ localStorage.setItem("home_platoon", d.platoon); document.getElementById("platoonImg").src=d.platoon; document.getElementById("platoonImg").style.display="block"; document.getElementById("platoonPlaceholder").style.display="none"; }
+    for(let k in d){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); }
   }).catch(()=>{});
 }
 
+function applyHome(k,v){
+  if(k=='banner'){ document.getElementById("bannerImg").src=v; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none"; }
+  if(k=='qm'){ document.getElementById("qmImg").src=v; document.getElementById("qmImg").style.display="block"; document.getElementById("qmPh").style.display="none"; }
+  if(k=='mtjco'){ document.getElementById("jcoImg").src=v; document.getElementById("jcoImg").style.display="block"; document.getElementById("jcoPh").style.display="none"; }
+  if(k=='mtnco'){ document.getElementById("ncoImg").src=v; document.getElementById("ncoImg").style.display="block"; document.getElementById("ncoPh").style.display="none"; }
+  if(k=='qm_name') document.getElementById("qmName").innerText=v;
+  if(k=='mtjco_name') document.getElementById("jcoName").innerText=v;
+  if(k=='mtnco_name') document.getElementById("ncoName").innerText=v;
+}
+
 function uploadHome(type, input){
-  let file = input.files[0];
-  if(!file) return;
+  let file = input.files[0]; if(!file) return;
   let reader = new FileReader();
-  reader.onload = function(e){
-    let base64 = e.target.result;
-    if(type=='banner'){
-      localStorage.setItem("home_banner", base64);
-      document.getElementById("bannerImg").src=base64; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none";
-    }else{
-      localStorage.setItem("home_platoon", base64);
-      document.getElementById("platoonImg").src=base64; document.getElementById("platoonImg").style.display="block"; document.getElementById("platoonPlaceholder").style.display="none";
-    }
-    // Google Sheet a save - sobai dekhbe
-    fetch(API, {method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:base64})}).then(()=>{ alert("Saved! Sobai ekhon dekhbe"); });
+  reader.onload = e=>{
+    let b64 = e.target.result;
+    localStorage.setItem("home_"+type, b64);
+    applyHome(type,b64);
+    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:b64})}).then(()=> alert("Saved! সবাই দেখবে"));
   };
   reader.readAsDataURL(file);
+}
+
+function editName(type){
+  let cur = localStorage.getItem("home_"+type+"_name") || "";
+  let nm = prompt("নাম লিখো:", cur);
+  if(nm){
+    localStorage.setItem("home_"+type+"_name", nm);
+    applyHome(type+"_name", nm);
+    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type+"_name", image:nm})});
+  }
 }
 
 function loadMembers(){ 
@@ -154,12 +192,12 @@ document.getElementById("memberCountHome").innerText = data.length;
 let html=""; 
 data.forEach((m, i)=>{ 
 let ini = m.name ? m.name.charAt(0).toUpperCase() : "M"; 
-html+='<div class="member"><div style="opacity:.5">'+(i+1)+'.</div><div class="avatar">'+ini+'</div><div><b>'+m.name+'</b><br><span style="font-size:12px;opacity:.6">'+m.sena+'</span></div></div>'; 
+html+='<div style="padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px"><div style="opacity:.5">'+(i+1)+'.</div><div style="width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold">'+ini+'</div><div><b>'+m.name+'</b><br><span style="font-size:12px;opacity:.6">'+m.sena+'</span></div></div>'; 
 }); 
 document.getElementById("memberListBox").innerHTML = html; 
 }); 
 } 
-loadHomeImages();
+loadHome();
 loadMembers(); 
 </script> 
 </body> 
