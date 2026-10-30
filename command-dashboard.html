@@ -1,109 +1,114 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT Platoon</title>
-<style>
-body{margin:0;font-family:sans-serif;background:#0a1a12;color:#fff;padding-bottom:80px}
-.top{background:#143d27;padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
-.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden;cursor:pointer}
-.profilePic img{width:100%;height:100%;object-fit:cover}
-.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center}
-.big{font-size:64px;font-weight:bold;color:#22c55e}
-.sectionTitle{padding:0 15px;margin-top:20px;font-weight:bold;opacity:.8}
-.memberList{background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px}
-.member{padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px}
-.member:last-child{border:none}
-.avatar{width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
-.sena{font-size:12px;opacity:.6}
-.folder{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;cursor:pointer}
-.bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10}
-.bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 25px}
-.bottom div.active{opacity:1;color:#22c55e;font-weight:bold}
-.hidden{display:none}
-</style>
-</head>
-<body>
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<title>MT Platoon</title> 
+<style> 
+body{margin:0;font-family:sans-serif;background:#0a1a12;color:#fff;padding-bottom:80px} 
+.top{background:#143d27;padding:12px 15px;display:flex;justify-content:space-between;align-items:center} 
+.profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden;cursor:pointer} 
+.profilePic img{width:100%;height:100%;object-fit:cover} 
+.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center} 
+.big{font-size:64px;font-weight:bold;color:#22c55e} 
+.sectionTitle{padding:0 15px;margin-top:20px;font-weight:bold;opacity:.8} 
+.memberList{background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px} 
+.member{padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:12px} 
+.member:last-child{border:none} 
+.avatar{width:38px;height:38px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0} 
+.sena{font-size:12px;opacity:.6} 
+.folder{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;cursor:pointer} 
+.bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10} 
+.bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px} 
+.bottom div.active{opacity:1;color:#22c55e;font-weight:bold} 
+.hidden{display:none} 
+</style> 
+</head> 
+<body> 
+<div class="top"> 
+<b>4 BIR - MT PLATOON</b> 
+<div id="topProfile" class="profilePic" onclick="location.href='profile.html'">R</div> 
+</div> 
 
-<div class="top">
-<b>4 BIR - MT PLATOON</b>
-<div id="topProfile" class="profilePic" onclick="location.href='profile.html'">R</div>
-</div>
-
-<div style="padding:20px 15px 5px 15px">
-<h1 style="margin:0;font-size:28px">Welcome to Mt Platoon</h1>
-<p style="opacity:.6;margin:5px 0;font-size:14px">Stay prepared. Everything up to date.</p>
+<!-- HOME VIEW - Eta main Welcome page -->
+<div id="homeView">
+  <div style="padding:20px 15px 5px 15px"> 
+    <h1 style="margin:0;font-size:28px">Welcome to Mt Platoon</h1> 
+    <p style="opacity:.6;margin:5px 0;font-size:14px">Stay prepared. Everything up to date.</p> 
+  </div> 
+  <div class="card"> 
+    <div style="opacity:.8">👥 Group Members</div> 
+    <div class="big" id="memberCountHome">0</div> 
+  </div> 
 </div>
 
 <!-- DASHBOARD VIEW - Vitore Group Chat Folder Hisebe Thakbe -->
-<div id="dashboardView">
-  <div class="card">
-    <div style="opacity:.8">👥 Group Members</div>
-    <div class="big" id="memberCount">0</div>
-  </div>
-  <a href="group.html" style="text-decoration:none;color:#fff">
-    <div class="folder">
-      <div style="font-size:45px">💬</div>
-      <h2 style="margin:10px 0 0 0">GROUP CHAT</h2>
-    </div>
-  </a>
-</div>
+<div id="dashboardView" class="hidden"> 
+  <div style="padding:15px"><h3 style="margin:0">Dashboard</h3></div>
+  <a href="group.html" style="text-decoration:none;color:#fff"> 
+    <div class="folder"> 
+      <div style="font-size:45px">💬</div> 
+      <h2 style="margin:10px 0 0 0">GROUP CHAT</h2> 
+    </div> 
+  </a> 
+</div> 
 
 <!-- GROUP VIEW - Niche Dane Group er Vitore Seniority List -->
-<div id="groupView" class="hidden">
-  <div class="sectionTitle">Group Members - Seniority Wise</div>
-  <div class="memberList" id="memberListBox">
-    <div style="text-align:center;padding:20px;opacity:.7">Loading...</div>
-  </div>
-</div>
+<div id="groupView" class="hidden"> 
+  <div class="sectionTitle">Group Members - Seniority Wise</div> 
+  <div class="memberList" id="memberListBox"> 
+    <div style="text-align:center;padding:20px;opacity:.7">Loading...</div> 
+  </div> 
+</div> 
 
-<div class="bottom">
-<div id="btnDash" class="active" onclick="switchTab('dash')">🏠<br>Dashboard</div>
-<div id="btnGroup" onclick="switchTab('group')">👥<br>Group</div>
-</div>
+<div class="bottom"> 
+<div id="btnDash" onclick="switchTab('dash')">🏠<br>Dashboard</div> 
+<div id="btnHome" class="active" onclick="switchTab('home')">🏡<br>Home Page</div> 
+<div id="btnGroup" onclick="switchTab('group')">👥<br>Group</div> 
+</div> 
 
-<script>
-const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
-const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
+<script> 
+const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
+const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto"; 
+let initial = MY_NAME.charAt(0).toUpperCase(); 
+document.getElementById("topProfile").innerText = initial; 
+let savedPic = localStorage.getItem("profile_pic"); 
+if(savedPic){ 
+document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'" style="width:100%;height:100%;border-radius:50%">'; 
+} 
 
-let initial = MY_NAME.charAt(0).toUpperCase();
-document.getElementById("topProfile").innerText = initial;
-let savedPic = localStorage.getItem("profile_pic");
-if(savedPic){
-  document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'">';
-}
+function switchTab(tab){ 
+  document.getElementById('dashboardView').classList.add('hidden'); 
+  document.getElementById('homeView').classList.add('hidden'); 
+  document.getElementById('groupView').classList.add('hidden'); 
+  document.getElementById('btnDash').classList.remove('active'); 
+  document.getElementById('btnHome').classList.remove('active'); 
+  document.getElementById('btnGroup').classList.remove('active'); 
 
-function switchTab(tab){
-  if(tab==='dash'){
-    document.getElementById('dashboardView').classList.remove('hidden');
-    document.getElementById('groupView').classList.add('hidden');
-    document.getElementById('btnDash').classList.add('active');
-    document.getElementById('btnGroup').classList.remove('active');
-  }else{
-    document.getElementById('dashboardView').classList.add('hidden');
-    document.getElementById('groupView').classList.remove('hidden');
-    document.getElementById('btnDash').classList.remove('active');
-    document.getElementById('btnGroup').classList.add('active');
-  }
-}
+  if(tab==='dash'){ 
+    document.getElementById('dashboardView').classList.remove('hidden'); 
+    document.getElementById('btnDash').classList.add('active'); 
+  }else if(tab==='home'){
+    document.getElementById('homeView').classList.remove('hidden'); 
+    document.getElementById('btnHome').classList.add('active'); 
+  }else{ 
+    document.getElementById('groupView').classList.remove('hidden'); 
+    document.getElementById('btnGroup').classList.add('active'); 
+  } 
+} 
 
-function loadMembers(){
-  fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{
-    // Seniority onujayi Sort - Sena number kom = senior
-    data.sort((a,b)=> parseInt(a.sena) - parseInt(b.sena));
-    
-    document.getElementById("memberCount").innerText = data.length;
-    
-    let html="";
-    data.forEach((m, index)=>{
-      let ini = m.name ? m.name.charAt(0).toUpperCase() : "M";
-      html+='<div class="member"><div style="min-width:20px;opacity:.5">'+(index+1)+'.</div><div class="avatar">'+ini+'</div><div><b>'+m.name+'</b><br><span class="sena">'+m.sena+'</span></div></div>';
-    });
-    document.getElementById("memberListBox").innerHTML = html;
-  });
-}
-loadMembers();
-</script>
-
-</body>
+function loadMembers(){ 
+fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{ 
+data.sort((a,b)=> parseInt(a.sena) - parseInt(b.sena)); 
+document.getElementById("memberCountHome").innerText = data.length; 
+let html=""; 
+data.forEach((m, index)=>{ 
+let ini = m.name ? m.name.charAt(0).toUpperCase() : "M"; 
+html+='<div class="member"><div style="min-width:20px;opacity:.5">'+(index+1)+'.</div><div class="avatar">'+ini+'</div><div><b>'+m.name+'</b><br><span class="sena">'+m.sena+'</span></div></div>'; 
+}); 
+document.getElementById("memberListBox").innerHTML = html; 
+}); 
+} 
+loadMembers(); 
+</script> 
+</body> 
 </html>
