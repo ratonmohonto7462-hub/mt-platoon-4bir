@@ -7,13 +7,14 @@
 body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-bottom:80px} 
 .topArmy{background:#0a1a12;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;color:#fff}
 .profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden;cursor:pointer} 
-.greenBar{background:#0e5d3e;color:#ffc107;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:bold}
-.bannerArmy{background:#1a2e1a;color:#fff;padding:14px 15px;display:flex;align-items:center;gap:12px;font-weight:bold;font-size:18px;letter-spacing:1px;border-bottom:3px solid #ffc107}
-.slider{width:100%;height:220px;background:#0e5d3e;overflow:hidden;position:relative}
+.greenBar{background:#0e5d3e;color:#ffc107;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold}
+.bannerArmy{background:#1a2e1a;color:#fff;padding:14px 15px;display:flex;align-items:center;gap:12px;font-weight:bold;font-size:18px;border-bottom:3px solid #ffc107}
+.slider{width:100%;height:240px;background:#000;overflow:hidden;position:relative}
 .slider img{width:100%;height:100%;object-fit:cover}
 .whiteBox{background:#fff;text-align:center;padding:20px 15px}
-.coasImg{width:260px;height:340px;margin:10px auto;background:#0e5d3e;border-radius:12px;overflow:hidden;border:3px solid #0e5d3e;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.coasImg{width:280px;min-height:340px;margin:10px auto;background:#d9d9d9;border-radius:12px;overflow:hidden;border:3px solid #0e5d3e;position:relative;display:flex;align-items:center;justify-content:center}
 .coasImg img{width:100%;height:100%;object-fit:cover}
+.uploadBtn{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#0e5d3e;color:#ffc107;border:1px solid #ffc107;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer}
 .card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center;color:#fff}
 .big{font-size:64px;font-weight:bold;color:#22c55e}
 .footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff;border-top:1px solid #eee}
@@ -34,40 +35,39 @@ body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-botto
 <div id="topProfile" class="profilePic" onclick="location.href='profile.html'">R</div> 
 </div> 
 
-<!-- HOME VIEW - Tumar chaoa moto -->
 <div id="homeView">
-  <!-- 1 number - Call Us -->
   <div class="greenBar">
-    <div>📞 Call Us: 01713 161979</div>
-    <div>⬇️ APPLY NOW</div>
+    <div>📞 Call Us: 01769-013433</div>
   </div>
   
-  <!-- 3 number - Welcome to Mt Platoon -->
   <div class="bannerArmy">
     <div style="width:42px;height:42px;background:#ffc107;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000">⚔️</div>
     <div>Welcome to Mt Platoon</div>
   </div>
 
-  <!-- 4 number - Helicopter Slider -->
-  <div class="slider">
-    <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b" alt="army">
+  <div class="slider" id="bannerBox">
+    <img id="bannerImg" src="" style="display:none">
+    <div id="bannerPlaceholder" style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1540962351504-03099e0a754b') center/cover"></div>
+    <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="uploadHome('banner', this)">
+    <div id="bannerUploadBtn" class="uploadBtn hidden" onclick="document.getElementById('bannerInput').click()">✏️ Change Banner (Admin)</div>
   </div>
 
-  <!-- Baki - COAS + Members -->
   <div class="whiteBox">
-    <div class="coasImg">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/General_Waker-Uz-Zaman.jpg/440px-General_Waker-Uz-Zaman.jpg" onerror="this.src='https://via.placeholder.com/260x340?text=MT+PLATOON'">
+    <div class="coasImg" id="platoonBox">
+      <img id="platoonImg" src="" style="display:none">
+      <div id="platoonPlaceholder" style="color:#888;font-size:22px;font-weight:bold;opacity:.6">MT PLATOON</div>
+      <input type="file" id="platoonInput" accept="image/*" style="display:none" onchange="uploadHome('platoon', this)">
+      <div id="platoonUploadBtn" class="uploadBtn hidden" onclick="document.getElementById('platoonInput').click()">✏️ Add Photo (Admin)</div>
     </div>
 
     <div class="card"> 
       <div style="opacity:.8">👥 Group Members</div> 
-      <div class="big" id="memberCountHome">1</div> 
+      <div class="big" id="memberCountHome">0</div> 
     </div> 
   </div>
   <div class="footerArmy">Copyright © 2026 <span style="color:#0e5d3e">BANGLADESH ARMY</span></div>
 </div>
 
-<!-- DASHBOARD VIEW -->
 <div id="dashboardView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
   <div style="padding:15px;color:#fff"><h3 style="margin:0">Dashboard</h3></div>
   <a href="group.html" style="text-decoration:none"> 
@@ -78,12 +78,9 @@ body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-botto
   </a> 
 </div> 
 
-<!-- GROUP VIEW -->
 <div id="groupView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
   <div style="padding:15px;color:#fff;font-weight:bold">Group Members - Seniority Wise</div> 
-  <div class="memberList" id="memberListBox"> 
-    <div style="text-align:center;padding:20px;opacity:.7">Loading...</div> 
-  </div> 
+  <div class="memberList" id="memberListBox"></div> 
 </div> 
 
 <div class="bottom"> 
@@ -94,10 +91,19 @@ body{margin:0;font-family:sans-serif;background:#f5f5f5;color:#000;padding-botto
 
 <script> 
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
-const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto"; 
+const MY_SENA = localStorage.getItem("sena_no") || "4521328";
+const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
+const IS_ADMIN = MY_SENA == "4521328"; // sudu tumi admin
+
 document.getElementById("topProfile").innerText = MY_NAME.charAt(0).toUpperCase(); 
 let savedPic = localStorage.getItem("profile_pic"); 
 if(savedPic){ document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'" style="width:100%;height:100%;border-radius:50%">'; }
+
+if(IS_ADMIN){
+  document.getElementById("bannerUploadBtn").classList.remove("hidden");
+  document.getElementById("platoonUploadBtn").classList.remove("hidden");
+}
+
 function switchTab(tab){ 
   document.getElementById('dashboardView').classList.add('hidden'); 
   document.getElementById('homeView').classList.add('hidden'); 
@@ -109,6 +115,38 @@ function switchTab(tab){
   else if(tab==='home'){ document.getElementById('homeView').classList.remove('hidden'); document.getElementById('btnHome').classList.add('active'); }
   else{ document.getElementById('groupView').classList.remove('hidden'); document.getElementById('btnGroup').classList.add('active'); }
 } 
+
+function loadHomeImages(){
+  let b = localStorage.getItem("home_banner");
+  let p = localStorage.getItem("home_platoon");
+  if(b){ document.getElementById("bannerImg").src=b; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none"; }
+  if(p){ document.getElementById("platoonImg").src=p; document.getElementById("platoonImg").style.display="block"; document.getElementById("platoonPlaceholder").style.display="none"; }
+  // Sheet theke sobar jonno load
+  fetch(API+"?action=getHomeImages").then(r=>r.json()).then(d=>{
+    if(d.banner){ localStorage.setItem("home_banner", d.banner); document.getElementById("bannerImg").src=d.banner; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none"; }
+    if(d.platoon){ localStorage.setItem("home_platoon", d.platoon); document.getElementById("platoonImg").src=d.platoon; document.getElementById("platoonImg").style.display="block"; document.getElementById("platoonPlaceholder").style.display="none"; }
+  }).catch(()=>{});
+}
+
+function uploadHome(type, input){
+  let file = input.files[0];
+  if(!file) return;
+  let reader = new FileReader();
+  reader.onload = function(e){
+    let base64 = e.target.result;
+    if(type=='banner'){
+      localStorage.setItem("home_banner", base64);
+      document.getElementById("bannerImg").src=base64; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none";
+    }else{
+      localStorage.setItem("home_platoon", base64);
+      document.getElementById("platoonImg").src=base64; document.getElementById("platoonImg").style.display="block"; document.getElementById("platoonPlaceholder").style.display="none";
+    }
+    // Google Sheet a save - sobai dekhbe
+    fetch(API, {method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:base64})}).then(()=>{ alert("Saved! Sobai ekhon dekhbe"); });
+  };
+  reader.readAsDataURL(file);
+}
+
 function loadMembers(){ 
 fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{ 
 data.sort((a,b)=> parseInt(a.sena) - parseInt(b.sena)); 
@@ -121,6 +159,7 @@ html+='<div class="member"><div style="opacity:.5">'+(i+1)+'.</div><div class="a
 document.getElementById("memberListBox").innerHTML = html; 
 }); 
 } 
+loadHomeImages();
 loadMembers(); 
 </script> 
 </body> 
