@@ -2,7 +2,7 @@
 <html> 
 <head> 
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
-<title>MT Platoon</title> 
+<title>MT Platoon - NEW</title> 
 <style> 
 body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-bottom:80px} 
 .topArmy{background:#0a1a12;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;color:#fff} 
@@ -23,22 +23,15 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 .card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px 0;text-align:center;color:#fff} 
 .big{font-size:64px;font-weight:bold;color:#22c55e} 
 .secTitle{color:#0e5d3e;font-weight:800;font-size:16px;margin:20px 0 10px 0;display:flex;justify-content:space-between;align-items:center;border-left:4px solid #ffc107;padding-left:8px} 
-.noticeItem{background:#fffbe6;border-left:4px solid #ffc107;padding:10px;border-radius:6px;margin-bottom:8px;font-size:13px} 
-.callCard{background:#fff;border:1px solid #ddd;padding:12px;border-radius:10px;margin-bottom:8px} 
-.callBtn{background:#0e5d3e;color:#ffc107;padding:6px 14px;border-radius:15px;text-decoration:none;font-size:12px;font-weight:bold} 
-.actionBtn{border:none;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;margin-left:4px} 
-.editBtn{background:#0e5d3e;color:#ffc107} 
-.delBtn{background:#c62828;color:#fff} 
-/* ACCORDION STYLE - শুধু নাম থাকবে, চাপ দিলে নিচে ভাসবে */
 .accHeader{background:#fff;border:1px solid #ddd;padding:12px;border-radius:10px;margin-bottom:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:14px}
-.accHeader span.arrow{transition:0.3s}
-.accHeader.active span.arrow{transform:rotate(180deg)}
-.accBody{display:none;background:#f9fff9;border:1px solid #c8e6c9;border-top:none;padding:12px;border-radius:0 0 10px 10px;margin:-6px 0 8px 0;font-size:13px;line-height:1.6}
-.accBody.show{display:block;animation:slideDown 0.3s}
-@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.boxCard{background:#fff;border:2px solid #0e5d3e;border-radius:12px;padding:15px;margin-top:10px}
-.boxCard input, .boxCard select{width:100%;padding:9px;margin:6px 0;border:1px solid #ccc;border-radius:6px;font-size:13px;box-sizing:border-box}
-.mainBtn{width:100%;background:#0e5d3e;color:#ffc107;border:none;padding:11px;border-radius:8px;font-weight:bold;margin-top:8px;cursor:pointer}
+.accBody{display:none;background:#f9fff9;border:1px solid #c8e6c9;border-top:none;padding:12px;border-radius:0 0 10px 10px;margin:-6px 0 8px 0;font-size:13px}
+.accBody.show{display:block}
+.boxCard{background:#fff;border:2px solid #0e5d3e;border-radius:12px;padding:12px;margin-top:10px}
+.boxCard input, .boxCard select{width:100%;padding:8px;margin:5px 0;border:1px solid #ccc;border-radius:6px;font-size:13px;box-sizing:border-box}
+.mainBtn{width:100%;background:#0e5d3e;color:#ffc107;border:none;padding:10px;border-radius:8px;font-weight:bold;margin-top:6px;cursor:pointer}
+.callBtn{background:#0e5d3e;color:#ffc107;padding:6px 14px;border-radius:15px;text-decoration:none;font-size:12px;font-weight:bold}
+.actionBtn{border:none;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;margin-left:4px}
+.editBtn{background:#0e5d3e;color:#ffc107} .delBtn{background:#c62828;color:#fff}
 .footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff} 
 .bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10} 
 .bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px;color:#fff} 
@@ -70,49 +63,47 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 </div> 
 </div> 
 
-<!-- NOTICE ACCORDION -->
 <div class="secTitle"><span>📢 NOTICE BOARD</span><button id="noticeAddBtn" class="hidden" onclick="addNotice()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div> 
 <div id="noticeList"></div> 
 
-<!-- EMERGENCY ACCORDION -->
 <div class="secTitle"><span>🚨 EMERGENCY CONTACTS</span><button id="emergencyAddBtn" class="hidden" onclick="addEmergency()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div> 
 <div id="emergencyList"></div> 
 
-<!-- WHATSAPP 3 NUMBER EDIT -->
+<!-- NEW 3 NUMBER EDIT -->
 <div id="waEditPanel" class="hidden boxCard" style="background:#fffbe6;border-style:dashed">
-<b style="color:#0e5d3e">📱 WhatsApp 3 Number Edit (Admin)</b>
-<input type="text" id="wa1" placeholder="Number 1 - MT JCO">
-<input type="text" id="wa2" placeholder="Number 2 - QM">
-<input type="text" id="wa3" placeholder="Number 3 - MT NCO">
-<button onclick="saveWANumbers()" class="mainBtn">💾 Save 3 Numbers</button>
-<div id="waShow" style="font-size:11px;color:#666;margin-top:6px"></div>
+<b>📱 3 WhatsApp Numbers Edit</b>
+<input id="wa1" placeholder="MT JCO Number">
+<input id="wa2" placeholder="QM Number">
+<input id="wa3" placeholder="MT NCO Number">
+<button onclick="saveWANumbers()" class="mainBtn">💾 Save</button>
+<div id="waShow" style="font-size:11px;margin-top:5px"></div>
 </div>
 
-<!-- LEAVE CARD FORM -->
+<!-- NEW LEAVE CARD -->
 <div class="secTitle"><span>📝 LEAVE CARD</span></div>
 <div class="boxCard">
-<input type="text" id="lvName" placeholder="নাম">
-<input type="text" id="lvSena" placeholder="সেনা নং">
+<input id="lvName" placeholder="নাম">
+<input id="lvSena" placeholder="সেনা নং">
 <select id="lvType"><option>Night Pass</option><option>Casual Leave</option><option>Annual Leave</option></select>
 <input type="date" id="lvDate">
-<input type="text" id="lvReason" placeholder="কারণ">
-<input type="text" id="lvPlace" placeholder="স্থান">
-<button class="mainBtn" onclick="submitLeave()">✅ Leave জমা + 3 WhatsApp</button>
+<input id="lvReason" placeholder="কারণ">
+<input id="lvPlace" placeholder="স্থান">
+<button onclick="submitLeave()" class="mainBtn">✅ জমা + WhatsApp</button>
 </div>
-<div class="secTitle"><span>📋 Leave List (নামে চাপ দাও)</span></div>
+<div class="secTitle"><span>📋 Leave List</span></div>
 <div id="leaveList"></div>
 
-<!-- COMPLAIN BOX FORM -->
+<!-- NEW COMPLAIN BOX -->
 <div class="secTitle"><span>🔧 COMPLAIN BOX</span></div>
 <div class="boxCard">
-<input type="text" id="cpName" placeholder="নাম">
-<input type="text" id="cpSena" placeholder="সেনা নং">
-<input type="text" id="cpVehicle" placeholder="গাড়ি নং">
-<select id="cpType"><option>Engine Problem</option><option>Break Problem</option><option>Tyre Problem</option><option>Battery Problem</option><option>Other</option></select>
-<input type="text" id="cpDetails" placeholder="বিস্তারিত সমস্যা">
-<button class="mainBtn" onclick="submitComplain()">🔧 Complain জমা + 3 WhatsApp</button>
+<input id="cpName" placeholder="নাম">
+<input id="cpSena" placeholder="সেনা নং">
+<input id="cpVehicle" placeholder="গাড়ি নং">
+<select id="cpType"><option>Engine Problem</option><option>Break Problem</option><option>Tyre Problem</option><option>Other</option></select>
+<input id="cpDetails" placeholder="বিস্তারিত">
+<button onclick="submitComplain()" class="mainBtn">🔧 জমা + 3 WhatsApp</button>
 </div>
-<div class="secTitle"><span>📋 Complain List (নামে চাপ দাও)</span></div>
+<div class="secTitle"><span>📋 Complain List</span></div>
 <div id="complainList"></div>
 
 <div class="card"><div style="opacity:.8">👥 Group Members</div><div class="big" id="memberCountHome">0</div></div> 
@@ -149,13 +140,16 @@ document.getElementById("bannerFileInput").addEventListener("change", function()
 function uploadHome(type, input){ let file=input.files[0]; if(!file) return; let reader=new FileReader(); reader.onload=e=>{ let b=e.target.result; localStorage.setItem("home_"+type, b); applyHome(type,b); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:b})}); }; reader.readAsDataURL(file);} 
 function editName(type){ let cur=localStorage.getItem("home_"+type+"_name")||""; let nm=prompt("নাম লিখো:", cur); if(nm){ localStorage.setItem("home_"+type+"_name", nm); applyHome(type+"_name", nm); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type+"_name", image:nm})}); }} 
 function save(type,data){ localStorage.setItem(type, JSON.stringify(data)); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:JSON.stringify(data)})}); }
-function toggleAcc(id){ let body=document.getElementById(id); let header=body.previousElementSibling; body.classList.toggle("show"); header.classList.toggle("active"); }
+function toggleAcc(id){ let b=document.getElementById(id); let h=b.previousElementSibling; b.classList.toggle("show"); h.classList.toggle("active"); }
 
-// NOTICE ACCORDION - শুধু নাম থাকবে
-function renderNotices(list){ let h=""; list.forEach((n,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();editNotice(${i})">✏️</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteNotice(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('notice_${i}')"><span>📢 ${n.text.substring(0,25)}...</span><span style="display:flex;gap:4px;align-items:center">${btn}<span class="arrow">▼</span></span></div><div id="notice_${i}" class="accBody">📅 ${n.date}<br>${n.text}</div>`; }); document.getElementById("noticeList").innerHTML=h||'No Notice'; }
-function addNotice(){ let txt=prompt("Notice লিখো:"); if(!txt) return; let list=JSON.parse(localStorage.getItem("notices")||"[]"); list.unshift({date:new Date().toLocaleDateString(), text:txt}); save("notices",list); renderNotices(list); }
-function editNotice(i){ let list=JSON.parse(localStorage.getItem("notices")||"[]"); let txt=prompt("Edit:", list[i].text); if(txt===null) return; list[i].text=txt; list[i].date=new Date().toLocaleDateString(); save("notices",list); renderNotices(list); }
-function deleteNotice(i){ if(!confirm("Delete?")) return; let list=JSON.parse(localStorage.getItem("notices")||"[]"); list.splice(i,1); save("notices",list); renderNotices(list); }
+function renderNotices(list){ let h=""; list.forEach((n,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();editNotice(${i})">✏️</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteNotice(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('n_${i}')"><span>📢 ${n.text.substring(0,20)}...</span><span>${btn} ▼</span></div><div id="n_${i}" class="accBody">📅 ${n.date}<br>${n.text}</div>`; }); document.getElementById("noticeList").innerHTML=h; }
+function addNotice(){ let t=prompt("Notice:"); if(!t) return; let l=JSON.parse(localStorage.getItem("notices")||"[]"); l.unshift({date:new Date().toLocaleDateString(), text:t}); save("notices",l); renderNotices(l); }
+function editNotice(i){ let l=JSON.parse(localStorage.getItem("notices")||"[]"); let t=prompt("Edit:",l[i].text); if(t===null) return; l[i].text=t; l[i].date=new Date().toLocaleDateString(); save("notices",l); renderNotices(l); }
+function deleteNotice(i){ if(!confirm("Delete?")) return; let l=JSON.parse(localStorage.getItem("notices")||"[]"); l.splice(i,1); save("notices",l); renderNotices(l); }
 
-// EMERGENCY ACCORDION - শুধু নাম থাকবে
-function renderEmergency(list){ let h=""; list.forEach((e,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();editEmergency(${i})">✏️</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteEmergency(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('em_${i}')"><span>🚨 ${e.name} - ${e.sub||''}</span><span style="display:flex;gap:4px;align-items:center">${btn}<span class="arrow">▼</span></span></div><div id="em_${i}" class="accBody"><b>${e.name}</b><br>${e.sub|
+function renderEmergency(list){ let h=""; list.forEach((e,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();editEmergency(${i})">✏️</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteEmergency(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('e_${i}')"><span>🚨 ${e.name}</span><span>${btn} ▼</span></div><div id="e_${i}" class="accBody"><b>${e.name}</b><br>${e.sub||''}<br>${e.num}<br><br><a class="callBtn" href="tel:${e.num}">📞 CALL</a></div>`; }); document.getElementById("emergencyList").innerHTML=h; }
+function addEmergency(){ let n=prompt("পদবি:"); if(!n) return; let s=prompt("নাম:"); let num=prompt("নাম্বার:"); if(!num) return; let l=JSON.parse(localStorage.getItem("emergency")||"[]"); l.push({name:n,sub:s,num}); save("emergency",l); renderEmergency(l); }
+function editEmergency(i){ let l=JSON.parse(localStorage.getItem("emergency")||"[]"); let c=l[i]; let n=prompt("পদবি:",c.name); if(n===null) return; let s=prompt("নাম:",c.sub); let num=prompt("নাম্বার:",c.num); l[i]={name:n,sub:s,num:num}; save("emergency",l); renderEmergency(l); }
+function deleteEmergency(i){ if(!confirm("Delete?")) return; let l=JSON.parse(localStorage.getItem("emergency")||"[]"); l.splice(i,1); save("emergency",l); renderEmergency(l); }
+
+function loadWANumbers(){ document.getElementById("wa1").value=WA_NUMBERS[0]||""; document.getElementById("wa2").value=WA_NUMBERS[1]||""; document.getElementById("wa3").value=WA_NUMBERS[2]||""; document.getElementById("waShow").innerHTML=`1. ${WA_NUMBERS[0]}<br>2. ${WA_NUMBERS[1]}<br>3. ${WA_NUMBERS[2]}`; if(IS_ADMIN) document.getElementById(
