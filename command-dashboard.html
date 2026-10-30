@@ -9,20 +9,20 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 .profilePic{width:44px;height:44px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden}
 .greenBar{background:#0e5d3e;color:#ffc107;padding:10px 15px;font-weight:bold;font-size:14px}
 .bannerArmy{background:#1a2e1a;color:#fff;padding:14px 15px;display:flex;align-items:center;gap:12px;font-weight:bold;font-size:18px;border-bottom:3px solid #ffc107}
-.slider{width:100%;height:240px;background:#000;position:relative;overflow:hidden}
-.slider img{width:100%;height:100%;object-fit:cover}
-.uploadBtn{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#0e5d3e;color:#ffc107;border:1px solid #ffc107;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;z-index:5}
-.whiteBox{background:#fff;padding:20px 10px}
-.qmGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
-.qmCard{background:#fff;border:2px solid #0e5d3e;border-radius:12px;overflow:hidden;text-align:center;position:relative;padding-bottom:8px}
-.qmCard .picBox{width:100%;height:130px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.qmCard .picBox img{width:100%;height:100%;object-fit:cover}
-.qmCard .role{font-weight:800;font-size:13px;margin-top:6px;color:#0e5d3e}
-.qmCard .name{font-size:11px;color:#333;margin-top:2px;padding:0 4px;word-break:break-word}
-.qmCard .editBtn{font-size:10px;background:#0e5d3e;color:#fff;border:none;border-radius:10px;padding:2px 6px;margin-top:4px;cursor:pointer}
-.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center;color:#fff}
+.slider{width:100%;height:260px;background:#000;position:relative;overflow:hidden}
+.slider img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity .6s}
+.slider img.active{opacity:1}
+.dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+.dots span{width:8px;height:8px;background:rgba(255,255,255,.5);border-radius:50%;cursor:pointer}
+.dots span.active{background:#ffc107}
+.editPanel{background:#fff;border:2px dashed #0e5d3e;margin:10px;padding:10px;border-radius:10px}
+.editGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.editGrid div{width:100%;height:50px;background:#eee;border-radius:6px;overflow:hidden;position:relative;cursor:pointer;border:1px solid #ccc}
+.editGrid div img{width:100%;height:100%;object-fit:cover}
+.whiteBox{background:#fff;padding:15px}
+.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px 0;text-align:center;color:#fff}
 .big{font-size:64px;font-weight:bold;color:#22c55e}
-.footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff;border-top:1px solid #eee}
+.footerArmy{text-align:center;padding:15px;color:#888;font-size:13px;background:#fff}
 .bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a;z-index:10}
 .bottom div{text-align:center;cursor:pointer;opacity:.6;padding:5px 15px;font-size:14px;color:#fff}
 .bottom div.active{opacity:1;color:#22c55e;font-weight:bold}
@@ -31,68 +31,54 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 </head> 
 <body> 
 
-<div class="topArmy"> 
-<b>4 BIR - MT PLATOON</b> 
-<div id="topProfile" class="profilePic" onclick="location.href='profile.html'">R</div> 
-</div> 
+<div class="topArmy"><b>4 BIR - MT PLATOON</b><div id="topProfile" class="profilePic">R</div></div> 
 
 <div id="homeView">
   <div class="greenBar">📞 Call Us: 01769-013433</div>
   <div class="bannerArmy"><div style="width:42px;height:42px;background:#ffc107;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000">⚔️</div> Welcome to Mt Platoon</div>
 
-  <div class="slider" id="bannerBox">
-    <img id="bannerImg" src="" style="display:none">
-    <div id="bannerPlaceholder" style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1540962351504-03099e0a754b') center/cover"></div>
-    <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="uploadHome('banner', this)">
-    <div id="bannerUploadBtn" class="uploadBtn hidden" onclick="document.getElementById('bannerInput').click()">✏️ Change Banner</div>
+  <!-- 10 PIC SLIDER - 2 SEC AUTO -->
+  <div class="slider" id="sliderBox">
+    <div id="sliderImgs"></div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <!-- ADMIN EDIT 10 PIC -->
+  <div id="adminEditBox" class="editPanel hidden">
+    <b style="color:#0e5d3e">📸 Edit 10 Banner Pics (Admin Only - Click to Change)</b>
+    <div class="editGrid" id="editGrid"></div>
+    <input type="file" id="bannerFileInput" accept="image/*" style="display:none">
   </div>
 
   <div class="whiteBox">
-    <h3 style="text-align:center;margin:0 0 12px 0;color:#0e5d3e">PLATOON COMMAND</h3>
-    <div class="qmGrid">
-      
-      <!-- 1 - QM -->
-      <div class="qmCard">
-        <div class="picBox" onclick="if(IS_ADMIN) document.getElementById('qmInput').click()">
-          <img id="qmImg" src="" style="display:none">
-          <span id="qmPh" style="color:#888;font-weight:bold">QM</span>
+    <h3 style="text-align:center;margin:0 0 15px 0;color:#0e5d3e">PLATOON COMMAND</h3>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
+        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="document.getElementById('qmInput').click()">
+          <img id="qmImg" src="" style="display:none;width:100%;height:100%;object-fit:cover">
+          <span id="qmPh">👤<br><b>QM</b></span>
           <input type="file" id="qmInput" accept="image/*" style="display:none" onchange="uploadHome('qm', this)">
         </div>
-        <div class="role">QM</div>
-        <div class="name" id="qmName">Name Here</div>
-        <button id="qmNameBtn" class="editBtn hidden" onclick="editName('qm')">Edit Name</button>
+        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">QM</div><div id="qmName" style="font-weight:bold;margin-top:4px">Name Here</div><button onclick="editName('qm')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
       </div>
-
-      <!-- 2 - MT JCO -->
-      <div class="qmCard">
-        <div class="picBox" onclick="if(IS_ADMIN) document.getElementById('jcoInput').click()">
-          <img id="jcoImg" src="" style="display:none">
-          <span id="jcoPh" style="color:#888;font-weight:bold">MT JCO</span>
+      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
+        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="document.getElementById('jcoInput').click()">
+          <img id="jcoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover">
+          <span id="jcoPh">👤<br><b>MT JCO</b></span>
           <input type="file" id="jcoInput" accept="image/*" style="display:none" onchange="uploadHome('mtjco', this)">
         </div>
-        <div class="role">MT JCO</div>
-        <div class="name" id="jcoName">Name Here</div>
-        <button id="jcoNameBtn" class="editBtn hidden" onclick="editName('mtjco')">Edit Name</button>
+        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT JCO</div><div id="jcoName" style="font-weight:bold;margin-top:4px">Name Here</div><button onclick="editName('mtjco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
       </div>
-
-      <!-- 3 - MT NCO -->
-      <div class="qmCard">
-        <div class="picBox" onclick="if(IS_ADMIN) document.getElementById('ncoInput').click()">
-          <img id="ncoImg" src="" style="display:none">
-          <span id="ncoPh" style="color:#888;font-weight:bold">MT NCO</span>
+      <div style="background:#fff;border:2px solid #0e5d3e;border-radius:14px;text-align:center;padding-bottom:12px">
+        <div style="width:100%;height:240px;background:#d9d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden" onclick="document.getElementById('ncoInput').click()">
+          <img id="ncoImg" src="" style="display:none;width:100%;height:100%;object-fit:cover">
+          <span id="ncoPh">👤<br><b>MT NCO</b></span>
           <input type="file" id="ncoInput" accept="image/*" style="display:none" onchange="uploadHome('mtnco', this)">
         </div>
-        <div class="role">MT NCO</div>
-        <div class="name" id="ncoName">Name Here</div>
-        <button id="ncoNameBtn" class="editBtn hidden" onclick="editName('mtnco')">Edit Name</button>
+        <div style="margin-top:10px"><div style="font-weight:800;color:#0e5d3e">MT NCO</div><div id="ncoName" style="font-weight:bold;margin-top:4px">Name Here</div><button onclick="editName('mtnco')" style="margin-top:6px;font-size:11px;padding:4px 10px;border-radius:10px;background:#0e5d3e;color:#ffc107;border:none">Edit Name</button></div>
       </div>
-
     </div>
-
-    <div class="card"> 
-      <div style="opacity:.8">👥 Group Members</div> 
-      <div class="big" id="memberCountHome">0</div> 
-    </div> 
+    <div class="card"><div style="opacity:.8">👥 Group Members</div><div class="big" id="memberCountHome">0</div></div> 
   </div>
   <div class="footerArmy">Copyright © 2026 BANGLADESH ARMY</div>
 </div>
@@ -101,12 +87,10 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
   <div style="padding:15px;color:#fff"><h3 style="margin:0">Dashboard</h3></div>
   <a href="group.html" style="text-decoration:none"><div style="background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:25px;margin:15px;text-align:center;color:#fff"><div style="font-size:45px">💬</div><h2>GROUP CHAT</h2></div></a> 
 </div> 
-
 <div id="groupView" class="hidden" style="background:#0a1a12;min-height:80vh;padding-top:10px"> 
   <div style="padding:15px;color:#fff;font-weight:bold">Group Members - Seniority Wise</div> 
   <div id="memberListBox" style="background:#1a4d2e;border-radius:16px;margin:10px 15px;padding:5px 10px;color:#fff"></div> 
 </div> 
-
 <div class="bottom"> 
 <div id="btnDash" onclick="switchTab('dash')">🏠<br>Dashboard</div> 
 <div id="btnHome" class="active" onclick="switchTab('home')">🏡<br>Home Page</div> 
@@ -117,18 +101,13 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
 const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
-const IS_ADMIN = true; // এখন সব সময় তুমি এডমিন - পরে MY_SENA=="4521328" করে দিবো
-
+const IS_ADMIN = true;
 document.getElementById("topProfile").innerText = MY_NAME.charAt(0).toUpperCase(); 
-let savedPic = localStorage.getItem("profile_pic"); 
-if(savedPic){ document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'" style="width:100%;height:100%;border-radius:50%">'; }
 
-if(IS_ADMIN){
-  document.getElementById("bannerUploadBtn").classList.remove("hidden");
-  document.getElementById("qmNameBtn").classList.remove("hidden");
-  document.getElementById("jcoNameBtn").classList.remove("hidden");
-  document.getElementById("ncoNameBtn").classList.remove("hidden");
-}
+let bannerPics = [];
+let curIdx = 0;
+let editTarget = -1;
+let sliderInterval;
 
 function switchTab(tab){ 
   document.getElementById('dashboardView').classList.add('hidden'); 
@@ -142,19 +121,70 @@ function switchTab(tab){
   else{ document.getElementById('groupView').classList.remove('hidden'); document.getElementById('btnGroup').classList.add('active'); }
 } 
 
+function initSlider(){
+  let container = document.getElementById("sliderImgs");
+  let dots = document.getElementById("dots");
+  let grid = document.getElementById("editGrid");
+  container.innerHTML=""; dots.innerHTML=""; grid.innerHTML="";
+  
+  for(let i=0;i<10;i++){
+    let img = document.createElement("img");
+    img.id="banner_"+i;
+    if(bannerPics[i]) img.src=bannerPics[i];
+    else img.src="https://images.unsplash.com/photo-1540962351504-03099e0a754b";
+    if(i==0) img.classList.add("active");
+    container.appendChild(img);
+
+    let dot = document.createElement("span");
+    if(i==0) dot.classList.add("active");
+    dot.onclick=()=>{ showSlide(i); };
+    dots.appendChild(dot);
+
+    let box = document.createElement("div");
+    box.innerHTML = bannerPics[i] ? '<img src="'+bannerPics[i]+'"><div style="position:absolute;top:0;left:0;background:#0e5d3e;color:#fff;font-size:8px;padding:1px 3px">'+(i+1)+'</div>' : '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:10px">'+(i+1)+'</div>';
+    box.onclick=()=>{ editTarget=i; document.getElementById("bannerFileInput").click(); };
+    grid.appendChild(box);
+  }
+  startAuto();
+}
+
+function showSlide(n){
+  curIdx=n;
+  document.querySelectorAll("#sliderImgs img").forEach((im, idx)=>{ im.classList.toggle("active", idx==n); });
+  document.querySelectorAll("#dots span").forEach((d, idx)=>{ d.classList.toggle("active", idx==n); });
+}
+
+function startAuto(){
+  clearInterval(sliderInterval);
+  sliderInterval = setInterval(()=>{
+    curIdx = (curIdx+1)%10;
+    showSlide(curIdx);
+  }, 2000);
+}
+
 function loadHome(){
-  let keys = ['banner','qm','mtjco','mtnco','qm_name','mtjco_name','mtnco_name'];
-  keys.forEach(k=>{
+  bannerPics=[];
+  for(let i=0;i<10;i++){
+    let v = localStorage.getItem("home_banner_"+i);
+    if(v) bannerPics[i]=v;
+  }
+  ['qm','mtjco','mtnco','qm_name','mtjco_name','mtnco_name'].forEach(k=>{
     let v = localStorage.getItem("home_"+k);
-    if(v){ applyHome(k,v); }
+    if(v) applyHome(k,v);
   });
+  initSlider();
+  
   fetch(API+"?action=getHomeImages").then(r=>r.json()).then(d=>{
-    for(let k in d){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); }
+    let changed=false;
+    for(let i=0;i<10;i++){
+      if(d["banner_"+i]){ localStorage.setItem("home_banner_"+i, d["banner_"+i]); bannerPics[i]=d["banner_"+i]; changed=true; }
+    }
+    for(let k in d){ if(k.includes("banner_")==false){ localStorage.setItem("home_"+k, d[k]); applyHome(k,d[k]); } }
+    if(changed) initSlider();
   }).catch(()=>{});
 }
 
 function applyHome(k,v){
-  if(k=='banner'){ document.getElementById("bannerImg").src=v; document.getElementById("bannerImg").style.display="block"; document.getElementById("bannerPlaceholder").style.display="none"; }
   if(k=='qm'){ document.getElementById("qmImg").src=v; document.getElementById("qmImg").style.display="block"; document.getElementById("qmPh").style.display="none"; }
   if(k=='mtjco'){ document.getElementById("jcoImg").src=v; document.getElementById("jcoImg").style.display="block"; document.getElementById("jcoPh").style.display="none"; }
   if(k=='mtnco'){ document.getElementById("ncoImg").src=v; document.getElementById("ncoImg").style.display="block"; document.getElementById("ncoPh").style.display="none"; }
@@ -163,6 +193,19 @@ function applyHome(k,v){
   if(k=='mtnco_name') document.getElementById("ncoName").innerText=v;
 }
 
+document.getElementById("bannerFileInput").addEventListener("change", function(){
+  let file=this.files[0]; if(!file || editTarget<0) return;
+  let reader=new FileReader();
+  reader.onload=e=>{
+    let b64=e.target.result;
+    localStorage.setItem("home_banner_"+editTarget, b64);
+    bannerPics[editTarget]=b64;
+    initSlider();
+    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:"banner_"+editTarget, image:b64})}).then(()=> alert((editTarget+1)+" নং ছবি Saved! সবাই দেখবে ✅"));
+  };
+  reader.readAsDataURL(file);
+});
+
 function uploadHome(type, input){
   let file = input.files[0]; if(!file) return;
   let reader = new FileReader();
@@ -170,7 +213,7 @@ function uploadHome(type, input){
     let b64 = e.target.result;
     localStorage.setItem("home_"+type, b64);
     applyHome(type,b64);
-    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:b64})}).then(()=> alert("Saved! সবাই দেখবে"));
+    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type, image:b64})});
   };
   reader.readAsDataURL(file);
 }
@@ -178,11 +221,7 @@ function uploadHome(type, input){
 function editName(type){
   let cur = localStorage.getItem("home_"+type+"_name") || "";
   let nm = prompt("নাম লিখো:", cur);
-  if(nm){
-    localStorage.setItem("home_"+type+"_name", nm);
-    applyHome(type+"_name", nm);
-    fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type+"_name", image:nm})});
-  }
+  if(nm){ localStorage.setItem("home_"+type+"_name", nm); applyHome(type+"_name", nm); fetch(API,{method:"POST", body: JSON.stringify({action:"saveHomeImage", type:type+"_name", image:nm})}); }
 }
 
 function loadMembers(){ 
@@ -197,6 +236,8 @@ html+='<div style="padding:12px 5px;border-bottom:1px solid #2a5a3a;display:flex
 document.getElementById("memberListBox").innerHTML = html; 
 }); 
 } 
+
+if(IS_ADMIN){ document.getElementById("adminEditBox").classList.remove("hidden"); }
 loadHome();
 loadMembers(); 
 </script> 
