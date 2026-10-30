@@ -1,0 +1,109 @@
+<!DOCTYPE html><html><head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Page - MT Platoon</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#f0f0f0;padding-bottom:80px;color:#000}
+.topArmy{background:#0a1a12;padding:12px 15px;color:#fff;font-weight:bold;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.sliderBox{width:100%;height:180px;overflow:hidden;position:relative;background:#000}
+.sliderTrack{display:flex;transition:0.5s; height:100%}
+.slide{ min-width:100%; height:100%; background-size:cover; background-position:center; display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;color:#fff;font-weight:bold;text-shadow:1px 1px 2px #000}
+.whiteBox{background:#fff;padding:15px}
+.secTitle{color:#0e5d3e;font-weight:800;margin:20px 0 10px;border-left:4px solid #ffc107;padding-left:8px;display:flex;justify-content:space-between;align-items:center;font-size:15px}
+.accHeader{background:#fff;border:1px solid #ddd;padding:12px;border-radius:10px;margin-bottom:6px;cursor:pointer;display:flex;justify-content:space-between;font-weight:bold;font-size:14px}
+.accBody{display:none;background:#f9fff9;border:1px solid #c8e6c9;border-top:none;padding:12px;border-radius:0 0 10px 10px;margin:-6px 0 8px 0;font-size:13px;line-height:1.5}
+.accBody.show{display:block}
+.boxCard{background:#fff;border:2px solid #0e5d3e;border-radius:12px;padding:12px;margin-top:10px}
+.boxCard input,.boxCard select,.boxCard textarea{width:100%;padding:8px;margin:5px 0;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;font-family:sans-serif}
+.mainBtn{width:100%;background:#0e5d3e;color:#ffc107;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:6px}
+.callBtn{background:#0e5d3e;color:#ffc107;padding:6px 14px;border-radius:15px;text-decoration:none;font-size:12px;font-weight:bold;display:inline-block}
+.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px 0;text-align:center;color:#fff}
+.big{font-size:64px;font-weight:bold;color:#22c55e}
+.bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;z-index:9999;border-top:1px solid #2a5a3a}
+.bottom div{text-align:center;cursor:pointer;padding:5px 15px;font-size:14px;color:#fff;opacity:.6}
+.bottom div.active{opacity:1;color:#22c55e;font-weight:bold}
+.actionBtn{border:none;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;margin-left:4px}
+.editBtn{background:#0e5d3e;color:#ffc107} .delBtn{background:#c62828;color:#fff}
+.hidden{display:none}
+</style>
+</head><body>
+
+<div class="topArmy"><span>4 BIR - MT PLATOON</span><span style="background:#22c55e;color:#000;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">R</span></div>
+
+<!-- 50 Army Pics Slider -->
+<div class="sliderBox"><div id="sliderTrack" class="sliderTrack"></div></div>
+
+<div class="whiteBox">
+<h3 style="text-align:center;margin:0 0 5px;color:#0e5d3e">PLATOON COMMAND</h3>
+<p style="text-align:center;font-size:11px;color:#666;margin:0">50 Army Style Pics Included</p>
+
+<div class="secTitle"><span>📢 NOTICE BOARD</span><button id="noticeAddBtn" class="hidden" onclick="addNotice()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div>
+<div id="noticeList"></div>
+
+<div class="secTitle"><span>🚨 EMERGENCY CONTACTS</span><button id="emergencyAddBtn" class="hidden" onclick="addEmergency()" style="background:#0e5d3e;color:#ffc107;border:none;padding:5px 10px;border-radius:10px;font-size:11px">+ Add</button></div>
+<div id="emergencyList"></div>
+
+<div id="leaveSection" class="secTitle"><span>📝 LEAVE CARD</span></div>
+<div class="boxCard"><input id="lvName" placeholder="নাম"><input id="lvSena" placeholder="সেনা নং"><select id="lvType"><option>Night Pass</option><option>Casual Leave</option><option>Annual Leave</option><option>Sick Leave</option></select><input type="date" id="lvDate"><input id="lvReason" placeholder="কারণ"><input id="lvPlace" placeholder="স্থান"><button onclick="submitLeave()" class="mainBtn">✅ জমা + WhatsApp</button></div>
+<div class="secTitle"><span>📋 Leave List</span></div><div id="leaveList"></div>
+
+<div id="complainSection" class="secTitle"><span>🔧 COMPLAIN BOX</span></div>
+<div class="boxCard"><input id="cpName" placeholder="নাম"><input id="cpSena" placeholder="সেনা নং"><input id="cpVehicle" placeholder="গাড়ি নং - BA-..."><select id="cpType"><option>Engine Problem</option><option>Break Problem</option><option>Tyre Problem</option><option>Electrical Problem</option><option>Other</option></select><input id="cpDetails" placeholder="বিস্তারিত সমস্যা"><button onclick="submitComplain()" class="mainBtn">🔧 জমা + 3 WhatsApp</button></div>
+<div class="secTitle"><span>📋 Complain List</span></div><div id="complainList"></div>
+
+<div class="card"><div>👥 Group Members</div><div class="big" id="memberCountHome">0</div><small>Tap Group to See All</small></div>
+
+<a href="group.html" style="text-decoration:none"><div style="background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:20px;margin:12px 0;color:#fff;display:flex;align-items:center;gap:15px"><div style="font-size:40px">💬</div><div><h3 style="margin:0">GROUP CHAT</h3><small>group.html Open</small></div></div></a>
+
+</div>
+
+<div style="text-align:center;padding:15px;color:#888;font-size:12px;background:#fff">Copyright © 2026 BANGLADESH ARMY<br>4 BIR - MT PLATOON</div>
+
+<div class="bottom">
+  <div onclick="location.href='command-dashboard.html'" style="color:#fff;opacity:.6">🏠<br>Dashboard</div>
+  <div class="active" onclick="location.href='command-Homepage.html'">🏡<br>Home Page</div>
+  <div onclick="location.href='group.html'" style="color:#fff;opacity:.6">👥<br>Group</div>
+</div>
+
+<script>
+const API="https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
+const MY_SENA=localStorage.getItem("sena_no")||"4521328"; const IS_ADMIN=MY_SENA=="4521328";
+let WA_NUMBERS=JSON.parse(localStorage.getItem("waNumbers")||'["8801769013434","8801769013433","8801769013432"]');
+
+// 50 Army Pics
+const armyPics=["https://images.unsplash.com/photo-1595590424283-b8f17842773f","https://images.unsplash.com/photo-1553882106-9a1d2d2d0c3c","https://images.unsplash.com/photo-1541560052-77ec1bbc09f7","https://images.unsplash.com/photo-1504280390367-361c6d9f38f4","https://images.unsplash.com/photo-1484861376155-99a96e0e7c36"];
+function loadSlider(){
+  let track=document.getElementById("sliderTrack");
+  let html=""; for(let i=0;i<10;i++){ armyPics.forEach((p,idx)=>{ html+=`<div class="slide" style="background-image:url(${p}?auto=format&fit=crop&w=600&q=80)"><span>MT PLATOON - 4 BIR - Pic ${i*5+idx+1}</span></div>`; }); }
+  track.innerHTML=html; let index=0; setInterval(()=>{ index=(index+1)%50; track.style.transform=`translateX(-${index*100}%)`; },3000);
+}
+
+function toggleAcc(id){ let b=document.getElementById(id); b.classList.toggle("show"); }
+function save(type,data){ localStorage.setItem(type,JSON.stringify(data)); fetch(API,{method:"POST",body:JSON.stringify({action:"saveHomeImage",type:type,image:JSON.stringify(data)})}).catch(()=>{}); }
+function renderNotices(list){ let h=""; list.forEach((n,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();editNotice(${i})">✏️</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteNotice(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('n_${i}')"><span>📢 ${n.text.substring(0,25)}...</span><span>${btn} ▼</span></div><div id="n_${i}" class="accBody">📅 ${n.date}<br>${n.text}</div>`; }); document.getElementById("noticeList").innerHTML=h; }
+function addNotice(){ let t=prompt("Notice লেখো:"); if(!t) return; let l=JSON.parse(localStorage.getItem("notices")||"[]"); l.unshift({date:new Date().toLocaleDateString(),text:t}); save("notices",l); renderNotices(l); }
+function editNotice(i){ let l=JSON.parse(localStorage.getItem("notices")||"[]"); let t=prompt("Edit:",l[i].text); if(t===null) return; l[i].text=t; save("notices",l); renderNotices(l); }
+function deleteNotice(i){ if(!confirm("Delete?")) return; let l=JSON.parse(localStorage.getItem("notices")||"[]"); l.splice(i,1); save("notices",l); renderNotices(l); }
+function renderEmergency(list){ let h=""; list.forEach((e,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();editEmergency(${i})">✏️</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteEmergency(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('e_${i}')"><span>🚨 ${e.name}</span><span>${btn} ▼</span></div><div id="e_${i}" class="accBody"><b>${e.name}</b><br>${e.sub||''}<br>${e.num}<br><br><a class="callBtn" href="tel:${e.num}">📞 CALL</a></div>`; }); document.getElementById("emergencyList").innerHTML=h; }
+function addEmergency(){ let n=prompt("পদবি (যেমন: QM):"); if(!n) return; let s=prompt("নাম/বিবরণ:"); let num=prompt("নাম্বার:"); if(!num) return; let l=JSON.parse(localStorage.getItem("emergency")||"[]"); l.push({name:n,sub:s,num}); save("emergency",l); renderEmergency(l); }
+function editEmergency(i){ let l=JSON.parse(localStorage.getItem("emergency")||"[]"); let c=l[i]; let n=prompt("পদবি:",c.name); if(n===null) return; let s=prompt("নাম:",c.sub); let num=prompt("নাম্বার:",c.num); l[i]={name:n,sub:s,num:num}; save("emergency",l); renderEmergency(l); }
+function deleteEmergency(i){ if(!confirm("Delete?")) return; let l=JSON.parse(localStorage.getItem("emergency")||"[]"); l.splice(i,1); save("emergency",l); renderEmergency(l); }
+function submitLeave(){ let name=document.getElementById("lvName").value; let sena=document.getElementById("lvSena").value; let type=document.getElementById("lvType").value; let date=document.getElementById("lvDate").value; let reason=document.getElementById("lvReason").value; let place=document.getElementById("lvPlace").value; if(!name||!sena||!date){ alert("নাম, সেনা, তারিখ লিখো!"); return; } let list=JSON.parse(localStorage.getItem("leaveCards")||"[]"); list.unshift({name,sena,type,date,reason,place,status:"Pending"}); save("leaveCards",list); renderLeave(list); let msg=`📝 LEAVE CARD\nনাম: ${name}\nসেনা: ${sena}\nধরন: ${type}\nতারিখ: ${date}\nকারণ: ${reason}\nস্থান: ${place}`; window.open(`https://wa.me/${WA_NUMBERS[0]}?text=${encodeURIComponent(msg)}`,"_blank"); }
+function renderLeave(list){ let h=""; list.forEach((l,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();approveLeave(${i})">✅</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteLeave(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('lv_${i}')"><span>👤 ${l.name}</span><span>${btn} ${l.status} ▼</span></div><div id="lv_${i}" class="accBody">সেনা: ${l.sena}<br>ধরন: ${l.type}<br>তারিখ: ${l.date}<br>কারণ: ${l.reason}<br>স্থান: ${l.place}</div>`; }); document.getElementById("leaveList").innerHTML=h||"<small style='color:#888'>No Leave Cards</small>"; }
+function approveLeave(i){ let l=JSON.parse(localStorage.getItem("leaveCards")||"[]"); l[i].status="Approved"; save("leaveCards",l); renderLeave(l); }
+function deleteLeave(i){ let l=JSON.parse(localStorage.getItem("leaveCards")||"[]"); l.splice(i,1); save("leaveCards",l); renderLeave(l); }
+function submitComplain(){ let name=document.getElementById("cpName").value; let sena=document.getElementById("cpSena").value; let vehicle=document.getElementById("cpVehicle").value; let type=document.getElementById("cpType").value; let details=document.getElementById("cpDetails").value; if(!vehicle||!details){ alert("গাড়ি নং আর সমস্যা লিখো!"); return; } let list=JSON.parse(localStorage.getItem("complainCards")||"[]"); list.unshift({name,sena,vehicle,type,details,status:"Pending",date:new Date().toLocaleDateString()}); save("complainCards",list); renderComplain(list); let msg=`🔧 COMPLAIN BOX\nনাম: ${name}\nগাড়ি: ${vehicle}\nসমস্যা: ${type}\nবিস্তারিত: ${details}`; WA_NUMBERS.forEach((num,idx)=>{ setTimeout(()=>{ window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,"_blank"); }, idx*1500); }); }
+function renderComplain(list){ let h=""; list.forEach((c,i)=>{ let btn=IS_ADMIN?`<button class="actionBtn editBtn" onclick="event.stopPropagation();solveComplain(${i})">✅</button><button class="actionBtn delBtn" onclick="event.stopPropagation();deleteComplain(${i})">🗑️</button>`:""; h+=`<div class="accHeader" onclick="toggleAcc('cp_${i}')"><span>🔧 ${c.vehicle} - ${c.name}</span><span>${btn} ${c.status} ▼</span></div><div id="cp_${i}" class="accBody">নাম: ${c.name}<br>সেনা: ${c.sena}<br>গাড়ি: ${c.vehicle}<br>ধরন: ${c.type}<br>বিস্তারিত: ${c.details}<br>তারিখ: ${c.date}</div>`; }); document.getElementById("complainList").innerHTML=h||"<small style='color:#888'>No Complain</small>"; }
+function solveComplain(i){ let l=JSON.parse(localStorage.getItem("complainCards")||"[]"); l[i].status="Solved"; save("complainCards",l); renderComplain(l); }
+function deleteComplain(i){ let l=JSON.parse(localStorage.getItem("complainCards")||"[]"); l.splice(i,1); save("complainCards",l); renderComplain(l); }
+function loadAll(){
+  loadSlider();
+  renderNotices(JSON.parse(localStorage.getItem("notices")||'[{"date":"10/31/2026","text":"যারা নাইট পাশ যেতে ইচ্ছুক তারা লিভ কার্ড জমা করেন - QM"}]'));
+  renderEmergency(JSON.parse(localStorage.getItem("emergency")||'[{"name":"QM","sub":"Ali Sir - Emergency","num":"01769-013433"},{"name":"MT JCO","sub":"MT Control","num":"01769-013432"},{"name":"MT NCO","sub":"Duty NCO","num":"01769-013431"}]'));
+  renderLeave(JSON.parse(localStorage.getItem("leaveCards")||"[]"));
+  renderComplain(JSON.parse(localStorage.getItem("complainCards")||"[]"));
+  if(IS_ADMIN){ document.getElementById("noticeAddBtn").classList.remove("hidden"); document.getElementById("emergencyAddBtn").classList.remove("hidden"); }
+  fetch(API+"?action=getMembers").then(r=>r.json()).then(d=>{ document.getElementById("memberCountHome").innerText=d.length; }).catch(()=>{ document.getElementById("memberCountHome").innerText=localStorage.getItem("members")?JSON.parse(localStorage.getItem("members")).length:0; });
+}
+loadAll();
+</script>
+</body></html>
