@@ -101,7 +101,8 @@ body{margin:0;font-family:sans-serif;background:#f0f0f0;color:#000;padding-botto
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec"; 
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
 const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
-const IS_ADMIN = true;
+const MY_SENA = localStorage.getItem("sena_no") || "4521328";
+const IS_ADMIN = MY_SENA == "4521328";
 document.getElementById("topProfile").innerText = MY_NAME.charAt(0).toUpperCase(); 
 
 let bannerPics = [];
