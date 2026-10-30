@@ -2,42 +2,36 @@
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#0a1a0f;color:#fff;display:flex;flex-direction:column;height:100vh}
 .top{background:#122e18;padding:12px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1f4a28}
-.members{background:#0f2110;padding:8px 12px;display:flex;gap:8px;overflow:auto;white-space:nowrap;border-bottom:1px solid #1f4a28}
-.m{width:44px;text-align:center;font-size:10px;color:#c8a951}
-.m div{width:36px;height:36px;border-radius:50%;background:#132a18;border:1px solid #c8a951;display:flex;align-items:center;justify-content:center;margin:0 auto 3px}
-.chat{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
-.msg{max-width:75%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.4}
-.me{align-self:flex-end;background:#1a4a2a;border:1px solid #22c55e}
-.other{align-self:flex-start;background:#132a18;border:1px solid #c8a951}
+.members{background:#0f2110;padding:8px 12px;display:flex;gap:10px;overflow:auto;white-space:nowrap;border-bottom:1px solid #1f4a28}
+.m{width:50px;text-align:center;font-size:10px;color:#c8a951;flex-shrink:0}
+.m div{width:36px;height:36px;border-radius:50%;background:#132a18;border:1px solid #c8a951;display:flex;align-items:center;justify-content:center;margin:0 auto 3px;font-weight:900;color:#fff}
+.chat{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#05140a}
+.msg{max-width:78%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.4;word-wrap:break-word}
+.me{align-self:flex-end;background:#1a4a2a;border:1px solid #22c55e;border-bottom-right-radius:2px}
+.other{align-self:flex-start;background:#132a18;border:1px solid #c8a951;border-bottom-left-radius:2px}
 .small{font-size:9px;color:#8aa88f;margin-top:4px}
 .sendArea{display:flex;gap:8px;padding:10px;background:#0f2110;border-top:1px solid #1f4a28}
-.sendArea input{flex:1;padding:12px;background:#000;border:1px solid #c8a951;border-radius:20px;color:#fff;outline:none}
-.sendArea button{padding:12px 18px;background:#c8a951;color:#000;border:none;border-radius:20px;font-weight:900}
+.sendArea input{flex:1;padding:12px 14px;background:#000;border:1.5px solid #c8a951;border-radius:24px;color:#fff;outline:none}
+.sendArea button{padding:12px 20px;background:#c8a951;color:#000;border:none;border-radius:24px;font-weight:900;cursor:pointer}
 </style></head><body>
-<div class="top"><div><b style="color:#c8a951">👥 MT PLATOON GROUP</b><br><small style="color:#8aa88f" id="online">0 জন Active</small></div><div><button onclick="location.href='command-dashboard.html'" style="padding:6px 10px;background:#1f4a28;color:#fff;border:none;border-radius:8px">← Dashboard</button></div></div>
+<div class="top"><div><b style="color:#c8a951">👥 MT PLATOON GROUP</b><br><small style="color:#8aa88f" id="online">Loading...</small></div><div><button onclick="location.href='command-dashboard.html'" style="padding:7px 12px;background:#1f4a28;color:#fff;border:none;border-radius:8px;font-weight:900">← Dashboard</button></div></div>
 <div class="members" id="members">Loading members...</div>
-<div class="chat" id="chat"></div>
+<div class="chat" id="chat"><div style="text-align:center;color:#6b8a70;margin-top:20px">👋 Group এ স্বাগতম! সবাই এখানে মেসেজ করতে পারবে</div></div>
 <div class="sendArea"><input id="msgInput" placeholder="মেসেজ লিখুন..." onkeypress="if(event.key=='Enter')send()"><button onclick="send()">SEND</button></div>
 
 <script>
-const GROUP_API = "https://script.google.com/macros/s/AKfycby8BQ0Dyo5s4otJEbRJcZXNiW3pyqDY9800nm8X7kGeOz49RVlQ1bdoF5IdByxL-l226w/exec";
-let mySena = localStorage.getItem('sena_no')||'Unknown';
+const GROUP_API = "https://script.google.com/macros/s/AKfycbx50AvsmCN5Pt-ROba7d4H3Us3YyUKj_UBb73-YvVToPQMRAM5MpLe_xfM5tWZfuds/exec";
+let mySena = localStorage.getItem('sena_no')||'Guest';
 let myName = localStorage.getItem('profile_name')||mySena;
-let myPic = localStorage.getItem('profile_pic')||'';
 
 function loadMembers(){
- let cache = JSON.parse(localStorage.getItem('all_profiles')||'[]');
- if(cache.length>0){
-   document.getElementById('members').innerHTML = cache.map(p=>`<div class="m"><div>${p.name? p.name[0]:'👤'}</div>${p.podobi||''}</div>`).join('');
-   document.getElementById('online').innerText = cache.length + " জন Member";
- }
  fetch(GROUP_API+"?action=getMembers&t="+Date.now()).then(r=>r.text()).then(t=>{
   try{
    let data=JSON.parse(t);
-   localStorage.setItem('all_profiles', JSON.stringify(data));
-   document.getElementById('members').innerHTML = data.map(p=>`<div class="m"><div>${p.name? p.name[0]:'👤'}</div>${p.name?.split(' ')[0]||p.sena}</div>`).join('');
-   document.getElementById('online').innerText = data.length + " জন Active";
-  }catch(e){}
+   if(data.length==0){document.getElementById('members').innerHTML='<small style="color:#6b8a70">এখনো কেউ Profile বানায়নি</small>'; document.getElementById('online').innerText='0 জন Member'; return;}
+   document.getElementById('members').innerHTML = data.map(p=>`<div class="m"><div>${p.name ? p.name.charAt(0) : '👤'}</div>${(p.name||p.sena||'').split(' ')[0].substring(0,8)}</div>`).join('');
+   document.getElementById('online').innerText = data.length + " জন Member Active";
+  }catch(e){ document.getElementById('members').innerHTML='<small>Member load error</small>'; }
  });
 }
 
@@ -45,12 +39,13 @@ function loadChat(){
  fetch(GROUP_API+"?action=getMessages&t="+Date.now()).then(r=>r.text()).then(t=>{
   try{
    let msgs=JSON.parse(t);
+   if(msgs.length==0) return;
    let html = msgs.map(m=>{
     let isMe = m.sena == mySena;
     return `<div class="msg ${isMe?'me':'other'}"><b style="font-size:11px;color:${isMe?'#7CFC00':'#c8a951'}">${isMe?'You':m.name}</b><br>${m.text}<div class="small">${m.time} • ${m.sena}</div></div>`;
    }).join('');
    let chatEl=document.getElementById('chat');
-   let isBottom = chatEl.scrollTop + chatEl.clientHeight >= chatEl.scrollHeight - 50;
+   let isBottom = chatEl.scrollTop + chatEl.clientHeight >= chatEl.scrollHeight - 80;
    chatEl.innerHTML = html;
    if(isBottom) chatEl.scrollTop = chatEl.scrollHeight;
   }catch(e){}
@@ -59,15 +54,17 @@ function loadChat(){
 
 function send(){
  let text = document.getElementById('msgInput').value.trim();
- if(!text) return;
- let data = {action:"sendMessage", sena:mySena, name:myName, text:text, time:new Date().toLocaleString('bn-BD')};
+ if(!text){ return; }
+ if(mySena=='Guest'){ alert("আগে Profile তৈরি করে Login করুন!"); location.href='profile.html'; return; }
+ let time = new Date().toLocaleString('bn-BD');
+ let data = {action:"sendMessage", sena:mySena, name:myName, text:text, time:time};
  document.getElementById('msgInput').value='';
- // instant show
  let chatEl=document.getElementById('chat');
- chatEl.innerHTML += `<div class="msg me"><b style="font-size:11px;color:#7CFC00">You</b><br>${text}<div class="small">Just now</div></div>`;
+ chatEl.innerHTML += `<div class="msg me"><b style="font-size:11px;color:#7CFC00">You</b><br>${text}<div class="small">Just now • ${mySena}</div></div>`;
  chatEl.scrollTop = chatEl.scrollHeight;
  fetch(GROUP_API, {method:"POST", mode:"no-cors", body:JSON.stringify(data)});
 }
 loadMembers(); loadChat();
 setInterval(loadChat, 3000);
+setInterval(loadMembers, 10000);
 </script></body></html>
