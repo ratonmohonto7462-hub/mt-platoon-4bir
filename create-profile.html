@@ -1,40 +1,58 @@
 <!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Create Profile - MT PLATOON 4 BIR</title>
-<style>*{box-sizing:border-box}body{margin:0;background:#070f0a;color:#7aff8a;font-family:system-ui;padding:15px}.wrap{max-width:420px;margin:auto;background:#111;padding:22px;border-radius:18px;border:1px solid #7aff8a}input,select{width:100%;padding:12px;margin-top:8px;background:#000;color:#7aff8a;border:1px solid #7aff8a;border-radius:8px}label{font-size:12px;margin-top:12px;display:block}.btn{width:100%;margin-top:18px;padding:14px;background:#7aff8a;color:#000;font-weight:900;border:none;border-radius:10px;cursor:pointer}</style>
-</head><body>
-<div class="wrap">
-<h3 style="text-align:center">Create New Profile</h3>
-<label>সেনা নং</label><input id="sena_no" placeholder="৪৫২১৩২৮">
-<label>পদবি</label><select id="podobi"><option value="">-- পদবি --</option><option>সার্জেন্ট</option><option>কর্পোরাল</option><option>ল্যান্স কর্পোরাল</option><option>সৈনিক</option></select>
-<label>নাম</label><input id="name" placeholder="রতন চন্দ্র মহন্ত">
-<label>কোম্পানি</label><select id="company"><option>এ</option><option>বি</option><option>সি</option><option>ডি</option><option>সদর</option></select>
-<label>মোবাইল</label><input id="mobile" placeholder="01...">
-<label>রক্তের গ্রুপ</label><input id="blood" placeholder="A+, B+...">
-<button class="btn" onclick="createProfile()">SUBMIT FOR APPROVAL</button>
-<p style="text-align:center;margin-top:12px"><a href="profile.html" style="color:#d4af37;text-decoration:none">← Back to Login</a></p>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create Profile - 4 BIR</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a1a0f;font-family:Arial;display:flex;justify-content:center;padding:20px 12px 90px}
+.card{width:100%;max-width:420px;background:#0f1510;border:2px solid #22ff88;border-radius:20px;padding:20px 18px;box-shadow:0 0 15px rgba(34,255,136,0.2)}
+h2{text-align:center;color:#22ff88;margin:6px 0 18px;font-weight:900;letter-spacing:0.5px}
+label{color:#22ff88;font-size:13px;margin:14px 0 6px 2px;display:block}
+input,select{width:100%;padding:13px 14px;background:#050a06;border:1.5px solid #22ff88;border-radius:10px;color:#7cff7c;outline:none;font-size:14px}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2322ff88' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.btn{width:100%;padding:14px;background:#6bff9e;color:#000;border:none;border-radius:12px;font-weight:900;font-size:15px;margin-top:20px;cursor:pointer;letter-spacing:0.3px}
+.back{text-align:center;margin-top:14px;color:#c8a951;font-size:14px;cursor:pointer}
+.back a{color:#c8a951;text-decoration:none}
+</style></head><body>
+<div class="card">
+<h2>Create New Profile</h2>
+<label>সেনা নং</label><input id="sena" value="৪৫২১৩২৮" placeholder="সেনা নং">
+<label>পদবি</label><select id="podobi"><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select>
+<label>নাম</label><input id="name" value="রতন চন্দ্র মহন্ত">
+<label>কোম্পানি</label><select id="company"><option>সদর</option><option>আলফা</option><option>ব্রাভো</option><option>চার্লি</option><option>ডেল্টা</option></select>
+<label>মোবাইল</label><input id="mobile" value="০১৭৩৭৯১২০৯৪">
+<label>রক্তের গ্রুপ</label><input id="blood" value="বি নেগেটিভ" placeholder="যেমন: বি পজেটিভ">
+<button class="btn" onclick="submitProfile()">SUBMIT FOR APPROVAL</button>
+<div class="back"><a href="profile.html">← Back to Login</a></div>
+<p id="msg" style="text-align:center;font-size:13px;margin-top:10px;color:#7CFC00"></p>
 </div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = {apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",authDomain: "mt-platoon-c408a.firebaseapp.com",projectId: "mt-platoon-c408a",storageBucket: "mt-platoon-c408a.firebasestorage.app",messagingSenderId: "431652749602",appId: "1:431652749602:web:7214305714f2d75995657b"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-window.createProfile=async()=>{
-const data={
-sena_no:document.getElementById('sena_no').value.trim(),
+<script>
+const APPROVAL_API="https://script.google.com/macros/s/AKfycby8BQ0Dyo5s4otJEbRJcZXNiW3pyqDY9800nm8X7kGeOz49RVlQ1bdoF5IdByxL-l226w/exec";
+function bnToEn(s){return s.replace(/[০-৯]/g,d=>String.fromCharCode(d.charCodeAt(0)-2486));}
+function submitProfile(){
+let data={
+sena_no:bnToEn(document.getElementById('sena').value.trim()),
 podobi:document.getElementById('podobi').value,
-name:document.getElementById('name').value.trim(),
+name:document.getElementById('name').value,
 company:document.getElementById('company').value,
-mobile:document.getElementById('mobile').value.trim(),
-blood:document.getElementById('blood').value.trim(),
-status:"pending",
-created_at:new Date()
+mobile:bnToEn(document.getElementById('mobile').value.trim()),
+blood:document.getElementById('blood').value,
+status:'PENDING'
 };
-if(!data.sena_no || !data.name || !data.mobile){alert("সব ঘর পূরণ করুন");return;}
-try{
-await addDoc(collection(db,"profiles"), data);
-alert("প্রোফাইল সাবমিট হয়েছে! Admin Approve করলে Login করতে পারবেন।");
-location.href="profile.html";
-}catch(e){alert("Error: "+e.message);console.log(e);}
+if(!data.sena_no||!data.name||!data.mobile){document.getElementById('msg').innerText='সব ঘর পূরণ করুন';return;}
+document.getElementById('msg').innerText='⏳ সাবমিট হচ্ছে...';
+// Local Save for now
+localStorage.setItem('pending_profile',JSON.stringify(data));
+localStorage.setItem('sena_no',data.sena_no);
+localStorage.setItem('mobile_no',data.mobile);
+localStorage.setItem('podobi',data.podobi);
+localStorage.setItem('profile_name',data.name);
+localStorage.setItem('company',data.company);
+localStorage.setItem('blood',data.blood);
+localStorage.setItem('mt_role','COMMAND');
+setTimeout(()=>{
+document.getElementById('msg').innerText='✅ Approval এর জন্য পাঠানো হয়েছে! Dashboard এ যাচ্ছে...';
+setTimeout(()=>location.href='command-dashboard.html',1200);
+},800);
+
+// যদি তোমার Google Sheet এ পাঠাতে চাও, এই লাইন চালু করবে:
+// fetch(APPROVAL_API,{method:'POST',mode:'no-cors',body:JSON.stringify(data)});
 }
-</script>
-</body></html>
+</script></body></html>
