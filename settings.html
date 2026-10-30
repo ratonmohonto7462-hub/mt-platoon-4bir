@@ -1,0 +1,18 @@
+<script>
+function loadPending(){
+  fetch(API+"?action=getAllProfiles").then(r=>r.json()).then(data=>{
+    let html="";
+    data.forEach(p=>{
+      if(p.status.trim()!="Active"){
+        html+=`${p.sena} - ${p.name} <button onclick="approve('${p.sena}')">Approve</button><br>`;
+      }
+    });
+    document.getElementById("pending").innerHTML=html||"No pending";
+  });
+}
+function approve(sena){
+  fetch(API,{method:"POST",body:JSON.stringify({action:"approve",sena_no:sena})})
+  .then(()=>{alert("Approved!"); loadPending(); loadMembers();});
+}
+</script>
+<div id="pending"></div>
