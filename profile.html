@@ -1,89 +1,102 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MT Platoon 4 BIR - Login</title>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile - MT Platoon</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#05140a;font-family:Arial;display:flex;justify-content:center;min-height:100vh}
-.phone{width:100%;max-width:400px;background:#0a1f11;border:1px solid #1a4a2a;padding:18px;position:relative}
-.circle{width:260px;height:260px;margin:30px auto;background:radial-gradient(circle,#0a0a0a 60%,#1a3a2a);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px #00ff88a0,inset 0 0 20px #00ff8840;border:2px solid #0f3a22}
-.circle b{color:#00ff88;text-align:center;font-size:18px;line-height:1.4;letter-spacing:1px;text-shadow:0 0 10px #00ff88}
-label{color:#00ff88;font-size:12px;letter-spacing:2px;margin:18px 0 8px;display:block;font-weight:900}
-input{width:100%;padding:14px 16px;background:#050a06;border:1.5px solid #1a5a3a;border-radius:14px;color:#7cff7c;outline:none}
-.btn{width:100%;padding:14px;background:#000;border:1.5px solid #00ff88;color:#00ff88;border-radius:14px;font-weight:900;letter-spacing:1px;margin-top:18px;cursor:pointer;box-shadow:0 0 10px #00ff8855}
-.links{display:flex;justify-content:space-between;margin-top:18px;font-size:13px}
-.links a{color:#aacc55;text-decoration:none;font-weight:900}
-.links a:last-child{color:#7cff7c}
-.foot{text-align:center;color:#555;font-size:11px;margin-top:16px}.foot b{color:#c8a951}
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000000cc;z-index:99;justify-content:center;align-items:center;padding:12px}
-.modal.active{display:flex}
-.card{width:100%;max-width:400px;background:#101410;border:2px solid #22ff88;border-radius:18px;padding:16px;max-height:90vh;overflow:auto}
-select{width:100%;padding:12px;background:#000;border:1.5px solid #22ff88;border-radius:10px;color:#7cff7c}
-</style></head><body>
+body{margin:0;background:#0a1a12;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:sans-serif}
+.phone{width:360px;max-width:95vw;background:#0f281a;border:3px solid #1a4d2e;border-radius:28px;padding:15px;box-shadow:0 0 20px rgba(0,0,0,.5);position:relative}
+.borderGold{border:2px solid #c9a85c;border-radius:22px;padding:15px 15px 25px 15px;min-height:600px}
+.badge{text-align:center;margin:10px 0 20px 0}
+.badge span{border:1.5px solid #c9a85c;color:#c9a85c;padding:6px 18px;border-radius:20px;font-size:12px;letter-spacing:1px}
+.circle{width:160px;height:160px;margin:20px auto;border:3px solid #c9a85c;border-radius:50%;background:#143d27;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.circle img{width:100%;height:100%;object-fit:cover}
+.profileText{text-align:center;color:#c9a85c;letter-spacing:4px;margin:15px 0;font-size:14px}
+.row{display:flex;justify-content:space-between;padding:18px 5px;border-bottom:1px solid #5a4a2a2a;border-top:1px solid #3a3a2a22}
+.row:first-child{border-top:1px solid #c9a85c55}
+.label{color:#d6b86a;font-size:14px}
+.value{color:#c7d3b8;font-size:14px;text-transform:uppercase}
+.footer{text-align:center;color:#5a6a4a;font-size:9px;letter-spacing:2px;margin-top:25px}
+.back{color:#c9a85c;text-decoration:none;font-size:14px;display:block;margin-bottom:10px}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid #c9a85c;background:#1a3a2a;color:#fff;margin-top:10px}
+button{width:100%;padding:12px;background:#c9a85c;color:#000;font-weight:bold;border:none;border-radius:8px;margin-top:10px}
+</style>
+</head>
+<body>
 <div class="phone">
-<div class="circle"><b>SECURE<br>LOGIN<br>NODE</b></div>
-<label>SENA NO</label><input id="sena" placeholder="Enter Sena No • 7238105">
-<label>MOBILE PASSWORD</label><input id="mob" type="password" placeholder="Enter mobile number">
-<button class="btn" onclick="doLogin()">[ ENGAGE LOGIN ]</button>
-<div style="display:flex;justify-content:space-between;margin-top:12px;font-size:12px;color:#555"><span><input type="checkbox"> Remember me</span><span>Forgot password?</span></div>
-<div class="links"><a onclick="location.href='admin.html'">→ Admin</a><a onclick="openCreate()">→ Create New Profile</a></div>
-<div class="foot">Create By <b>Snk Roton 4 bir mt</b></div>
-<p id="msg" style="text-align:center;color:#ff5555;font-size:12px"></p>
+<div class="borderGold">
+<a href="command.html" class="back">← Back to Dashboard</a>
+<div class="badge"><span>COMMAND VIEW ONLY</span></div>
+
+<div class="circle" id="picCircle">
+<div style="font-size:80px">🪖</div>
+</div>
+<div style="text-align:center">
+<input type="file" id="picInput" accept="image/*" style="display:none" onchange="uploadPic(this)">
+<button onclick="document.getElementById('picInput').click()" style="width:auto;padding:6px 15px;font-size:12px">Change Photo</button>
 </div>
 
-<!-- CREATE MODAL -->
-<div class="modal" id="createModal"><div class="card">
-<h2 style="text-align:center;color:#22ff88">Create New Profile</h2>
-<label>সেনা নং</label><input id="c_sena">
-<label>পদবি</label><select id="c_pod"><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option></select>
-<label>নাম</label><input id="c_name">
-<label>কোম্পানি</label><select id="c_com"><option>সদর</option><option>আলফা</option><option>ব্রাভো</option><option>চার্লি</option></select>
-<label>মোবাইল</label><input id="c_mob">
-<label>রক্তের গ্রুপ</label><input id="c_blood" placeholder="যেমন: বি+">
-<button class="btn" style="background:#4dff8a;color:#000" onclick="submitProfile()">SUBMIT FOR APPROVAL</button>
-<p onclick="closeCreate()" style="text-align:center;color:#c8a951;margin-top:10px;cursor:pointer">← Back to Login</p>
-</div></div>
+<div class="profileText">PROFILE</div>
+
+<div id="rows">
+<div class="row"><span class="label">SENA NO</span><span class="value" id="sena">-</span></div>
+<div class="row"><span class="label">PODOBI (RANK)</span><span class="value" id="podobi">-</span></div>
+<div class="row"><span class="label">NAME</span><span class="value" id="name">-</span></div>
+<div class="row"><span class="label">COMPANY</span><span class="value" id="company">-</span></div>
+<div class="row"><span class="label">MOBILE NUMBER</span><span class="value" id="mobile">-</span></div>
+<div class="row"><span class="label">BLOOD GROUP</span><span class="value" id="blood">-</span></div>
+</div>
+
+<div class="footer">SECURE • MILITARY PROFILE • CLASSIFIED</div>
+</div>
+</div>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycby8BQ0Dyo5s4otJEbRJcZXNiW3pyqDY9800nm8X7kGeOz49RVlQ1bdoF5IdByxL-l226w/exec";
-function openCreate(){document.getElementById('createModal').classList.add('active')}
-function closeCreate(){document.getElementById('createModal').classList.remove('active')}
+const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
+const sena = localStorage.getItem("sena_no") || "4521328";
 
-function submitProfile(){
-let data={
- sena:document.getElementById('c_sena').value,
- podobi:document.getElementById('c_pod').value,
- name:document.getElementById('c_name').value,
- company:document.getElementById('c_com').value,
- mobile:document.getElementById('c_mob').value,
- blood:document.getElementById('c_blood').value,
- status:"PENDING"
-};
-if(!data.sena||!data.mobile){alert("সেনা নং ও মোবাইল দিন");return;}
-localStorage.setItem('pending_profile',JSON.stringify(data));
-localStorage.setItem('sena_no',data.sena);
-localStorage.setItem('mobile_no',data.mobile);
-localStorage.setItem('profile_name',data.name);
-localStorage.setItem('podobi',data.podobi);
-localStorage.setItem('company',data.company);
-localStorage.setItem('blood',data.blood);
-// Google Sheet এ পাঠানো (Approval Sheet)
-fetch(API,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"new_profile",...data})});
-alert("✅ Profile Submitted! Admin Approval এর জন্য অপেক্ষা করুন।");
-closeCreate();
-document.getElementById('msg').innerHTML="<span style='color:#7CFC00'>Submitted! Admin approve করলে Login করতে পারবেন।</span>";
+function loadProfile(){
+  // localStorage theke fast load
+  document.getElementById("sena").innerText = localStorage.getItem("sena_no") || "-";
+  document.getElementById("name").innerText = localStorage.getItem("name") || "-";
+  document.getElementById("podobi").innerText = localStorage.getItem("podobi") || "SOLDIER";
+  document.getElementById("company").innerText = localStorage.getItem("company") || "-";
+  document.getElementById("mobile").innerText = localStorage.getItem("mobile") || "-";
+  document.getElementById("blood").innerText = localStorage.getItem("blood") || "-";
+
+  let savedPic = localStorage.getItem("profile_pic");
+  if(savedPic){
+    document.getElementById("picCircle").innerHTML = '<img src="'+savedPic+'">';
+  }
+
+  // Sheet theke real data
+  fetch(API+"?action=getProfile&sena="+sena).then(r=>r.json()).then(p=>{
+    if(p && p.sena){
+      document.getElementById("sena").innerText = p.sena;
+      document.getElementById("name").innerText = p.name;
+      document.getElementById("podobi").innerText = p.podobi || "SOLDIER";
+      document.getElementById("company").innerText = p.company || "-";
+      document.getElementById("mobile").innerText = p.mobile || "-";
+      document.getElementById("blood").innerText = p.blood || "-";
+      if(p.photo){
+        document.getElementById("picCircle").innerHTML = '<img src="'+p.photo+'">';
+        localStorage.setItem("profile_pic", p.photo);
+      }
+    }
+  });
 }
 
-function doLogin(){
-let s=document.getElementById('sena').value.trim();
-let m=document.getElementById('mob').value.trim();
-if(!s||!m){document.getElementById('msg').innerText="সেনা নং ও মোবাইল দিন";return;}
-// Check Local Approval (Demo) - Real এ Sheet থেকে চেক করবে
-let pending=JSON.parse(localStorage.getItem('pending_profile')||'{}');
-let approved=localStorage.getItem('profile_approved');
-if(pending.sena==s && !approved){
-document.getElementById('msg').innerHTML="<span style='color:orange'>⏳ এখনো Admin Approve করেনি।</span>";
-return;
+function uploadPic(input){
+  let file = input.files[0];
+  let reader = new FileReader();
+  reader.onload = function(e){
+    localStorage.setItem("profile_pic", e.target.result);
+    document.getElementById("picCircle").innerHTML = '<img src="'+e.target.result+'">';
+  }
+  reader.readAsDataURL(file);
 }
-localStorage.setItem('sena_no',s);
-localStorage.setItem('mobile_no',m);
-localStorage.setItem('mt_role','COMMAND');
-location.href='command-dashboard.html';
-}
-</script></body></html>
+
+loadProfile();
+</script>
+</body>
+</html>
