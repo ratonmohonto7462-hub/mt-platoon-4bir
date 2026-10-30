@@ -2,62 +2,83 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MT Platoon - Command</title>
+<title>MT Platoon</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#0a1a12;color:#fff}
-.top{background:#1a3a2a;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.card{background:#1e4a32;border-radius:16px;padding:20px;margin:15px;text-align:center}
+body{margin:0;font-family:sans-serif;background:#0a1a12;color:#fff;padding-bottom:80px}
+.top{background:#143d27;padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
+.profilePic{width:42px;height:42px;border-radius:50%;background:#facc15;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:2px solid #fff;overflow:hidden;cursor:pointer}
+.profilePic img{width:100%;height:100%;object-fit:cover}
+.card{background:#1a4d2e;border-radius:16px;padding:20px;margin:15px;text-align:center}
 .big{font-size:64px;font-weight:bold;color:#22c55e}
-.folder{background:#1e4a32;border-radius:16px;padding:25px;margin:15px;text-align:center;border:2px solid #facc15}
-.folder h2{margin:10px 0 0 0}
-a{text-decoration:none;color:#fff}
-.bottom{position:fixed;bottom:0;width:100%;background:#1a3a2a;display:flex;justify-content:space-around;padding:10px 0}
+.memberList{background:#1a4d2e;border-radius:16px;margin:15px;padding:10px}
+.member{padding:10px;border-bottom:1px solid #2a5a3a;display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;background:#22c55e;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #2a5a3a}
+.bottom div{text-align:center;cursor:pointer;opacity:.7;padding:5px 20px}
+.bottom div.active{opacity:1;color:#22c55e}
 </style>
 </head>
 <body>
 
 <div class="top">
 <b>4 BIR - MT PLATOON</b>
-<div><a href="profile.html" style="border:1px solid #fff;padding:5px 10px;border-radius:6px">My Profile</a></div>
+<div id="topProfile" class="profilePic" onclick="location.href='profile.html'">R</div>
 </div>
 
-<div style="padding:20px">
-<h1 id="greet">Assalamualaikum</h1>
-<p style="opacity:.7">Stay prepared. Everything up to date.</p>
+<div style="padding:20px 15px 5px 15px">
+<h1 style="margin:0">Welcome to Mt Platoon</h1>
+<p style="opacity:.6;margin:5px 0">Stay prepared. Everything up to date.</p>
 </div>
 
 <div class="card">
 <div style="opacity:.8">👥 Group Members</div>
-<div class="big" id="memberCount">0</div>
+<div class="big" id="memberCount">1</div>
 </div>
 
-<a href="group.html">
-<div class="folder">
-<div style="font-size:50px">💬</div>
-<h2>GROUP CHAT</h2>
+<div class="memberList" id="memberListBox">
+<div style="text-align:center;padding:10px;opacity:.7">Loading members...</div>
 </div>
-</a>
 
-<div style="height:80px"></div>
 <div class="bottom">
-<div>🏠<br>Dashboard</div>
-<div>👥<br>Group</div>
+<div id="btnDash" onclick="goChat()">🏠<br>Dashboard</div>
+<div id="btnGroup" class="active" onclick="showMembers()">👥<br>Group</div>
 </div>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
+const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
 const MY_SENA = localStorage.getItem("sena_no") || "4521328";
-const MY_NAME = localStorage.getItem("name") || "Roton";
 
-// Name Show
-document.getElementById("greet").innerText = "Assalamualaikum " + MY_NAME;
+// 1. Top e jar jar pic / initial asbe
+let initial = MY_NAME.charAt(0).toUpperCase();
+document.getElementById("topProfile").innerHTML = initial;
+let savedPic = localStorage.getItem("profile_pic");
+if(savedPic){
+  document.getElementById("topProfile").innerHTML = '<img src="'+savedPic+'">';
+}
 
-// Group Member Count Fix
-fetch(API+"?action=getMembers")
-.then(r=>r.json())
-.then(data=>{
-  document.getElementById("memberCount").innerText = data.length;
-});
+// 2. Group Members + List
+function loadMembers(){
+  fetch(API+"?action=getMembers").then(r=>r.json()).then(data=>{
+    document.getElementById("memberCount").innerText = data.length;
+    let html="";
+    data.forEach(m=>{
+      let ini = m.name ? m.name.charAt(0).toUpperCase() : "M";
+      html+='<div class="member"><div class="avatar">'+ini+'</div><div><b>'+m.name+'</b><br><small style="opacity:.6">'+m.sena+'</small></div></div>';
+    });
+    document.getElementById("memberListBox").innerHTML = html;
+  });
+}
+loadMembers();
+
+function goChat(){
+  location.href = "group.html";
+}
+function showMembers(){
+  document.getElementById("memberListBox").scrollIntoView({behavior:"smooth"});
+  document.getElementById("btnGroup").classList.add("active");
+  document.getElementById("btnDash").classList.remove("active");
+}
 </script>
 
 </body>
