@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Waiting</title>
+<style>body{margin:0;font-family:Arial;background:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.box{max-width:380px;text-align:center}.icon{font-size:70px}.h1{font-size:26px;font-weight:900;margin:18px 0 10px}.p{color:#555;font-size:15px;line-height:1.5}.btn{width:100%;padding:15px;background:#111;color:#fff;border:none;border-radius:30px;font-weight:700;margin-top:24px;cursor:pointer}</style>
+</head><body>
+<div class="box">
+  <div class="icon">⏳</div>
+  <div class="h1">Waiting for Approval</div>
+  <div class="p">আপনার প্রোফাইল Admin এর কাছে পাঠানো হয়েছে।<br>অনুমোদনের পর আপনি Login করতে পারবেন।<br><br>Sena No: <b id="sNo"></b></div>
+  <button class="btn" onclick="location.href='dashboard.html'">Back to Home</button>
+</div>
+<script>document.getElementById('sNo').innerText=localStorage.getItem('sena_no')||''</script>
+</body></html>
