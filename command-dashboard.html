@@ -1,64 +1,32 @@
-<!DOCTYPE html><html><head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard - Only Group Chat</title>
-<style>
-body{margin:0;font-family:sans-serif;background:#0a1a12;padding-bottom:80px;color:#fff}
-.topArmy{background:#0a1a12;padding:12px 15px;font-weight:bold;border-bottom:2px solid #1a4d2e;text-align:center;font-size:15px}
-.welcome{background:#00c853;color:#000;padding:10px 15px;text-align:center;font-weight:800;font-size:14px;display:none}
-.pending{background:#ff9800;color:#000;padding:10px 15px;text-align:center;font-weight:700;font-size:13px;display:none}
-.bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;z-index:9999;border-top:1px solid #2a5a3a}
-.bottom div{text-align:center;cursor:pointer;padding:5px 15px;font-size:14px}
-.cardLink{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:35px 20px;margin:25px 15px;color:#fff;display:flex;align-items:center;justify-content:center;gap:18px;text-decoration:none;text-align:center}
-.cardLink:active{transform:scale(0.97)}
-</style>
-</head><body>
-
-<div class="topArmy">4 BIR - MT PLATOON | Dashboard</div>
-<div id="welcomeBox" class="welcome"></div>
-<div id="pendingBox" class="pending">⏳ Waiting for Approval - Sena No: <span id="pSena"></span></div>
-
-<a href="group.html" style="text-decoration:none">
-<div class="cardLink">
-<div style="font-size:55px">💬</div>
-<div>
-<h2 style="margin:0;font-size:22px">GROUP CHAT</h2>
-<small style="opacity:.7">Tap to Open Chat</small>
-</div>
-</div>
-</a>
-
-<div style="text-align:center;margin-top:50px;color:#555;font-size:13px;line-height:1.5">
-Dashboard এ শুধু Group Chat<br>আর কিছু নাই<br><br>
-<span style="font-size:20px">👆</span> উপরের Folder এ Click করো
-</div>
-
-<div class="bottom">
-<div onclick="location.href='command-dashboard.html'" style="color:#22c55e;font-weight:bold;opacity:1">🏠<br>Dashboard</div>
-<div onclick="location.href='command-Homepage.html'" style="color:#fff;opacity:.6">🏡<br>Home Page</div>
-<div onclick="location.href='group.html'" style="color:#fff;opacity:.6">👥<br>Group</div>
-</div>
-
-<script>
+<!DOCTYPE html><html><head> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Dashboard - Only Group Chat</title> <style> body{margin:0;font-family:sans-serif;background:#0a1a12;padding-bottom:80px;color:#fff} .topArmy{background:#0a1a12;padding:12px 15px;font-weight:bold;border-bottom:2px solid #1a4d2e;text-align:center;font-size:15px} .welcome{background:#00c853;color:#000;padding:10px 15px;text-align:center;font-weight:800;font-size:14px;display:none} .pending{background:#ff9800;color:#000;padding:10px 15px;text-align:center;font-weight:700;font-size:13px;display:none} .bottom{position:fixed;bottom:0;width:100%;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;z-index:9999;border-top:1px solid #2a5a3a} .bottom div{text-align:center;cursor:pointer;padding:5px 15px;font-size:14px} .cardLink{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:35px 20px;margin:25px 15px;color:#fff;display:flex;align-items:center;justify-content:center;gap:18px;text-decoration:none;text-align:center} .cardLink:active{transform:scale(0.97)} </style> </head><body> <div class="topArmy">4 BIR - MT PLATOON | Dashboard</div> <div id="welcomeBox" class="welcome"></div> <div id="pendingBox" class="pending">⏳ Waiting for Approval - Sena No: <span id="pSena"></span></div> <a href="group.html" style="text-decoration:none"> <div class="cardLink"> <div style="font-size:55px">💬</div> <div> <h2 style="margin:0;font-size:22px">GROUP CHAT</h2> <small style="opacity:.7">Tap to Open Chat</small> </div> </div> </a> <div style="text-align:center;margin-top:50px;color:#555;font-size:13px;line-height:1.5"> Dashboard এ শুধু Group Chat<br>আর কিছু নাই<br><br> <span style="font-size:20px">👆</span> উপরের Folder এ Click করো </div> <div class="bottom"> <div onclick="location.href='command-dashboard.html'" style="color:#22c55e;font-weight:bold;opacity:1">🏠<br>Dashboard</div> <div onclick="location.href='command-Homepage.html'" style="color:#fff;opacity:.6">🏡<br>Home Page</div> <div onclick="location.href='group.html'" style="color:#fff;opacity:.6">👥<br>Group</div> </div> <script>
 const SENA_NO = localStorage.getItem("sena_no");
 const PENDING_SENA = localStorage.getItem("pending_sena");
-const MY_NAME = localStorage.getItem("name") || "Roton Chandro";
+const MT_ARMY = localStorage.getItem("mt_army");
+const MT_ROLE = localStorage.getItem("mt_role");
+const MY_NAME = localStorage.getItem("name") || "Roton Chandro Mohonto";
 
-// Auto Fix for Admin 4521328
-if(PENDING_SENA=="4521328" && !SENA_NO){
+// FIX: Main Dashboard থেকে 4521328 login করলে এখানেও auto approve
+if((MT_ARMY=="4521328" || PENDING_SENA=="4521328") && !SENA_NO){
   localStorage.setItem("sena_no","4521328");
   localStorage.setItem("name","Roton Chandro Mohonto");
   localStorage.removeItem("pending_sena");
   location.reload();
 }
 
-if(SENA_NO){
+// FIX: যদি mt_role থাকে মানে main dashboard এ login আছে, তাহলে sena_no বানাও
+if(!SENA_NO && MT_ARMY){
+  localStorage.setItem("sena_no", MT_ARMY);
+  localStorage.setItem("name", MY_NAME);
+  localStorage.removeItem("pending_sena");
+  location.reload();
+}
+
+if(localStorage.getItem("sena_no")){
   const wb=document.getElementById("welcomeBox");
   wb.style.display="block";
-  wb.innerText="✅ Welcome, "+SENA_NO+(MY_NAME?" | "+MY_NAME:"");
-} else if(PENDING_SENA){
+  wb.innerText="✅ Welcome, "+localStorage.getItem("sena_no")+" | "+(localStorage.getItem("name")||"");
+} else if(localStorage.getItem("pending_sena")){
   document.getElementById("pendingBox").style.display="block";
-  document.getElementById("pSena").innerText=PENDING_SENA;
+  document.getElementById("pSena").innerText=localStorage.getItem("pending_sena");
 }
-</script>
-
-</body></html>
+</script> </body></html>
