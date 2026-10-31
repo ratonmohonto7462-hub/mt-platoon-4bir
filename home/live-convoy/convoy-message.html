@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convoy Message</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0f172a;color:#fff;padding:14px;padding-bottom:80px}
+h1{font-size:18px;text-align:center;margin-bottom:15px}
+.box{background:#162040;padding:14px;border-radius:12px;margin-bottom:10px}
+.box b{color:#38bdf8}
+.input{display:flex;gap:8px;margin-top:15px}
+.input input{flex:1;padding:12px;border-radius:10px;border:none;background:#1e293b;color:#fff}
+.input button{padding:12px 18px;border-radius:10px;border:none;background:#3b82f6;color:#fff;font-weight:700}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;padding:12px 0}
+.nav div{font-size:12px;color:#94a3b8;text-align:center}
+.nav div.mid{background:#3b82f6;color:#fff;padding:8px 18px;border-radius:20px;margin-top:-15px;font-weight:800}
+</style>
+</head>
+<body>
+<h1>💬 Convoy Message Group</h1>
+
+<div class="box"><b>Truck-01:</b> সবাই রেডি তো?</div>
+<div class="box"><b>Truck-03:</b> আমি মানিকগঞ্জ আছি</div>
+<div class="box" style="background:#1e3a5f;border:1px solid #3b82f6"><b>You (Truck-05):</b> Live Map অন করছি</div>
+<div class="box"><b>Truck-02:</b> দেখতে পাচ্ছি 🛰️</div>
+
+<div id="msgs"></div>
+
+<div class="input">
+<input id="txt" placeholder="Message লিখো...">
+<button onclick="send()">Send</button>
+</div>
+
+<div class="nav">
+<div onclick="location.href='convoy-home.html'">🚚<br>Home</div>
+<div class="mid" onclick="location.href='convoy-group.html'">🛰️<br>Live</div>
+<div style="color:#22c55e">💬<br>Message</div>
+</div>
+
+<script>
+function send(){
+let t=document.getElementById('txt').value;
+if(!t)return;
+document.getElementById('msgs').innerHTML+=`<div class="box" style="background:#1e3a5f"><b>You:</b> ${t}</div>`;
+document.getElementById('txt').value='';
+}
+</script>
+</body>
+</html>
