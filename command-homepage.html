@@ -1,116 +1,81 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>4 BIR - MT PLATOON</title>
+<title>Home - MT PLATOON 4 BIR</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Roboto,Arial}
-body{background:#f5f5f5;padding-bottom:80px}
-.top{ background:#0a1a12; color:#fff; padding:14px 15px; display:flex; justify-content:space-between; align-items:center;}
-.top b{font-size:18px}
-.rCircle{width:44px;height:44px;background:#ffcc00;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:22px;border:2px solid #fff}
-.callBar{background:#0e5d3e;padding:10px 15px;color:#ffcc00;font-weight:800;display:flex;align-items:center;gap:8px}
-.welcomeBar{background:#122e1f;padding:14px 15px;color:#fff;display:flex;align-items:center;gap:12px;border-bottom:3px solid #ffcc00}
-.wIcon{width:42px;height:42px;background:#ffcc00;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}
-.banner{position:relative;width:100%;height:260px;background:#000;overflow:hidden}
-.banner img{width:100%;height:100%;object-fit:cover}
-.dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:7px}
-.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.6)}
-.dot.active{background:#ffcc00;width:12px;height:12px}
-.editBox{margin:12px;background:#fff;border:2px dashed #0e5d3e;border-radius:12px;padding:14px}
-.editBox h3{color:#0e5d3e;margin-bottom:12px}
-.grid10{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.box{height:52px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;border:1.5px solid #ccc;background:#f3f3f3}
-.box.filled{background:#0e5d3e;color:#fff;font-weight:900}
-.section{padding:0 15px;margin-top:18px}
-.secHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.secHead b{color:#0e5d3e;font-size:18px;border-left:5px solid #ffcc00;padding-left:8px}
-.addBtn{background:#0e5d3e;color:#ffcc00;border:none;padding:6px 14px;border-radius:20px;font-weight:700}
-.notice{background:#fffbe6;border-left:4px solid #ffcc00;padding:12px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.contactCard{background:#fff;border:1.5px solid #ddd;padding:14px;border-radius:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.callBtn{background:#0e5d3e;color:#ffcc00;padding:8px 16px;border-radius:20px;border:none;font-weight:800}
-.groupBig{background:#0e3a25;color:#fff;padding:30px 20px;border-radius:20px;text-align:center;margin:20px 15px}
-.groupBig h1{font-size:70px;color:#22c55e;line-height:1}
-.bottomNav{position:fixed;bottom:0;left:0;right:0;background:#143d27;display:flex;justify-content:space-around;padding:10px 0;z-index:999}
-.bottomNav div{color:#fff;text-align:center;font-size:13px;opacity:.6;cursor:pointer}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f2f2f2;padding-bottom:85px}
+.topBar{background:#0a1a12;color:#fff;padding:14px 15px;display:flex;justify-content:space-between;align-items:center}
+.topBar b{font-size:18px;letter-spacing:.5px}
+.rBadge{width:42px;height:42px;background:#ffcc00;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:22px;border:2px solid #fff}
+.callBar{background:#0e5d3e;color:#ffcc00;padding:11px 15px;font-weight:900;display:flex;gap:8px}
+.welcome{background:#122e1f;color:#fff;padding:14px 15px;display:flex;gap:12px;align-items:center;border-bottom:3px solid #ffcc00}
+.wIcon{width:40px;height:40px;background:#ffcc00;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.bannerWrap{position:relative;width:100%;height:250px;background:#000}
+.bannerWrap img{width:100%;height:100%;object-fit:cover}
+.dots{position:absolute;bottom:10px;width:100%;display:flex;justify-content:center;gap:6px}
+.dot{width:8px;height:8px;background:rgba(255,255,255,.6);border-radius:50%}
+.dot.active{background:#ffcc00;width:22px;border-radius:10px}
+.editSec{margin:12px;background:#fff;border:2px dashed #0e5d3e;border-radius:12px;padding:14px}
+.grid10{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.gBox{height:50px;background:#eee;border:1px solid #ccc;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.gBox.on{background:#0e5d3e;color:#fff;font-weight:900}
+.sec{padding:15px}
+.secHead{display:flex;justify-content:space-between;margin-bottom:10px}
+.secHead b{color:#0e5d3e;border-left:5px solid #ffcc00;padding-left:8px;font-size:17px}
+.btnAdd{background:#0e5d3e;color:#ffcc00;border:none;padding:6px 14px;border-radius:20px;font-weight:700}
+.noticeCard{background:#fffbe6;border-left:4px solid #ffcc00;padding:12px;border-radius:8px;display:flex;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.contactCard{background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.callBtn{background:#0e5d3e;color:#ffcc00;border:none;padding:8px 16px;border-radius:20px;font-weight:800}
+.groupBig{background:#0a3320;margin:15px;padding:25px;border-radius:18px;text-align:center;color:#fff}
+.groupBig h1{font-size:60px;color:#22c55e}
+.bottomNav{position:fixed;bottom:0;left:0;right:0;background:#143d27;display:flex;justify-content:space-around;padding:12px 0;z-index:999}
+.bottomNav div{color:#fff;text-align:center;font-size:13px;opacity:.6}
 .bottomNav div.active{opacity:1;color:#22c55e;font-weight:900}
-.editDel{display:flex;gap:6px}
-.editDel button{border:none;padding:6px 12px;border-radius:6px;font-weight:700}
 </style>
 </head>
 <body>
-
-<div class="top"><b>4 BIR - MT PLATOON</b><div class="rCircle">R</div></div>
+<div class="topBar"><b>4 BIR - MT PLATOON</b><div class="rBadge">R</div></div>
 <div class="callBar">📞 Call Us: 01769-013433</div>
-<div class="welcomeBar"><div class="wIcon">⚔️</div><b>Welcome to Mt Platoon</b></div>
+<div class="welcome"><div class="wIcon">⚔️</div><b>Welcome to Mt Platoon</b></div>
 
-<!-- BANNER -->
-<div class="banner">
-<img id="bannerImg" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800" alt="banner">
-<div class="dots">
-<span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-</div>
+<div class="bannerWrap">
+<img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=800" alt="plane">
+<div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
 </div>
 
-<!-- Edit 10 Banner -->
-<div class="editBox">
-<h3>📸 Edit 10 Banner Pics</h3>
+<div class="editSec">
+<b>📸 Edit 10 Banner Pics</b>
 <div class="grid10">
-<div class="box filled">1</div><div class="box filled">2</div><div class="box">3</div><div class="box">4</div><div class="box">5</div>
-<div class="box">6</div><div class="box">7</div><div class="box">8</div><div class="box">9</div><div class="box">10</div>
+<div class="gBox on">1</div><div class="gBox on">2</div><div class="gBox">3</div><div class="gBox">4</div><div class="gBox">5</div>
+<div class="gBox">6</div><div class="gBox">7</div><div class="gBox">8</div><div class="gBox">9</div><div class="gBox">10</div>
 </div>
 </div>
 
-<!-- NOTICE -->
-<div class="section">
-<div class="secHead"><b>📢 NOTICE BOARD</b><button class="addBtn">+ Add</button></div>
-<div class="notice">
-<div>📅 10/31/2026: যারা নাইট পাশ যেতে ইচ্ছুক তারা লিভ কার্ড জমা করেন</div>
-<div class="editDel"><button style="background:#0e5d3e;color:#ffcc00">✏️ Edit</button><button style="background:#c0392b;color:#fff">🗑️ Del</button></div>
+<div class="sec">
+<div class="secHead"><b>📢 NOTICE BOARD</b><button class="btnAdd">+ Add</button></div>
+<div class="noticeCard">
+<span>📅 10/31/2026: যারা নাইট পাশ যেতে ইচ্ছুক তারা লিভ কার্ড জমা করেন</span>
+<span><button style="background:#0e5d3e;color:#ffcc00;border:none;padding:5px 10px;border-radius:6px">Edit</button> <button style="background:#c0392b;color:#fff;border:none;padding:5px 10px;border-radius:6px">Del</button></span>
 </div>
 </div>
 
-<!-- EMERGENCY -->
-<div class="section">
-<div class="secHead"><b>🚨 EMERGENCY CONTACTS</b><button class="addBtn">+ Add</button></div>
-
-<div class="contactCard">
-<div><b>QM</b><br>Capt Mohammad Ali Akbor Arko</div>
-<div style="display:flex;gap:8px;align-items:center"><button class="callBtn">📞 CALL</button><button style="background:#143d27;color:#ffcc00;border:none;padding:6px 10px;border-radius:8px">✏️</button><button style="background:#c0392b;color:#fff;border:none;padding:6px 10px;border-radius:8px">🗑️</button></div>
+<div class="sec">
+<div class="secHead"><b>🚨 EMERGENCY CONTACTS</b><button class="btnAdd">+ Add</button></div>
+<div class="contactCard"><div><b>QM</b><br>Capt Mohammad Ali Akbor Arko</div><div><button class="callBtn">📞 CALL</button></div></div>
+<div class="contactCard"><div><b>MT JCO</b><br>SWO Liton Chandro Nath</div><div><button class="callBtn">📞 CALL</button></div></div>
+<div class="contactCard"><div><b>MT</b><br>Garage</div><div><button class="callBtn">📞 CALL</button></div></div>
 </div>
 
-<div class="contactCard">
-<div><b>MT JCO</b><br>SWO Liton Chandro Nath</div>
-<div style="display:flex;gap:8px;align-items:center"><button class="callBtn">📞 CALL</button><button style="background:#143d27;color:#ffcc00;border:none;padding:6px 10px;border-radius:8px">✏️</button></div>
-</div>
+<div class="groupBig"><div>👥 Group Members</div><h1>1</h1></div>
+<div style="text-align:center;padding:15px;color:#888;font-size:12px">Copyright © 2026 BANGLADESH ARMY</div>
 
-<div class="contactCard">
-<div><b>MT</b><br>Garage</div>
-<div style="display:flex;gap:8px;align-items:center"><button class="callBtn">📞 CALL</button><button style="background:#143d27;color:#ffcc00;border:none;padding:6px 10px;border-radius:8px">✏️</button><button style="background:#c0392b;color:#fff;border:none;padding:6px 10px;border-radius:8px">🗑️</button></div>
-</div>
-
-</div>
-
-<div class="groupBig">
-<div>👥 Group Members</div>
-<h1>1</h1>
-</div>
-
-<div style="text-align:center;padding:20px;color:#888">Copyright © 2026 BANGLADESH ARMY</div>
-
-<!-- BOTTOM NAV -->
 <div class="bottomNav">
-<div onclick="location.href='dashboard.html'">🏠<br>Dashboard</div>
+<div onclick="location.href='index.html'">🏠<br>Dashboard</div>
 <div class="active">🏡<br>Home Page</div>
 <div onclick="location.href='group.html'">👥<br>Group</div>
 </div>
-
-<script>
-// Login Check
-if(!localStorage.getItem('mt_role')){
-  // location.href="index.html";
-}
-</script>
 </body>
 </html>
