@@ -55,7 +55,7 @@ body{background:#f2f2f2;padding-bottom:90px}
 <div class="top">
   <div style="display:flex;align-items:center;gap:10px">
     <button onclick="openMenu()" style="background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer">⋮</button>
-    <b>4 BIR - MT PLATOON</b>
+    <b>MT PLATOON</b>
   </div>
   <b onclick="location.href='own-profile.html'" style="background:#ffcc00;color:#000;padding:7px 13px;border-radius:50%;cursor:pointer">R</b>
 </div>
@@ -66,35 +66,38 @@ body{background:#f2f2f2;padding-bottom:90px}
     <button onclick="closeMenu()" style="background:#ff4444;color:#fff;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-weight:900">X</button>
   </div>
   <div class="menu-item" onclick="location.href='leave-card-maker.html'">💳 Leave Card Maker</div>
-  <div class="menu-item" onclick="location.href='home.html'" style="background:transparent;color:#aaa">🏠 Home Page</div>
+  <div class="menu-item" onclick="location.href='home.html'" style="background:transparent;color:#aaa"
+>👼🏽 Store Toking</div>
+  <div class="menu-item" onclick="location.href='group.html'" style="background:transparent;color:#aaa"
+>🏠 Home Page</div>
   <div class="menu-item" onclick="location.href='group.html'" style="background:transparent;color:#aaa">📝 invoice</div>
   <div class="menu-item" onclick="location.href='group.html'" style="background:transparent;color:#aaa">🧾 Duty Slip</div>
   <div class="menu-item" onclick="location.href='group.html'" style="background:transparent;color:#aaa">🚫 Gate Pass</div>
-  <div class="menu-item" onclick="location.href='group.html'" style="background:transparent;color:#aaa">👥 Group Chat</div>
+  <div class="menu-item" onclick="location.href='group.html'" style="background:transparent;color:#aaa">💌 Group Chat</div>
 </div>
 <div id="menuOverlay" onclick="closeMenu()"></div>
 
-<div class="call"><span>📞 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div>
-<div class="welcome">🎖️ Welcome To MT Platoon 🎖️</div>
+<div class="call"><span>📲 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div>
+<div class="welcome">🇧🇩 Welcome To MT Platoon 🇧🇩</div>
 
 <div class="banner" id="armyBanner">
-  <div id="bannerPlaceholder" style="text-align:center;font-size:14px">📸 Banner Pic Add করো<br><small>4521328 শুধু Add করতে পারবে</small></div>
+  <div id="bannerPlaceholder" style="text-align:center;font-size:16px">📸 Banner Pic Add করো<br><small>4521328 শুধু Add করতে পারবে</small></div>
   <button id="bannerAddBtn" class="banner-add-btn" onclick="openBannerModal()">+ Add Pics (20)</button>
   <div class="banner-dots" id="bannerDots"></div>
 </div>
 
 <div class="sec">
-  <h3 style="color:#0e5d3e;margin-bottom:14px">🎖️ PLATOON COMMAND</h3>
+  <h3 style="color:#0e5d3e;margin-bottom:14px">👑 PLATOON COMMAND</h3>
   <div class="sir-card">
-    <button class="edit-btn" onclick="openEdit('qm')">✏️ Edit</button>
+    <button class="edit-btn" onclick="openEdit('qm')">✏️</button>
     <div class="img-box"><img id="img-qm" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-qm">QM</div><div class="name-text" id="name-qm">Capt Mohammad Ali Akbor Arko</div></div></div>
   </div>
   <div class="sir-card">
-    <button class="edit-btn" onclick="openEdit('jco')">✏️ Edit</button>
+    <button class="edit-btn" onclick="openEdit('jco')">✏️</button>
     <div class="img-box"><img id="img-jco" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-jco">MT JCO</div><div class="name-text" id="name-jco">Subedar Name Here</div></div></div>
   </div>
   <div class="sir-card">
-    <button class="edit-btn" onclick="openEdit('nco')">✏️ Edit</button>
+    <button class="edit-btn" onclick="openEdit('nco')">✏️</button>
     <div class="img-box"><img id="img-nco" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-nco">MT NCO</div><div class="name-text" id="name-nco">Sgt Name Here</div></div></div>
   </div>
 </div>
@@ -109,11 +112,29 @@ body{background:#f2f2f2;padding-bottom:90px}
   <div id="vehicleList"></div>
 </div>
 
-<div id="editModal"><div class="modal-box"><h3 style="color:#0e5d3e">PLATOON COMMAND Edit</h3><input id="editRank" placeholder="পদবী - QM / MT JCO"><input id="editName" placeholder="নাম"><input id="editFile" type="file" accept="image/*"><p style="font-size:12px;color:#666;margin-bottom:10px">গ্যালারি থেকে ছবি সিলেক্ট করো</p><button class="btn" style="background:#0e5d3e;color:#ffcc00" onclick="saveEdit()">✅ Save</button><button class="btn" style="background:#ddd" onclick="closeEdit()">Cancel</button></div></div>
-<div id="vehicleModal"><div class="modal-box"><h3 style="color:#b91c1c">🚛 Vehicle Problem</h3><input id="vPodobi" placeholder="পদবী"><input id="vName" placeholder="নাম"><input id="vBa" placeholder="বিএ নং"><textarea id="vProblem" placeholder="সমস্যা লিখো..." rows="3"></textarea><button class="btn" style="background:#b91c1c;color:#fff" onclick="saveVehicle()">✅ Submit</button><button class="btn" style="background:#ddd" onclick="closeVehicle()">Cancel</button></div></div>
-<div id="bannerModal"><div class="modal-box"><h3 style="color:#0a1a12">🖼️ Banner Pic Add (20 টা)</h3><p style="font-size:12px;color:#666;text-align:center;margin-bottom:10px">গ্যালারি থেকে Bangladesh Army পিক সিলেক্ট করো<br>অটো 3 সেকেন্ড পর পর চেঞ্জ হবে</p><input id="bannerFile" type="file" accept="image/*" multiple><p style="font-size:11px;color:#b91c1c;margin-top:5px">* একসাথে অনেকগুলা সিলেক্ট করতে পারবি, Max 20 টা</p><div class="thumb-grid" id="thumbGrid"></div><button class="btn" style="background:#0a1a12;color:#ffcc00" onclick="saveBannerPics()">✅ Save Banner</button><button class="btn" style="background:#ff4444;color:#fff" onclick="clearBannerPics()">🗑️ সব Delete</button><button class="btn" style="background:#ddd" onclick="closeBannerModal()">Cancel</button></div></div>
+<div id="editModal"><div class="modal-box"><h3 style="color:#0e5d3e">PLATOON COMMAND Edit</h3><input id="editRank" placeholder="পদবী - QM / MT JCO"><input id="editName" placeholder="নাম"><input id="editFile" type="file" accept="image/*"><p style="font-size:12px;color:#666;margin-bottom:10px">গ্যালারি থেকে ছবি সিলেক্ট করো</p><button class="btn" style="background:#0e5d3e;color:#ffcc00" onclick="saveEdit()">✅</button><button class="btn" style="background:#ddd" onclick="closeEdit()">Cancel</button></div></div>
+<div id="vehicleModal"><div class="modal-box"><h3 style="color:#b91c1c">🚛 Vehicle Problem</h3><input id="vPodobi" placeholder="পদবী"><input id="vName" placeholder="নাম"><input id="vBa" placeholder="বিএ নং"><textarea id="vProblem" placeholder="সমস্যা লিখো..." rows="3"></textarea><button class="btn" style="background:#b91c1c;color:#fff" onclick="saveVehicle()">✅</button><button class="btn" style="background:#ddd" onclick="closeVehicle()">Cancel</button></div></div>
+<div id="bannerModal"><div class="modal-box"><h3 style="color:#0a1a12">🖼️ Pic Add</h3><p style="font-size:12px;color:#666;text-align:center;margin-bottom:10px">গ্যালারি থেকে Bangladesh Army পিক সিলেক্ট করো<br>অটো 3 সেকেন্ড পর পর চেঞ্জ হবে</p><input id="bannerFile" type="file" accept="image/*" multiple><p style="font-size:11px;color:#b91c1c;margin-top:5px">* একসাথে অনেকগুলা সিলেক্ট করতে পারবি, Max 20</p><div class="thumb-grid" id="thumbGrid"></div><button class="btn" style="background:#0a1a12;color:#ffcc00" onclick="saveBannerPics()">✅</button><button class="btn" style="background:#ff4444;color:#fff" onclick="clearBannerPics()">❌</button><button class="btn" style="background:#ddd" onclick="closeBannerModal()">Cancel</button></div></div>
 
-<div class="nav"><div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div><div onclick="location.href='group.html'">👥<br>Group</div></div>
+<div class="nav">
+  <div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div>
+  
+  <div onclick="location.href='live-convoy/convoy.html'" style="background:#3b82f6;color:#fff;padding:8px 18px;border-radius:20px;margin-top:-18px;font-weight:800;box-shadow:0 4px 15px #3b82f680;cursor:pointer;text-align:center">🛰️<br>Live Convoy Tracking</div>
+  
+  <div onclick="location.href='group.html'">👥<br>Group</div>
+</div>
+
+<style>
+.nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#0b1226;display:flex;
+  justify-content:space-around;align-items:center;
+  padding:12px 0 10px 0;
+  border-top:1px solid #1e293b;
+  z-index:999;
+}
+.nav div{color:#94a3b8;text-align:center;font-size:12px;cursor:pointer;line-height:1.2}
+</style>
 
 <script>
 function openMenu(){ document.getElementById('sideMenu').style.display='block'; document.getElementById('menuOverlay').style.display='block'; }
@@ -173,12 +194,12 @@ document.getElementById('bannerFile').addEventListener('change', function(e){
   });
 });
 function removeBannerPic(i){ bannerPics.splice(i,1); renderThumbs(); }
-function clearBannerPics(){ if(confirm("সব Banner Pic Delete করবে?")){ bannerPics = []; renderThumbs(); } }
+function clearBannerPics(){ if(confirm("All Delete?")){ bannerPics = []; renderThumbs(); } }
 function saveBannerPics(){
   if(bannerPics.length>20) bannerPics = bannerPics.slice(0,20);
   localStorage.setItem('armyBannerPics', JSON.stringify(bannerPics));
   renderBanner(); closeBannerModal();
-  alert("✅ Banner Save Done! "+bannerPics.length+" টা পিক");
+  alert("✅"+bannerPics.length+" টা পিক");
   document.getElementById('bannerFile').value="";
 }
 let cur = JSON.parse(localStorage.getItem('currentUser') || 'null');
@@ -198,7 +219,7 @@ function openEdit(type){ if(!isAdmin()){ alert("শুধু 4521328 পার�
 function closeEdit(){ document.getElementById('editModal').style.display='none'; currentType=''; document.getElementById('editFile').value=''; }
 function saveEdit(){
   let rank = document.getElementById('editRank').value; let name = document.getElementById('editName').value; let fileInput = document.getElementById('editFile'); let data = JSON.parse(localStorage.getItem('emergencyContacts') || '{}');
-  if(fileInput.files && fileInput.files[0]){ let reader = new FileReader(); reader.onload = function(e){ data[currentType] = { rank: rank, name: name, img: e.target.result }; localStorage.setItem('emergencyContacts', JSON.stringify(data)); loadContacts(); closeEdit(); alert("✅ Update Done!"); }; reader.readAsDataURL(fileInput.files[0]); } else { data[currentType] = { rank: rank, name: name, img: document.getElementById('img-'+currentType).src }; localStorage.setItem('emergencyContacts', JSON.stringify(data)); loadContacts(); closeEdit(); alert("✅ Update Done!"); }
+  if(fileInput.files && fileInput.files[0]){ let reader = new FileReader(); reader.onload = function(e){ data[currentType] = { rank: rank, name: name, img: e.target.result }; localStorage.setItem('emergencyContacts', JSON.stringify(data)); loadContacts(); closeEdit(); alert("✅"); }; reader.readAsDataURL(fileInput.files[0]); } else { data[currentType] = { rank: rank, name: name, img: document.getElementById('img-'+currentType).src }; localStorage.setItem('emergencyContacts', JSON.stringify(data)); loadContacts(); closeEdit(); alert("✅"); }
 }
 let notices = JSON.parse(localStorage.getItem('mtNotices') || '["📅 10/31/2026: যারা নাইট পাশ যেতে ইচ্ছুক তারা লিভ কার্ড জমা করেন"]');
 function renderNotices(){ let list = document.getElementById('noticeList'); list.innerHTML = ""; notices.forEach((n,i)=>{ let admin = isAdmin(); list.innerHTML += `<div class="notice-item">${n}${admin?`<span class="notice-actions"><button style="background:#ffcc00" onclick="editNotice(${i})">Edit</button><button style="background:#ff4444;color:#fff" onclick="deleteNotice(${i})">Del</button></span>`:''}</div>`; }); }
