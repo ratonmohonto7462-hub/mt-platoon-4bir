@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Convoy - MT Platoon 4 BIR</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}
+body{background:#0f172a;color:#fff}
+.header{background:#0b1226;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:17px}.header h1 span{font-size:11px;color:#94a3b8;display:block;font-weight:400}
+.live-badge{background:#10b98122;border:1px solid #10b981;color:#10b981;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+#map{height:62vh;width:100%;background:#111}
+.bottom{background:#0b1226;padding:14px 16px;border-radius:20px 20px 0 0;margin-top:-18px;position:relative;z-index:10}
+.join-box{background:#162040;padding:10px;border-radius:12px;display:flex;gap:8px;margin-bottom:12px;border:1px solid #1e3a5f}
+.join-box input{flex:1;padding:12px;border-radius:8px;border:none;background:#0f172a;color:#fff;outline:none}
+.join-box button{padding:12px 18px;border-radius:8px;border:none;background:#3b82f6;color:#fff;font-weight:700;cursor:pointer}
+.trucks{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.truck{padding:5px 12px;background:#1e293b;border-radius:20px;font-size:12px;border:1px solid #334155}
+.truck.me{background:#3b82f6;color:#fff;animation:pulse 2s infinite}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center}
+.grid div{background:#162040;padding:12px;border-radius:12px}
+.grid b{display:block;font-size:18px;color:#38bdf8}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #3b82f680}70%{box-shadow:0 0 0 10px #3b82f600}100%{box-shadow:0 0 0 0 #3b82f600}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>কনভয় লাইভ ট্র্যাকিং <span>Live Convoy • Dhaka → Jessore • 10 Trucks</span></h1>
+<div class="live-badge">● LIVE • 10 Active</div>
+</div>
+<div id="map"></div>
+<div class="bottom">
+<div class="join-box">
+<input id="truckName" placeholder="গাড়ির নাম: Truck-05">
+<button onclick="joinConvoy()">Join Convoy</button>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="truckList"></div>
+<div class="grid">
+<div><b id="speed">58</b>km/h<br><small>Avg Speed</small></div>
+<div><b>3h 12m</b>ETA<br><small>Remaining Time</small></div>
+<div><b>142km</b>Left<br><small>Distance</small></div>
+</div>
+</div>
+<script>
+const route = [[23.8103,90.4125],[23.72,90.25],[23.55,89.95],[23.35,89.75],[23.05,89.45],[22.85,89.2]];
+const map = L.map('map',{zoomControl:false}).setView([23.4,89.9], 9);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+L.polyline(route, {color:'#38bdf8', weight:4}).addTo(map);
+
+let trucks = {};
+let myName = localStorage.getItem('myTruck') || '';
+
+for(let i=1;i<=10;i++){
+  let name = `Truck-${String(i).padStart(2,'0')}`;
+  let base = route[i%route.length];
+  let pos = [base[0]+(Math.random()-0.5)*0.3, base[1]+(Math.random()-0.5)*0.3];
+  let icon = L.divIcon({html:`<div style="background:#22c55e;color:#fff;padding:2px 6px;border-radius:12px;font-size:10px;font-weight:700;border:2px solid #fff">🚚 ${name}</div>`,className:''});
+  let marker = L.marker(pos,{icon:icon}).addTo(map).bindPopup(name);
+  trucks[name]={marker,pos};
+}
+
+function renderList(){
+  let html='';
+  Object.keys(trucks).forEach(n=>{
+    html+=`<span class="truck ${n===myName?'me':''}">${n} ${n===myName?'(You)':''}</span>`;
+  });
+  document.getElementById('truckList').innerHTML=html;
+}
+renderList();
+
+function joinConvoy(){
+  let name = document.getElementById('truckName').value.trim();
+  if(!name){ alert('নাম লিখো!'); return; }
+  myName=name;
+  localStorage.setItem('myTruck', name);
+  if(!trucks[name]){
+    let pos = route[2];
+    let icon = L.divIcon({html:`<div style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;border:2px solid #fff">📍 ${name} (You)</div>`,className:''});
+    let marker = L.marker(pos,{icon:icon}).addTo(map).bindPopup(name+' (You)').openPopup();
+    trucks[name]={marker,pos};
+    map.setView(pos,12);
+  }
+  if(navigator.geolocation){
+    navigator.geolocation.watchPosition(p=>{
+      let newPos=[p.coords.latitude,p.coords.longitude];
+      trucks[myName].marker.setLatLng(newPos);
+      trucks[myName].pos=newPos;
+    },{enableHighAccuracy:true});
+  }
+  renderList();
+  alert('✅ Joined! সবাই সবাইকে দেখবে!');
+}
+
+setInterval(()=>{
+  Object.keys(trucks).forEach(n=>{
+    if(n!==myName){
+      let lat = trucks[n].pos[0] + (Math.random()-0.5)*0.008;
+      let lng = trucks[n].pos[1] + (Math.random()-0.5)*0.008;
+      trucks[n].pos=[lat,lng];
+      trucks[n].marker.setLatLng([lat,lng]);
+    }
+  });
+  document.getElementById('speed').innerText=Math.floor(50+Math.random()*18);
+},2500);
+
+if(myName) document.getElementById('truckName').value=myName;
+</script>
+</body>
+</html>
