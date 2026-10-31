@@ -23,15 +23,16 @@ body{background:#f2f2f2;padding-bottom:90px}
 .name-text{color:#fff;font-weight:900;font-size:15px}
 .edit-btn{position:absolute;top:12px;right:12px;background:#ffcc00;color:#000;border:none;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:900;cursor:pointer;z-index:10}
 .notice-item{background:#fffbe6;padding:12px;border-left:4px solid #ffcc00;margin-top:10px;border-radius:8px;position:relative}
+.vehicle-item{background:#fff3f3;padding:12px;border-left:4px solid #ff4444;margin-top:10px;border-radius:8px;position:relative;font-size:13px;line-height:1.6}
 .notice-actions{position:absolute;top:5px;right:5px}
 .notice-actions button{border:none;padding:4px 8px;border-radius:10px;font-size:11px;font-weight:900;margin-left:4px;cursor:pointer}
 .btn-add{background:#0e5d3e;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer}
-#editModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;justify-content:center;align-items:center;padding:20px}
+.btn-add2{background:#b91c1c;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer}
+#editModal, #vehicleModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;justify-content:center;align-items:center;padding:20px}
 .modal-box{background:#fff;width:100%;max-width:350px;border-radius:15px;padding:20px}
-.modal-box h3{color:#0e5d3e;margin-bottom:15px;text-align:center}
-.modal-box input{width:100%;padding:10px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px}
+.modal-box h3{margin-bottom:15px;text-align:center}
+.modal-box input, .modal-box textarea{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px}
 .modal-box .btn{width:100%;padding:10px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-top:5px}
-.quick-btn{flex:1;padding:14px;border:none;border-radius:12px;font-weight:900;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
 </style>
 </head>
 <body>
@@ -44,17 +45,16 @@ body{background:#f2f2f2;padding-bottom:90px}
 
 <div class="banner"><img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=800"></div>
 
-<!-- QUICK ACCESS - VEHICLE PROBLEM ADD KORA HOLO -->
-<div class="sec" style="padding-bottom:5px">
-  <div style="display:flex;gap:10px">
-    <button class="quick-btn" onclick="location.href='vehicle-problem.html'" style="background:#b91c1c;color:#fff">🚛 Vehicle Problem <span id="vCount" style="background:#fff;color:#b91c1c;padding:2px 7px;border-radius:10px;font-size:11px;margin-left:4px">0</span></button>
-    <button class="quick-btn" onclick="location.href='duty.html'" style="background:#0e5d3e;color:#ffcc00">📋 Duty Chart</button>
-  </div>
-</div>
-
 <div class="sec">
   <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#0e5d3e">📢 NOTICE BOARD</h3><button id="addNoticeBtn" class="btn-add" onclick="addNotice()">+ Add</button></div>
   <div id="noticeList"></div>
+</div>
+
+<!-- VEHICLE PROBLEM - NOTICE BOARD ER MOTO SAME SYSTEM -->
+<div class="sec">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#b91c1c">🚛 VEHICLE PROBLEM</h3><button class="btn-add2" onclick="openVehicle()">+ Add</button></div>
+  <div style="font-size:11px;color:#666;margin-top:4px">ফরমেট: সেনা নং | পদবী | নাম | বিএ নং | সমস্যা - সবাই Add করতে পারবে</div>
+  <div id="vehicleList"></div>
 </div>
 
 <div class="sec">
@@ -73,10 +73,10 @@ body{background:#f2f2f2;padding-bottom:90px}
   </div>
 </div>
 
-<!-- EDIT MODAL -->
+<!-- MT COMMAND EDIT MODAL -->
 <div id="editModal">
   <div class="modal-box">
-    <h3>MT COMMAND Edit</h3>
+    <h3 style="color:#0e5d3e">MT COMMAND Edit</h3>
     <input id="editRank" placeholder="পদবী - QM / MT JCO">
     <input id="editName" placeholder="নাম">
     <input id="editFile" type="file" accept="image/*">
@@ -86,11 +86,21 @@ body{background:#f2f2f2;padding-bottom:90px}
   </div>
 </div>
 
-<div class="nav">
-  <div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div>
-  <div onclick="location.href='vehicle-problem.html'">🚛<br>Vehicle</div>
-  <div onclick="location.href='group.html'">👥<br>Group</div>
+<!-- VEHICLE PROBLEM MODAL - NOTICE BOARD ER MOTO -->
+<div id="vehicleModal">
+  <div class="modal-box">
+    <h3 style="color:#b91c1c">🚛 Vehicle Problem Add</h3>
+    <input id="vSena" placeholder="সেনা নং">
+    <input id="vPodobi" placeholder="পদবী">
+    <input id="vName" placeholder="নাম">
+    <input id="vBa" placeholder="বিএ নং">
+    <textarea id="vProblem" placeholder="সমস্যা লিখো..." rows="3"></textarea>
+    <button class="btn" style="background:#b91c1c;color:#fff" onclick="saveVehicle()">✅ Submit</button>
+    <button class="btn" style="background:#ddd" onclick="closeVehicle()">Cancel</button>
+  </div>
 </div>
+
+<div class="nav"><div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div><div onclick="location.href='group.html'">👥<br>Group</div></div>
 
 <script>
 let cur = JSON.parse(localStorage.getItem('currentUser') || 'null');
@@ -107,7 +117,6 @@ function loadContacts(){
   if(data.nco){ document.getElementById('name-nco').innerText=data.nco.name; document.getElementById('rank-nco').innerText=data.nco.rank; document.getElementById('img-nco').src=data.nco.img; }
 }
 loadContacts();
-
 function openEdit(type){ if(!isAdmin()){ alert("শুধু 4521328 পারবে!"); return; } currentType = type; document.getElementById('editRank').value = document.getElementById('rank-'+type).innerText; document.getElementById('editName').value = document.getElementById('name-'+type).innerText; document.getElementById('editModal').style.display='flex'; }
 function closeEdit(){ document.getElementById('editModal').style.display='none'; currentType=''; document.getElementById('editFile').value=''; }
 function saveEdit(){
@@ -122,9 +131,49 @@ function addNotice(){ if(!isAdmin()) return; let txt = prompt("Notice:"); if(txt
 function editNotice(i){ let txt = prompt("Edit:", notices[i]); if(txt){ notices[i]=txt; localStorage.setItem('mtNotices', JSON.stringify(notices)); renderNotices(); } }
 function deleteNotice(i){ if(confirm("Delete?")){ notices.splice(i,1); localStorage.setItem('mtNotices', JSON.stringify(notices)); renderNotices(); } }
 
-// VEHICLE COUNT SHOW
-let vData = JSON.parse(localStorage.getItem('vehicleProblems') || '[]');
-document.getElementById('vCount').innerText = vData.length;
+// VEHICLE PROBLEM - NOTICE BOARD ER MOTO SAME
+let vehicles = JSON.parse(localStorage.getItem('vehicleProblems') || '[]');
+function renderVehicles(){
+  let list = document.getElementById('vehicleList'); list.innerHTML = "";
+  if(vehicles.length==0){ list.innerHTML = `<div style="color:#888;padding:10px;font-size:13px">কোনো Vehicle Problem নাই</div>`; return; }
+  vehicles.forEach((v,i)=>{
+    let admin = isAdmin();
+    list.innerHTML += `<div class="vehicle-item">
+      <b>সেনা নং:</b> ${v.sena} | <b>পদবী:</b> ${v.podobi} | <b>নাম:</b> ${v.name}<br>
+      <b>বিএ নং:</b> ${v.ba} | <b style="color:#b91c1c">সমস্যা:</b> ${v.problem}
+      ${admin?`<span class="notice-actions"><button style="background:#ffcc00" onclick="editVehicle(${i})">Edit</button><button style="background:#ff4444;color:#fff" onclick="deleteVehicle(${i})">Del</button></span>`:''}
+    </div>`;
+  });
+}
+renderVehicles();
+
+function openVehicle(){ document.getElementById('vehicleModal').style.display='flex'; }
+function closeVehicle(){ document.getElementById('vehicleModal').style.display='none'; }
+
+function saveVehicle(){
+  let sena = document.getElementById('vSena').value.trim();
+  let podobi = document.getElementById('vPodobi').value.trim();
+  let name = document.getElementById('vName').value.trim();
+  let ba = document.getElementById('vBa').value.trim();
+  let problem = document.getElementById('vProblem').value.trim();
+  if(!sena || !podobi || !name || !ba || !problem){ alert("সব ঘর পূরণ করো!"); return; }
+  vehicles.unshift({ sena, podobi, name, ba, problem });
+  localStorage.setItem('vehicleProblems', JSON.stringify(vehicles));
+  renderVehicles(); closeVehicle();
+  document.getElementById('vSena').value=''; document.getElementById('vPodobi').value=''; document.getElementById('vName').value=''; document.getElementById('vBa').value=''; document.getElementById('vProblem').value='';
+}
+function editVehicle(i){
+  if(!isAdmin()){ alert("শুধু Admin পারবে"); return; }
+  let v = vehicles[i];
+  document.getElementById('vSena').value = v.sena;
+  document.getElementById('vPodobi').value = v.podobi;
+  document.getElementById('vName').value = v.name;
+  document.getElementById('vBa').value = v.ba;
+  document.getElementById('vProblem').value = v.problem;
+  vehicles.splice(i,1);
+  document.getElementById('vehicleModal').style.display='flex';
+}
+function deleteVehicle(i){ if(confirm("Delete করবে?")){ vehicles.splice(i,1); localStorage.setItem('vehicleProblems', JSON.stringify(vehicles)); renderVehicles(); } }
 </script>
 </body>
 </html>
