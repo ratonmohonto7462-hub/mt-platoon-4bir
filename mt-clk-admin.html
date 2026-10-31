@@ -1,17 +1,45 @@
 <!DOCTYPE html>
 <html lang="bn">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>MT CLK Admin</title><style>*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#070f0a;color:#7aff8a;padding:12px}.card{background:rgba(20,40,20,.9);border:1px solid #7aff8a;padding:14px;border-radius:12px;margin-top:12px}.btn{padding:10px;border:none;border-radius:8px;font-weight:800;cursor:pointer;flex:1}.approve{background:#7aff8a;color:#000}.decline{background:#ff4444;color:white}.loginBox{max-width:360px;margin:60px auto;background:#111;padding:25px;border-radius:15px;border:1px solid #7aff8a;text-align:center}#adminView{display:none}.filter{display:flex;gap:8px;margin-top:12px}select{padding:10px;border-radius:8px;flex:1;background:#000;color:#7aff8a;border:1px solid #7aff8a}</style></head>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT Platoon - Login</title>
+<style>
+body{margin:0;font-family:system-ui;background:#0a1a12;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.box{width:90%;max-width:360px;background:#143d27;padding:25px;border-radius:16px;border:1px solid #2a5a3a}
+input{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #2a5a3a;background:#0a1a12;color:#fff}
+button{width:100%;padding:13px;background:#00c853;color:#000;font-weight:800;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
 <body>
-<div id="loginAdmin" class="loginBox"><h3>MT CLK LOGIN</h3><input id="adminPass" type="password" placeholder="Password" style="width:100%;padding:12px;margin-top:10px;background:#000;color:#7aff8a;border:1px solid #7aff8a;border-radius:8px"><button class="btn approve" style="width:100%;margin-top:15px" id="adminLoginBtn">LOGIN</button><p style="font-size:12px;color:#555">Default: MTCLK2026</p></div>
-<div id="adminView"><h2 style="text-align:center">MT CLK - HELMET ADMIN</h2><div class="filter"><select id="filterStatus"><option value="pending">Pending</option><option value="approved">Approved</option><option value="all">All</option></select><select id="filterCompany"><option value="all">সব</option><option>এ</option><option>বি</option><option>সি</option><option>ডি</option><option>সদর</option></select></div><div id="list">লোড হচ্ছে...</div></div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = {apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU",authDomain: "mt-platoon-c408a.firebaseapp.com",projectId: "mt-platoon-c408a",storageBucket: "mt-platoon-c408a.firebasestorage.app",messagingSenderId: "431652749602",appId: "1:431652749602:web:7214305714f2d75995657b"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-document.getElementById('adminLoginBtn').onclick=()=>{if(document.getElementById('adminPass').value==="MTCLK2026"){localStorage.setItem("mt_clk","ok");document.getElementById('loginAdmin').style.display='none';document.getElementById('adminView').style.display='block';loadProfiles();}else alert("ভুল!");}
-if(localStorage.getItem("mt_clk")==="ok"){document.getElementById('loginAdmin').style.display='none';document.getElementById('adminView').style.display='block';loadProfiles();}
-async function loadProfiles(){const status=document.getElementById('filterStatus').value;const company=document.getElementById('filterCompany').value;const list=document.getElementById('list');list.innerHTML="লোড হচ্ছে...";let q=status==="all"?collection(db,"profiles"):query(collection(db,"profiles"),where("status","==",status));const snap=await getDocs(q);list.innerHTML="";snap.forEach(d=>{const data=d.data();if(company!=="all"&&data.company!==company)return;const div=document.createElement('div');div.className='card';div.innerHTML=`<b>${data.sena_no}</b> | ${data.podobi} | ${data.name}<br>Company: ${data.company} | Blood: ${data.blood}<br>Mobile: ${data.mobile} | Status: ${data.status}<br><div style="display:flex;gap:10px;margin-top:10px"><button class="btn approve" onclick="updateStatus('${d.id}','approved')">Approve</button><button class="btn decline" onclick="updateStatus('${d.id}','declined')">Decline</button></div>`;list.appendChild(div);});}
-window.updateStatus=async(id,s)=>{await updateDoc(doc(db,"profiles",id),{status:s});alert(s);loadProfiles();}
-document.getElementById('filterStatus').onchange=loadProfiles;document.getElementById('filterCompany').onchange=loadProfiles;
-</script></body></html>
+<div class="box">
+<h3 style="text-align:center">4 BIR - MT PLATOON LOGIN</h3>
+<input id="mobile" placeholder="Mobile Number">
+<input id="sena_no" placeholder="Sena No - 4521328">
+<input id="pwd" type="password" placeholder="Password">
+<button onclick="loginUser()">LOGIN</button>
+</div>
+
+<script>
+function loginUser(){
+  const mobile = document.getElementById("mobile").value.trim();
+  const sena = document.getElementById("sena_no").value.trim();
+  const pwd = document.getElementById("pwd").value.trim();
+  if(!mobile || !sena || !pwd){ alert("সব ঘর পূরণ করো"); return; }
+
+  // সব Key Save যাতে কোন Dashboard এ Pending না দেখায়
+  localStorage.setItem("mobile", mobile);
+  localStorage.setItem("sena_no", sena);
+  localStorage.setItem("mt_army", sena);
+  localStorage.setItem("mt_mobile", mobile);
+  localStorage.setItem("mt_role", "COMMAND");
+  localStorage.setItem("name", "Roton Chandro Mohonto");
+  localStorage.setItem("mt_approved_"+sena, "true");
+  localStorage.removeItem("pending_sena");
+
+  // সবাই Home Page এ যাবে
+  location.href='command-Homepage.html';
+}
+</script>
+</body>
+</html>
