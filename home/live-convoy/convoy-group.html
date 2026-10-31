@@ -1,34 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Convoy Group</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-body{background:#0f172a;color:#fff;padding:14px;padding-bottom:80px}
-h1{font-size:16px;margin-bottom:12px}
-.row{background:#162040;padding:12px;border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between}
-.row b{color:#38bdf8}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;padding:12px 0;z-index:999}
-.nav a{font-size:12px;color:#94a3b8;text-align:center;text-decoration:none}
-.nav a.mid{background:#3b82f6;color:#fff;padding:8px 18px;border-radius:20px;margin-top:-15px;font-weight:800}
-</style>
-</head>
-<body>
-<h1>🛰️ Convoy Group - 10 Trucks LIVE</h1>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Convoy Group Live Map</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui} body{background:#0f172a;color:#fff;padding-bottom:70px} h1{font-size:15px;padding:10px;background:#162040} #map{height:65vh;width:100%} #list{padding:8px;max-height:30vh;overflow:auto} .row{background:#162040;padding:8px;border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;font-size:12px} .row b{color:#38bdf8} .nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;padding:10px 0;z-index:9999} .nav a{font-size:11px;color:#94a3b8;text-align:center;text-decoration:none} .nav a.mid{background:#3b82f6;color:#fff;padding:8px 16px;border-radius:20px;margin-top:-15px;font-weight:800}</style></head><body>
+<h1>🛰️ Convoy Group - 10 Trucks LIVE MAP</h1>
+<div id="map"></div>
 <div id="list"></div>
-
 <div class="nav">
 <a href="https://mtplatoon4bir.xyz/home/live-convoy/convoy-home.html">🚚<br>Home</a>
 <a class="mid" href="https://mtplatoon4bir.xyz/home/live-convoy/convoy-group.html">👥<br>Group</a>
 <a href="https://mtplatoon4bir.xyz/home/live-convoy/convoy-message.html">💬<br>Message</a>
 </div>
-
 <script>
+var map = L.map('map').setView([23.8103, 89.2], 7);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 let l=document.getElementById('list');
-for(let i=1;i<=10;i++){
-l.innerHTML+=`<div class="row"><div><b>Truck-${String(i).padStart(2,'0')}</b><br><small>Dhaka → Jessore</small></div><div style="text-align:right;color:#22c55e">● Live<br><small>${50+Math.floor(Math.random()*15)} km/h</small></div></div>`;
-}
+let trucks=[
+[23.8103,90.4125],[23.5,89.8],[23.2,89.2],[22.9,89.5],[22.7,88.9],
+[24.0,90.8],[24.3,89.5],[23.0,89.9],[22.5,89.0],[25.0,89.3]
+];
+trucks.forEach((pos,i)=>{
+ let marker=L.marker(pos).addTo(map).bindPopup(`<b>Truck-${String(i+1).padStart(2,'0')}</b><br>Dhaka → Jessore<br>${50+Math.floor(Math.random()*15)} km/h`);
+ l.innerHTML+=`<div class="row"><div><b>Truck-${String(i+1).padStart(2,'0')}</b><br><small>Dhaka → Jessore</small></div><div style="text-align:right;color:#22c55e">● Live<br><small>${50+Math.floor(Math.random()*15)} km/h</small></div></div>`;
+});
 </script>
-</body>
-</html>
+</body></html>
