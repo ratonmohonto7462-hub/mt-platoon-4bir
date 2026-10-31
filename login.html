@@ -1,0 +1,33 @@
+<script>
+function loginUser(){
+  const mobile = document.getElementById("mobile").value.trim();
+  const sena = document.getElementById("sena_no").value.trim();
+  const pwd = document.getElementById("pwd").value.trim();
+
+  if(!mobile || !sena || !pwd){
+    alert("Mobile, Sena No, Password সব দাও ভাই");
+    return;
+  }
+
+  // সব Key একবারে Save, যাতে কোন Dashboard এ না আটকায়
+  localStorage.setItem("mobile", mobile);
+  localStorage.setItem("sena_no", sena);
+  localStorage.setItem("mt_army", sena);
+  localStorage.setItem("mt_mobile", mobile);
+  localStorage.setItem("mt_role", "COMMAND");
+  localStorage.setItem("name", "Roton Chandro Mohonto");
+  localStorage.setItem("mt_approved_"+sena, "true");
+  localStorage.removeItem("pending_sena");
+
+  // সবাই Home Page এ যাবে
+  location.href = 'command-Homepage.html';
+}
+</script>
+
+<!-- Login Box Example -->
+<div style="padding:20px">
+  <input id="mobile" placeholder="Mobile Number" style="width:100%;padding:12px;margin-bottom:10px">
+  <input id="sena_no" placeholder="Sena Number (4521328)" style="width:100%;padding:12px;margin-bottom:10px">
+  <input id="pwd" type="password" placeholder="Password" style="width:100%;padding:12px;margin-bottom:15px">
+  <button onclick="loginUser()" style="width:100%;padding:12px;background:#00c853;color:#000;font-weight:bold;border:none">LOGIN</button>
+</div>
