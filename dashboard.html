@@ -23,17 +23,19 @@ async function loadAll(){ let seniority=[]; try{ let txt=await fetch(SENIORITY_S
 loadAll();
 document.getElementById('profileBtn').onclick=function(){document.getElementById('mtLogin').classList.add('active');};
 document.getElementById('closeMt').onclick=function(){document.getElementById('mtLogin').classList.remove('active');};
-function loginMT(){
-  const a=document.getElementById('armyNo').value.trim();
-  const m=document.getElementById('mobNo').value.trim();
-  const p=document.getElementById('passNo').value.trim();
-  if(!a||!m||!p){alert('Army Number, Mobile, Password দাও');return;}
-  localStorage.setItem('mt_army', a);
-  localStorage.setItem('mt_mobile', m);
-  if(a === 'MT CLK' || a === 'MTCLK'){ localStorage.setItem('mt_role', 'MT CLK'); } else { localStorage.setItem('mt_role', 'COMMAND'); }
-  localStorage.setItem('mt_approved_'+a, 'true');
-  alert('Login OK: '+a+' Approved ✅');
-  document.getElementById('mtLogin').classList.remove('active');
-  location.reload();
+function loginMT(){ 
+  const a=document.getElementById('armyNo').value.trim(); 
+  const m=document.getElementById('mobNo').value.trim(); 
+  const p=document.getElementById('passNo').value.trim(); 
+  if(!a||!m||!p){alert('Army Number, Mobile, Password দাও');return;} 
+  localStorage.setItem('mt_army', a); 
+  localStorage.setItem('mt_mobile', m); 
+  if(a === 'MT CLK' || a === 'MTCLK'){ 
+    localStorage.setItem('mt_role', 'MT CLK'); 
+  } else { 
+    localStorage.setItem('mt_role', 'COMMAND'); 
+  } 
+  localStorage.setItem('mt_approved_'+a, 'true'); 
+  location.href = 'home';
 }
 </script></body></html>
