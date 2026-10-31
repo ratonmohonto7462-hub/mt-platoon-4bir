@@ -11,12 +11,13 @@ body{background:#f2f2f2;padding-bottom:90px}
 .call{background:#0e5d3e;color:#ffcc00;padding:11px 15px;font-weight:900;font-size:15px;display:flex;justify-content:space-between;align-items:center}
 .gc-btn{background:#ffcc00;color:#000;padding:5px 12px;border-radius:15px;font-size:13px;cursor:pointer}
 .welcome{background:#ffcc00;color:#0a1a12;padding:11px 15px;font-weight:900;font-size:15px;text-align:center}
-.banner{width:100%;height:280px;position:relative;overflow:hidden;background:#000}
+.banner{width:100%;height:280px;position:relative;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;color:#fff}
 .banner img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 1s ease-in-out}
 .banner img.active{opacity:1}
 .banner-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10}
 .banner-dots span{width:7px;height:7px;background:rgba(255,255,255,0.6);border-radius:50%;display:inline-block;transition:0.3s}
 .banner-dots span.active{background:#ffcc00;width:20px;border-radius:10px}
+.banner-add-btn{position:absolute;top:10px;right:10px;background:#ffcc00;color:#000;border:none;padding:7px 12px;border-radius:20px;font-weight:900;font-size:12px;z-index:20;cursor:pointer}
 .sec{padding:15px}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#143d27;display:flex;justify-content:space-around;padding:12px 0}
 .nav div{color:#fff;text-align:center;cursor:pointer}
@@ -34,11 +35,15 @@ body{background:#f2f2f2;padding-bottom:90px}
 .notice-actions button{border:none;padding:4px 8px;border-radius:10px;font-size:11px;font-weight:900;margin-left:4px;cursor:pointer}
 .btn-add{background:#0e5d3e;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer}
 .btn-add2{background:#b91c1c;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer}
-#editModal, #vehicleModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;justify-content:center;align-items:center;padding:20px}
-.modal-box{background:#fff;width:100%;max-width:350px;border-radius:15px;padding:20px}
+#editModal, #vehicleModal, #bannerModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;justify-content:center;align-items:center;padding:20px}
+.modal-box{background:#fff;width:100%;max-width:380px;border-radius:15px;padding:20px;max-height:90vh;overflow:auto}
 .modal-box h3{margin-bottom:15px;text-align:center}
 .modal-box input, .modal-box textarea{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px}
 .modal-box .btn{width:100%;padding:10px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-top:5px}
+.thumb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.thumb-grid img{width:100%;height:60px;object-fit:cover;border-radius:6px;border:2px solid #ddd}
+.thumb-grid div{position:relative}
+.thumb-grid button{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:10px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -47,8 +52,10 @@ body{background:#f2f2f2;padding-bottom:90px}
 <div class="call"><span>📞 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div>
 <div class="welcome">🎖️ Welcome To MT Platoon 🎖️</div>
 
-<!-- BANGLADESH ARMY SLIDER 20 PIC - 3 SEC -->
+<!-- BANNER ADD SYSTEM - TUI NIZE PIC ADD KORBI -->
 <div class="banner" id="armyBanner">
+  <div id="bannerPlaceholder" style="text-align:center;font-size:14px">📸 Banner Pic Add করো<br><small>4521328 শুধু Add করতে পারবে</small></div>
+  <button id="bannerAddBtn" class="banner-add-btn" onclick="openBannerModal()">+ Add Pics (20)</button>
   <div class="banner-dots" id="bannerDots"></div>
 </div>
 
@@ -102,63 +109,119 @@ body{background:#f2f2f2;padding-bottom:90px}
   </div>
 </div>
 
+<!-- BANNER PIC ADD MODAL -->
+<div id="bannerModal">
+  <div class="modal-box">
+    <h3 style="color:#0a1a12">🖼️ Banner Pic Add (20 টা)</h3>
+    <p style="font-size:12px;color:#666;text-align:center;margin-bottom:10px">গ্যালারি থেকে Bangladesh Army পিক সিলেক্ট করো<br>অটো 3 সেকেন্ড পর পর চেঞ্জ হবে</p>
+    <input id="bannerFile" type="file" accept="image/*" multiple>
+    <p style="font-size:11px;color:#b91c1c;margin-top:5px">* একসাথে অনেকগুলা সিলেক্ট করতে পারবি, Max 20 টা</p>
+    <div class="thumb-grid" id="thumbGrid"></div>
+    <button class="btn" style="background:#0a1a12;color:#ffcc00" onclick="saveBannerPics()">✅ Save Banner</button>
+    <button class="btn" style="background:#ff4444;color:#fff" onclick="clearBannerPics()">🗑️ সব Delete</button>
+    <button class="btn" style="background:#ddd" onclick="closeBannerModal()">Cancel</button>
+  </div>
+</div>
+
 <div class="nav"><div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div><div onclick="location.href='group.html'">👥<br>Group</div></div>
 
 <script>
-// BANGLADESH ARMY 20 PIC - 3 SEC CHANGE
-const armyPics = [
-"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Bangladesh_Army_Soldiers.jpg/800px-Bangladesh_Army_Soldiers.jpg",
-"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Bangladesh_Army_parade.jpg/800px-Bangladesh_Army_parade.jpg",
-"https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=800&q=80&auto=format",
-"https://images.unsplash.com/photo-1601985705806-5b9a71f6004f?w=800&q=80&auto=format",
-"https://images.unsplash.com/photo-1576669801838-1c043c91a37d?w=800&q=80&auto=format",
-"https://cdn.pixabay.com/photo/2017/08/06/03/33/army-2590658_1280.jpg",
-"https://cdn.pixabay.com/photo/2015/07/28/14/29/military-865526_1280.jpg",
-"https://cdn.pixabay.com/photo/2016/01/19/16/05/soldier-1149461_1280.jpg",
-"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Bangladesh_Military_Academy.jpg/800px-Bangladesh_Military_Academy.jpg",
-"https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&q=80&auto=format",
-"https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&q=80&auto=format",
-"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flag_of_the_Bangladesh_Army.svg/800px-Flag_of_the_Bangladesh_Army.svg.png",
-"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80&auto=format",
-"https://cdn.pixabay.com/photo/2016/03/27/22/22/army-1282890_1280.jpg",
-"https://images.unsplash.com/photo-1507561216420-3447c8a76a66?w=800&q=80&auto=format",
-"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/BAF_Base.jpg/800px-BAF_Base.jpg",
-"https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=800&q=80&auto=format",
-"https://cdn.pixabay.com/photo/2016/11/10/15/15/soldiers-1813380_1280.jpg",
-"https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?w=800&q=80&auto=format",
-"https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Bangladesh_Army_Tank.jpg/800px-Bangladesh_Army_Tank.jpg"
-];
-
+// BANNER PIC ADD SYSTEM - 20 PIC
+let bannerPics = JSON.parse(localStorage.getItem('armyBannerPics') || '[]');
 let curSlide = 0;
-const banner = document.getElementById('armyBanner');
-const dotsDiv = document.getElementById('bannerDots');
+let slideInterval = null;
 
-armyPics.forEach((src,i)=>{
-  let img = document.createElement('img');
-  img.src = src;
-  if(i==0) img.className = 'active';
-  banner.appendChild(img);
-  let dot = document.createElement('span');
-  if(i==0) dot.className = 'active';
-  dotsDiv.appendChild(dot);
+function renderBanner(){
+  const banner = document.getElementById('armyBanner');
+  const dotsDiv = document.getElementById('bannerDots');
+  const placeholder = document.getElementById('bannerPlaceholder');
+  
+  // পুরানো img clear
+  banner.querySelectorAll('img').forEach(el=>el.remove());
+  dotsDiv.innerHTML = "";
+  
+  if(bannerPics.length==0){
+    placeholder.style.display = 'block';
+    return;
+  }
+  placeholder.style.display = 'none';
+  
+  bannerPics.forEach((src,i)=>{
+    let img = document.createElement('img');
+    img.src = src;
+    if(i==0) img.className = 'active';
+    banner.appendChild(img);
+    let dot = document.createElement('span');
+    if(i==0) dot.className = 'active';
+    dotsDiv.appendChild(dot);
+  });
+  
+  startSlider();
+}
+
+function startSlider(){
+  if(slideInterval) clearInterval(slideInterval);
+  if(bannerPics.length<=1) return;
+  slideInterval = setInterval(()=>{
+    const allImgs = document.querySelectorAll('#armyBanner img');
+    const allDots = document.querySelectorAll('#bannerDots span');
+    if(allImgs.length==0) return;
+    allImgs[curSlide].classList.remove('active');
+    allDots[curSlide].classList.remove('active');
+    curSlide = (curSlide + 1) % allImgs.length;
+    allImgs[curSlide].classList.add('active');
+    allDots[curSlide].classList.add('active');
+  }, 3000);
+}
+
+renderBanner();
+
+function openBannerModal(){
+  if(!isAdmin()){ alert("শুধু 4521328 পারবে!"); return; }
+  document.getElementById('bannerModal').style.display='flex';
+  renderThumbs();
+}
+function closeBannerModal(){ document.getElementById('bannerModal').style.display='none'; }
+
+function renderThumbs(){
+  let grid = document.getElementById('thumbGrid');
+  grid.innerHTML = "";
+  bannerPics.forEach((src,i)=>{
+    grid.innerHTML += `<div><img src="${src}"><button onclick="removeBannerPic(${i})">X</button></div>`;
+  });
+}
+
+document.getElementById('bannerFile').addEventListener('change', function(e){
+  let files = Array.from(e.target.files);
+  if(bannerPics.length + files.length > 20){ alert("Max 20 টা পিক! এখন আছে "+bannerPics.length+" টা"); return; }
+  
+  files.forEach(file=>{
+    let reader = new FileReader();
+    reader.onload = function(ev){
+      bannerPics.push(ev.target.result);
+      renderThumbs();
+    };
+    reader.readAsDataURL(file);
+  });
 });
 
-const allImgs = banner.querySelectorAll('img');
-const allDots = dotsDiv.querySelectorAll('span');
+function removeBannerPic(i){ bannerPics.splice(i,1); renderThumbs(); }
+function clearBannerPics(){ if(confirm("সব Banner Pic Delete করবে?")){ bannerPics = []; renderThumbs(); } }
 
-function nextSlide(){
-  allImgs[curSlide].classList.remove('active');
-  allDots[curSlide].classList.remove('active');
-  curSlide = (curSlide + 1) % armyPics.length;
-  allImgs[curSlide].classList.add('active');
-  allDots[curSlide].classList.add('active');
+function saveBannerPics(){
+  if(bannerPics.length>20) bannerPics = bannerPics.slice(0,20);
+  localStorage.setItem('armyBannerPics', JSON.stringify(bannerPics));
+  renderBanner();
+  closeBannerModal();
+  alert("✅ Banner Save Done! "+bannerPics.length+" টা পিক, 3 সেকেন্ড পর পর চেঞ্জ হবে");
+  document.getElementById('bannerFile').value="";
 }
-setInterval(nextSlide, 3000);
 
+// OLD CODE
 let cur = JSON.parse(localStorage.getItem('currentUser') || 'null');
 if(!cur){ localStorage.setItem('currentUser', JSON.stringify({name:"Ruhul", senaNo:"4521328", isAdmin:true})); }
 function isAdmin(){ let u = JSON.parse(localStorage.getItem('currentUser') || '{}'); return u.senaNo == "4521328" || u.isAdmin == true; }
-function checkAdmin(){ if(isAdmin()){ document.querySelectorAll('.edit-btn').forEach(b=>b.style.display='block'); document.getElementById('addNoticeBtn').style.display='block'; } }
+function checkAdmin(){ if(isAdmin()){ document.querySelectorAll('.edit-btn').forEach(b=>b.style.display='block'); document.getElementById('addNoticeBtn').style.display='block'; document.getElementById('bannerAddBtn').style.display='block'; } else { document.getElementById('bannerAddBtn').style.display='none'; } }
 checkAdmin();
 let currentType = '';
 function loadContacts(){
