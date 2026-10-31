@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Leave Card - Big Font</title>
+<title>Leave Card - Nirdesh Niche</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#f2f2f2}
@@ -14,22 +14,21 @@ body{background:#f2f2f2}
 .row2{display:flex;gap:8px}
 .btn{width:100%;padding:13px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-top:8px;background:#0e5d3e;color:#ffcc00;font-size:15px}
 
-/* A4 - BIG FONT */
 .a4Page{background:#fff;width:100%;max-width:800px;margin:10px auto;padding:8px}
-.leaveCard{border:1.5px dashed #000;padding:20px 18px;margin-bottom:14px;line-height:2.1;font-size:15px;color:#000;font-weight:900;letter-spacing:0.2px}
-.title{text-align:center;text-decoration:underline;margin-bottom:10px;font-size:17px;color:#000}
-.nirdesh{margin-bottom:12px;font-size:14px}
-.nirdesh .label{font-size:15px;margin-bottom:4px}
-.blank{border-bottom:1.5px dotted #000;min-width:55px;display:inline-block;padding:0 4px;color:#000;min-height:16px}
-.line{margin-bottom:1px}
+.leaveCard{border:1.5px dashed #000;padding:20px 18px;margin-bottom:14px;line-height:2.2;font-size:16px;color:#000;font-weight:900}
+.title{text-align:center;text-decoration:underline;margin-bottom:12px;font-size:17px}
+.nirdesh{margin-bottom:12px}
+.nirdeshTitle{font-size:15px;margin-bottom:4px}
+.nirdeshText{font-size:14.5px;line-height:1.9;margin-left:5px}
+.blank{border-bottom:1.5px solid #000;min-width:55px;display:inline-block;padding:0 4px;color:#000;min-height:16px}
 
 @media print{
   body *{visibility:hidden}
   .a4Page, .a4Page *{visibility:visible}
-  .a4Page{position:absolute;left:0;top:0;width:100%;max-width:100%;margin:0;padding:0}
+  .a4Page{position:absolute;left:0;top:0;width:100%;margin:0;padding:0}
   .top,.formBox{display:none}
-  .leaveCard{border:1.5px dashed #000;margin-bottom:0;height:33.3vh;padding:22px 18px;font-size:16px;line-height:2.2}
-  @page{size:ISO A4;margin:8mm}
+  .leaveCard{border:1.5px dashed #000;margin-bottom:0;height:32.8vh;padding:20px 16px;font-size:16.5px;line-height:2.2}
+  @page{size:ISO A4;margin:7mm}
 }
 </style>
 </head>
@@ -37,60 +36,65 @@ body{background:#f2f2f2}
 
 <div class="top">
   <button onclick="location.href='home.html'">←</button>
-  <b>Leave Card - A4 Big Font</b>
+  <b>Leave Card - নির্দেশাবলী নিচে</b>
 </div>
 
 <div class="formBox">
   <div class="row2"><input id="fNo" placeholder="নং - 4521328" oninput="draw()"><input id="fRank" placeholder="পদবী - সৈনিক" oninput="draw()"></div>
   <input id="fName" placeholder="নাম - রতন চন্দ্র মহন্ত" oninput="draw()">
   <div class="row2"><input id="fUnit" placeholder="ইউনিট - 4 বীর" value="4 বীর" oninput="draw()"><input id="fCoy" placeholder="কোম্পানী - সদর কোম্পানী" value="সদর কোম্পানী" oninput="draw()"></div>
-  <div class="row2"><input id="fFrom" placeholder="হইতে - 0/5/2026" oninput="draw()"><input id="fTo" placeholder="পর্যন্ত - 14/5/2026" oninput="draw()"></div>
-  <input id="fDays" placeholder="মোট দিন - 30" oninput="draw()">
-  <input id="fVillage" placeholder="গ্রাম - শ্রীট বাগপুর" oninput="draw()">
+  <div class="row2"><input id="fFrom" placeholder="হইতে - 3/8/2026" oninput="draw()"><input id="fTo" placeholder="পর্যন্ত - 12/8/2026" oninput="draw()"></div>
+  <input id="fDays" placeholder="মোট দিন - 10" oninput="draw()">
+  <input id="fVillage" placeholder="গ্রাম - সীট বাগপুর" oninput="draw()">
   <div class="row2"><input id="fPost" placeholder="পোঃ - উত্তর পানাপুকুর" oninput="draw()"><input id="fThana" placeholder="থানা - গংগাচড়া" oninput="draw()"></div>
   <div class="row2"><input id="fZilla" placeholder="জেলা - রংপুর" oninput="draw()"><input id="fMobile" placeholder="মোবাইল - 01737-912094" oninput="draw()"></div>
-  <button class="btn" onclick="window.print()">🖨️ Print A4 - 3 টা বড় ফন্টে</button>
+  <button class="btn" onclick="window.print()">🖨️ Print A4</button>
 </div>
 
 <div class="a4Page">
   <div class="leaveCard">
     <div class="title">ছুটির সনদপত্র</div>
     <div class="nirdesh">
-      <div class="label">নির্দেশাবলী :</div>
-      ১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>
-      ২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।
+      <div class="nirdeshTitle">নির্দেশাবলী :</div>
+      <div class="nirdeshText">
+        ১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>
+        ২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।
+      </div>
     </div>
-    <div class="line">নং <span class="blank oNo"></span> পদবীঃ <span class="blank oRank"></span> নামঃ <span class="blank oName"></span> ইউনিটঃ <span class="blank oUnit"></span> , <span class="blank oCoy"></span>, ঢাকা সেনানিবাস।</div>
-    <div class="line">তাহাকে <span class="blank oFrom"></span> তারিখ হতে <span class="blank oTo"></span> তারিখ পর্যন্ত মোট <span class="blank oDays"></span> দিনের ছুটি প্রদান করা হলো।</div>
-    <div class="line">ছুটিকালীন তার ঠিকানা নিম্নরূপঃ</div>
-    <div class="line">গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span></div>
-    <div class="line">মোবাইল নংঃ <span class="blank oMobile"></span></div>
-    <div class="line">স্থানঃ ঢাকা সেনানিবাস</div>
-    <div class="line">তারিখঃ ........</div>
+    নং <span class="blank oNo"></span> পদবীঃ <span class="blank oRank"></span> নামঃ <span class="blank oName"></span> ইউনিটঃ <span class="blank oUnit"></span> , <span class="blank oCoy"></span>, ঢাকা সেনানিবাস।<br>
+    তাহাকে <span class="blank oFrom"></span> তারিখ হতে <span class="blank oTo"></span> তারিখ পর্যন্ত মোট <span class="blank oDays"></span> দিনের ছুটি প্রদান করা হলো।<br>
+    ছুটিকালীন তার ঠিকানা নিম্নরূপঃ<br>
+    গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
+    মোবাইল নংঃ <span class="blank oMobile"></span><br>
+    স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
   </div>
 
   <div class="leaveCard">
     <div class="title">ছুটির সনদপত্র</div>
-    <div class="nirdesh"><div class="label">নির্দেশাবলী :</div>১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।</div>
-    <div class="line">নং <span class="blank oNo"></span> পদবীঃ <span class="blank oRank"></span> নামঃ <span class="blank oName"></span> ইউনিটঃ <span class="blank oUnit"></span> , <span class="blank oCoy"></span>, ঢাকা সেনানিবাস।</div>
-    <div class="line">তাহাকে <span class="blank oFrom"></span> তারিখ হতে <span class="blank oTo"></span> তারিখ পর্যন্ত মোট <span class="blank oDays"></span> দিনের ছুটি প্রদান করা হলো।</div>
-    <div class="line">ছুটিকালীন তার ঠিকানা নিম্নরূপঃ</div>
-    <div class="line">গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span></div>
-    <div class="line">মোবাইল নংঃ <span class="blank oMobile"></span></div>
-    <div class="line">স্থানঃ ঢাকা সেনানিবাস</div>
-    <div class="line">তারিখঃ ........</div>
+    <div class="nirdesh">
+      <div class="nirdeshTitle">নির্দেশাবলী :</div>
+      <div class="nirdeshText">১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।</div>
+    </div>
+    নং <span class="blank oNo"></span> পদবীঃ <span class="blank oRank"></span> নামঃ <span class="blank oName"></span> ইউনিটঃ <span class="blank oUnit"></span> , <span class="blank oCoy"></span>, ঢাকা সেনানিবাস।<br>
+    তাহাকে <span class="blank oFrom"></span> তারিখ হতে <span class="blank oTo"></span> তারিখ পর্যন্ত মোট <span class="blank oDays"></span> দিনের ছুটি প্রদান করা হলো।<br>
+    ছুটিকালীন তার ঠিকানা নিম্নরূপঃ<br>
+    গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
+    মোবাইল নংঃ <span class="blank oMobile"></span><br>
+    স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
   </div>
 
   <div class="leaveCard">
     <div class="title">ছুটির সনদপত্র</div>
-    <div class="nirdesh"><div class="label">নির্দেশাবলী :</div>১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।</div>
-    <div class="line">নং <span class="blank oNo"></span> পদবীঃ <span class="blank oRank"></span> নামঃ <span class="blank oName"></span> ইউনিটঃ <span class="blank oUnit"></span> , <span class="blank oCoy"></span>, ঢাকা সেনানিবাস।</div>
-    <div class="line">তাহাকে <span class="blank oFrom"></span> তারিখ হতে <span class="blank oTo"></span> তারিখ পর্যন্ত মোট <span class="blank oDays"></span> দিনের ছুটি প্রদান করা হলো।</div>
-    <div class="line">ছুটিকালীন তার ঠিকানা নিম্নরূপঃ</div>
-    <div class="line">গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span></div>
-    <div class="line">মোবাইল নংঃ <span class="blank oMobile"></span></div>
-    <div class="line">স্থানঃ ঢাকা সেনানিবাস</div>
-    <div class="line">তারিখঃ ........</div>
+    <div class="nirdesh">
+      <div class="nirdeshTitle">নির্দেশাবলী :</div>
+      <div class="nirdeshText">১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।</div>
+    </div>
+    নং <span class="blank oNo"></span> পদবীঃ <span class="blank oRank"></span> নামঃ <span class="blank oName"></span> ইউনিটঃ <span class="blank oUnit"></span> , <span class="blank oCoy"></span>, ঢাকা সেনানিবাস।<br>
+    তাহাকে <span class="blank oFrom"></span> তারিখ হতে <span class="blank oTo"></span> তারিখ পর্যন্ত মোট <span class="blank oDays"></span> দিনের ছুটি প্রদান করা হলো।<br>
+    ছুটিকালীন তার ঠিকানা নিম্নরূপঃ<br>
+    গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
+    মোবাইল নংঃ <span class="blank oMobile"></span><br>
+    স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
   </div>
 </div>
 
