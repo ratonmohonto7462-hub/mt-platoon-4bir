@@ -52,25 +52,15 @@ body{background:#f2f2f2;padding-bottom:90px}
 <div class="call"><span>📞 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div>
 <div class="welcome">🎖️ Welcome To MT Platoon 🎖️</div>
 
-<!-- BANNER ADD SYSTEM - TUI NIZE PIC ADD KORBI -->
 <div class="banner" id="armyBanner">
   <div id="bannerPlaceholder" style="text-align:center;font-size:14px">📸 Banner Pic Add করো<br><small>4521328 শুধু Add করতে পারবে</small></div>
   <button id="bannerAddBtn" class="banner-add-btn" onclick="openBannerModal()">+ Add Pics (20)</button>
   <div class="banner-dots" id="bannerDots"></div>
 </div>
 
+<!-- PLATOON COMMAND - AGE OPOR E CHOLE ASLO -->
 <div class="sec">
-  <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#0e5d3e">📢 NOTICE BOARD</h3><button id="addNoticeBtn" class="btn-add" onclick="addNotice()">+ Add</button></div>
-  <div id="noticeList"></div>
-</div>
-
-<div class="sec">
-  <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#b91c1c">🚛 VEHICLE PROBLEM</h3><button class="btn-add2" onclick="openVehicle()">+ Add Problem</button></div>
-  <div id="vehicleList"></div>
-</div>
-
-<div class="sec">
-  <h3 style="color:#0e5d3e;margin-bottom:14px">🎖️ MT COMMAND</h3>
+  <h3 style="color:#0e5d3e;margin-bottom:14px">🎖️ PLATOON COMMAND</h3>
   <div class="sir-card">
     <button class="edit-btn" onclick="openEdit('qm')">✏️ Edit</button>
     <div class="img-box"><img id="img-qm" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-qm">QM</div><div class="name-text" id="name-qm">Capt Mohammad Ali Akbor Arko</div></div></div>
@@ -85,9 +75,21 @@ body{background:#f2f2f2;padding-bottom:90px}
   </div>
 </div>
 
+<!-- NOTICE BOARD - NICHE CHOLE GELO -->
+<div class="sec">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#0e5d3e">📢 NOTICE BOARD</h3><button id="addNoticeBtn" class="btn-add" onclick="addNotice()">+ Add</button></div>
+  <div id="noticeList"></div>
+</div>
+
+<!-- VEHICLE PROBLEM - SOBAR NICHE -->
+<div class="sec">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#b91c1c">🚛 VEHICLE PROBLEM</h3><button class="btn-add2" onclick="openVehicle()">+ Add Problem</button></div>
+  <div id="vehicleList"></div>
+</div>
+
 <div id="editModal">
   <div class="modal-box">
-    <h3 style="color:#0e5d3e">MT COMMAND Edit</h3>
+    <h3 style="color:#0e5d3e">PLATOON COMMAND Edit</h3>
     <input id="editRank" placeholder="পদবী - QM / MT JCO">
     <input id="editName" placeholder="নাম">
     <input id="editFile" type="file" accept="image/*">
@@ -109,7 +111,6 @@ body{background:#f2f2f2;padding-bottom:90px}
   </div>
 </div>
 
-<!-- BANNER PIC ADD MODAL -->
 <div id="bannerModal">
   <div class="modal-box">
     <h3 style="color:#0a1a12">🖼️ Banner Pic Add (20 টা)</h3>
@@ -126,26 +127,17 @@ body{background:#f2f2f2;padding-bottom:90px}
 <div class="nav"><div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div><div onclick="location.href='group.html'">👥<br>Group</div></div>
 
 <script>
-// BANNER PIC ADD SYSTEM - 20 PIC
 let bannerPics = JSON.parse(localStorage.getItem('armyBannerPics') || '[]');
 let curSlide = 0;
 let slideInterval = null;
-
 function renderBanner(){
   const banner = document.getElementById('armyBanner');
   const dotsDiv = document.getElementById('bannerDots');
   const placeholder = document.getElementById('bannerPlaceholder');
-  
-  // পুরানো img clear
   banner.querySelectorAll('img').forEach(el=>el.remove());
   dotsDiv.innerHTML = "";
-  
-  if(bannerPics.length==0){
-    placeholder.style.display = 'block';
-    return;
-  }
+  if(bannerPics.length==0){ placeholder.style.display = 'block'; return; }
   placeholder.style.display = 'none';
-  
   bannerPics.forEach((src,i)=>{
     let img = document.createElement('img');
     img.src = src;
@@ -155,10 +147,8 @@ function renderBanner(){
     if(i==0) dot.className = 'active';
     dotsDiv.appendChild(dot);
   });
-  
   startSlider();
 }
-
 function startSlider(){
   if(slideInterval) clearInterval(slideInterval);
   if(bannerPics.length<=1) return;
@@ -173,51 +163,32 @@ function startSlider(){
     allDots[curSlide].classList.add('active');
   }, 3000);
 }
-
 renderBanner();
-
-function openBannerModal(){
-  if(!isAdmin()){ alert("শুধু 4521328 পারবে!"); return; }
-  document.getElementById('bannerModal').style.display='flex';
-  renderThumbs();
-}
+function openBannerModal(){ if(!isAdmin()){ alert("শুধু 4521328 পারবে!"); return; } document.getElementById('bannerModal').style.display='flex'; renderThumbs(); }
 function closeBannerModal(){ document.getElementById('bannerModal').style.display='none'; }
-
 function renderThumbs(){
   let grid = document.getElementById('thumbGrid');
   grid.innerHTML = "";
-  bannerPics.forEach((src,i)=>{
-    grid.innerHTML += `<div><img src="${src}"><button onclick="removeBannerPic(${i})">X</button></div>`;
-  });
+  bannerPics.forEach((src,i)=>{ grid.innerHTML += `<div><img src="${src}"><button onclick="removeBannerPic(${i})">X</button></div>`; });
 }
-
 document.getElementById('bannerFile').addEventListener('change', function(e){
   let files = Array.from(e.target.files);
   if(bannerPics.length + files.length > 20){ alert("Max 20 টা পিক! এখন আছে "+bannerPics.length+" টা"); return; }
-  
   files.forEach(file=>{
     let reader = new FileReader();
-    reader.onload = function(ev){
-      bannerPics.push(ev.target.result);
-      renderThumbs();
-    };
+    reader.onload = function(ev){ bannerPics.push(ev.target.result); renderThumbs(); };
     reader.readAsDataURL(file);
   });
 });
-
 function removeBannerPic(i){ bannerPics.splice(i,1); renderThumbs(); }
 function clearBannerPics(){ if(confirm("সব Banner Pic Delete করবে?")){ bannerPics = []; renderThumbs(); } }
-
 function saveBannerPics(){
   if(bannerPics.length>20) bannerPics = bannerPics.slice(0,20);
   localStorage.setItem('armyBannerPics', JSON.stringify(bannerPics));
-  renderBanner();
-  closeBannerModal();
-  alert("✅ Banner Save Done! "+bannerPics.length+" টা পিক, 3 সেকেন্ড পর পর চেঞ্জ হবে");
+  renderBanner(); closeBannerModal();
+  alert("✅ Banner Save Done! "+bannerPics.length+" টা পিক");
   document.getElementById('bannerFile').value="";
 }
-
-// OLD CODE
 let cur = JSON.parse(localStorage.getItem('currentUser') || 'null');
 if(!cur){ localStorage.setItem('currentUser', JSON.stringify({name:"Ruhul", senaNo:"4521328", isAdmin:true})); }
 function isAdmin(){ let u = JSON.parse(localStorage.getItem('currentUser') || '{}'); return u.senaNo == "4521328" || u.isAdmin == true; }
