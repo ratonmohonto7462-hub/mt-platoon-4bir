@@ -44,11 +44,33 @@ body{background:#f2f2f2;padding-bottom:90px}
 .thumb-grid img{width:100%;height:60px;object-fit:cover;border-radius:6px;border:2px solid #ddd}
 .thumb-grid div{position:relative}
 .thumb-grid button{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:10px;cursor:pointer}
+/* 3 DOT MENU */
+#sideMenu{display:none;position:fixed;top:0;left:0;bottom:0;width:270px;background:#0a1a12;z-index:1000;padding:20px;box-shadow:4px 0 15px rgba(0,0,0,0.6)}
+#menuOverlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999}
+.menu-item{background:#143d27;color:#fff;padding:14px;border-radius:10px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:900}
 </style>
 </head>
 <body>
 
-<div class="top"><b>4 BIR - MT PLATOON</b><b onclick="location.href='own-profile.html'" style="background:#ffcc00;color:#000;padding:7px 13px;border-radius:50%;cursor:pointer">R</b></div>
+<div class="top">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button onclick="openMenu()" style="background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer">⋮</button>
+    <b>4 BIR - MT PLATOON</b>
+  </div>
+  <b onclick="location.href='own-profile.html'" style="background:#ffcc00;color:#000;padding:7px 13px;border-radius:50%;cursor:pointer">R</b>
+</div>
+
+<div id="sideMenu">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px">
+    <b style="color:#ffcc00;font-size:18px">☰ MENU</b>
+    <button onclick="closeMenu()" style="background:#ff4444;color:#fff;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-weight:900">X</button>
+  </div>
+  <div class="menu-item" onclick="location.href='leave-card-maker.html'">💳 Leave Card Maker</div>
+  <div class="menu-item" onclick="location.href='home.html'" style="background:transparent;color:#aaa">🏠 Home Page</div>
+  <div class="menu-item" onclick="location.href='group.html'" style="background:transparent;color:#aaa">👥 Group Chat</div>
+</div>
+<div id="menuOverlay" onclick="closeMenu()"></div>
+
 <div class="call"><span>📞 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div>
 <div class="welcome">🎖️ Welcome To MT Platoon 🎖️</div>
 
@@ -58,7 +80,6 @@ body{background:#f2f2f2;padding-bottom:90px}
   <div class="banner-dots" id="bannerDots"></div>
 </div>
 
-<!-- PLATOON COMMAND - AGE OPOR E CHOLE ASLO -->
 <div class="sec">
   <h3 style="color:#0e5d3e;margin-bottom:14px">🎖️ PLATOON COMMAND</h3>
   <div class="sir-card">
@@ -75,58 +96,26 @@ body{background:#f2f2f2;padding-bottom:90px}
   </div>
 </div>
 
-<!-- NOTICE BOARD - NICHE CHOLE GELO -->
 <div class="sec">
   <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#0e5d3e">📢 NOTICE BOARD</h3><button id="addNoticeBtn" class="btn-add" onclick="addNotice()">+ Add</button></div>
   <div id="noticeList"></div>
 </div>
 
-<!-- VEHICLE PROBLEM - SOBAR NICHE -->
 <div class="sec">
   <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#b91c1c">🚛 VEHICLE PROBLEM</h3><button class="btn-add2" onclick="openVehicle()">+ Add Problem</button></div>
   <div id="vehicleList"></div>
 </div>
 
-<div id="editModal">
-  <div class="modal-box">
-    <h3 style="color:#0e5d3e">PLATOON COMMAND Edit</h3>
-    <input id="editRank" placeholder="পদবী - QM / MT JCO">
-    <input id="editName" placeholder="নাম">
-    <input id="editFile" type="file" accept="image/*">
-    <p style="font-size:12px;color:#666;margin-bottom:10px">গ্যালারি থেকে ছবি সিলেক্ট করো</p>
-    <button class="btn" style="background:#0e5d3e;color:#ffcc00" onclick="saveEdit()">✅ Save</button>
-    <button class="btn" style="background:#ddd" onclick="closeEdit()">Cancel</button>
-  </div>
-</div>
-
-<div id="vehicleModal">
-  <div class="modal-box">
-    <h3 style="color:#b91c1c">🚛 Vehicle Problem</h3>
-    <input id="vPodobi" placeholder="পদবী">
-    <input id="vName" placeholder="নাম">
-    <input id="vBa" placeholder="বিএ নং">
-    <textarea id="vProblem" placeholder="সমস্যা লিখো..." rows="3"></textarea>
-    <button class="btn" style="background:#b91c1c;color:#fff" onclick="saveVehicle()">✅ Submit</button>
-    <button class="btn" style="background:#ddd" onclick="closeVehicle()">Cancel</button>
-  </div>
-</div>
-
-<div id="bannerModal">
-  <div class="modal-box">
-    <h3 style="color:#0a1a12">🖼️ Banner Pic Add (20 টা)</h3>
-    <p style="font-size:12px;color:#666;text-align:center;margin-bottom:10px">গ্যালারি থেকে Bangladesh Army পিক সিলেক্ট করো<br>অটো 3 সেকেন্ড পর পর চেঞ্জ হবে</p>
-    <input id="bannerFile" type="file" accept="image/*" multiple>
-    <p style="font-size:11px;color:#b91c1c;margin-top:5px">* একসাথে অনেকগুলা সিলেক্ট করতে পারবি, Max 20 টা</p>
-    <div class="thumb-grid" id="thumbGrid"></div>
-    <button class="btn" style="background:#0a1a12;color:#ffcc00" onclick="saveBannerPics()">✅ Save Banner</button>
-    <button class="btn" style="background:#ff4444;color:#fff" onclick="clearBannerPics()">🗑️ সব Delete</button>
-    <button class="btn" style="background:#ddd" onclick="closeBannerModal()">Cancel</button>
-  </div>
-</div>
+<div id="editModal"><div class="modal-box"><h3 style="color:#0e5d3e">PLATOON COMMAND Edit</h3><input id="editRank" placeholder="পদবী - QM / MT JCO"><input id="editName" placeholder="নাম"><input id="editFile" type="file" accept="image/*"><p style="font-size:12px;color:#666;margin-bottom:10px">গ্যালারি থেকে ছবি সিলেক্ট করো</p><button class="btn" style="background:#0e5d3e;color:#ffcc00" onclick="saveEdit()">✅ Save</button><button class="btn" style="background:#ddd" onclick="closeEdit()">Cancel</button></div></div>
+<div id="vehicleModal"><div class="modal-box"><h3 style="color:#b91c1c">🚛 Vehicle Problem</h3><input id="vPodobi" placeholder="পদবী"><input id="vName" placeholder="নাম"><input id="vBa" placeholder="বিএ নং"><textarea id="vProblem" placeholder="সমস্যা লিখো..." rows="3"></textarea><button class="btn" style="background:#b91c1c;color:#fff" onclick="saveVehicle()">✅ Submit</button><button class="btn" style="background:#ddd" onclick="closeVehicle()">Cancel</button></div></div>
+<div id="bannerModal"><div class="modal-box"><h3 style="color:#0a1a12">🖼️ Banner Pic Add (20 টা)</h3><p style="font-size:12px;color:#666;text-align:center;margin-bottom:10px">গ্যালারি থেকে Bangladesh Army পিক সিলেক্ট করো<br>অটো 3 সেকেন্ড পর পর চেঞ্জ হবে</p><input id="bannerFile" type="file" accept="image/*" multiple><p style="font-size:11px;color:#b91c1c;margin-top:5px">* একসাথে অনেকগুলা সিলেক্ট করতে পারবি, Max 20 টা</p><div class="thumb-grid" id="thumbGrid"></div><button class="btn" style="background:#0a1a12;color:#ffcc00" onclick="saveBannerPics()">✅ Save Banner</button><button class="btn" style="background:#ff4444;color:#fff" onclick="clearBannerPics()">🗑️ সব Delete</button><button class="btn" style="background:#ddd" onclick="closeBannerModal()">Cancel</button></div></div>
 
 <div class="nav"><div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div><div onclick="location.href='group.html'">👥<br>Group</div></div>
 
 <script>
+function openMenu(){ document.getElementById('sideMenu').style.display='block'; document.getElementById('menuOverlay').style.display='block'; }
+function closeMenu(){ document.getElementById('sideMenu').style.display='none'; document.getElementById('menuOverlay').style.display='none'; }
+
 let bannerPics = JSON.parse(localStorage.getItem('armyBannerPics') || '[]');
 let curSlide = 0;
 let slideInterval = null;
