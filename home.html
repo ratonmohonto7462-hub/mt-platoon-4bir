@@ -12,11 +12,11 @@ body{background:#f2f2f2;padding-bottom:90px}
 .gc-btn{background:#ffcc00;color:#000;padding:5px 12px;border-radius:15px;font-size:13px;cursor:pointer}
 .welcome{background:#ffcc00;color:#0a1a12;padding:11px 15px;font-weight:900;font-size:15px;text-align:center}
 .banner{width:100%;height:280px;position:relative;overflow:hidden;background:#000}
-.banner img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.8s ease-in-out}
+.banner img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 1s ease-in-out}
 .banner img.active{opacity:1}
-.banner-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:10}
-.banner-dots span{width:7px;height:7px;background:rgba(255,255,255,0.5);border-radius:50%;display:inline-block}
-.banner-dots span.active{background:#ffcc00}
+.banner-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10}
+.banner-dots span{width:7px;height:7px;background:rgba(255,255,255,0.6);border-radius:50%;display:inline-block;transition:0.3s}
+.banner-dots span.active{background:#ffcc00;width:20px;border-radius:10px}
 .sec{padding:15px}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#143d27;display:flex;justify-content:space-around;padding:12px 0}
 .nav div{color:#fff;text-align:center;cursor:pointer}
@@ -47,7 +47,7 @@ body{background:#f2f2f2;padding-bottom:90px}
 <div class="call"><span>📞 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div>
 <div class="welcome">🎖️ Welcome To MT Platoon 🎖️</div>
 
-<!-- ARMY SLIDER - 20 PIC AUTO 2 SEC -->
+<!-- BANGLADESH ARMY SLIDER 20 PIC - 3 SEC -->
 <div class="banner" id="armyBanner">
   <div class="banner-dots" id="bannerDots"></div>
 </div>
@@ -105,32 +105,34 @@ body{background:#f2f2f2;padding-bottom:90px}
 <div class="nav"><div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div><div onclick="location.href='group.html'">👥<br>Group</div></div>
 
 <script>
-// ARMY 20 PIC SLIDER - 2 SEC
+// BANGLADESH ARMY 20 PIC - 3 SEC CHANGE
 const armyPics = [
-"https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800",
-"https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800",
-"https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800",
-"https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=800",
-"https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227?w=800",
-"https://images.unsplash.com/photo-1576669801838-1c043c91a37d?w=800",
-"https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?w=800",
-"https://images.unsplash.com/photo-1601985705806-5b9a71f6004f?w=800",
-"https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=800",
-"https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=800",
-"https://images.unsplash.com/photo-1555421689-d68471e189f2?w=800",
-"https://images.unsplash.com/photo-1564564244660-5d73c057f2d2?w=800",
-"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800",
-"https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
-"https://images.unsplash.com/photo-1521995948773-44f7a58b9c27?w=800",
-"https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=800",
-"https://images.unsplash.com/photo-1507561216420-3447c8a76a66?w=800",
-"https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?w=800",
-"https://images.unsplash.com/photo-1573349480507-8437d04b7fa3?w=800",
-"https://images.unsplash.com/photo-1603899123552-0b9c1c5b07d?w=800"
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Bangladesh_Army_Soldiers.jpg/800px-Bangladesh_Army_Soldiers.jpg",
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Bangladesh_Army_parade.jpg/800px-Bangladesh_Army_parade.jpg",
+"https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=800&q=80&auto=format",
+"https://images.unsplash.com/photo-1601985705806-5b9a71f6004f?w=800&q=80&auto=format",
+"https://images.unsplash.com/photo-1576669801838-1c043c91a37d?w=800&q=80&auto=format",
+"https://cdn.pixabay.com/photo/2017/08/06/03/33/army-2590658_1280.jpg",
+"https://cdn.pixabay.com/photo/2015/07/28/14/29/military-865526_1280.jpg",
+"https://cdn.pixabay.com/photo/2016/01/19/16/05/soldier-1149461_1280.jpg",
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Bangladesh_Military_Academy.jpg/800px-Bangladesh_Military_Academy.jpg",
+"https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&q=80&auto=format",
+"https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&q=80&auto=format",
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flag_of_the_Bangladesh_Army.svg/800px-Flag_of_the_Bangladesh_Army.svg.png",
+"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80&auto=format",
+"https://cdn.pixabay.com/photo/2016/03/27/22/22/army-1282890_1280.jpg",
+"https://images.unsplash.com/photo-1507561216420-3447c8a76a66?w=800&q=80&auto=format",
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/BAF_Base.jpg/800px-BAF_Base.jpg",
+"https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=800&q=80&auto=format",
+"https://cdn.pixabay.com/photo/2016/11/10/15/15/soldiers-1813380_1280.jpg",
+"https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?w=800&q=80&auto=format",
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Bangladesh_Army_Tank.jpg/800px-Bangladesh_Army_Tank.jpg"
 ];
+
 let curSlide = 0;
 const banner = document.getElementById('armyBanner');
 const dotsDiv = document.getElementById('bannerDots');
+
 armyPics.forEach((src,i)=>{
   let img = document.createElement('img');
   img.src = src;
@@ -140,8 +142,10 @@ armyPics.forEach((src,i)=>{
   if(i==0) dot.className = 'active';
   dotsDiv.appendChild(dot);
 });
+
 const allImgs = banner.querySelectorAll('img');
 const allDots = dotsDiv.querySelectorAll('span');
+
 function nextSlide(){
   allImgs[curSlide].classList.remove('active');
   allDots[curSlide].classList.remove('active');
@@ -149,9 +153,8 @@ function nextSlide(){
   allImgs[curSlide].classList.add('active');
   allDots[curSlide].classList.add('active');
 }
-setInterval(nextSlide, 2000);
+setInterval(nextSlide, 3000);
 
-// OLD CODE
 let cur = JSON.parse(localStorage.getItem('currentUser') || 'null');
 if(!cur){ localStorage.setItem('currentUser', JSON.stringify({name:"Ruhul", senaNo:"4521328", isAdmin:true})); }
 function isAdmin(){ let u = JSON.parse(localStorage.getItem('currentUser') || '{}'); return u.senaNo == "4521328" || u.isAdmin == true; }
@@ -183,13 +186,7 @@ function renderVehicles(){
   if(vehicles.length==0){ list.innerHTML = `<div style="color:#888;padding:10px;font-size:15px">কোনো Vehicle Problem নাই</div>`; return; }
   vehicles.forEach((v,i)=>{
     let admin = isAdmin();
-    list.innerHTML += `<div class="vehicle-item">
-      <b>পদবী:</b> ${v.podobi} | <b>নাম:</b> ${v.name}<br>
-      <b>বিএ নং:</b> ${v.ba}<br>
-      <b style="color:#b91c1c">সমস্যা:</b> ${v.problem}<br>
-      <small style="color:#666">📅 ${v.datetime}</small>
-      ${admin?`<span class="notice-actions"><button style="background:#ffcc00" onclick="editVehicle(${i})">Edit</button><button style="background:#ff4444;color:#fff" onclick="deleteVehicle(${i})">Del</button></span>`:''}
-    </div>`;
+    list.innerHTML += `<div class="vehicle-item"> <b>পদবী:</b> ${v.podobi} | <b>নাম:</b> ${v.name}<br> <b>বিএ নং:</b> ${v.ba}<br> <b style="color:#b91c1c">সমস্যা:</b> ${v.problem}<br> <small style="color:#666">📅 ${v.datetime}</small> ${admin?`<span class="notice-actions"><button style="background:#ffcc00" onclick="editVehicle(${i})">Edit</button><button style="background:#ff4444;color:#fff" onclick="deleteVehicle(${i})">Del</button></span>`:''} </div>`;
   });
 }
 renderVehicles();
