@@ -1,28 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MT Platoon 4 BIR</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-body{background:#0f172a;color:#fff;text-align:center;padding:20px;padding-bottom:80px}
-h1{color:#38bdf8;margin:20px 0}
-.btn{background:#3b82f6;color:#fff;padding:14px;border:none;border-radius:12px;width:100%;margin:8px 0;font-weight:700;font-size:15px}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;padding:12px 0}
-.nav div{font-size:12px;color:#94a3b8}
-.nav div.mid{background:#3b82f6;color:#fff;padding:8px 18px;border-radius:20px;margin-top:-15px;font-weight:800}
+body{background:#f1f5f9;padding-bottom:85px}
+.header{background:#0f2e2a;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;color:#fff}
+.header b{letter-spacing:1px}
+.r{background:#facc15;color:#000;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
+.call-bar{background:#1a5c4a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.call-bar span{color:#facc15;font-weight:800}
+.call-bar button{background:#facc15;border:none;padding:6px 14px;border-radius:20px;font-weight:700}
+.welcome{background:#facc15;text-align:center;padding:8px;font-weight:800;color:#000}
+.img-box{position:relative;height:260px;background:#000;overflow:hidden}
+.img-box img{width:100%;height:100%;object-fit:cover}
+.add{position:absolute;top:10px;right:10px;background:#facc15;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.convoy-btns{padding:12px;display:grid;gap:8px;background:#fff}
+.convoy-btns button{padding:12px;border:none;border-radius:10px;font-weight:700;color:#fff;cursor:pointer}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0a1a2f;display:flex;justify-content:space-around;align-items:center;padding:10px 0;border-top:1px solid #1e3a3a;z-index:999}
+.nav div{text-align:center;font-size:11px;color:#94a3b8;cursor:pointer;line-height:1.2}
+.nav div.mid{background:#3b82f6;color:#fff;padding:8px 18px;border-radius:20px;margin-top:-20px;font-weight:800;box-shadow:0 4px 12px #3b82f680}
 </style>
 </head>
 <body>
-<h1>MT Platoon 4 BIR</h1>
-<p>Dhaka → Jessore Convoy</p>
-<button class="btn" onclick="location.href='live-convoy/convoy-home.html'">🚚 Convoy Home</button>
-<button class="btn" style="background:#162040" onclick="location.href='live-convoy/convoy-group.html'">🛰️ Live Tracking</button>
-<button class="btn" style="background:#22c55e" onclick="location.href='live-convoy/convoy-message.html'">💬 Convoy Message</button>
+<div class="header"><b>⋮ MT PLATOON</b><div class="r">R</div></div>
+<div class="call-bar"><span>📲 Call Us: 01769-013433</span><button onclick="location.href='live-convoy/convoy-message.html'">💬 Group Chat</button></div>
+<div class="welcome">🇧🇩 Welcome To MT Platoon 🇧🇩</div>
+<div class="img-box">
+<img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb4" alt="platoon">
+<div class="add">+ Add Pic</div>
+</div>
+
+<div style="padding:12px;background:#fff">
+<h3 style="color:#14532d">👑 PLATOON COMMAND</h3>
+<p style="color:#64748b;font-size:12px;margin-top:6px">Convoy System Active</p>
+</div>
+
+<div class="convoy-btns">
+<button style="background:#3b82f6" onclick="location.href='live-convoy/convoy-home.html'">🚚 Convoy Home</button>
+<button style="background:#162040" onclick="location.href='live-convoy/convoy-group.html'">🛰️ Live Tracking - Group</button>
+<button style="background:#22c55e" onclick="location.href='live-convoy/convoy-message.html'">💬 Convoy Message</button>
+</div>
+
 <div class="nav">
-<div style="color:#22c55e">🏡<br>Home</div>
-<div class="mid" onclick="location.href='live-convoy/convoy-home.html'">🚚<br>Convoy</div>
-<div onclick="location.href='live-convoy/convoy-message.html'">💬<br>Message</div>
+<div style="color:#22c55e;font-weight:700" onclick="location.href='index.html'">🏠<br>Home Page</div>
+<div class="mid" onclick="location.href='live-convoy/convoy-group.html'">🛰️<br>Live Convoy Tracking</div>
+<div onclick="location.href='live-convoy/convoy-message.html'">👥<br>Group</div>
 </div>
 </body>
 </html>
