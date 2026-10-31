@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vehicle Problem - MT PLATOON</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#f2f2f2;padding-bottom:80px}
+.top{background:#0a1a12;color:#fff;padding:14px 15px;display:flex;justify-content:space-between;align-items:center}
+.call{background:#0e5d3e;color:#ffcc00;padding:11px 15px;font-weight:900;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.gc-btn{background:#ffcc00;color:#000;padding:5px 12px;border-radius:15px;font-size:13px;cursor:pointer}
+.sec{padding:15px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#143d27;display:flex;justify-content:space-around;padding:12px 0}
+.nav div{color:#fff;text-align:center;cursor:pointer}
+.btn-add{background:#b91c1c;color:#fff;padding:10px 18px;border:none;border-radius:25px;font-weight:900;cursor:pointer;width:100%;font-size:15px;margin-bottom:15px}
+.vehicle-card{background:#fff;border-radius:12px;padding:14px;margin-top:12px;border:1px solid #ddd;border-left:5px solid #ff4444;position:relative;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+.vehicle-card b{color:#0e5d3e}
+.del{position:absolute;top:8px;right:8px;background:#ff4444;color:#fff;border:none;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900;cursor:pointer}
+#vehicleModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;justify-content:center;align-items:center;padding:20px}
+.modal-box{background:#fff;width:100%;max-width:360px;border-radius:15px;padding:20px}
+.modal-box h3{color:#b91c1c;margin-bottom:15px;text-align:center}
+.modal-box input, .modal-box textarea{width:100%;padding:11px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px;font-size:14px}
+.modal-box .btn{width:100%;padding:11px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-top:5px;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <b onclick="location.href='home.html'">⬅ 4 BIR - MT PLATOON</b>
+  <b onclick="location.href='own-profile.html'" style="background:#ffcc00;color:#000;padding:7px 13px;border-radius:50%;cursor:pointer">R</b>
+</div>
+
+<div class="call">
+  <span>🚛 Vehicle Problem Report</span>
+  <span class="gc-btn" onclick="location.href='home.html'">🏠 Home</span>
+</div>
+
+<div class="sec">
+  <h3 style="color:#b91c1c;text-align:center;margin-bottom:5px">🚛 VEHICLE PROBLEM BOARD</h3>
+  <p style="text-align:center;font-size:12px;color:#666;margin-bottom:15px">ফরমেট: সেনা নং | পদবী | নাম | বিএ নং | সমস্যা - সবাই Add করতে পারবে</p>
+  
+  <button class="btn-add" onclick="openVehicle()">+ Add Vehicle Problem</button>
+  
+  <div id="vehicleList"></div>
+</div>
+
+<!-- MODAL -->
+<div id="vehicleModal">
+  <div class="modal-box">
+    <h3>🚛 Vehicle Problem Add</h3>
+    <input id="vSena" placeholder="সেনা নং - 4521328">
+    <input id="vPodobi" placeholder="পদবী - Sldr / Cpl">
+    <input id="vName" placeholder="নাম - Ruhul">
+    <input id="vBa" placeholder="বিএ নং - BA-12345 / গাড়ি নং">
+    <textarea id="vProblem" placeholder="সমস্যা বিস্তারিত লিখো..." rows="4"></textarea>
+    <button class="btn" style="background:#b91c1c;color:#fff" onclick="saveVehicle()">✅ Submit</button>
+    <button class="btn" style="background:#ddd" onclick="closeVehicle()">Cancel</button>
+  </div>
+</div>
+
+<div class="nav">
+  <div onclick="location.href='home.html'">🏡<br>Home</div>
+  <div style="color:#22c55e;font-weight:900">🚛<br>Vehicle</div>
+  <div onclick="location.href='group.html'">👥<br>Group</div>
+</div>
+
+<script>
+let cur = JSON.parse(localStorage.getItem('currentUser') || 'null');
+if(!cur){ localStorage.setItem('currentUser', JSON.stringify({name:"Ruhul", senaNo:"4521328", isAdmin:true})); }
+function isAdmin(){ let u = JSON.parse(localStorage.getItem('currentUser') || '{}'); return u.senaNo == "4521328" || u.isAdmin == true; }
+
+let vehicles = JSON.parse(localStorage.getItem('vehicleProblems') || '[]');
+
+function renderVehicles(){
+  let list = document.getElementById('vehicleList'); list.innerHTML = "";
+  if(vehicles.length==0){ list.innerHTML = `<div style="text-align:center;color:#888;padding:30px;background:#fff;border-radius:10px">কোনো Vehicle Problem নাই<br><small>প্রথম Problem Add করো</small></div>`; return; }
+  vehicles.forEach((v,i)=>{
+    list.innerHTML += `<div class="vehicle-card">
+      ${isAdmin()?`<button class="del" onclick="deleteVehicle(${i})">Del</button>`:''}
+      <div style="font-size:13px;line-height:1.7">
+        <b>সেনা নং:</b> ${v.sena} &nbsp; | &nbsp; <b>পদবী:</b> ${v.podobi}<br>
+        <b>নাম:</b> ${v.name} &nbsp; | &nbsp; <b>বিএ/গাড়ি নং:</b> ${v.ba}<br>
+        <div style="margin-top:8px;padding:8px;background:#fff3f3;border-radius:6px"><b style="color:#b91c1c">সমস্যা:</b> ${v.problem}</div>
+        <div style="margin-top:8px;font-size:11px;color:#888">📅 ${v.date}</div>
+      </div>
+    </div>`;
+  });
+}
+renderVehicles();
+
+function openVehicle(){ document.getElementById('vehicleModal').style.display='flex'; }
+function closeVehicle(){ document.getElementById('vehicleModal').style.display='none'; }
+
+function saveVehicle(){
+  let sena = document.getElementById('vSena').value.trim();
+  let podobi = document.getElementById('vPodobi').value.trim();
+  let name = document.getElementById('vName').value.trim();
+  let ba = document.getElementById('vBa').value.trim();
+  let problem = document.getElementById('vProblem').value.trim();
+  if(!sena || !podobi || !name || !ba || !problem){ alert("সব ঘর পূরণ করো!"); return; }
+  vehicles.unshift({ sena, podobi, name, ba, problem, date: new Date().toLocaleString('bn-BD') });
+  localStorage.setItem('vehicleProblems', JSON.stringify(vehicles));
+  renderVehicles(); closeVehicle();
+  document.getElementById('vSena').value=''; document.getElementById('vPodobi').value=''; document.getElementById('vName').value=''; document.getElementById('vBa').value=''; document.getElementById('vProblem').value='';
+  alert("✅ Vehicle Problem Add Done!");
+}
+function deleteVehicle(i){ if(!isAdmin()){ alert("শুধু Admin Delete করতে পারবে"); return; } if(confirm("Delete করবে?")){ vehicles.splice(i,1); localStorage.setItem('vehicleProblems', JSON.stringify(vehicles)); renderVehicles(); } }
+</script>
+</body>
+</html>
