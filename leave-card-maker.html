@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Leave Card - 1 Page Fix</title>
+<title>Leave Card - Full Fit</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#f2f2f2}
@@ -14,24 +14,24 @@ body{background:#f2f2f2}
 .row2{display:flex;gap:5px}
 .btn{width:100%;padding:10px;border:none;border-radius:6px;font-weight:900;cursor:pointer;background:#0e5d3e;color:#ffcc00;font-size:13px;margin-top:5px}
 
-/* 1 PAGE FIX - 3 ta = 297mm */
-.a4Page{background:#fff;width:210mm;height:297mm;margin:8px auto;padding:0;display:block;overflow:hidden}
-.leaveCard{border:1px dashed #000;width:210mm;height:99mm;padding:11px 12px;overflow:hidden;line-height:1.55;font-size:12.5px;color:#000;font-weight:900;display:block}
-.title{text-align:center;text-decoration:underline;margin-bottom:5px;font-size:13.5px}
-.nirdeshTitle{font-size:11.5px;margin-bottom:1px}
-.nirdeshText{font-size:11px;line-height:1.35;margin-bottom:4px}
-.blank{border:none;color:#000;padding:0 2px}
-.blank-under{border-bottom:1.2px solid #000;min-width:75px;display:inline-block;text-align:center;padding:0 4px}
-.blank-under.small{min-width:30px}
+/* FULL FIT - NO GAP */
+.a4Page{background:#fff;width:210mm;height:297mm;margin:0 auto;padding:0;display:block}
+.leaveCard{border:1.2px dashed #000;width:210mm;height:99mm;padding:14px 10px 10px 12px;line-height:1.7;font-size:13.8px;color:#000;font-weight:900;overflow:hidden}
+.title{text-align:center;text-decoration:underline;margin-bottom:6px;font-size:14.5px}
+.nirdeshTitle{font-size:12.5px}
+.nirdeshText{font-size:12px;line-height:1.45;margin-bottom:6px}
+.blank{border:none;color:#000}
+.blank-under{border-bottom:1.3px solid #000;min-width:80px;display:inline-block;text-align:center}
+.blank-under.small{min-width:32px}
+.gap{height:8px}
 
 @media print{
   body *{visibility:hidden}
   .a4Page, .a4Page *{visibility:visible}
-  .a4Page{position:absolute;left:0;top:0;width:210mm;height:297mm;margin:0;padding:0;overflow:hidden}
+  .a4Page{position:absolute;left:0;top:0;width:210mm;height:297mm;margin:0;padding:0}
   .top,.formBox{display:none}
-  .leaveCard{border:1px dashed #000;width:210mm;height:99mm;overflow:hidden}
   @page{size:ISO A4;margin:0}
-  html,body{margin:0;padding:0;height:297mm;overflow:hidden}
+  html,body{margin:0;padding:0;width:210mm;height:297mm}
 }
 </style>
 </head>
@@ -39,19 +39,19 @@ body{background:#f2f2f2}
 
 <div class="top">
   <button onclick="location.href='home.html'">←</button>
-  <b>Leave Card - 1 Page Guaranteed</b>
+  <b>Leave Card - Full Fit 1 Page</b>
 </div>
 
 <div class="formBox">
-  <div class="row2"><input id="fNo" placeholder="নং - 4521328" oninput="draw()"><input id="fRank" placeholder="পদবী" oninput="draw()"></div>
+  <div class="row2"><input id="fNo" placeholder="নং" oninput="draw()"><input id="fRank" placeholder="পদবী" oninput="draw()"></div>
   <input id="fName" placeholder="নাম" oninput="draw()">
-  <div class="row2"><input id="fUnit" placeholder="ইউনিট - 4 বীর" value="4 বীর" oninput="draw()"><input id="fCoy" placeholder="কোম্পানী - সদর কোম্পানী" value="সদর কোম্পানী" oninput="draw()"></div>
-  <div class="row2"><input id="fFrom" placeholder="হইতে - 01/10/2026" oninput="draw()"><input id="fTo" placeholder="পর্যন্ত - 03/10/2026" oninput="draw()"></div>
-  <input id="fDays" placeholder="মোট দিন - 02" oninput="draw()">
+  <div class="row2"><input id="fUnit" placeholder="ইউনিট" value="4 বীর" oninput="draw()"><input id="fCoy" placeholder="কোম্পানী" value="সদর কোম্পানী" oninput="draw()"></div>
+  <div class="row2"><input id="fFrom" placeholder="হইতে" oninput="draw()"><input id="fTo" placeholder="পর্যন্ত" oninput="draw()"></div>
+  <input id="fDays" placeholder="মোট দিন" oninput="draw()">
   <input id="fVillage" placeholder="গ্রাম" oninput="draw()">
   <div class="row2"><input id="fPost" placeholder="পোঃ" oninput="draw()"><input id="fThana" placeholder="থানা" oninput="draw()"></div>
   <div class="row2"><input id="fZilla" placeholder="জেলা" oninput="draw()"><input id="fMobile" placeholder="মোবাইল" oninput="draw()"></div>
-  <button class="btn" onclick="window.print()">🖨️ Print - এখন 1/1 হবে</button>
+  <button class="btn" onclick="window.print()">🖨️ Print - Full Fit 1/1</button>
 </div>
 
 <div class="a4Page">
@@ -63,9 +63,11 @@ body{background:#f2f2f2}
     তাহাকে <span class="blank-under oFrom"></span> তারিখ হতে <span class="blank-under oTo"></span> তারিখ পর্যন্ত মোট <span class="blank-under small oDays"></span> দিনের ছুটি প্রদান করা হলো।<br>
     ছুটিকালীন তার ঠিকানা নিম্নরূপঃ<br>
     গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
-    মোবাইল নংঃ <span class="blank oMobile"></span><br>
+    মোবাইল নংঃ <span class="blank oMobile"></span>
+    <div class="gap"></div>
     স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
   </div>
+
   <div class="leaveCard">
     <div class="title">ছুটির সনদপত্র</div>
     <div class="nirdeshTitle">নির্দেশাবলী :</div>
@@ -74,9 +76,11 @@ body{background:#f2f2f2}
     তাহাকে <span class="blank-under oFrom"></span> তারিখ হতে <span class="blank-under oTo"></span> তারিখ পর্যন্ত মোট <span class="blank-under small oDays"></span> দিনের ছুটি প্রদান করা হলো।<br>
     ছুটিকালীন তার ঠিকানা নিম্নরূপঃ<br>
     গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
-    মোবাইল নংঃ <span class="blank oMobile"></span><br>
+    মোবাইল নংঃ <span class="blank oMobile"></span>
+    <div class="gap"></div>
     স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
   </div>
+
   <div class="leaveCard">
     <div class="title">ছুটির সনদপত্র</div>
     <div class="nirdeshTitle">নির্দেশাবলী :</div>
@@ -85,7 +89,8 @@ body{background:#f2f2f2}
     তাহাকে <span class="blank-under oFrom"></span> তারিখ হতে <span class="blank-under oTo"></span> তারিখ পর্যন্ত মোট <span class="blank-under small oDays"></span> দিনের ছুটি প্রদান করা হলো।<br>
     ছুটিকালীন তার ঠিকানা নিম্নরূপঃ<br>
     গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
-    মোবাইল নংঃ <span class="blank oMobile"></span><br>
+    মোবাইল নংঃ <span class="blank oMobile"></span>
+    <div class="gap"></div>
     স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
   </div>
 </div>
