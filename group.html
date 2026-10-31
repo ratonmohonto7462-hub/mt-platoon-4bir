@@ -1,39 +1,13 @@
 <!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Group - Seniority List</title>
-<style>
-  body { font-family: sans-serif; background: #f2f2f2; margin:0; }
-  .header { background:#0a3d1f; color:white; padding:15px; text-align:center; font-weight:bold; }
-  .member-card { background:white; margin:10px; padding:12px; border-radius:8px; display:flex; justify-content:space-between; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-  .sena-no { font-weight:bold; color:#0a3d1f; }
-</style>
-</head>
-<body>
-  <div class="header">4 BIR - MT PLATOON - Group Members (Seniority)</div>
-  <div id="member-list">Loading...</div>
-
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Group - Seniority</title>
+<style>body{font-family:Arial;background:#f2f2f2;margin:0}.top{background:#0a1a12;color:#fff;padding:14px;text-align:center}.list{padding:10px}.item{background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;border-left:4px solid #0e5d3e}</style>
+</head><body>
+<div class="top"><b>Group Members - Seniority Wise</b></div>
+<div class="list" id="list"></div>
 <script>
-// এখানে তোমার approved user list থাকবে
-let members = JSON.parse(localStorage.getItem('approvedMembers')) || [
-  { name: "Example 1", senaNo: "12345" },
-  { name: "Example 2", senaNo: "12001" }
-];
-
-// সেনা নম্বর অনুযায়ী সিনিয়রিটি সর্ট (ছোট নম্বর = সিনিয়র)
-members.sort((a, b) => parseInt(a.senaNo) - parseInt(b.senaNo));
-
-let listDiv = document.getElementById('member-list');
-listDiv.innerHTML = "";
-members.forEach((m, index) => {
-  listDiv.innerHTML += `
-    <div class="member-card">
-      <div><span class="sena-no">${index+1}. ${m.senaNo}</span> - ${m.name}</div>
-    </div>
-  `;
-});
+// তোর Approved Member List - এখানে সেনা নম্বর দিয়ে সর্ট হবে
+let members = JSON.parse(localStorage.getItem('approvedMembers')) || [];
+members.sort((a,b)=> parseInt(a.senaNo) - parseInt(b.senaNo));
+document.getElementById('list').innerHTML = members.length ? members.map((m,i)=> `<div class="item"><span>${i+1}. ${m.senaNo} - ${m.name}</span><span>${m.rank||''}</span></div>`).join('') : '<p style="text-align:center;margin-top:20px">কোনো মেম্বার এখনো Add হয়নি</p>';
 </script>
-</body>
-</html>
+</body></html>
