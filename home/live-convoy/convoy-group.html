@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convoy Group</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0f172a;color:#fff;padding:14px;padding-bottom:80px}
+h1{font-size:16px;margin-bottom:12px}
+.row{background:#162040;padding:12px;border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between}
+.row b{color:#38bdf8}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;padding:12px 0}
+.nav div{font-size:12px;color:#94a3b8;text-align:center}
+.nav div.mid{background:#3b82f6;color:#fff;padding:8px 18px;border-radius:20px;margin-top:-15px;font-weight:800}
+</style>
+</head>
+<body>
+<h1>🛰️ Convoy Group - 10 Trucks LIVE</h1>
+<div id="list"></div>
+<div class="nav">
+<div onclick="location.href='convoy-home.html'">🚚<br>Home</div>
+<div class="mid">👥<br>Group</div>
+<div onclick="location.href='convoy-message.html'">💬<br>Message</div>
+</div>
+<script>
+let l=document.getElementById('list');
+for(let i=1;i<=10;i++){
+l.innerHTML+=`<div class="row"><div><b>Truck-${String(i).padStart(2,'0')}</b><br><small>Dhaka → Jessore</small></div><div style="text-align:right;color:#22c55e">● Live<br><small>${50+Math.floor(Math.random()*15)} km/h</small></div></div>`;
+}
+</script>
+</body>
+</html>
