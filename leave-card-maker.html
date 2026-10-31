@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Leave Card - Full Page</title>
+<title>Leave Card - 1 Page Fix</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#f2f2f2}
@@ -14,25 +14,24 @@ body{background:#f2f2f2}
 .row2{display:flex;gap:5px}
 .btn{width:100%;padding:10px;border:none;border-radius:6px;font-weight:900;cursor:pointer;background:#0e5d3e;color:#ffcc00;font-size:13px;margin-top:5px}
 
-/* FULL PAGE FIX */
-.a4Page{background:#fff;width:210mm;min-height:297mm;margin:8px auto;padding:0;display:flex;flex-direction:column}
-.leaveCard{border:1px dashed #000;padding:18px 14px;flex:1;display:flex;flex-direction:column;justify-content:center;line-height:1.75;font-size:14.5px;color:#000;font-weight:900;border-bottom:1px dashed #000}
-.leaveCard:last-child{border-bottom:1px dashed #000}
-.title{text-align:center;text-decoration:underline;margin-bottom:8px;font-size:15.5px}
-.nirdeshTitle{font-size:13.5px;margin-bottom:2px}
-.nirdeshText{font-size:13px;line-height:1.5;margin-bottom:8px}
+/* 1 PAGE FIX - 3 ta = 297mm */
+.a4Page{background:#fff;width:210mm;height:297mm;margin:8px auto;padding:0;display:block;overflow:hidden}
+.leaveCard{border:1px dashed #000;width:210mm;height:99mm;padding:11px 12px;overflow:hidden;line-height:1.55;font-size:12.5px;color:#000;font-weight:900;display:block}
+.title{text-align:center;text-decoration:underline;margin-bottom:5px;font-size:13.5px}
+.nirdeshTitle{font-size:11.5px;margin-bottom:1px}
+.nirdeshText{font-size:11px;line-height:1.35;margin-bottom:4px}
 .blank{border:none;color:#000;padding:0 2px}
-.blank-under{border-bottom:1.3px solid #000;min-width:85px;display:inline-block;text-align:center;padding:0 5px}
-.blank-under.small{min-width:35px}
+.blank-under{border-bottom:1.2px solid #000;min-width:75px;display:inline-block;text-align:center;padding:0 4px}
+.blank-under.small{min-width:30px}
 
 @media print{
   body *{visibility:hidden}
   .a4Page, .a4Page *{visibility:visible}
-  .a4Page{position:absolute;left:0;top:0;width:100%;height:100%;min-height:100vh;margin:0;padding:0;display:flex;flex-direction:column}
+  .a4Page{position:absolute;left:0;top:0;width:210mm;height:297mm;margin:0;padding:0;overflow:hidden}
   .top,.formBox{display:none}
-  .leaveCard{border:1px dashed #000;flex:1;padding:20px 16px;font-size:13px;line-height:1.7;display:flex;flex-direction:column;justify-content:center}
+  .leaveCard{border:1px dashed #000;width:210mm;height:99mm;overflow:hidden}
   @page{size:ISO A4;margin:0}
-  body{background:#fff}
+  html,body{margin:0;padding:0;height:297mm;overflow:hidden}
 }
 </style>
 </head>
@@ -40,7 +39,7 @@ body{background:#f2f2f2}
 
 <div class="top">
   <button onclick="location.href='home.html'">←</button>
-  <b>Leave Card - Full Page 3টা</b>
+  <b>Leave Card - 1 Page Guaranteed</b>
 </div>
 
 <div class="formBox">
@@ -52,12 +51,11 @@ body{background:#f2f2f2}
   <input id="fVillage" placeholder="গ্রাম" oninput="draw()">
   <div class="row2"><input id="fPost" placeholder="পোঃ" oninput="draw()"><input id="fThana" placeholder="থানা" oninput="draw()"></div>
   <div class="row2"><input id="fZilla" placeholder="জেলা" oninput="draw()"><input id="fMobile" placeholder="মোবাইল" oninput="draw()"></div>
-  <button class="btn" onclick="window.print()">🖨️ Print - Full Page</button>
+  <button class="btn" onclick="window.print()">🖨️ Print - এখন 1/1 হবে</button>
 </div>
 
 <div class="a4Page">
   <div class="leaveCard">
-    <div>
     <div class="title">ছুটির সনদপত্র</div>
     <div class="nirdeshTitle">নির্দেশাবলী :</div>
     <div class="nirdeshText">১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।</div>
@@ -67,10 +65,8 @@ body{background:#f2f2f2}
     গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
     মোবাইল নংঃ <span class="blank oMobile"></span><br>
     স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
-    </div>
   </div>
   <div class="leaveCard">
-    <div>
     <div class="title">ছুটির সনদপত্র</div>
     <div class="nirdeshTitle">নির্দেশাবলী :</div>
     <div class="nirdeshText">১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।</div>
@@ -80,10 +76,8 @@ body{background:#f2f2f2}
     গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
     মোবাইল নংঃ <span class="blank oMobile"></span><br>
     স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
-    </div>
   </div>
   <div class="leaveCard">
-    <div>
     <div class="title">ছুটির সনদপত্র</div>
     <div class="nirdeshTitle">নির্দেশাবলী :</div>
     <div class="nirdeshText">১। ছুটিতে গমন করে অপরাধমূলক কার্যকলাপে জড়িত হবে না।<br>২। ছুটিতে গমন করে কেউ মোটর সাইকেল ব্যবহার করবে না।</div>
@@ -93,7 +87,6 @@ body{background:#f2f2f2}
     গ্রামঃ <span class="blank oVillage"></span> পোঃঃ <span class="blank oPost"></span> থানাঃ <span class="blank oThana"></span> জেলাঃ <span class="blank oZilla"></span><br>
     মোবাইল নংঃ <span class="blank oMobile"></span><br>
     স্থানঃ ঢাকা সেনানিবাস<br>তারিখঃ ........
-    </div>
   </div>
 </div>
 
