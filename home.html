@@ -86,38 +86,6 @@ body{background:#f2f2f2;padding-bottom:90px}
   <div class="banner-dots" id="bannerDots"></div>
 </div>
 
-<!-- 3D BANNER - Full Page Gari System -->
-<div style="position:relative; width:100%; height:320px; background:#000; overflow:hidden; border-radius:12px; border:2px solid #333;">
-  
-  <!-- Main 3D Display - Banner -->
-  <img id="main3DBanner" src="jeep-3d.png" style="width:100%; height:100%; object-fit:contain; background:#000; transition:0.4s;">
-
-  <!-- নিচে জীপ পিকআপ ৩টন - Banner এর উপরেই -->
-  <div style="position:absolute; bottom:12px; left:0; width:100%; display:flex; justify-content:center; gap:8px; z-index:10;">
-    <button onclick="change3D('jeep')" id="btn-jeep" style="background:#facc15; color:#000; border:none; padding:7px 16px; border-radius:20px; font-weight:900; font-size:13px; cursor:pointer;">🚙 জীপ</button>
-    <button onclick="change3D('pickup')" id="btn-pickup" style="background:rgba(0,0,0,0.8); color:#fff; border:1px solid #fff; padding:7px 16px; border-radius:20px; font-weight:800; font-size:13px; cursor:pointer;">🛻 পিকআপ</button>
-    <button onclick="change3D('3ton')" id="btn-3ton" style="background:rgba(0,0,0,0.8); color:#fff; border:1px solid #fff; padding:7px 16px; border-radius:20px; font-weight:800; font-size:13px; cursor:pointer;">🚚 ৩টন</button>
-  </div>
-</div>
-
-<script>
-function change3D(type){
-  const pics = {
-    jeep: 'jeep-3d.png',
-    pickup: 'pickup-3d.png',
-    '3ton': '3ton-3d.png'
-  };
-  document.getElementById('main3DBanner').src = pics[type];
-  // active button color
-  document.getElementById('btn-jeep').style.background = type=='jeep' ? '#facc15' : 'rgba(0,0,0,0.8)';
-  document.getElementById('btn-jeep').style.color = type=='jeep' ? '#000' : '#fff';
-  document.getElementById('btn-pickup').style.background = type=='pickup' ? '#facc15' : 'rgba(0,0,0,0.8)';
-  document.getElementById('btn-pickup').style.color = type=='pickup' ? '#000' : '#fff';
-  document.getElementById('btn-3ton').style.background = type=='3ton' ? '#facc15' : 'rgba(0,0,0,0.8)';
-  document.getElementById('btn-3ton').style.color = type=='3ton' ? '#000' : '#fff';
-}
-</script>
-<!-- এর পরেই Platoon Command শুরু -->
 👑 PLATOON COMMAND</h3>
   <div class="sir-card">
     <button class="edit-btn" onclick="openEdit('qm')">✏️</button>
