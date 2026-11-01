@@ -86,56 +86,38 @@ body{background:#f2f2f2;padding-bottom:90px}
   <div class="banner-dots" id="bannerDots"></div>
 </div>
 
-<!-- ===== 3D BANNER SYSTEM - Full Page Gari ===== -->
-<div style="position:relative; width:100%; height:320px; background:#000; overflow:hidden; border-bottom:4px solid #facc15;">
-
-  <!-- 3D Gari Display Area (Banner) -->
-  <img id="main3DBanner" src="jeep-3d.png" style="width:100%; height:100%; object-fit:cover; transition:0.5s;">
+<!-- 3D BANNER - Full Page Gari System -->
+<div style="position:relative; width:100%; height:320px; background:#000; overflow:hidden; border-radius:12px; border:2px solid #333;">
   
-  <!-- Model Viewer চাইলে (360° ঘুরবে) - এইটা Use করলে উপরের img বাদ দিবি
-  <model-viewer id="main3DModel" src="jeep.glb" auto-rotate camera-controls style="width:100%; height:100%;"></model-viewer>
-  -->
+  <!-- Main 3D Display - Banner -->
+  <img id="main3DBanner" src="jeep-3d.png" style="width:100%; height:100%; object-fit:contain; background:#000; transition:0.4s;">
 
-  <!-- Banner এর উপরেই নিচের দিকে - জীপ পিকআপ ৩টন -->
-  <div style="position:absolute; bottom:35px; left:0; width:100%; display:flex; justify-content:center; gap:8px; z-index:10;">
-    
-    <button onclick="change3D('jeep')" id="btn-jeep" style="background:#facc15; color:#000; border:none; padding:6px 14px; border-radius:20px; font-weight:900; font-size:12px;">🚙 জীপ</button>
-    
-    <button onclick="change3D('pickup')" id="btn-pickup" style="background:rgba(0,0,0,0.7); color:#fff; border:1px solid #fff; padding:6px 14px; border-radius:20px; font-weight:800; font-size:12px;">🛻 পিকআপ</button>
-    
-    <button onclick="change3D('3ton')" id="btn-3ton" style="background:rgba(0,0,0,0.7); color:#fff; border:1px solid #fff; padding:6px 14px; border-radius:20px; font-weight:800; font-size:12px;">🚚 ৩টন</button>
-
+  <!-- নিচে জীপ পিকআপ ৩টন - Banner এর উপরেই -->
+  <div style="position:absolute; bottom:12px; left:0; width:100%; display:flex; justify-content:center; gap:8px; z-index:10;">
+    <button onclick="change3D('jeep')" id="btn-jeep" style="background:#facc15; color:#000; border:none; padding:7px 16px; border-radius:20px; font-weight:900; font-size:13px; cursor:pointer;">🚙 জীপ</button>
+    <button onclick="change3D('pickup')" id="btn-pickup" style="background:rgba(0,0,0,0.8); color:#fff; border:1px solid #fff; padding:7px 16px; border-radius:20px; font-weight:800; font-size:13px; cursor:pointer;">🛻 পিকআপ</button>
+    <button onclick="change3D('3ton')" id="btn-3ton" style="background:rgba(0,0,0,0.8); color:#fff; border:1px solid #fff; padding:7px 16px; border-radius:20px; font-weight:800; font-size:13px; cursor:pointer;">🚚 ৩টন</button>
   </div>
-
-  <!-- Dots (আগের মতো) -->
-  <div style="position:absolute; bottom:8px; left:0; width:100%; display:flex; justify-content:center; gap:6px;">
-    <span style="width:8px; height:8px; background:#facc15; border-radius:50%; display:inline-block;"></span>
-    <span style="width:8px; height:8px; background:rgba(255,255,255,0.5); border-radius:50%; display:inline-block;"></span>
-    <span style="width:8px; height:8px; background:rgba(255,255,255,0.5); border-radius:50%; display:inline-block;"></span>
-  </div>
-
 </div>
 
 <script>
-const images = {
-  jeep: 'jeep-3d.png', // তোর Jeep 3D Pic
-  pickup: 'pickup-3d.png', // Pickup 3D Pic
-  '3ton': '3ton-3d.png' // 3Ton 3D Pic
-};
-
 function change3D(type){
-  document.getElementById('main3DBanner').src = images[type];
-  
-  // Button Active Style
-  document.querySelectorAll('[id^=btn-]').forEach(b=>{b.style.background='rgba(0,0,0,0.7)'; b.style.color='#fff';});
-  document.getElementById('btn-'+type).style.background='#facc15';
-  document.getElementById('btn-'+type).style.color='#000';
-  
-  // 3D Effect
-  document.getElementById('main3DBanner').style.transform='scale(1.05)';
-  setTimeout(()=>document.getElementById('main3DBanner').style.transform='scale(1)', 300);
+  const pics = {
+    jeep: 'jeep-3d.png',
+    pickup: 'pickup-3d.png',
+    '3ton': '3ton-3d.png'
+  };
+  document.getElementById('main3DBanner').src = pics[type];
+  // active button color
+  document.getElementById('btn-jeep').style.background = type=='jeep' ? '#facc15' : 'rgba(0,0,0,0.8)';
+  document.getElementById('btn-jeep').style.color = type=='jeep' ? '#000' : '#fff';
+  document.getElementById('btn-pickup').style.background = type=='pickup' ? '#facc15' : 'rgba(0,0,0,0.8)';
+  document.getElementById('btn-pickup').style.color = type=='pickup' ? '#000' : '#fff';
+  document.getElementById('btn-3ton').style.background = type=='3ton' ? '#facc15' : 'rgba(0,0,0,0.8)';
+  document.getElementById('btn-3ton').style.color = type=='3ton' ? '#000' : '#fff';
 }
 </script>
+<!-- এর পরেই Platoon Command শুরু -->
 👑 PLATOON COMMAND</h3>
   <div class="sir-card">
     <button class="edit-btn" onclick="openEdit('qm')">✏️</button>
