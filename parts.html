@@ -1,46 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parts Inventory</title>
 <style>
 body{margin:0;background:#fff;font-family:Arial}
-.h{padding:24px 20px} .h h1{font-size:34px;font-weight:900;margin:0} .h p{color:#777}
-.r{display:flex;align-items:center;gap:12px;padding:14px;border-top:1px solid #eee}
-.s{font-size:34px;font-weight:900;width:55px} .p{width:90px;height:60px;background:#f5f5f5;border-radius:6px;overflow:hidden} .p img{width:100%;height:100%;object-fit:contain} .n{flex:1;font-size:12px;font-weight:700;color:#333}
+.top{padding:24px 20px}
+.top h1{margin:0;font-size:34px;font-weight:900}
+.top p{margin:4px 0 0;color:#777}
+.row{display:flex;align-items:center;gap:12px;padding:14px 14px;border-top:1px solid #eee}
+.sl{font-size:34px;font-weight:900;width:55px}
+.pic{width:90px;height:60px;background:#fff;border:1px solid #eee;border-radius:6px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:contain}
+.nm{flex:1;font-size:11px;font-weight:700;color:#222;line-height:1.3}
 </style>
 </head>
 <body>
-<div class="h"><h1>Parts Inventory</h1><p>MT Platoon 4 BIR</p></div>
+<div class="top"><h1>Parts Inventory</h1><p>MT Platoon 4 BIR</p></div>
 
-<script>
-// Auto Pic - Online Link - যেকোনো Mobile এ দেখা যাবে
-const pics = [
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg",
-"https://i.ibb.co/1fW9x5Y/faw1.jpg"
-];
-const names = [
-"J6P CAB ASSY HIGH ROOF FOR FAW J6 SERIES",
-"J6P CAB SHELL HIGH ROOF FOR FAW J6 SERIES",
-"J6P CAB ASSY LOW ROOF FOR FAW J6 SERIES",
-"J6P CAB SHELL LOW ROOF FOR FAW J6 SERIES",
-"J6P-B27 CAB ASSY HIGH ROOF FOR FAW J6 SERIES",
-"J6P-B27 CAB SHELL HIGH ROOF FOR FAW J6 SERIES",
-"J6P-B35 CAB ASSY LOW ROOF FOR FAW J6 SERIES",
-"J6P-B35 CAB SHELL LOW ROOF FOR FAW J6 SERIES",
-"DOOR SHELL L/R FOR FAW J6 SERIES"
-];
+<div class="row"><div class="sl">01</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P CAB ASSY HIGH ROOF FOR FAW J6 SERIES</div></div>
+<div class="row"><div class="sl">02</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P CAB SHELL HIGH ROOF FOR FAW J6 SERIES</div></div>
+<div class="row"><div class="sl">03</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P CAB ASSY LOW ROOF FOR FAW J6 SERIES</div></div>
+<div class="row"><div class="sl">04</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P CAB SHELL LOW ROOF FOR FAW J6 SERIES</div></div>
+<div class="row"><div class="sl">05</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P-B27 CAB ASSY HIGH ROOF</div></div>
+<div class="row"><div class="sl">06</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P-B27 CAB SHELL HIGH ROOF</div></div>
+<div class="row"><div class="sl">07</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P-B35 CAB ASSY LOW ROOF</div></div>
+<div class="row"><div class="sl">08</div><div class="pic"><img src="faw.jpg"></div><div class="nm">J6P-B35 CAB SHELL LOW ROOF</div></div>
+<div class="row"><div class="sl">09</div><div class="pic"><img src="faw.jpg"></div><div class="nm">DOOR SHELL L/R</div></div>
 
-let html="";
-for(let i=0;i<9;i++){
- html+=`<div class="r"><div class="s">${String(i+1).padStart(2,'0')}</div><div class="p"><img src="${pics[i]}" onerror="this.src='https://via.placeholder.com/90x60?text=FAW'"></div><div class="n">${names[i]}</div></div>`;
-}
-document.write(html);
-</script>
 </body>
 </html>
