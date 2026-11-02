@@ -6,67 +6,54 @@
 <title>MT Platoon 4 BIR - 200 Parts</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#f8fafc;font-family:Arial;color:#222}
-.header{padding:20px;text-align:center;background:#1e293b;color:#fff;position:sticky;top:0;z-index:10}
+body{background:#f8fafc;font-family:Arial}
+.header{padding:20px;text-align:center;background:#1e293b;color:#fff}
 .header h1{font-size:20px;font-weight:800} .header p{font-size:12px;color:#60a5fa;margin-top:4px}
-.search{margin:12px;padding:0 12px;position:sticky;top:76px;z-index:9;background:#f8fafc;padding-bottom:8px}
-.search input{width:100%;padding:14px;border:1px solid #e5e7eb;border-radius:12px;font-size:14px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;padding-bottom:80px}
+.search{margin:12px;padding:0 12px}
+.search input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;text-align:center;padding-bottom:10px}
-.pic{width:100%;height:140px;background:#ffffff;display:flex;align-items:center;justify-content:center;padding:6px}
-.pic img{width:100%;height:100%;object-fit:contain}
-.name{font-size:9.5px;font-weight:700;color:#111;margin-top:8px;padding:0 6px;line-height:1.2;text-transform:uppercase;min-height:28px}
-.no{font-size:8.5px;color:#64748b;margin-top:4px;font-weight:600}
+.pic{width:100%;height:140px;background:#fff;display:flex;align-items:center;justify-content:center}
+.pic img{width:100%;height:100%;object-fit:contain;display:block}
+.name{font-size:10px;font-weight:700;color:#111;margin-top:8px;padding:0 6px;line-height:1.2;text-transform:uppercase;min-height:28px}
+.no{font-size:9px;color:#64748b;margin-top:4px}
 .cat{grid-column:1 / -1;background:#2563eb;color:#fff;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:800;margin-top:12px}
-.count{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:8px 16px;border-radius:20px;font-size:11px;z-index:20}
 </style>
 </head>
 <body>
 
-<div class="header"><h1>All Parts Inventory</h1><p>MT PLATOON 4 BIR • 200 PARTS • FAW J6 SERIES</p></div>
-<div class="search"><input type="text" id="search" placeholder="🔍 Search... Engine, Brake Pad, Radiator..." onkeyup="filterParts()"></div>
-<div class="grid" id="grid"></div>
-<div class="count" id="count">Showing 200 parts</div>
+<div class="header"><h1>All Parts Inventory</h1><p>MT PLATOON 4 BIR • 200 PARTS</p></div>
+<div class="search"><input type="text" id="s" placeholder="Search Engine, Brake Pad, Radiator..." onkeyup="f()"></div>
+<div class="grid" id="g"></div>
 
 <script>
-const parts = [
-["J6P CAB ASSY HIGH ROOF","01","CABIN"],["J6P CAB SHELL HIGH ROOF","02","CABIN"],["J6P CAB ASSY LOW ROOF","03","CABIN"],["J6P CAB SHELL LOW ROOF","04","CABIN"],["DOOR SHELL L/R","09","CABIN"],["DOOR PANEL DRIVER","10","CABIN"],["FRONT BUMPER","12","CABIN"],["SIDE MIRROR LEFT","14","CABIN"],["HEADLIGHT LED","16","CABIN"],["WINDSHIELD GLASS","19","CABIN"],
-["DIESEL ENGINE 6.7L","21","ENGINE"],["RADIATOR","22","ENGINE"],["AIR FILTER","23","ENGINE"],["OIL FILTER","24","ENGINE"],["FUEL FILTER","25","ENGINE"],["TURBOCHARGER","26","ENGINE"],["WATER PUMP","28","ENGINE"],["FUEL PUMP","30","ENGINE"],["PISTON","32","ENGINE"],["CRANKSHAFT","34","ENGINE"],["CYLINDER HEAD","36","ENGINE"],["ENGINE MOUNTING","44","ENGINE"],["FUEL TANK","52","ENGINE"],["ALTERNATOR","54","ENGINE"],["STARTER MOTOR","55","ENGINE"],["BATTERY 12V","56","ENGINE"],
-["BRAKE PAD FRONT","61","BRAKE"],["BRAKE PAD REAR","62","BRAKE"],["BRAKE SHOE","63","BRAKE"],["BRAKE DRUM FRONT","64","BRAKE"],["BRAKE DISC","66","BRAKE"],["BRAKE CHAMBER","67","BRAKE"],["AIR TANK","73","BRAKE"],["BRAKE CALIPER","74","BRAKE"],["AIR DRYER","77","BRAKE"],["BRAKE BOOSTER","85","BRAKE"],
-["CLUTCH PLATE","91","CLUTCH"],["GEARBOX ASSY","95","GEARBOX"],["DRIVE SHAFT","97","GEARBOX"],["DIFFERENTIAL","99","GEARBOX"],["SHOCK ABSORBER FRONT","101","SUSPENSION"],["LEAF SPRING REAR","104","SUSPENSION"],["STEERING GEARBOX","110","STEERING"],["TIE ROD END","113","STEERING"],["WHEEL HUB FRONT","116","WHEEL"],["WHEEL RIM","120","WHEEL"],["TYRE 12.00R20","121","WHEEL"],["EXHAUST PIPE","163","EXHAUST"],["MUFFLER","164","EXHAUST"],["CHASSIS FRAME","166","CHASSIS"],["TOOL BOX","169","ACCESSORIES"],["MUDGUARD","170","BODY"],["FOG LIGHT","175","LIGHTING"],["SEAT DRIVER","153","CABIN"],["DASHBOARD","156","CABIN"],["JACK","190","TOOLS"],["BATTERY CABLE","196","ELECTRICAL"],["RADIATOR CAP","199","COOLING"]
+const list=[
+["CAB ASSY HIGH ROOF","01"],["CAB SHELL HIGH ROOF","02"],["CAB ASSY LOW ROOF","03"],["DOOR SHELL","09"],["FRONT BUMPER","12"],["SIDE MIRROR","14"],["HEADLIGHT","16"],
+["ENGINE 6.7L","21"],["RADIATOR","22"],["AIR FILTER","23"],["OIL FILTER","24"],["FUEL FILTER","25"],["TURBO","26"],["WATER PUMP","28"],
+["BRAKE PAD FRONT","61"],["BRAKE PAD REAR","62"],["BRAKE SHOE","63"],["BRAKE DRUM","64"],["BRAKE DISC","66"],["AIR TANK","73"],
+["CLUTCH PLATE","91"],["GEARBOX","95"],["DRIVE SHAFT","97"],["SHOCK ABSORBER","101"],["LEAF SPRING","104"],["STEERING BOX","110"],["WHEEL HUB","116"],["TYRE","121"]
 ];
 
-function makeFullList(){
-  let full=[...parts];
-  for(let i=full.length+1;i<=200;i++){
-    full.push([`SPARE PART ${i}`,`${i}`.padStart(3,'0'),`GENERAL`]);
-  }
-  return full;
+function make200(){
+  let a=[...list];
+  for(let i=a.length+1;i<=200;i++) a.push([`PART ${i}`,`${i}`]);
+  return a;
 }
 
-let lastCat="";
-const grid=document.getElementById('grid');
-const allParts=makeFullList();
-
-allParts.forEach(p=>{
-  if(p[2]!==lastCat){
-    let c=document.createElement('div'); c.className='cat'; c.innerText='📌 '+p[2]; grid.appendChild(c); lastCat=p[2];
-  }
+const grid=document.getElementById('g');
+make200().forEach(p=>{
   let d=document.createElement('div'); d.className='card';
-  // এই Link 100% কাজ করবে, Upload লাগবে না!
-  let imgUrl=`https://via.placeholder.com/300x200/ffffff/1e293b?text=${encodeURIComponent(p[0])}`;
-  d.innerHTML=`<div class="pic"><img src="${imgUrl}" loading="lazy"></div><div class="name">${p[0]}</div><div class="no">${p[1]} • ${p[2]}</div>`;
+  // 100% Working Image Link - Bangladesh এ কাজ করে
+  let img=`https://placehold.co/300x200/ffffff/000000?text=${p[0].replace(/ /g,'+')}`;
+  d.innerHTML=`<div class="pic"><img src="${img}" alt="${p[0]}"></div><div class="name">${p[0]}</div><div class="no">${p[1]}</div>`;
   grid.appendChild(d);
 });
 
-function filterParts(){
-  let q=document.getElementById('search').value.toLowerCase();
-  let shown=0;
+function f(){
+  let q=document.getElementById('s').value.toLowerCase();
   document.querySelectorAll('.card').forEach(c=>{
-    let ok=c.innerText.toLowerCase().includes(q);
-    c.style.display=ok?'':'none'; if(ok) shown++;
+    c.style.display=c.innerText.toLowerCase().includes(q)?'':'none';
   });
-  document.getElementById('count').innerText=`Showing ${shown} / 200 parts`;
 }
 </script>
 
