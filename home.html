@@ -118,21 +118,17 @@ body{background:#f2f2f2;padding-bottom:90px}
 
 <div class="nav">
   <div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div>
-
   <div onclick="document.getElementById('liveBox').style.display='flex'" style="background:#c8a951;color:#0a1a0f;padding:8px 20px;border-radius:22px;font-weight:900;cursor:pointer;text-align:center;font-size:12px;line-height:1.2">📁<br>Live Tracking</div>
-
   <div onclick="location.href='group.html'" style="color:#94a3b8;text-align:center;font-size:12px;cursor:pointer;line-height:1.2">👥<br>Group</div>
 </div>
 
-<!-- Live Tracking এ ক্লিক করলে ৫ টা ফাইল দেখাবে -->
+<!-- Live Tracking এর ৫ টা ফাইল -->
 <div id="liveBox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:end;justify-content:center" onclick="if(event.target==this)this.style.display='none'">
 <div style="background:#0b1226;width:100%;max-width:500px;border-top-left-radius:24px;border-top-right-radius:24px;padding:20px 14px 30px 14px;border:1px solid #1e293b;border-bottom:none">
-
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
 <b style="color:#c8a951">📁 Live Tracking - Files</b>
 <span onclick="document.getElementById('liveBox').style.display='none'" style="background:#1e293b;color:white;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px">✖️</span>
 </div>
-
 <div style="display:grid;gap:10px">
 <a href="home/live-convoy/convoy-home.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none;border:1px solid #1e4a28">🏠 convoy-home.html</a>
 <a href="home/live-convoy/convoy-group.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none;border:1px solid #1e4a28">👥 convoy-group.html</a>
@@ -140,18 +136,10 @@ body{background:#f2f2f2;padding-bottom:90px}
 <a href="home/live-convoy/live-map.html" style="background:#132a18;padding:14px;border-radius:12px;color:#22c55e;text-decoration:none;border:1px solid #c8a951">🛰️ live-map.html</a>
 <a href="home/live-convoy/walkie-talkie.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none;border:1px solid #1e4a28">📻 walkie-talkie.html</a>
 </div>
-
 </div>
 </div>
 
 <style>
-.nav{
- position:fixed;bottom:0;left:0;right:0;
- background:#0b1226;display:flex;
- justify-content:space-around;align-items:center;
- padding:12px 0 14px 0;
- border-top:1px solid #1e293b;
- z-index:999;
-}
+.nav{ position:fixed;bottom:0;left:0;right:0; background:#0b1226;display:flex; justify-content:space-around;align-items:center; padding:12px 0 10px 0; border-top:1px solid #1e293b; z-index:999; }
 .nav div{color:#94a3b8;text-align:center;font-size:12px;cursor:pointer;line-height:1.2}
 </style>
