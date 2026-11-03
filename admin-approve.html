@@ -1,72 +1,32 @@
-<!DOCTYPE html> <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - MT PLATOON</title> <style>body{margin:0;font-family:Arial;background:#f4f4f4} .top{background:#111;color:#fff;padding:14px 20px;display:flex;justify-content:space-between} .wrap{padding:16px;max-width:500px;margin:0 auto} .card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;border-left:5px solid #ff9800;box-shadow:0 2px 6px rgba(0,0,0,0.1)} .card.active{border-left-color:#00c853} .btn{padding:8px 14px;border:none;border-radius:20px;font-weight:700;cursor:pointer;margin-right:6px} .btn-a{background:#00c853;color:#fff} .btn-r{background:#ff3d00;color:#fff} #loginBox{height:100vh;display:flex;align-items:center;justify-content:center;background:#0a1a0f} input{width:100%;padding:14px;border:1.5px solid #111;border-radius:10px;margin-top:10px}</style> </head><body> <div id="loginBox"><div style="background:#fff;padding:24px;border-radius:16px;width:90%;max-width:320px"><h2>🔐 Admin Login</h2><p style="font-size:12px;color:#666">Only MT CLK Can Access</p><input id="apass" type="password" placeholder="Admin Password"><button onclick="checkAdmin()" style="width:100%;padding:14px;background:#111;color:#fff;border:none;border-radius:30px;margin-top:12px;font-weight:700">Login</button><p style="text-align:center;font-size:12px;color:#888">Password: mtadmin123<br>or MT CLK ID</p></div></div> <div id="mainBox" style="display:none"><div class="top"><span>MT PLATOON - ADMIN (MT CLK ONLY)</span><span onclick="location.href='dashboard.html'" style="cursor:pointer;font-size:22px">X</span></div> <div class="wrap"><h3>⏳ Pending Profiles <span id="count" style="background:red;color:#fff;padding:2px 8px;border-radius:10px;font-size:12px">0</span></h3><div id="list">Loading...</div></div></div> <script> 
-const API="https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
-const GARAGE_API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
-
+<!DOCTYPE html> <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - MT PLATOON</title> <style>body{margin:0;font-family:Arial;background:#f4f4f4} .top{background:#111;color:#fff;padding:14px 20px;display:flex;justify-content:space-between} .wrap{padding:16px;max-width:500px;margin:0 auto} .card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;border-left:5px solid #ff9800;box-shadow:0 2px 6px rgba(0,0,0,0.1)} .btn{padding:8px 14px;border:none;border-radius:20px;font-weight:700;cursor:pointer;margin-right:6px} .btn-a{background:#00c853;color:#fff} .btn-r{background:#ff3d00;color:#fff} #loginBox{height:100vh;display:flex;align-items:center;justify-content:center;background:#0a1a0f} input{width:100%;padding:14px;border:1.5px solid #111;border-radius:10px;margin-top:10px}</style> </head><body> <div id="loginBox"><div style="background:#fff;padding:24px;border-radius:16px;width:90%;max-width:320px"><h2>🔐 Admin Login</h2><input id="apass" type="password" placeholder="Admin Password"><button onclick="checkAdmin()" style="width:100%;padding:14px;background:#111;color:#fff;border:none;border-radius:30px;margin-top:12px;font-weight:700">Login</button><p style="text-align:center;font-size:12px;color:#888">Password: mtadmin123<br>or MT CLK ID</p></div></div> <div id="mainBox" style="display:none"><div class="top"><span>MT PLATOON - ADMIN</span><span onclick="location.href='dashboard.html'" style="cursor:pointer;font-size:22px">X</span></div> <div class="wrap"><h3>⏳ Pending <span id="count" style="background:red;color:#fff;padding:2px 8px;border-radius:10px;font-size:12px">0</span></h3><div id="list">Loading...</div></div></div> <script> 
+const GARAGE_API="https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
 function checkAdmin(){ 
   let pass = document.getElementById('apass').value;
   let role = localStorage.getItem('mt_role');
-  // MT CLK ID দিয়ে বা Password দিয়ে ঢুকতে পারবে
   if(pass==="mtadmin123" || role==="MT CLK" || pass==="MT CLK"){
     document.getElementById('loginBox').style.display="none"; 
     document.getElementById('mainBox').style.display="block"; 
     loadData(); 
-  } else alert("⛔ Wrong! Only MT CLK Can Approve"); 
+  } else alert("⛔ Wrong! Only MT CLK"); 
 } 
-
-// Auto Login if already MT CLK
 let roleCheck = localStorage.getItem('mt_role');
 if(roleCheck === "MT CLK"){
   document.getElementById('loginBox').style.display="none"; 
   document.getElementById('mainBox').style.display="block"; 
   loadData();
 }
-
 function loadData(){ 
-  // New API - getPending
   fetch(GARAGE_API+"?action=getPending&t="+Date.now())
-  .then(r=>r.json())
-  .then(data=>{ 
+  .then(r=>r.json()).then(data=>{ 
     document.getElementById('count').innerText = data.length;
     let html=""; 
     data.forEach(row=>{ 
-      let sena = row.sena_no||row.sena||row[0];
-      let name = row.name||row[2]||row[1];
-      let mobile = row.mobile||row[4]||"";
-      let podobi = row.podobi||row[1]||"";
-      let blood = row.blood||row[5]||"";
-      let company = row.company||"";
-      html+=`<div class="card"><b>${sena} - ${name}</b><br>Mobile: ${mobile}<br>Rank: ${podobi} | Company: ${company} | Blood: ${blood}<br>Status: <b style="color:orange">PENDING</b><br><br><button class="btn btn-a" onclick="approve('${sena}')">✓ Approve</button><button class="btn btn-r" onclick="reject('${sena}')">X Reject</button></div>`; 
+      html+=`<div class="card"><b>${row.sena} - ${row.name}</b><br>Mobile: ${row.mobile}<br>Rank: ${row.podobi} | Company: ${row.company} | Blood: ${row.blood}<br><b style="color:orange">PENDING</b><br><br><button class="btn btn-a" onclick="approve('${row.sena}')">✓ Approve</button><button class="btn btn-r" onclick="reject('${row.sena}')">X Reject</button></div>`; 
     }); 
     if(!html) html="<p style='text-align:center;color:green;padding:20px'>✅ কোনো Pending Request নাই!</p>"; 
     document.getElementById('list').innerHTML=html; 
-  })
-  .catch(()=>{
-    // Fallback - Old API
-    fetch(API+"?action=get_profiles").then(r=>r.json()).then(data=>{ 
-      let html=""; 
-      data.forEach(row=>{ 
-        let status=row.status||row[6]||"PENDING"; 
-        if(status.toLowerCase()!=="active" && status.toLowerCase()!=="approved"){ 
-          html+=`<div class="card"><b>${row.sena_no||row[0]} - ${row.name||row[2]}</b><br>Mobile: ${row.mobile||row[4]}<br>Rank: ${row.podobi||row[1]} | Blood: ${row.blood||row[5]}<br>Status: <b style="color:orange">${status}</b><br><br><button class="btn btn-a" onclick="approve('${row.sena_no||row[0]}')">✓ Approve</button><button class="btn btn-r" onclick="reject('${row.sena_no||row[0]}')">X Reject</button></div>`; 
-        } 
-      }); 
-      if(!html) html="<p style='text-align:center;color:green'>✅ কোনো Pending Request নাই!</p>"; 
-      document.getElementById('list').innerHTML=html; 
-    });
-  }); 
+  });
 } 
-
-function approve(sena){ 
-  if(confirm(sena+" কে Approve করবা?")){
-    fetch(GARAGE_API+`?action=approve&sena=${encodeURIComponent(sena)}&t=${Date.now()}`)
-    .then(()=>{ alert("✅ Approved!"); loadData(); });
-  } 
-} 
-
-function reject(sena){ 
-  if(confirm(sena+" কে Reject করবা?")){
-    fetch(GARAGE_API+`?action=reject&sena=${encodeURIComponent(sena)}&t=${Date.now()}`)
-    .then(()=>{ alert("❌ Rejected!"); loadData(); });
-  } 
-} 
+function approve(sena){ if(confirm(sena+" Approve?")){ fetch(GARAGE_API+`?action=approve&sena=${encodeURIComponent(sena)}&t=${Date.now()}`).then(()=>{ alert("✅ Approved!"); loadData(); }); } } 
+function reject(sena){ if(confirm(sena+" Reject?")){ fetch(GARAGE_API+`?action=reject&sena=${encodeURIComponent(sena)}&t=${Date.now()}`).then(()=>{ alert("❌ Rejected!"); loadData(); }); } } 
 </script> </body></html>
