@@ -1,83 +1,93 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Live Map - MT Platoon 4 BIR</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#000;overflow:hidden}#top{position:absolute;top:0;left:0;right:0;z-index:999;background:#0f2e2a;color:#facc15;padding:12px;text-align:center;font-weight:900;display:flex;justify-content:space-between;align-items:center}#map{height:100vh;width:100%}#talkBtn{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#ef4444;color:white;padding:16px 32px;border-radius:50px;border:3px solid white;font-weight:900;z-index:9999;font-size:14px;box-shadow:0 5px 20px rgba(0,0,0,0.5);cursor:pointer;touch-action:none}#status{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#000;color:#22c55e;padding:7px 18px;border-radius:20px;z-index:9999;border:1px solid #22c55e;font-size:12px;font-weight:700}#backBtn{background:#1a4d3a;color:#ffcc00;border:none;padding:6px 14px;border-radius:20px;font-weight:900}</style></head><body>
-<div id="top"><button id="backBtn" onclick="history.back()">← Back</button><span>🛰️ LIVE CONVOY TRACKING</span><span style="font-size:10px">MT 4 BIR</span></div>
-<div id="status">● CONNECTING...</div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Map - MT Platoon</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial;background:#000;overflow:hidden}
+#top{position:fixed;top:0;left:0;right:0;z-index:9999;background:#0f2e2a;color:#facc15;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:13px}
+#map{height:100vh;width:100%;z-index:1}
+#status{position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#000;color:#22c55e;padding:6px 14px;border-radius:20px;z-index:9999;border:1px solid #22c55e;font-size:11px;font-weight:700}
+#talkBtn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:14px 28px;border-radius:50px;border:3px solid #fff;font-weight:900;z-index:9999;font-size:13px;box-shadow:0 5px 20px rgba(0,0,0,0.5)}
+</style>
+</head>
+<body>
+<div id="top">
+<button onclick="location.href='/home/index.html'" style="background:#1a4d3a;color:#ffcc00;border:none;padding:5px 12px;border-radius:15px;font-weight:900">← Back</button>
+<span>🛰️ LIVE MAP</span>
+<span style="font-size:10px">MT 4 BIR</span>
+</div>
+<div id="status">● Loading Map...</div>
 <div id="map"></div>
 <button id="talkBtn">🎙️ HOLD TO TALK</button>
+
 <script>
-var map = L.map('map').setView([23.6, 89.8], 8);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'MT Platoon 4 BIR'}).addTo(map);
-// Convoy markers will be added by Firebase
-var truckMarkers = {};
+// 1. MAP LOAD - FIXED
+var map = L.map('map').setView([23.8103, 90.4125], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+attribution:'MT Platoon 4 BIR'
+}).addTo(map);
+
+document.getElementById('status').innerText = '● Map Loaded - Ready';
+
+// 2. MY LOCATION SHOW
+if(navigator.geolocation){
+navigator.geolocation.watchPosition(pos=>{
+var lat=pos.coords.latitude, lng=pos.coords.longitude;
+L.marker([lat,lng]).addTo(map).bindPopup("You - MT Driver").openPopup();
+map.setView([lat,lng], 14);
+document.getElementById('status').innerText = '● Live Location On';
+}, err=>{console.log(err)}, {enableHighAccuracy:true});
+}
+
+// 3. WALKIE TALKIE - SIMPLE (HTTPS লাগবে না, Map চলবে)
 </script>
+
 <script type="module">
+// Firebase Walkie Talkie - Map নষ্ট করবে না
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 const firebaseConfig = { apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0", authDomain: "mt-platoon-4bir.firebaseapp.com", projectId: "mt-platoon-4bir", storageBucket: "mt-platoon-4bir.firebasestorage.app", messagingSenderId: "720139134198", appId: "1:720139134198:web:ea8e10926d90bbfddcb8d7" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const convoyId = new URLSearchParams(location.search).get('convoy') || 'MT-04';
-const myId = 'truck_' + Math.floor(Math.random()*10000);
-let localStream;
-let pcs = {};
-try{
-if(location.protocol !== 'https:' && location.hostname !== 'localhost'){
-document.getElementById('status').innerText = "⚠️ HTTPS লাগবে - https:// দিয়ে Open করো";
-throw new Error("HTTPS needed");
-}
-localStream = await navigator.mediaDevices.getUserMedia({audio:true});
-localStream.getAudioTracks().forEach(t=> t.enabled = false);
-const roomRef = collection(db, "convoys", convoyId, "signals");
-onSnapshot(roomRef, snap=>{
-snap.docChanges().forEach(async change=>{
-const d = change.doc.data();
-if(d.from===myId) return;
-if(d.type==='join') createPeer(d.from,true);
-if(d.type==='offer') createPeer(d.from,false,d.offer);
-if(d.type==='answer'){ await pcs[d.from]?.setRemoteDescription(d.answer); }
-if(d.type==='ice'){ try{ await pcs[d.from]?.addIceCandidate(d.candidate);}catch(e){} }
-});
-});
-await addDoc(roomRef, { type:'join', from: myId });
-async function createPeer(peerId, init, remoteOffer=null){
-if(pcs[peerId]) return;
-const pc = new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
-pcs[peerId]=pc;
-localStream.getTracks().forEach(t=> pc.addTrack(t, localStream));
-pc.ontrack = e=>{
-const a=document.createElement('audio');
-a.srcObject=e.streams[0];
-a.autoplay=true;
-document.body.appendChild(a);
-};
-pc.onicecandidate = e=>{
-if(e.candidate) addDoc(roomRef, {type:'ice', from:myId, to:peerId, candidate:e.candidate});
-};
-if(init){
-const offer=await pc.createOffer();
-await pc.setLocalDescription(offer);
-addDoc(roomRef,{type:'offer', from:myId, to:peerId, offer});
-} else {
-await pc.setRemoteDescription(remoteOffer);
-const ans=await pc.createAnswer();
-await pc.setLocalDescription(ans);
-addDoc(roomRef,{type:'answer', from:myId, to:peerId, answer:ans});
-}
-}
+const convoyId = 'MT-04';
+const myId = 'truck_'+Math.floor(Math.random()*10000);
+let localStream; let pcs={};
 const btn=document.getElementById('talkBtn');
 const status=document.getElementById('status');
-function setTalk(s){
-localStream.getAudioTracks().forEach(t=> t.enabled=s);
-btn.innerText=s?"🔴 BROADCASTING...":"🎙️ HOLD TO TALK";
-btn.style.background=s?"#16a34a":"#ef4444";
-status.innerText=s?`🔴 YOU ARE TALKING - ${convoyId}`:`● ${Object.keys(pcs).length+1} DRIVERS ONLINE - READY`;
+try{
+localStream = await navigator.mediaDevices.getUserMedia({audio:true});
+localStream.getAudioTracks().forEach(t=>t.enabled=false);
+const roomRef = collection(db,"convoys",convoyId,"signals");
+onSnapshot(roomRef, snap=>{
+snap.docChanges().forEach(async c=>{
+const d=c.doc.data(); if(d.from===myId) return;
+if(d.type==='join') createPeer(d.from,true);
+if(d.type==='offer') createPeer(d.from,false,d.offer);
+if(d.type==='answer'){ try{await pcs[d.from]?.setRemoteDescription(d.answer)}catch(e){} }
+if(d.type==='ice'){ try{await pcs[d.from]?.addIceCandidate(d.candidate)}catch(e){} }
+});
+});
+await addDoc(roomRef,{type:'join',from:myId});
+async function createPeer(pid,init,off=null){
+if(pcs[pid]) return;
+const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+pcs[pid]=pc;
+localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));
+pc.ontrack=e=>{ const a=document.createElement('audio'); a.srcObject=e.streams[0]; a.autoplay=true; document.body.appendChild(a); };
+pc.onicecandidate=e=>{ if(e.candidate) addDoc(roomRef,{type:'ice',from:myId,to:pid,candidate:e.candidate}); };
+if(init){ const offer=await pc.createOffer(); await pc.setLocalDescription(offer); addDoc(roomRef,{type:'offer',from:myId,to:pid,offer}); }
+else{ await pc.setRemoteDescription(off); const ans=await pc.createAnswer(); await pc.setLocalDescription(ans); addDoc(roomRef,{type:'answer',from:myId,to:pid,answer:ans}); }
 }
-btn.onmousedown=()=>setTalk(true);
-btn.onmouseup=()=>setTalk(false);
-btn.ontouchstart=(e)=>{e.preventDefault(); setTalk(true);};
-btn.ontouchend=(e)=>{e.preventDefault(); setTalk(false);};
-status.innerText="● READY - HOLD TO TALK - "+convoyId;
-}catch(e){
-document.getElementById('status').innerText="⚠️ Mic Allow করো / HTTPS লাগবে - উপরে 🔒 তে Allow দাও";
-console.log(e);
-}
-</script></body></html>
+function setTalk(s){ localStream.getAudioTracks().forEach(t=>t.enabled=s); btn.innerText=s?"🔴 BROADCASTING...":"🎙️ HOLD TO TALK"; btn.style.background=s?"#16a34a":"#ef4444"; status.innerText=s?`🔴 YOU ARE TALKING`:`● ${Object.keys(pcs).length+1} Drivers Online`; }
+btn.onmousedown=()=>setTalk(true); btn.onmouseup=()=>setTalk(false);
+btn.ontouchstart=e=>{e.preventDefault(); setTalk(true)}; btn.ontouchend=e=>{e.preventDefault(); setTalk(false)};
+status.innerText="● Ready - Hold To Talk";
+}catch(e){ status.innerText="● Map Ready - Mic Allow দিলে কথা বলতে পারবে"; console.log(e); }
+</script>
+</body>
+</html>
