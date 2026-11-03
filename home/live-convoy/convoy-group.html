@@ -9,12 +9,7 @@
 </div>
 <script>
 var map = L.map('map').setView([23.8103, 89.2], 7);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-let l=document.getElementById('list');
-let trucks=[
-[23.8103,90.4125],[23.5,89.8],[23.2,89.2],[22.9,89.5],[22.7,88.9],
-[24.0,90.8],[24.3,89.5],[23.0,89.9],[22.5,89.0],[25.0,89.3]
-];
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').
 trucks.forEach((pos,i)=>{
  let marker=L.marker(pos).addTo(map).bindPopup(`<b>Truck-${String(i+1).padStart(2,'0')}</b><br>Dhaka → Jessore<br>${50+Math.floor(Math.random()*15)} km/h`);
  l.innerHTML+=`<div class="row"><div><b>Truck-${String(i+1).padStart(2,'0')}</b><br><small>Dhaka → Jessore</small></div><div style="text-align:right;color:#22c55e">● Live<br><small>${50+Math.floor(Math.random()*15)} km/h</small></div></div>`;
