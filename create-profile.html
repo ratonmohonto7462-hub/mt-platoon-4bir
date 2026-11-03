@@ -32,7 +32,7 @@ input:focus,select:focus{border-color:#000;background:#fff}
 <input id="name" type="text" placeholder="Enter Full Name">
 <label>কোম্পানি / Company</label>
 <select id="company">
-<option>সদর</option><option>আলফা</option><option>ব্রাভো</option><option>চার্লি</option>
+<option>HQ</option><option>A</option><option>B</option><option>C</option>
 </select>
 <label>মোবাইল / Mobile *</label>
 <input id="mobile" type="tel" placeholder="01XXXXXXXXX">
@@ -47,7 +47,7 @@ input:focus,select:focus{border-color:#000;background:#fff}
 <p id="msg" class="msg"></p>
 </div>
 <script>
-const API="https://script.google.com/macros/s/AKfycby8BQ0Dyo5s4otJEbRJcZXNiW3pyqDY9800nm8X7kGeOz49RVlQ1bdoF5IdByxL-l226w/exec";
+const API = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
 function toEnglishNum(str){ return str.replace(/[০-৯]/g,d=> "০১২৩৪৫৬৭৮৯".indexOf(d)); }
 function submitNow(){
 let sena=toEnglishNum(document.getElementById('sena').value.trim());
