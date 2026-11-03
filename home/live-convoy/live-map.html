@@ -1,1 +1,77 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Map</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial;background:#000;overflow:hidden}#top{position:fixed;top:0;left:0;right:0;z-index:9999;background:#0f2e2a;color:#facc15;padding:10px;display:flex;justify-content:space-between;font-weight:900}#map{height:100vh;width:100%}</style></head><body><div id="top"><button onclick="location.href='/home/index.html'" style="background:#1a4d3a;color:#ffcc00;border:none;padding:5px 12px;border-radius:15px">← Back</button><span>🛰️ LIVE MAP</span><span>MT 4 BIR</span></div><div id="map"></div><script>var map=L.map('map').setView([23.8103,90.4125],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'MT'}).addTo(map);if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{L.marker([p.coords.latitude,p.coords.longitude]).addTo(map).bindPopup("You").openPopup();map.setView([p.coords.latitude,p.coords.longitude],15);});}</script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Convoy Map - MT 4 BIR</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial;background:#000;overflow:hidden}#top{position:fixed;top:0;left:0;right:0;z-index:9999;background:#0f2e2a;color:#facc15;padding:10px 12px;display:flex;justify-content:space-between;font-weight:900;font-size:12px}#map{height:100vh;width:100%}#list{position:fixed;bottom:80px;left:10px;right:10px;z-index:9999;background:rgba(0,0,0,0.9);border:1px solid #ffcc00;border-radius:12px;padding:10px;max-height:150px;overflow-y:auto}#list b{color:#ffcc00;font-size:11px}#driver{color:#fff;font-size:11px;padding:4px 0;border-bottom:1px solid #222;display:flex;justify-content:space-between}#talkBtn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:12px 24px;border-radius:50px;border:2px solid #fff;font-weight:900;z-index:9999}#status{position:fixed;top:45px;left:50%;transform:translateX(-50%);background:#000;color:#22c55e;padding:5px 12px;border-radius:20px;z-index:9999;border:1px solid #22c55e;font-size:10px}</style></head><body>
+<div id="top"><button onclick="location.href='/home/index.html'" style="background:#1a4d3a;color:#ffcc00;border:none;padding:4px 10px;border-radius:10px">← Back</button><span>🛰️ CONVOY LIVE - MT 4 BIR</span><span id="count">0 Trucks</span></div>
+<div id="status">● Locating...</div>
+<div id="map"></div>
+<div id="list"><b>🚛 Convoy Members Location:</b><div id="drivers">Loading...</div></div>
+<button id="talkBtn">🎙️ HOLD TO TALK</button>
+<script>
+var map = L.map('map').setView([23.8, 90.4], 9);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'MT 4 BIR'}).addTo(map);
+var markers = {};
+var myLat=0, myLng=0;
+function distance(lat1,lon1,lat2,lon2){
+var R=6371;var dLat=(lat2-lat1)*Math.PI/180;var dLon=(lon2-lon1)*Math.PI/180;
+var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
+}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0", authDomain: "mt-platoon-4bir.firebaseapp.com", projectId: "mt-platoon-4bir", storageBucket: "mt-platoon-4bir.firebasestorage.app", messagingSenderId: "720139134198", appId: "1:720139134198:web:ea8e10926d90bbfddcb8d7" };
+const app=initializeApp(firebaseConfig); const db=getFirestore(app);
+const convoyId = 'MT-04';
+const myId = 'truck_'+Math.floor(Math.random()*10000)+'_'+(localStorage.getItem('mt_sena')||'MT');
+const locRef = collection(db, "convoys", convoyId, "locations");
+
+// 1. SEND MY LOCATION EVERY 5 SEC
+if(navigator.geolocation){
+navigator.geolocation.watchPosition(async pos=>{
+myLat=pos.coords.latitude; myLng=pos.coords.longitude;
+document.getElementById('status').innerText = `● You: ${myLat.toFixed(4)}, ${myLng.toFixed(4)} - Live`;
+try{
+await setDoc(doc(locRef, myId), { truckId:myId, lat:myLat, lng:myLng, time:Date.now(), sena:localStorage.getItem('mt_sena')||myId });
+}catch(e){console.log(e)}
+}, null, {enableHighAccuracy:true});
+}
+
+// 2. LISTEN ALL TRUCKS LOCATION
+onSnapshot(locRef, snap=>{
+var html=''; var count=0;
+snap.forEach(d=>{
+var data=d.data(); if(!data.lat) return; count++;
+var isMe = data.truckId===myId;
+var dist = (myLat && !isMe) ? distance(myLat,myLng,data.lat,data.lng)+' km দূরে' : (isMe ? 'You' : '0 km');
+var color = isMe ? '#ffcc00' : '#22c55e';
+
+// Marker Update
+if(!markers[data.truckId]){
+var icon = L.divIcon({html:`<div style="background:${color};color:#000;width:35px;height:35px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;border:2px solid #fff">🚛</div>`, iconSize:[35,35]});
+markers[data.truckId]=L.marker([data.lat,data.lng],{icon:icon}).addTo(map).bindPopup(`${data.truckId}<br>${dist}`);
+}else{
+markers[data.truckId].setLatLng([data.lat,data.lng]);
+markers[data.truckId].getPopup().setContent(`${data.truckId}<br>${dist}`);
+}
+html+=`<div id="driver"><span>${isMe?'⭐ ':''}${data.truckId}</span><span style="color:${color}">${dist}</span></div>`;
+});
+document.getElementById('drivers').innerHTML = html || 'No trucks online';
+document.getElementById('count').innerText = count+' Trucks';
+if(count>0 && myLat===0){ var first = Object.values(markers)[0]; if(first) map.setView(first.getLatLng(), 10); }
+});
+
+// 3. WALKIE TALKIE (Same)
+import { addDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+const roomRef = collection(db, "convoys", convoyId, "signals");
+let localStream, pcs={};
+const btn=document.getElementById('talkBtn');
+try{
+localStream=await navigator.mediaDevices.getUserMedia({audio:true});
+localStream.getAudioTracks().forEach(t=>t.enabled=false);
+onSnapshot(roomRef, s=>{s.docChanges().forEach(async c=>{const d=c.doc.data(); if(d.from===myId) return; if(d.type==='join') createPeer(d.from,true); if(d.type==='offer') createPeer(d.from,false,d.offer); if(d.type==='answer'){try{await pcs[d.from]?.setRemoteDescription(d.answer)}catch{}} if(d.type==='ice'){try{await pcs[d.from]?.addIceCandidate(d.candidate)}catch{}}})});
+await addDoc(roomRef,{type:'join',from:myId});
+async function createPeer(pid,init,off=null){if(pcs[pid]) return; const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]}); pcs[pid]=pc; localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); pc.ontrack=e=>{const a=document.createElement('audio'); a.srcObject=e.streams[0]; a.autoplay=true; document.body.appendChild(a);}; pc.onicecandidate=e=>{if(e.candidate) addDoc(roomRef,{type:'ice',from:myId,to:pid,candidate:e.candidate});}; if(init){const o=await pc.createOffer(); await pc.setLocalDescription(o); addDoc(roomRef,{type:'offer',from:myId,to:pid,offer:o});} else{await pc.setRemoteDescription(off); const a=await pc.createAnswer(); await pc.setLocalDescription(a); addDoc(roomRef,{type:'answer',from:myId,to:pid,answer:a});}}
+function setTalk(s){localStream.getAudioTracks().forEach(t=>t.enabled=s); btn.innerText=s?"🔴 BROADCASTING...":"🎙️ HOLD TO TALK"; btn.style.background=s?"#16a34a":"#ef4444";}
+btn.onmousedown=()=>setTalk(true); btn.onmouseup=()=>setTalk(false); btn.ontouchstart=e=>{e.preventDefault(); setTalk(true)}; btn.ontouchend=e=>{e.preventDefault(); setTalk(false)};
+}catch(e){console.log(e)}
+</script>
+</body></html>
