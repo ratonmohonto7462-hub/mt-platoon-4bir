@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT PLATOON - New Home</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050a14;color:white;font-family:sans-serif}
+.top{position:fixed;top:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #1e293b;z-index:999}
+.menu-item{padding:12px 14px;margin:6px 0;background:#132a18;border-radius:12px;color:#fff;cursor:pointer;border:1px solid #1e293b}
+.content{margin-top:60px;padding:15px}
+.card{background:#0b1226;border:1px solid #1e293b;border-radius:16px;padding:15px;margin-bottom:15px}
+</style>
+</head>
+<body>
+
+<!-- TOP - শুধু 3 dot -->
+<div class="top"> 
+  <div style="display:flex;align-items:center;gap:10px"> 
+    <button onclick="openMenu()" style="background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer">⋮</button> 
+    <b>MT PLATOON</b> 
+  </div> 
+  <b onclick="location.href='own-profile.html'" style="background:#ffcc00;color:#000;padding:7px 13px;border-radius:50%;cursor:pointer">R</b> 
+</div>
+
+<!-- SIDE MENU -->
+<div id="sideMenu" style="position:fixed;top:0;left:0;width:78%;max-width:320px;height:100%;background:#0a1a0f;z-index:99999;display:none;border-right:2px solid #c8a951;padding:20px 15px;overflow-y:auto"> 
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px"> 
+    <b style="color:#ffcc00;font-size:18px">☰ MENU</b> 
+    <button onclick="closeMenu()" style="background:#ff4444;color:#fff;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-weight:900">X</button> 
+  </div> 
+  <div class="menu-item" onclick="location.href='leave-card-maker.html'">💳 Leave Card Maker</div> 
+  <div class="menu-item">👼🏽 Store Toking</div> 
+  <div class="menu-item">🏠 Home Page</div> 
+  <div class="menu-item" onclick="document.getElementById('liveBox').style.display='flex'; closeMenu()" style="background:#c8a951 !important;color:#0a1a0f !important;font-weight:900;border:2px solid #facc15">📁 Live Tracking</div>
+  <div class="menu-item">📝 invoice</div> 
+  <div class="menu-item">🧾 Duty Slip</div> 
+  <div class="menu-item">🚫 Gate Pass</div> 
+  <div class="menu-item">💌 Group Chat</div> 
+</div> 
+<div id="menuOverlay" onclick="closeMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99998"></div>
+
+<!-- MAIN CONTENT - এখানে তোর বাকি কোড বসবে -->
+<div class="content">
+  <div class="card">তোর Banner এর কোড এখানে বসবে</div>
+  <div class="card">তোর Notice এর কোড এখানে বসবে</div>
+  <div class="card">তোর Vehicle এর কোড এখানে বসবে</div>
+</div>
+
+<!-- LIVE TRACKING POPUP -->
+<div id="liveBox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999999;align-items:center;justify-content:center" onclick="if(event.target==this)this.style.display='none'">
+<div style="background:#0b1226;width:90%;max-width:400px;border-radius:20px;padding:20px 14px;border:1px solid #1e293b">
+<div style="display:flex;justify-content:space-between;margin-bottom:15px"><b style="color:#c8a951">📁 Live Tracking</b><span onclick="document.getElementById('liveBox').style.display='none'" style="background:#1e293b;padding:6px 14px;border-radius:20px;cursor:pointer">✖️</span></div>
+<div style="display:grid;gap:10px">
+<a href="home/live-convoy/convoy-home.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">🏠 convoy-home.html</a>
+<a href="home/live-convoy/convoy-group.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">👥 convoy-group.html</a>
+<a href="home/live-convoy/convoy-message.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">💬 convoy-message.html</a>
+<a href="home/live-convoy/live-map.html" style="background:#132a18;padding:14px;border-radius:12px;color:#22c55e;text-decoration:none;border:1px solid #c8a951">🛰️ live-map.html</a>
+<a href="home/live-convoy/walkie-talkie.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">📻 walkie-talkie.html</a>
+</div>
+</div>
+</div>
+
+<script>
+function openMenu(){ document.getElementById('sideMenu').style.display='block'; document.getElementById('menuOverlay').style.display='block'; }
+function closeMenu(){ document.getElementById('sideMenu').style.display='none'; document.getElementById('menuOverlay').style.display='none'; }
+</script>
+
+</body>
+</html>
