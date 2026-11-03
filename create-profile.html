@@ -1,10 +1,4 @@
-function toEng(str){
-  let b=["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
-  let en=["0","1","2","3","4","5","6","7","8","9"];
-  let s=String(str);
-  for(let i=0;i<10;i++) s=s.split(b[i]).join(en[i]);
-  return s;
-}<!DOCTYPE html>
+<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Create Profile - MT PLATOON</title>
 <style>
@@ -71,7 +65,13 @@ function showMsg(txt, ok){
   el.className = ok ? 'msg ok' : 'msg err';
 }
 
-async function createProfile(){
+async function createProfile()function toEng(str){
+  let b=["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+  let en=["0","1","2","3","4","5","6","7","8","9"];
+  let s=String(str);
+  for(let i=0;i<10;i++) s=s.split(b[i]).join(en[i]);
+  return s;
+}{
   let sena = document.getElementById('sena').value.trim();
   let name = document.getElementById('name').value.trim();
   let podobi = document.getElementById('podobi').value.trim();
