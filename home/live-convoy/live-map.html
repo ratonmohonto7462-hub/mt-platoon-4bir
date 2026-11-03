@@ -1,4 +1,4 @@
-k<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -46,7 +46,7 @@ return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(2);
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 const firebaseConfig = {
 apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",
 authDomain: "mt-platoon-4bir.firebaseapp.com",
@@ -59,31 +59,37 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const convoyId = 'MT-04-CONVOY';
 
-// FIX 1: PERSISTENT ID - Refresh করলেও একই ID থাকবে
-let myId = localStorage.getItem('mt_truck_id');
-if(!myId){
-  myId = 'TRUCK-' + Math.floor(Math.random()*9000+1000);
-  localStorage.setItem('mt_truck_id', myId);
+function getDeviceId(){
+  let id = null;
+  try{ id = localStorage.getItem('mt_truck_id_v2'); }catch(e){}
+  if(id) return id;
+  const raw = navigator.userAgent + screen.width + screen.height;
+  let hash = 0;
+  for(let i=0;i<raw.length;i++){ hash = ((hash<<5)-hash)+raw.charCodeAt(i); hash = hash & hash; }
+  id = 'TRUCK-' + Math.abs(hash).toString().substring(0,4);
+  try{ localStorage.setItem('mt_truck_id_v2', id); }catch(e){}
+  return id;
 }
-
+const myId = getDeviceId();
 const locRef = collection(db, "convoys", convoyId, "locations");
 const roomRef = collection(db, "convoys", convoyId, "signals");
 
 if(navigator.geolocation){
 navigator.geolocation.watchPosition(async pos=>{
 myLat=pos.coords.latitude; myLng=pos.coords.longitude;
-document.getElementById('status').innerText = `● ${myId} LIVE: ${myLat.toFixed(4)}, ${myLng.toFixed(4)} | Link Share করো`;
-try{
-await setDoc(doc(locRef, myId), {truckId:myId, lat:myLat, lng:myLng, time:Date.now()});
-}catch(e){console.log(e)}
+document.getElementById('status').innerText = `● ${myId} LIVE: ${myLat.toFixed(4)}, ${myLng.toFixed(4)}`;
+try{ await setDoc(doc(locRef, myId), {truckId:myId, lat:myLat, lng:myLng, time:Date.now()}); }catch(e){}
 }, null, {enableHighAccuracy:true});
 }
 
 onSnapshot(locRef, snap=>{
 var html=''; var count=0; var now=Date.now();
-snap.forEach(d=>{
+snap.forEach(async d=>{
 var data=d.data(); if(!data.lat) return;
-if(now - data.time > 300000) return; // 5 min offline auto hide
+if(now - data.time > 300000){
+  try{ await deleteDoc(doc(locRef, d.id)); }catch(e){}
+  return;
+}
 count++;
 var isMe = data.truckId===myId;
 var distText = isMe ? '⭐ YOU' : (myLat ? distance(myLat,myLng,data.lat,data.lng)+' km দূরে' : 'Online');
@@ -97,7 +103,7 @@ markers[data.truckId].setLatLng([data.lat,data.lng]);
 }
 html+=`<div class="driver"><span>${isMe?'⭐ ':'🚛 '}${data.truckId}</span><span>${distText}</span></div>`;
 });
-document.getElementById('drivers').innerHTML = html || 'কেউ Online নাই - অন্য Phone এ Link Open করো';
+document.getElementById('drivers').innerHTML = html || 'কেউ Online নাই';
 document.getElementById('count').innerText = count+' Trucks';
 if(count===1 && myLat){ map.setView([myLat,myLng], 14); }
 });
@@ -130,7 +136,7 @@ else{await pc.setRemoteDescription(off); const a=await pc.createAnswer(); await 
 function setTalk(s){localStream.getAudioTracks().forEach(t=>t.enabled=s); btn.innerText=s?"🔴 BROADCASTING...":"🎙️ HOLD TO TALK"; btn.style.background=s?"#16a34a":"#ef4444";}
 btn.onmousedown=()=>setTalk(true); btn.onmouseup=()=>setTalk(false);
 btn.ontouchstart=e=>{e.preventDefault(); setTalk(true);}; btn.ontouchend=e=>{e.preventDefault(); setTalk(false);};
-}catch(e){console.log(e)}
+}catch(e){}
 </script>
 </body>
 </html>
