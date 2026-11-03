@@ -16,7 +16,7 @@ body{font-family:Arial;background:#000;overflow:hidden}
 #list b{color:#ffcc00;font-size:12px;display:block;margin-bottom:6px}
 .driver{color:#fff;font-size:11px;padding:7px 0;border-bottom:1px solid #1a3d2a;display:flex;justify-content:space-between;align-items:center}
 .driver span:last-child{color:#22c55e;font-weight:700}
-#talkBtn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:13px 26px;border-radius:50px;border:3px solid #fff;font-weight:900;z-index:9999;font-size:13px;box-shadow:0 5px 20px rgba(0,0,0,0.6)}
+#talkBtn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:13px 26px;border-radius:50px;border:3px solid #fff;font-weight:900;z-index:9999;font-size:13px}
 </style>
 </head>
 <body>
@@ -28,16 +28,15 @@ body{font-family:Arial;background:#000;overflow:hidden}
 <div id="status">● Locating...</div>
 <div id="map"></div>
 <div id="list">
-<b>🚛 Convoy Members - কে কতদূরে আছে:</b>
-<div id="drivers">Loading trucks...</div>
+<b>🚛 Convoy Members:</b>
+<div id="drivers">Loading...</div>
+<button onclick="clearAllGhost()" style="background:#ffcc00;color:#000;padding:6px;border-radius:8px;font-weight:900;font-size:11px;margin-top:8px;width:100%;border:none">🧹 CLEAR ALL GHOST TRUCKS</button>
 </div>
 <button id="talkBtn">🎙️ HOLD TO TALK</button>
 <script>
 var map = L.map('map', {zoomControl:false}).setView([25.75, 89.25], 11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'MT 4 BIR'}).addTo(map);
-L.control.zoom({position:'topright'}).addTo(map);
-var markers = {};
-var myLat=0, myLng=0;
+var markers = {}; var myLat=0, myLng=0;
 function distance(lat1,lon1,lat2,lon2){
 var R=6371; var dLat=(lat2-lat1)*Math.PI/180; var dLon=(lon2-lon1)*Math.PI/180;
 var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
@@ -46,7 +45,7 @@ return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(2);
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 const firebaseConfig = {
 apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",
 authDomain: "mt-platoon-4bir.firebaseapp.com",
@@ -60,24 +59,36 @@ const db = getFirestore(app);
 const convoyId = 'MT-04-CONVOY';
 
 function getDeviceId(){
-  let id = null;
-  try{ id = localStorage.getItem('mt_truck_id_v2'); }catch(e){}
-  if(id) return id;
-  const raw = navigator.userAgent + screen.width + screen.height;
-  let hash = 0;
-  for(let i=0;i<raw.length;i++){ hash = ((hash<<5)-hash)+raw.charCodeAt(i); hash = hash & hash; }
-  id = 'TRUCK-' + Math.abs(hash).toString().substring(0,4);
-  try{ localStorage.setItem('mt_truck_id_v2', id); }catch(e){}
-  return id;
+  try{
+    let id = localStorage.getItem('mt_truck_fixed_v3');
+    if(id) return id;
+    const raw = navigator.userAgent + screen.width;
+    let h=0; for(let i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i); h=h&h;}
+    id = 'TRUCK-' + Math.abs(h).toString().substring(0,4);
+    localStorage.setItem('mt_truck_fixed_v3', id);
+    return id;
+  }catch(e){
+    return 'TRUCK-' + Math.floor(Math.random()*9000+1000);
+  }
 }
 const myId = getDeviceId();
 const locRef = collection(db, "convoys", convoyId, "locations");
 const roomRef = collection(db, "convoys", convoyId, "signals");
 
+window.clearAllGhost = async () => {
+  const snap = await getDocs(locRef);
+  snap.forEach(async d=>{
+    if(d.id !== myId){
+      try{ await deleteDoc(doc(locRef, d.id)); }catch(e){}
+    }
+  });
+  alert("Cleared! এখন 1 টা Truck থাকবে");
+};
+
 if(navigator.geolocation){
 navigator.geolocation.watchPosition(async pos=>{
 myLat=pos.coords.latitude; myLng=pos.coords.longitude;
-document.getElementById('status').innerText = `● ${myId} LIVE: ${myLat.toFixed(4)}, ${myLng.toFixed(4)}`;
+document.getElementById('status').innerText = `● ${myId} LIVE`;
 try{ await setDoc(doc(locRef, myId), {truckId:myId, lat:myLat, lng:myLng, time:Date.now()}); }catch(e){}
 }, null, {enableHighAccuracy:true});
 }
@@ -97,17 +108,15 @@ var color = isMe ? '#ffcc00' : '#22c55e';
 if(!markers[data.truckId]){
 var iconHtml = `<div style="background:${color};color:#000;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;border:3px solid #fff;font-size:16px">${isMe?'⭐':'🚛'}</div>`;
 var icon = L.divIcon({html:iconHtml, iconSize:[38,38], iconAnchor:[19,19]});
-markers[data.truckId]=L.marker([data.lat,data.lng],{icon:icon}).addTo(map).bindPopup(`<b>${data.truckId}</b><br>${distText}`);
+markers[data.truckId]=L.marker([data.lat,data.lng],{icon:icon}).addTo(map).bindPopup(`<b>${data.truckId}</b>`);
 }else{
 markers[data.truckId].setLatLng([data.lat,data.lng]);
 }
 html+=`<div class="driver"><span>${isMe?'⭐ ':'🚛 '}${data.truckId}</span><span>${distText}</span></div>`;
 });
-document.getElementById('drivers').innerHTML = html || 'কেউ Online নাই';
+document.getElementById('drivers').innerHTML = html || 'কেউ নাই';
 document.getElementById('count').innerText = count+' Trucks';
-if(count===1 && myLat){ map.setView([myLat,myLng], 14); }
 });
-
 let localStream=null, pcs={};
 const btn=document.getElementById('talkBtn');
 try{
