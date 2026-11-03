@@ -1,176 +1,98 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <title>MT PLATOON - Home</title> <style> *{margin:0;padding:0;box-sizing:border-box;font-family:Arial} body{background:#f2f2f2;padding-bottom:90px} .top{background:#0a1a12;color:#fff;padding:14px 15px;display:flex;justify-content:space-between;align-items:center} .call{background:#0e5d3e;color:#ffcc00;padding:11px 15px;font-weight:900;font-size:15px;display:flex;justify-content:space-between;align-items:center} .gc-btn{background:#ffcc00;color:#000;padding:5px 12px;border-radius:15px;font-size:13px;cursor:pointer} .welcome{background:#ffcc00;color:#0a1a12;padding:11px 15px;font-weight:900;font-size:15px;text-align:center} .banner{width:100%;height:280px;position:relative;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;color:#fff} .banner img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 1s ease-in-out} .banner img.active{opacity:1} .banner-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10} .banner-dots span{width:7px;height:7px;background:rgba(255,255,255,0.6);border-radius:50%;display:inline-block;transition:0.3s} .banner-dots span.active{background:#ffcc00;width:20px;border-radius:10px} .banner-add-btn{position:absolute;top:10px;right:10px;background:#ffcc00;color:#000;border:none;padding:7px 12px;border-radius:20px;font-weight:900;font-size:12px;z-index:20;cursor:pointer} .sec{padding:15px} .sir-card{background:#fff;border-radius:16px;padding:15px;margin-bottom:20px;text-align:center;border:1px solid #ddd;position:relative} .img-box{position:relative;width:280px;height:360px;margin:0 auto;border-radius:14px;overflow:hidden;border:4px solid #0e5d3e} .img-box img{width:100%;height:100%;object-fit:cover} .bottom-info{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.75);padding:10px 8px;text-align:center} .rank-text{color:#ffcc00;font-weight:900;font-size:18px;margin-bottom:4px} .name-text{color:#fff;font-weight:900;font-size:15px} .edit-btn{position:absolute;top:12px;right:12px;background:#ffcc00;color:#000;border:none;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:900;cursor:pointer;z-index:10} .notice-item{background:#fffbe6;padding:12px;border-left:4px solid #ffcc00;margin-top:10px;border-radius:8px;position:relative;font-size:15px} .vehicle-item{background:#fff3f3;padding:14px;border-left:4px solid #ff4444;margin-top:12px;border-radius:8px;position:relative;font-size:15px;line-height:1.8} .notice-actions{position:absolute;top:5px;right:5px} .notice-actions button{border:none;padding:4px 8px;border-radius:10px;font-size:11px;font-weight:900;margin-left:4px;cursor:pointer} .btn-add{background:#0e5d3e;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer} .btn-add2{background:#b91c1c;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer} #editModal, #vehicleModal, #bannerModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center;padding:20px} .modal-box{background:#fff;width:100%;max-width:380px;border-radius:15px;padding:20px;max-height:90vh;overflow:auto} #sideMenu{position:fixed;top:0;left:0;bottom:0;width:280px;background:#0a1a12;z-index:999999;display:none;padding:20px;box-shadow:4px 0 15px rgba(0,0,0,0.6);border-right:3px solid #c8a951} #menuOverlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:999998;display:none} .menu-item{background:#143d27;color:#fff;padding:14px;border-radius:10px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:900;border:1px solid #1e4a28} .nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;align-items:center;padding:12px 0 10px 0;border-top:1px solid #1e293b;z-index:999} .nav div{color:#94a3b8;text-align:center;font-size:12px;cursor:pointer;line-height:1.2} </style> </head> <body> <div class="top"> <div style="display:flex;align-items:center;gap:10px"> <button onclick="openMenu()" style="background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer">⋮</button> <b>MT PLATOON</b> </div> <b onclick="location.href='own-profile.html'" style="background:#ffcc00;color:#000;padding:7px 13px;border-radius:50%;cursor:pointer">R</b> </div> <div id="sideMenu"> <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"> <b style="color:#ffcc00">☰ MENU</b> <button onclick="closeMenu()" style="background:#ff4444;color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-weight:900;cursor:pointer">X</button> </div> <div class="menu-item" onclick="location.href='leave-card-maker.html'">💳 Leave Card Maker</div> <div class="menu-item" onclick="location.href='store-toking.html'">👼🏽 Store Toking</div> <div class="menu-item" onclick="closeMenu(); document.getElementById('liveBox').style.display='flex'" style="background:#c8a951;color:#000;border:2px solid gold">📁 Live Tracking</div> <div class="menu-item" onclick="location.href='duty-slip.html'">🧾 Duty Slip</div> <div class="menu-item" onclick="location.href='gate-pass.html'">🚫 Gate Pass</div> </div> <div id="menuOverlay" onclick="closeMenu()"></div> <div class="call"><span>📲 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div> <div class="welcome">🇧🇩 Welcome To MT Platoon 🇧🇩</div> <div class="banner" id="armyBanner"> <div id="bannerPlaceholder" style="text-align:center;font-size:16px">📸 Banner Pic Add করো<br><small>4521328 শুধু Add করতে পারবে</small></div> <button id="bannerAddBtn" class="banner-add-btn" onclick="openBannerModal()">+ Add Pics (20)</button> <div class="banner-dots" id="bannerDots"></div> </div> <div class="sec"> <h3 style="color:#0a1a12;margin-bottom:10px">👑 PLATOON COMMAND</h3> <div class="sir-card"> <button class="edit-btn" onclick="openEdit('qm')">✏️</button> <div class="img-box"><img id="img-qm" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-qm">QM</div><div class="name-text" id="name-qm">Capt Mohammad Ali Akbor Arko</div></div></div> </div> <div class="sir-card"> <button class="edit-btn" onclick="openEdit('jco')">✏️</button> <div class="img-box"><img id="img-jco" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-jco">MT JCO</div><div class="name-text" id="name-jco">Subedar Name Here</div></div></div> </div> <div class="sir-card"> <button class="edit-btn" onclick="openEdit('nco')">✏️</button> <div class="img-box"><img id="img-nco" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-nco">MT NCO</div><div class="name-text" id="name-nco">Sgt Name Here</div></div></div> </div> </div> <div class="sec"> <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#0e5d3e">📢 NOTICE BOARD</h3><button class="btn-add" onclick="addNotice()">+ Add</button></div> <div id="noticeList"></div> </div> <div class="sec"> <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="color:#b91c1c">🚛 VEHICLE PROBLEM</h3><button class="btn-add2" onclick="openVehicle()">+ Add Problem</button></div> <div id="vehicleList"></div> </div> <div class="nav"> <div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div> <div onclick="document.getElementById('liveBox').style.display='flex'" style="background:#c8a951;color:#0a1a0f;padding:8px 20px;border-radius:22px;font-weight:900;cursor:pointer;text-align:center;font-size:12px">📁<br>Live Tracking</div> <div onclick="location.href='group.html'" style="color:#94a3b8">👥<br>Group</div> </div> <div id="liveBox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:end;justify-content:center" onclick="if(event.target==this)this.style.display='none'"> <div style="background:#0b1226;width:100%;max-width:500px;border-top-left-radius:24px;border-top-right-radius:24px;padding:20px 14px 30px 14px"> <div style="display:flex;justify-content:space-between;margin-bottom:15px"><b style="color:#c8a951">📁 Live Tracking</b><span onclick="document.getElementById('liveBox').style.display='none'" style="background:#1e293b;color:white;padding:6px 14px;border-radius:20px;cursor:pointer">✖️</span></div> <div style="display:grid;gap:10px"> <a href="home/live-convoy/convoy-home.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">🏠 convoy-home.html</a> <a href="home/live-convoy/convoy-group.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">👥 convoy-group.html</a> <a href="home/live-convoy/convoy-message.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">💬 convoy-message.html</a> <a href="home/live-convoy/live-map.html" style="background:#132a18;padding:14px;border-radius:12px;color:#22c55e;text-decoration:none;border:1px solid #c8a951">🛰️ live-map.html</a> <a href="home/live-convoy/walkie-talkie.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">📻 walkie-talkie.html</a> </div> </div> </div> <div id="editModal"><div class="modal-box"><h3>Edit</h3><input id="editRank"><input id="editName"><input id="editFile" type="file"><button style="width:100%;padding:10px;background:#0e5d3e;color:#ffcc00;border:none;border-radius:8px;margin-top:10px" onclick="saveEdit()">Save</button><button style="width:100%;padding:10px;background:#ddd;border:none;border-radius:8px;margin-top:5px" onclick="closeEdit()">Cancel</button></div></div> <div id="vehicleModal"><div class="modal-box"><h3>Vehicle</h3><input id="vPodobi"><input id="vName"><input id="vBa"><textarea id="vProblem"></textarea><button style="width:100%;padding:10px;background:#b91c1c;color:#fff;border:none;border-radius:8px;margin-top:10px" onclick="saveVehicle()">Save</button><button style="width:100%;padding:10px;background:#ddd;border:none;border-radius:8px;margin-top:5px" onclick="closeVehicle()">Cancel</button></div></div> <div id="bannerModal"><div class="modal-box"><h3>Banner Pics (Max 20)</h3><input id="bannerFile" type="file" multiple accept="image/*"><div id="thumbGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:10px"></div><div id="bannerStatus" style="margin-top:10px;font-size:13px;color:#666"></div><button style="width:100%;padding:12px;background:#0a1a12;color:#ffcc00;border:none;border-radius:8px;margin-top:10px;font-weight:900" onclick="saveBannerPics()">Save To Database</button><button style="width:100%;padding:10px;background:#ddd;border:none;border-radius:8px;margin-top:5px" onclick="closeBannerModal()">Cancel</button></div></div>
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <title>MT PLATOON - Home</title> <style> *{margin:0;padding:0;box-sizing:border-box;font-family:Arial} body{background:#f2f2f2;padding-bottom:90px} .top{background:#0a1a12;color:#fff;padding:14px 15px;display:flex;justify-content:space-between;align-items:center} .call{background:#0e5d3e;color:#ffcc00;padding:11px 15px;font-weight:900;font-size:15px;display:flex;justify-content:space-between;align-items:center} .gc-btn{background:#ffcc00;color:#000;padding:5px 12px;border-radius:15px;font-size:13px;cursor:pointer} .welcome{background:#ffcc00;color:#0a1a12;padding:11px 15px;font-weight:900;font-size:15px;text-align:center} .banner{width:100%;height:280px;position:relative;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;color:#fff} .banner img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 1s ease-in-out} .banner img.active{opacity:1} .banner-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10} .banner-dots span{width:7px;height:7px;background:rgba(255,255,255,0.6);border-radius:50%;display:inline-block;transition:0.3s} .banner-dots span.active{background:#ffcc00;width:20px;border-radius:10px} .banner-add-btn{position:absolute;top:10px;right:10px;background:#ffcc00;color:#000;border:none;padding:7px 12px;border-radius:20px;font-weight:900;font-size:12px;z-index:20;cursor:pointer} .sec{padding:15px} .sir-card{background:#fff;border-radius:16px;padding:15px;margin-bottom:20px;text-align:center;border:1px solid #ddd;position:relative} .img-box{position:relative;width:280px;height:360px;margin:0 auto;border-radius:14px;overflow:hidden;border:4px solid #0e5d3e} .img-box img{width:100%;height:100%;object-fit:cover} .bottom-info{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.75);padding:10px 8px;text-align:center} .rank-text{color:#ffcc00;font-weight:900;font-size:18px;margin-bottom:4px} .name-text{color:#fff;font-weight:900;font-size:15px} .edit-btn{position:absolute;top:12px;right:12px;background:#ffcc00;color:#000;border:none;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:900;cursor:pointer;z-index:10} .notice-item{background:#fffbe6;padding:12px;border-left:4px solid #ffcc00;margin-top:10px;border-radius:8px;position:relative;font-size:15px} .vehicle-item{background:#fff3f3;padding:14px;border-left:4px solid #ff4444;margin-top:12px;border-radius:8px;position:relative;font-size:15px;line-height:1.8} .btn-add{background:#0e5d3e;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer} .btn-add2{background:#b91c1c;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;margin-top:10px;cursor:pointer} #editModal, #vehicleModal, #bannerModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center;padding:20px} .modal-box{background:#fff;width:100%;max-width:380px;border-radius:15px;padding:20px;max-height:90vh;overflow:auto} #sideMenu{position:fixed;top:0;left:0;bottom:0;width:280px;background:#0a1a12;z-index:999999;display:none;padding:20px;box-shadow:4px 0 15px rgba(0,0,0,0.6);border-right:3px solid #c8a951} #menuOverlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:999998;display:none} .menu-item{background:#143d27;color:#fff;padding:14px;border-radius:10px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:900;border:1px solid #1e4a28} .nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;align-items:center;padding:12px 0 10px 0;border-top:1px solid #1e293b;z-index:999} .nav div{color:#94a3b8;text-align:center;font-size:12px;cursor:pointer;line-height:1.2} </style> </head> <body> <div class="top"> <div style="display:flex;align-items:center;gap:10px"> <button onclick="openMenu()" style="background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer">⋮</button> <b>MT PLATOON</b> </div> <b onclick="location.href='own-profile.html'" style="background:#ffcc00;color:#000;padding:7px 13px;border-radius:50%;cursor:pointer">R</b> </div> <div id="sideMenu"> <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"> <b style="color:#ffcc00">☰ MENU</b> <button onclick="closeMenu()" style="background:#ff4444;color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-weight:900;cursor:pointer">X</button> </div> <div class="menu-item" onclick="location.href='leave-card-maker.html'">💳 Leave Card Maker</div> <div class="menu-item" onclick="location.href='store-toking.html'">👼🏽 Store Toking</div> <div class="menu-item" onclick="closeMenu(); document.getElementById('liveBox').style.display='flex'" style="background:#c8a951;color:#000;border:2px solid gold">📁 Live Tracking</div> <div class="menu-item" onclick="location.href='duty-slip.html'">🧾 Duty Slip</div> <div class="menu-item" onclick="location.href='gate-pass.html'">🚫 Gate Pass</div> </div> <div id="menuOverlay" onclick="closeMenu()"></div> <div class="call"><span>📲 Call Us: 01769-013433</span><span class="gc-btn" onclick="location.href='group.html'">💬 Group Chat</span></div> <div class="welcome">🇧🇩 Welcome To MT Platoon 🇧🇩</div> <div class="banner" id="armyBanner"> <div id="bannerPlaceholder" style="text-align:center;font-size:16px">📸 Banner Pic Add করো<br><small>4521328 শুধু Add করতে পারবে</small></div> <button id="bannerAddBtn" class="banner-add-btn" onclick="openBannerModal()">+ Add Pics (20)</button> <div class="banner-dots" id="bannerDots"></div> </div> <div class="sec"> <h3 style="color:#0a1a12;margin-bottom:10px">👑 PLATOON COMMAND</h3> <div class="sir-card"> <button class="edit-btn" onclick="openEdit('qm')">✏️</button> <div class="img-box"><img id="img-qm" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-qm">QM</div><div class="name-text" id="name-qm">Capt Mohammad Ali Akbor Arko</div></div></div> </div> <div class="sir-card"> <button class="edit-btn" onclick="openEdit('jco')">✏️</button> <div class="img-box"><img id="img-jco" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-jco">MT JCO</div><div class="name-text" id="name-jco">Subedar Name Here</div></div></div> </div> <div class="sir-card"> <button class="edit-btn" onclick="openEdit('nco')">✏️</button> <div class="img-box"><img id="img-nco" src="https://i.imgur.com/8Km9tLL.png"><div class="bottom-info"><div class="rank-text" id="rank-nco">MT NCO</div><div class="name-text" id="name-nco">Sgt Name Here</div></div></div> </div> </div> <div class="nav"> <div style="color:#22c55e;font-weight:900">🏡<br>Home Page</div> <div onclick="document.getElementById('liveBox').style.display='flex'" style="background:#c8a951;color:#0a1a0f;padding:8px 20px;border-radius:22px;font-weight:900;cursor:pointer;text-align:center;font-size:12px">📁<br>Live Tracking</div> <div onclick="location.href='group.html'" style="color:#94a3b8">👥<br>Group</div> </div> <div id="liveBox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:end;justify-content:center" onclick="if(event.target==this)this.style.display='none'"> <div style="background:#0b1226;width:100%;max-width:500px;border-top-left-radius:24px;border-top-right-radius:24px;padding:20px 14px 30px 14px"> <div style="display:flex;justify-content:space-between;margin-bottom:15px"><b style="color:#c8a951">📁 Live Tracking</b><span onclick="document.getElementById('liveBox').style.display='none'" style="background:#1e293b;color:white;padding:6px 14px;border-radius:20px;cursor:pointer">✖️</span></div> <div style="display:grid;gap:10px"> <a href="home/live-convoy/convoy-home.html" style="background:#132a18;padding:14px;border-radius:12px;color:white;text-decoration:none">🏠 convoy-home</a> <a href="home/live-convoy/live-map.html" style="background:#132a18;padding:14px;border-radius:12px;color:#22c55e;text-decoration:none;border:1px solid #c8a951">🛰️ live-map</a> </div> </div> </div> <div id="editModal"><div class="modal-box"><h3>Edit</h3><input id="editRank"><input id="editName"><input id="editFile" type="file"><button style="width:100%;padding:10px;background:#0e5d3e;color:#ffcc00;border:none;border-radius:8px;margin-top:10px" onclick="saveEdit()">Save</button><button style="width:100%;padding:10px;background:#ddd;border:none;border-radius:8px;margin-top:5px" onclick="closeEdit()">Cancel</button></div></div> <div id="vehicleModal"><div class="modal-box"><h3>Vehicle</h3><input id="vPodobi"><input id="vName"><input id="vBa"><textarea id="vProblem"></textarea><button style="width:100%;padding:10px;background:#b91c1c;color:#fff;border:none;border-radius:8px;margin-top:10px" onclick="saveVehicle()">Save</button><button style="width:100%;padding:10px;background:#ddd;border:none;border-radius:8px;margin-top:5px" onclick="closeVehicle()">Cancel</button></div></div> <div id="bannerModal"><div class="modal-box"><h3>Banner Pics (Max 20)</h3><input id="bannerFile" type="file" multiple accept="image/*"><div id="thumbGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:10px"></div><div id="bannerStatus" style="margin-top:10px;font-size:13px;color:#666"></div><button style="width:100%;padding:12px;background:#0a1a12;color:#ffcc00;border:none;border-radius:8px;margin-top:10px;font-weight:900" onclick="saveBannerPics()">Save To Database</button><button style="width:100%;padding:10px;background:#ddd;border:none;border-radius:8px;margin-top:5px" onclick="closeBannerModal()">Cancel</button></div></div>
 
-<script>
-function openMenu(){ document.getElementById('sideMenu').style.display='block'; document.getElementById('menuOverlay').style.display='block'; }
-function closeMenu(){ document.getElementById('sideMenu').style.display='none'; document.getElementById('menuOverlay').style.display='none'; }
-function openEdit(){ document.getElementById('editModal').style.display='flex'; }
-function closeEdit(){ document.getElementById('editModal').style.display='none'; }
-function saveEdit(){ closeEdit(); }
-function openVehicle(){ document.getElementById('vehicleModal').style.display='flex'; }
-function closeVehicle(){ document.getElementById('vehicleModal').style.display='none'; }
-function saveVehicle(){ closeVehicle(); }
-function addNotice(){}
-</script>
+<script> function openMenu(){ document.getElementById('sideMenu').style.display='block'; document.getElementById('menuOverlay').style.display='block'; } function closeMenu(){ document.getElementById('sideMenu').style.display='none'; document.getElementById('menuOverlay').style.display='none'; } function openEdit(){ document.getElementById('editModal').style.display='flex'; } function closeEdit(){ document.getElementById('editModal').style.display='none'; } function saveEdit(){ closeEdit(); } function openVehicle(){ document.getElementById('vehicleModal').style.display='flex'; } function closeVehicle(){ document.getElementById('vehicleModal').style.display='none'; } function saveVehicle(){ closeVehicle(); } </script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",
-  authDomain: "mt-platoon-4bir.firebaseapp.com",
-  projectId: "mt-platoon-4bir",
-  storageBucket: "mt-platoon-4bir.firebasestorage.app",
-  messagingSenderId: "720139134198",
-  appId: "1:720139134198:web:4ed98d6e53a7e741dcb8d7",
-  measurementId: "G-ZDK2DNTBL5"
-};
-
+import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0", authDomain: "mt-platoon-4bir.firebaseapp.com", projectId: "mt-platoon-4bir", storageBucket: "mt-platoon-4bir.firebasestorage.app", messagingSenderId: "720139134198", appId: "1:720139134198:web:4ed98d6e53a7e741dcb8d7", measurementId: "G-ZDK2DNTBL5" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+let bannerImages = []; let currentIdx = 0; let slideTimer = null; let selectedFilesBase64 = [];
 
-let bannerImages = [];
-let currentIdx = 0;
-let slideTimer = null;
-let selectedFilesBase64 = [];
+function compressImage(file){
+  return new Promise((resolve)=>{
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        const MAX = 900;
+        if(w>MAX || h>MAX){
+          if(w>h){ h = h*MAX/w; w=MAX; } else { w = w*MAX/h; h=MAX; }
+        }
+        canvas.width=w; canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg', 0.65));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 async function loadBannersFromDB(){
   try{
     const q = query(collection(db, "bannerPics"), orderBy("created","asc"));
     const snap = await getDocs(q);
     bannerImages = [];
-    snap.forEach(d=>{
-      bannerImages.push({id:d.id, ...d.data()});
-    });
-    
+    snap.forEach(d=>{ bannerImages.push({id:d.id, ...d.data()}); });
     const bannerDiv = document.getElementById('armyBanner');
     const placeholder = document.getElementById('bannerPlaceholder');
-    
-    // Clear old imgs
     bannerDiv.querySelectorAll('img.banner-img').forEach(el=>el.remove());
-    
     if(bannerImages.length>0){
       placeholder.style.display='none';
       bannerImages.forEach((item, idx)=>{
         const img = document.createElement('img');
-        img.src = item.src;
-        img.className = 'banner-img' + (idx===0 ? ' active' : '');
-        img.dataset.id = item.id;
+        img.src = item.src; img.className = 'banner-img' + (idx===0 ? ' active' : '');
         bannerDiv.insertBefore(img, document.getElementById('bannerDots'));
       });
-      renderDots();
-      startSlide();
+      renderDots(); startSlide();
       document.getElementById('bannerAddBtn').innerText = `+ Add Pics (${bannerImages.length}/20)`;
     } else {
-      placeholder.style.display='block';
-      document.getElementById('bannerDots').innerHTML='';
+      placeholder.style.display='block'; document.getElementById('bannerDots').innerHTML='';
     }
-  } catch(e){
-    console.log("Banner load error", e);
-  }
+  }catch(e){ console.log("Banner load error", e); }
 }
-
 function renderDots(){
-  const dotsBox = document.getElementById('bannerDots');
-  dotsBox.innerHTML = '';
-  bannerImages.forEach((_, idx)=>{
-    const s = document.createElement('span');
-    s.className = idx===0 ? 'active' : '';
-    s.onclick = ()=> goToSlide(idx);
-    dotsBox.appendChild(s);
-  });
+  const dotsBox = document.getElementById('bannerDots'); dotsBox.innerHTML = '';
+  bannerImages.forEach((_, idx)=>{ const s = document.createElement('span'); s.className = idx===0 ? 'active' : ''; s.onclick = ()=> goToSlide(idx); dotsBox.appendChild(s); });
 }
-
 function goToSlide(idx){
-  const imgs = document.querySelectorAll('.banner-img');
-  const dots = document.querySelectorAll('#bannerDots span');
-  imgs.forEach(im=>im.classList.remove('active'));
-  dots.forEach(d=>d.classList.remove('active'));
-  if(imgs[idx]){
-    imgs[idx].classList.add('active');
-    dots[idx].classList.add('active');
-    currentIdx = idx;
-  }
+  const imgs = document.querySelectorAll('.banner-img'); const dots = document.querySelectorAll('#bannerDots span');
+  imgs.forEach(im=>im.classList.remove('active')); dots.forEach(d=>d.classList.remove('active'));
+  if(imgs[idx]){ imgs[idx].classList.add('active'); dots[idx].classList.add('active'); currentIdx = idx; }
 }
-
 function startSlide(){
-  clearInterval(slideTimer);
-  if(bannerImages.length<=1) return;
-  slideTimer = setInterval(()=>{
-    let next = (currentIdx+1) % bannerImages.length;
-    goToSlide(next);
-  }, 4000);
+  clearInterval(slideTimer); if(bannerImages.length<=1) return;
+  slideTimer = setInterval(()=>{ let next = (currentIdx+1) % bannerImages.length; goToSlide(next); }, 3500);
 }
-
-function toBase64(file){
-  return new Promise(res=>{
-    const r = new FileReader();
-    r.onload = ()=> res(r.result);
-    r.readAsDataURL(file);
-  });
-}
-
 window.openBannerModal = ()=>{
-  if(bannerImages.length>=20){
-    alert('20 টা হয়ে গেছে! আর Add করা যাবে না। Delete করে Add করো।');
-    return;
-  }
-  document.getElementById('bannerModal').style.display='flex';
-  document.getElementById('thumbGrid').innerHTML='';
-  document.getElementById('bannerStatus').innerText='';
-  selectedFilesBase64=[];
+  if(bannerImages.length>=20){ alert('20 টা হয়ে গেছে!'); return; }
+  document.getElementById('bannerModal').style.display='flex'; document.getElementById('thumbGrid').innerHTML=''; document.getElementById('bannerStatus').innerText=''; selectedFilesBase64=[];
 }
-
-window.closeBannerModal = ()=>{
-  document.getElementById('bannerModal').style.display='none';
-}
+window.closeBannerModal = ()=>{ document.getElementById('bannerModal').style.display='none'; }
 
 document.getElementById('bannerFile').addEventListener('change', async (e)=>{
-  const files = Array.from(e.target.files);
-  const grid = document.getElementById('thumbGrid');
-  grid.innerHTML='';
-  selectedFilesBase64=[];
-  
-  if(bannerImages.length + files.length > 20){
-    alert(`আর মাত্র ${20-bannerImages.length} টা Add করতে পারবি!`);
-    return;
-  }
-  
+  const files = Array.from(e.target.files); const grid = document.getElementById('thumbGrid'); grid.innerHTML=''; selectedFilesBase64=[];
+  if(bannerImages.length + files.length > 20){ alert(`আর মাত্র ${20-bannerImages.length} টা Add করতে পারবি!`); return; }
+  document.getElementById('bannerStatus').innerText = 'Compressing...';
   for(let f of files){
-    const b64 = await toBase64(f);
-    selectedFilesBase64.push(b64);
-    const im = document.createElement('img');
-    im.src = b64;
-    im.style.width='100%';
-    im.style.height='60px';
-    im.style.objectFit='cover';
-    im.style.borderRadius='5px';
-    grid.appendChild(im);
+    const b64 = await compressImage(f); selectedFilesBase64.push(b64);
+    const im = document.createElement('img'); im.src = b64; im.style.width='100%'; im.style.height='60px'; im.style.objectFit='cover'; im.style.borderRadius='5px'; grid.appendChild(im);
   }
-  document.getElementById('bannerStatus').innerText = `${selectedFilesBase64.length} টা Ready`;
+  document.getElementById('bannerStatus').innerText = `${selectedFilesBase64.length} টা Ready - Save চাপ দাও`;
 });
-
 window.saveBannerPics = async ()=>{
-  if(selectedFilesBase64.length===0){
-    alert('ছবি সিলেক্ট কর!');
-    return;
-  }
+  if(selectedFilesBase64.length===0){ alert('ছবি সিলেক্ট কর!'); return; }
   document.getElementById('bannerStatus').innerText = 'Uploading to Database...';
   try{
-    for(let src of selectedFilesBase64){
-      await addDoc(collection(db, "bannerPics"), {
-        src: src,
-        created: Date.now()
-      });
-    }
-    alert('✅ Banner Database এ Save হইছে!');
-    closeBannerModal();
-    location.reload();
-  } catch(err){
-    alert('Error: '+err.message);
-  }
+    for(let src of selectedFilesBase64){ await addDoc(collection(db, "bannerPics"), { src: src, created: Date.now() }); }
+    alert('✅ Banner Save হইছে! Refresh করলেও যাবে না!');
+    closeBannerModal(); location.reload();
+  }catch(err){ alert('Error: '+err.message+' - Rules Publish করছো?'); }
 }
-
 loadBannersFromDB();
 </script>
 </body> </html>
