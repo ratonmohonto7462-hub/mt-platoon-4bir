@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#050a14;color:white">
+<button onclick="openMenu()" style="font-size:30px">⋮ 3 DOT CLICK KOR</button>
+
+<div id="sideMenu" style="display:none;position:fixed;top:0;left:0;width:250px;height:100%;background:#0a1a0f;padding:20px;z-index:9999;border-right:2px solid gold">
+  <b style="color:gold">☰ MENU</b> 
+  <button onclick="closeMenu()" style="background:red;color:white;border:none;padding:5px 10px;border-radius:50%;float:right">X</button>
+  <div style="margin-top:30px;display:grid;gap:10px">
+    <div style="background:#132a18;padding:12px;border-radius:10px">💳 Leave Card Maker</div>
+    <div style="background:#132a18;padding:12px;border-radius:10px">👼🏽 Store Toking</div>
+    <div style="background:gold;padding:12px;border-radius:10px;color:black;font-weight:900">📁 Live Tracking</div>
+    <div style="background:#132a18;padding:12px;border-radius:10px">🧾 Duty Slip</div>
+    <div style="background:#132a18;padding:12px;border-radius:10px">🚫 Gate Pass</div>
+  </div>
+</div>
+
+<script>
+function openMenu(){ alert("3 dot kaj kortese!"); document.getElementById('sideMenu').style.display='block'; }
+function closeMenu(){ document.getElementById('sideMenu').style.display='none'; }
+</script>
+</body>
+</html>
