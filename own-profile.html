@@ -1,87 +1,83 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Own Profile - MT Platoon</title>
-</head>
-<body style="margin:0;font-family:Arial;background:#f0f0f0">
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Own Profile</title></head><body style="margin:0;background:#f0f0f0;font-family:Arial">
 
-<div style="max-width:420px;margin:20px auto;background:#fff;padding:24px;border-radius:18px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.1)">
-<img id="pImg" src="https://i.imgur.com/8Km9tLL.png" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid #0e5d3e;background:#ddd">
-<h2 id="pName" style="margin:14px 0 4px">Loading...</h2>
-<p id="pRank" style="margin:0;color:#0e5d3e;font-weight:700"></p>
-<div style="text-align:left;margin-top:20px;background:#f8f8f0;padding:14px;border-radius:12px">
-<p style="margin:8px 0">BA No: <b id="pBa">-</b></p>
-<p style="margin:8px 0">Blood: <b id="pBlood">-</b></p>
-<p style="margin:8px 0">Unit: <b id="pUnit">-</b></p>
+<div style="max-width:420px;margin:20px auto;background:#fff;padding:24px;border-radius:18px;text-align:center">
+<img id="pImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid #0e5d3e">
+<h2 id="pName">Loading...</h2>
+<p id="pRank" style="color:#0e5d3e;font-weight:700;margin:0"></p>
+<div style="text-align:left;margin-top:18px;background:#fdfbe9;padding:14px;border-radius:12px">
+<p>BA No: <b id="pBa">-</b></p>
+<p>Name: <b id="pFull">-</b></p>
+<p>Blood: <b id="pBlood">-</b></p>
+<p>Unit: <b id="pUnit">-</b></p>
 </div>
-<button onclick="history.back()" style="margin-top:20px;padding:12px;width:100%;background:#0a1a12;color:#ffcc00;border:none;border-radius:10px;font-weight:900;font-size:16px">Back</button>
+<button onclick="history.back()" style="margin-top:20px;padding:12px;width:100%;background:#0a1a12;color:#ffcc00;border:none;border-radius:10px;font-weight:900">Back</button>
+<p id="msg" style="font-size:12px;color:#888;margin-top:10px"></p>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",
-  authDomain: "mt-platoon-4bir.firebaseapp.com",
-  projectId: "mt-platoon-4bir",
-  storageBucket: "mt-platoon-4bir.firebasestorage.app",
-  messagingSenderId: "720139134198",
-  appId: "1:720139134198:web:ea8e10926d90bbfddcb8d7",
-  measurementId: "G-1B1Y32W1FH"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-function toEng(s){
-  s = String(s||"");
-  const bn="০১২৩৪৫৬৭৮৯", en="0123456789";
-  for(let i=0;i<10;i++) s=s.split(bn[i]).join(en[i]);
-  return s.replace(/\D/g,'');
-}
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxc9Yj6YR8bmMYkgNxoIYVWRHDERqQjq5j_I_M72sVqvkSERvazxXyPPKrlObgtIpuHZA/exec";
 
 let raw = localStorage.getItem('mt_army') || localStorage.getItem('sena_no') || "4521328";
-let sena = toEng(raw);
-document.getElementById('pBa').innerText = sena || raw;
+let sena = raw.toString().replace(/[০-৯]/g, d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'') || "4521328";
+document.getElementById('pBa').innerText = sena;
+document.getElementById('pName').innerText = sena;
+document.getElementById('msg').innerText = "Loading from API...";
 
-async function load(){
-  let data = null;
+async function loadAPI(){
   try{
-    const d = await getDoc(doc(db, "users", sena));
-    if(d.exists()) data = d.data();
-  }catch(e){}
-
-  if(!data){
-    const fields = ["ba_no","baNo","sena_no","senaNo","armyNo","ba"];
-    for(let f of fields){
+    // 3 টা ভাবে Try করবে তোমার Script এর জন্য
+    let urls = [
+      API_URL + "?ba_no=" + sena,
+      API_URL + "?ba=" + sena + "&action=getUser",
+      API_URL + "?action=read&ba=" + sena
+    ];
+    
+    let data = null;
+    for(let u of urls){
       try{
-        let q1 = query(collection(db, "users"), where(f, "==", sena));
-        let snap1 = await getDocs(q1);
-        if(!snap1.empty){ data = snap1.docs[0].data(); break; }
-        let q2 = query(collection(db, "users"), where(f, "==", Number(sena)));
-        let snap2 = await getDocs(q2);
-        if(!snap2.empty){ data = snap2.docs[0].data(); break; }
+        let res = await fetch(u);
+        let txt = await res.text();
+        try{ data = JSON.parse(txt); }catch(e){ data = null; }
+        if(data) { console.log("API Response:", data); break; }
       }catch(e){}
     }
-  }
 
-  if(data){
-    document.getElementById('pName').innerText = data.name || data.fullName || data.displayName || sena;
-    document.getElementById('pRank').innerText = data.rank || data.post || "";
-    document.getElementById('pBlood').innerText = data.blood || data.bloodGroup || data.bg || "-";
-    document.getElementById('pUnit').innerText = data.unit || data.platoon || "MT Platoon 4 BIR";
-    let pic = data.photo || data.photoURL || data.pic || data.image || data.profilePic || data.avatar;
-    if(pic) document.getElementById('pImg').src = pic;
-  }else{
+    if(!data){
+      // যদি সব Fail করে তাইলে Direct Fetch without param
+      let res = await fetch(API_URL);
+      data = await res.json();
+    }
+
+    // তোমার Sheet এর Data Array হতে পারে
+    let user = null;
+    if(Array.isArray(data)){
+      user = data.find(x => String(x.ba_no||x.ba||x.BA||"").replace(/\D/g,'') == sena);
+    } else if(data.data && Array.isArray(data.data)){
+      user = data.data.find(x => String(x.ba_no||x.ba||"").replace(/\D/g,'') == sena);
+    } else if(data.result){
+      user = data.result;
+    } else {
+      user = data;
+    }
+
+    if(user){
+      document.getElementById('pName').innerText = user.name || user.fullName || user.Name || sena;
+      document.getElementById('pFull').innerText = user.name || user.fullName || sena;
+      document.getElementById('pRank').innerText = user.rank || user.Rank || "";
+      document.getElementById('pBlood').innerText = user.blood || user.bloodGroup || user.Blood || "-";
+      document.getElementById('pUnit').innerText = user.unit || user.Unit || "MT Platoon 4 BIR";
+      let pic = user.photo || user.pic || user.image || user.Photo;
+      if(pic) document.getElementById('pImg').src = pic;
+      document.getElementById('msg').innerText = "";
+    }else{
+      document.getElementById('pName').innerText = sena;
+      document.getElementById('msg').innerText = "API থেকে BA "+sena+" পাওয়া যায়নি";
+    }
+  }catch(e){
+    document.getElementById('msg').innerText = "API Error: "+e.message;
     document.getElementById('pName').innerText = sena;
-    document.getElementById('pBlood').innerText = "users collection এ পাওয়া যায়নি";
-    document.getElementById('pUnit').innerText = "MT Platoon 4 BIR";
   }
 }
-load();
+loadAPI();
 </script>
-</body>
-</html>
+</body></html>
