@@ -68,4 +68,37 @@ async function loadVehicles(){try{const snap=await getDocs(collection(db,"vehicl
 window.saveVehicle=async()=>{const podobi=document.getElementById('vPodobi').value;const name=document.getElementById('vName').value;const ba=document.getElementById('vBa').value;const problem=document.getElementById('vProblem').value.trim();if(!problem)return;await addDoc(collection(db,"vehicles"),{podobi,name,ba,problem,created:Date.now()});closeVehicle();loadVehicles()};
 window.delVehicle=async(id)=>{if(confirm('Delete?')){await deleteDoc(doc(db,"vehicles",id));loadVehicles()}};
 loadBanners();loadCommands();loadNotices();loadVehicles();
+</script><script>
+// ONLY 4521328 IS ADMIN
+(function(){
+  function getSena(){
+    var s = localStorage.getItem('mt_army') || localStorage.getItem('sena_no') || localStorage.getItem('armyNo') || "";
+    s = String(s);
+    var bn = "০১২৩৪৫৬৭৮৯"; var en = "0123456789";
+    for(var i=0;i<10;i++){ s = s.split(bn[i]).join(en[i]); }
+    return s.replace(/\D/g,'').trim();
+  }
+
+  function hideAdmin(){
+    var sena = getSena();
+    if(sena !== "4521328"){
+      // Hide All Add/Edit Buttons
+      var b1 = document.getElementById('bannerAddBtn');
+      if(b1) b1.style.display = 'none';
+      document.querySelectorAll('.edit-btn').forEach(function(e){ e.style.display='none'; });
+      document.querySelectorAll('.btn-add').forEach(function(e){ e.style.display='none'; });
+      document.querySelectorAll('.btn-add2').forEach(function(e){ e.style.display='none'; });
+
+      // Block Functions
+      window.openEdit = function(){ alert('Only Admin Can Edit'); };
+      window.openNotice = function(){ alert('Only Admin Can Add'); };
+      window.openVehicle = function(){ alert('Only Admin Can Add'); };
+      window.openBannerModal = function(){ alert('Only Admin Can Add'); };
+    }
+  }
+
+  // Run 2 times for sure
+  setTimeout(hideAdmin, 500);
+  setTimeout(hideAdmin, 1500);
+})();
 </script></body></html>
