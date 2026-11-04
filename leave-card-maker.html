@@ -1,66 +1,87 @@
-<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leave Card Add System 3 Copy Big Dot</title>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leave Card - 3 Copy Full Page Big Dot + Add System</title>
 <style>
-@page{size:A4;margin:1mm}
-*{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali'}
-body{margin:0;background:#e8e8e8}
-.topbar{background:#0a2e18;color:#fff;padding:10px;text-align:center;font-weight:900}
-.box{max-width:520px;margin:10px auto;background:#fff;padding:12px;border-radius:12px;display:grid;gap:8px}
-.box input{padding:11px;border:1.5px solid #777;border-radius:7px;font-size:14px}
-.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.btn{padding:13px;background:#0a2e18;color:#ffcc00;border:none;border-radius:8px;font-weight:900;font-size:15px}
+@page{size:A4;margin:0}
+*{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali',Arial}
+body{margin:0;background:#ddd}
+.panel{max-width:560px;margin:10px auto;background:#fff;padding:12px;border-radius:12px}
+.panel h3{text-align:center;margin:0 0 10px 0}
+.panel input{width:100%;padding:10px;margin:4px 0;border:1.5px solid #555;border-radius:6px;font-size:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{width:100%;padding:13px;background:#000;color:#fff;border:none;border-radius:8px;font-weight:900;margin-top:6px;font-size:15px}
 .a4{width:210mm;height:297mm;background:#fff;margin:10px auto;display:flex;flex-direction:column}
-.copy{height:99mm;border:1.5px solid #000;padding:3.5mm 5mm;display:flex;flex-direction:column;justify-content:space-between}
-.topL{font-size:9pt;white-space:nowrap}
-.title{text-align:center;font-weight:900;text-decoration:underline;font-size:13pt;margin:1mm 0}
-.line{font-size:11pt;line-height:16pt;white-space:nowrap}
+.copy{height:99mm;border:1.8px solid #000;padding:3mm 4mm;display:flex;flex-direction:column;justify-content:space-between}
+.topLine{font-size:8.8pt;white-space:nowrap;line-height:10pt}
+.titleMain{text-align:center;font-weight:900;text-decoration:underline;font-size:13pt;margin:2mm 0}
+.line{font-size:11pt;line-height:16.5pt;white-space:nowrap}
 .b{font-weight:900}
-.dot{border-bottom:1.8px dotted #000;display:inline-block;text-align:center;font-weight:700;color:#000;min-width:6mm}
-@media print{body{background:#fff} .topbar,.box{display:none} .a4{margin:0;width:100%;height:100vh}}
-</style></head><body>
-<div class="topbar">Leave Card - Add System (3 Copy Full Page)</div>
-<div class="box">
-  <div class="r2"><input id="no" placeholder="নং - 4011028"><input id="pod" placeholder="পদবী - সৈনিক"></div>
-  <input id="name" placeholder="নাম - রতন চন্দ্র মহন্ত">
-  <div class="r2"><input id="gram" placeholder="গ্রাম - বাবপুর"><input id="po" placeholder="পোষ্ট - উত্তর পানাপুকুর"></div>
-  <div class="r2"><input id="thana" placeholder="থানা - গংগাচড়া"><input id="zela" placeholder="জেলা - রংপুর"></div>
-  <input id="tele" placeholder="টেলিগ্রাম অফিস">
-  <input id="mob" placeholder="মোবাইল - 01737912094">
-  <button class="btn" onclick="window.print()">🖨️ Print - 1 Page 3 Copy</button>
+.dot{border-bottom:1.8px dotted #000;display:inline-block;text-align:center;font-weight:700;min-width:6mm}
+@media print{
+  body{background:#fff}
+  .panel{display:none}
+  .a4{margin:0;width:100%;height:100vh}
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+<h3>Add System - সব তথ্য লিখো</h3>
+<div class="row"><input id="no" placeholder="নং"><input id="podobi" placeholder="পদবী"></div>
+<input id="name" placeholder="নাম">
+<div class="row"><input id="comp" placeholder="কোম্পানী/শাখা"><input id="mot" placeholder="মোট দিন"></div>
+<div class="row"><input id="from" type="date"><input id="to" type="date"></div>
+<div class="row"><input id="gram" placeholder="গ্রাম"><input id="post" placeholder="পোষ্ট"></div>
+<div class="row"><input id="thana" placeholder="থানা/উপজেলা"><input id="zela" placeholder="জেলা"></div>
+<input id="tele" placeholder="টেলিগ্রাম অফিস">
+<input id="mob" placeholder="মোবাঃ">
+<button class="btn" onclick="window.print()">Print - 1 Page 3 Copy Full Page</button>
 </div>
 
 <div class="a4" id="a4"></div>
 
 <script>
 function render(){
-  const v=id=>document.getElementById(id).value.trim()||'';
+  const V=id=>document.getElementById(id).value.trim();
   const d={
-    no:v('no')||'........................',
-    pod:v('pod')||'........................',
-    name:v('name')||'........................................',
-    gram:v('gram')||'........................',
-    po:v('po')||'........................',
-    thana:v('thana')||'........................',
-    zela:v('zela')||'........................',
-    tele:v('tele')||'........................',
-    mob:v('mob')||'........................'
+    no:V('no')||'........................',
+    pod:V('podobi')||'........................',
+    name:V('name')||'........................................',
+    comp:V('comp')||'',
+    mot:V('mot')||'........................',
+    from:V('from')?V('from').split('-').reverse().join('/'): '......../......../২০২৬',
+    to:V('to')?V('to').split('-').reverse().join('/'): '......../......../২০২৬',
+    gram:V('gram')||'........................................',
+    post:V('post')||'........................................',
+    thana:V('thana')||'........................',
+    zela:V('zela')||'........................................................',
+    tele:V('tele')||'........................................',
+    mob:V('mob')||'........................................'
   };
-  const one=`
+  let compText = d.comp ? d.comp : '........................';
+
+  let one=`
   <div class="copy">
-    <div class="topL">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
-    <div class="title">ছুটির সনদ পত্র</div>
-    <div class="line">নং<span class="dot" style="width:32mm">${d.no}</span>পদবী<span class="dot" style="width:22mm">${d.pod}</span>নাম<span class="dot" style="width:42mm">${d.name}</span>ইউনিট<span class="dot" style="width:18mm">৪ বীর</span></div>
-    <div class="line"><span class="dot" style="width:38mm"></span>কোম্পানী/শাখা<span class="dot" style="width:14mm">ঢাকা</span>সেনানিবাস। তাহাকে<span class="dot" style="width:9mm"></span>/<span class="dot" style="width:9mm"></span>/২০২৬ ইং তারিখ</div>
-    <div class="line">হইতে<span class="dot" style="width:9mm"></span>/<span class="dot" style="width:9mm"></span>/২০২৬ ইং তারিখ পর্যন্ত মোট<span class="dot" style="width:16mm"></span>দিনের সাময়িক/বাৎসরিক/চিত্তবিনোদন/ডাক্তারী ছুটি মঞ্জুর করা হলো।</div>
-    <div class="title" style="font-size:11pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
-    <div class="line">গ্রাম<span class="dot" style="width:40mm">${d.gram}</span>পোষ্ট<span class="dot" style="width:30mm">${d.po}</span>থানা/উপজেলা<span class="dot" style="width:30mm">${d.thana}</span></div>
-    <div class="line">টেলিগ্রাম অফিস<span class="dot" style="width:40mm">${d.tele}</span>জেলা<span class="dot" style="width:50mm">${d.zela}</span></div>
-    <div class="line">স্থান<span class="dot" style="width:16mm">ঢাকা</span>সেনানিবাস।</div>
-    <div class="line">তারিখ<span class="dot" style="width:16mm"></span>/<span class="dot" style="width:10mm"></span>/২০২৬ ইং। মোবাঃ<span class="dot" style="width:36mm">${d.mob}</span></div>
+    <div class="topLine">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
+    <div class="titleMain">ছুটির সনদ পত্র</div>
+    <div class="line">নং<span class="dot" style="width:34mm">${d.no}</span>পদবী<span class="dot" style="width:22mm">${d.pod}</span>নাম<span class="dot" style="width:42mm">${d.name}</span>ইউনিট<span class="dot" style="width:18mm"><span class="b">৪ বীর</span></span></div>
+    <div class="line"><span class="dot" style="width:18mm">${compText}</span>কোম্পানী/শাখা<span class="dot" style="width:10mm"><span class="b">ঢাকা</span></span>সেনানিবাস। তাহাকে<span class="dot" style="width:26mm">${d.from}</span>ইং তারিখ</div>
+    <div class="line">হইতে<span class="dot" style="width:26mm">${d.to}</span>ইং তারিখ পর্যন্ত মোট<span class="dot" style="width:14mm">${d.mot}</span>দিনের সাময়িক/বাৎসরিক/চিত্তবিনোদন/ডাক্তারী ছুটি মঞ্জুর করা হলো।</div>
+    <div class="titleMain" style="font-size:11pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
+    <div class="line">গ্রাম<span class="dot" style="width:36mm">${d.gram}</span>পোষ্ট<span class="dot" style="width:28mm">${d.post}</span>থানা/উপজেলা<span class="dot" style="width:30mm">${d.thana}</span></div>
+    <div class="line">টেলিগ্রাম অফিস<span class="dot" style="width:30mm">${d.tele}</span>জেলা<span class="dot" style="width:38mm">${d.zela}</span></div>
+    <div class="line">স্থান<span class="dot" style="width:16mm"><span class="b">ঢাকা</span></span>সেনানিবাস।</div>
+    <div class="line">তারিখ<span class="dot" style="width:22mm"></span>/২০২৬ ইং। মোবাঃ<span class="dot" style="width:38mm">${d.mob}</span></div>
   </div>`;
-  document.getElementById('a4').innerHTML=one+one+one;
+
+  document.getElementById('a4').innerHTML = one+one+one;
 }
-document.querySelectorAll('input').forEach(e=>e.addEventListener('input',render));
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',render));
 render();
 </script>
-</body></html>
+</body>
+</html>
