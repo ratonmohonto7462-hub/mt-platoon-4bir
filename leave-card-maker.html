@@ -32,7 +32,7 @@
   <div class="inputs">
     <div class="row2"><input id="no" placeholder="নং"><input id="podobi" placeholder="পদবী"></div>
     <input id="name" placeholder="নাম">
-    <div class="row2"><input id="unit" value="4 বীর"><input id="company" value="সদর কোম্পানী"></div>
+    <div class="row2"><input id="unit" value="4 বীর"><input id="company" value=" কোম্পানী"></div>
     <div class="row2"><input id="hoite" type="date"><input id="porjonto" type="date"></div>
     <input id="mot" placeholder="মোট দিন">
     <input id="gram" placeholder="গ্রাম"><div class="row2"><input id="po" placeholder="পোঃ"><input id="thana" placeholder="থানা"></div>
@@ -57,14 +57,11 @@
 function makeCopy(){
   let no=document.getElementById('no').value, podobi=document.getElementById('podobi').value, name=document.getElementById('name').value, unit=document.getElementById('unit').value, company=document.getElementById('company').value, hoite=document.getElementById('hoite').value, por=document.getElementById('porjonto').value, mot=document.getElementById('mot').value, gram=document.getElementById('gram').value, po=document.getElementById('po').value, thana=document.getElementById('thana').value, zela=document.getElementById('zela').value, mobile=document.getElementById('mobile').value;
   let html = `
-  <b>ছুটির কার্ড নং <span class="dot w90">${no}</span> পদবী <span class="dot w90">${podobi}</span> নাম <span class="dot w120">${name}</span> ইউনিট <span class="dot w90">${unit}</span> ৪ বীর</b><br>
+  <b>নং <span class="dot w90">${no}</span> পদবী <span class="dot w90">${podobi}</span> নাম <span class="dot w120">${name}</span> ইউনিট <span class="dot w90">${unit}</span> ৪ বীর</b><br>
   কোম্পানী <span class="dot w120">${company}</span> কে <span class="dot w90">${hoite}</span> হইতে <span class="dot w90">${por}</span> তারিখ পর্যন্ত মোট <span class="dot w90">${mot}</span> দিনের নৈমিত্তিক/অর্জিত/বিনা বেতনে ছুটি মঞ্জুর করা হলো।<br>
   <b>ছুটি কালীন তার ঠিকানা নিম্নরূপঃ</b><br>
   গ্রামঃ <span class="dot w120">${gram}</span> পোঃঃ <span class="dot w90">${po}</span> থানাঃ <span class="dot w90">${thana}</span> জেলাঃ <span class="dot w90">${zela}</span> মোবাইলঃ <span class="dot w120">${mobile}</span><br>
-  <div style="display:flex;justify-content:space-between;margin-top:8px">
-  <span>স্বাক্ষরঃ ...................<br>তারিখঃ ......./......./২০২৫ ইং</span>
-  <span style="text-align:right">কমান্ডিং অফিসার<br><b>৪ বীর</b></span>
-  </div>`;
+  <div style="display:flex;justify-content:space-between;margin-top:8px">;
   document.getElementById('copy1').innerHTML=html;
   document.getElementById('copy2').innerHTML=html;
   document.getElementById('copy3').innerHTML=html;
