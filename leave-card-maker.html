@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leave Card - Compressed Top Gap Bottom</title>
+<title>Leave Card - Sthan Tarikh 2 Enter Niche</title>
 <style>
 @page{size:A4;margin:0}
 *{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali'}
@@ -8,27 +8,29 @@ body{margin:0;background:#e5e5e5}
 .panel input{width:100%;padding:9px;margin:3px 0;border:1.2px solid #777;border-radius:5px}
 .r{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .btn{width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:7px;font-weight:900;margin-top:6px}
-.a4{width:210mm;height:297mm;background:#fff;margin:0 auto;display:flex;flex-direction:column;padding:2mm 10mm 0 10mm}
-.copy{width:190mm;height:98mm;min-height:98mm;max-height:98mm;padding:1mm 0 2mm 0;display:flex;flex-direction:column;justify-content:flex-start;gap:1.2mm;border-bottom:0.8px dashed #bbb;margin-bottom:3mm}
+.a4{width:210mm;height:297mm;background:#fff;margin:0 auto;display:flex;flex-direction:column;padding:1mm 10mm}
+.copy{width:190mm;height:95mm;min-height:95mm;max-height:95mm;padding:1mm 0 0 0;display:flex;flex-direction:column;justify-content:flex-start;gap:1.2mm;margin-bottom:4mm;border-bottom:0.5px dashed #aaa}
 .copy:last-child{border:none;margin-bottom:0}
-.top{font-size:8.2pt;line-height:10pt;white-space:nowrap;width:190mm;text-align:justify;text-align-last:justify}
-.title{font-size:11pt;font-weight:900;text-decoration:underline;text-align:center;margin:0.5mm 0}
-.line{font-size:9.5pt;line-height:13pt;white-space:nowrap;display:flex;align-items:center;width:190mm}
-.dot{border-bottom:1px dotted #000;flex-grow:1;margin:0 1mm;min-width:5mm;text-align:center;font-weight:700;font-size:9pt}
+.top{font-size:7.8pt;line-height:9pt;white-space:nowrap;width:190mm;text-align:justify;text-align-last:justify}
+.title{font-size:10.5pt;font-weight:900;text-decoration:underline;text-align:center;margin:0.5mm 0}
+.line{font-size:9.2pt;line-height:12.5pt;white-space:nowrap;display:flex;align-items:center;width:190mm}
+.dot{border-bottom:1px dotted #000;flex-grow:1;margin:0 1.5mm;min-width:5mm;text-align:center;font-weight:700;font-size:8.8pt}
 .b{font-weight:900;flex-shrink:0}
-/* স্থান এর ছোট dot */
-.small-dot{border-bottom:1px dotted #000;width:14mm;min-width:14mm;max-width:14mm;text-align:center;margin:0 1mm;font-weight:700}
-.tiny-dot{border-bottom:1px dotted #000;width:10mm;min-width:10mm;max-width:10mm;margin:0 1mm}
-@media print{body{background:#fff} .panel{display:none} .a4{width:210mm;height:297mm;margin:0;padding:2mm 10mm 0 10mm}}
+.sd{border-bottom:1px dotted #000;text-align:center;font-weight:700;margin:0 1mm}
+.sd10{width:10mm;min-width:10mm;max-width:10mm}
+.sd14{width:14mm;min-width:14mm;max-width:14mm}
+.sd28{width:28mm;min-width:28mm;max-width:28mm}
+.gap2{margin-top:6mm}
+@media print{body{background:#fff} .panel{display:none} .a4{padding:1mm 10mm}}
 </style></head><body>
 
 <div class="panel">
-<div class="r"><input id="no" value="৪৪১১০৩৮"><input id="pod" value="সৈনিক"></div>
+<div class="r"><input id="no" value="৪৪১১০০৮"><input id="pod" value="সৈনিক"></div>
 <input id="name" value="রতন চন্দ্র মহন্ত">
 <div class="r"><input id="gram" value="বাবপুর"><input id="po" value="উত্তর পানাপুকুর"></div>
 <div class="r"><input id="thana" value="গংগাচড়া"><input id="zela" value="রংপুর"></div>
 <input id="tele" placeholder="টেলিগ্রাম অফিস">
-<input id="mob" value="০১৭৩৭-৯১২০৯৪">
+<input id="mob" value="০১৭০৭-৯১২০৯৪">
 <button class="btn" onclick="window.print()">Save as PDF - ISO A4</button>
 </div>
 
@@ -49,8 +51,8 @@ function render(){
   <div class="title" style="font-size:9pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
   <div class="line"><span class="b">গ্রাম</span>${dot(d.gram)}<span class="b">পোষ্ট</span>${dot(d.po)}<span class="b">থানা/উপজেলা</span>${dot(d.thana)}</div>
   <div class="line"><span class="b">টেলিগ্রাম অফিস</span>${dot(d.tele)}<span class="b">জেলা</span>${dot(d.zela)}</div>
-  <div class="line"><span class="b">স্থান</span><span class="tiny-dot"></span><span class="small-dot">ঢাকা</span><span class="tiny-dot"></span><span class="b">সেনানিবাস।</span></div>
-  <div class="line"><span class="b">তারিখ</span><span class="tiny-dot"></span><span class="b">/</span><span class="tiny-dot"></span><span class="b">/২০২৬ ইং। মোবাঃ</span><span class="small-dot" style="width:28mm;min-width:28mm;max-width:28mm">${d.mob}</span></div>
+  <div class="line gap2"><span class="b">স্থান</span><span class="sd sd10"></span><span class="sd sd14">ঢাকা</span><span class="sd sd10"></span><span class="b">সেনানিবাস।</span></div>
+  <div class="line"><span class="b">তারিখ</span><span class="sd sd10"></span><span class="b">/</span><span class="sd sd10"></span><span class="b">/২০২৬ ইং। মোবাঃ</span><span class="sd sd28">${d.mob}</span></div>
  </div>`;
  document.getElementById('a4').innerHTML=one+one+one;
 }
