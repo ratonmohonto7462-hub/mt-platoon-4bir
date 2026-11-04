@@ -1,61 +1,65 @@
-<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><title>Leave Card 3 Copy in 1 A4 - Same Line Setup</title>
+<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leave Card 3 Copy - All Add</title>
 <style>
-  @page{size:A4;margin:1.5mm 2mm}
-  *{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali',Arial}
-  body{margin:0;background:#fff}
-  .a4{width:210mm;height:297mm;margin:0 auto;display:flex;flex-direction:column}
-  .copy{height:99mm;border:1px solid #000;padding:2mm 3.5mm;position:relative;overflow:hidden}
-  .copy::before{content:"✂ ------------------------------------------------ ✂";position:absolute;top:0;left:0;right:0;text-align:center;font-size:7pt;background:#fff}
-  .top{font-size:7.3pt;white-space:nowrap;line-height:9pt;margin-top:3mm}
-  .title{text-align:center;font-weight:900;text-decoration:underline;font-size:10pt;margin:1.5mm 0}
-  .line{font-size:8.7pt;line-height:13.5pt;white-space:nowrap}
-  .b{font-weight:900}
-  .dot{border-bottom:1px dotted #000;display:inline-block}
-  @media print{body{margin:0} .a4{width:100%;height:100vh}}
+@page{size:A4;margin:2mm}
+*{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali'}
+body{margin:0;background:#e9e9e9}
+.topbar{background:#0a2214;color:#fff;padding:10px;text-align:center}
+.box{max-width:500px;margin:8px auto;background:#fff;padding:10px;border-radius:10px;display:grid;gap:8px}
+.box input{padding:10px;border:1px solid #999;border-radius:6px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{background:#0e4d2a;color:#ffcc00;border:none;padding:12px;border-radius:8px;font-weight:900}
+.a4{width:210mm;height:297mm;background:#fff;margin:10px auto;display:flex;flex-direction:column}
+.copy{height:99mm;border:1px solid #000;padding:2mm 3mm;position:relative}
+.topL{font-size:7.2pt;white-space:nowrap;margin-top:2mm}
+.title{text-align:center;font-weight:900;text-decoration:underline;font-size:10pt;margin:1mm 0}
+.line{font-size:8.8pt;line-height:13pt;white-space:nowrap}
+.b{font-weight:900}
+.dot{border-bottom:1px dotted #000;display:inline-block;text-align:center;font-weight:700;min-width:5mm}
+@media print{body{background:#fff} .topbar,.box{display:none} .a4{margin:0;width:100%;height:100vh}}
 </style></head><body>
-<div class="a4">
-
-<!-- COPY 1 -->
-<div class="copy">
-  <div class="top">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
-  <div class="title">ছুটির সনদ পত্র</div>
-  <div class="line">নং<span class="dot" style="width:26mm"></span>পদবী<span class="dot" style="width:16mm"></span>নাম<span class="dot" style="width:36mm"></span>ইউনিট<span class="dot" style="width:5mm"></span><span class="b">৪ বীর</span><span class="dot" style="width:10mm"></span></div>
-  <div class="line"><span class="dot" style="width:32mm"></span>কোম্পানী/শাখা<span class="dot" style="width:10mm"></span><span class="b">ঢাকা</span><span class="dot" style="width:7mm"></span>সেনানিবাস। তাহাকে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ</div>
-  <div class="line">হইতে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ পর্যন্ত মোট<span class="dot" style="width:12mm"></span>দিনের সাময়িক/বাৎসরিক/চিত্তবিনোদন/ডাক্তারী ছুটি মঞ্জুর করা হলো।</div>
-  <div class="title" style="font-size:9pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
-  <div class="line">গ্রাম<span class="dot" style="width:34mm"></span>পোষ্ট<span class="dot" style="width:26mm"></span>থানা/উপজেলা<span class="dot" style="width:26mm"></span></div>
-  <div class="line">টেলিগ্রাম অফিস<span class="dot" style="width:34mm"></span>জেলা<span class="dot" style="width:60mm"></span></div>
-  <div class="line">স্থান<span class="dot" style="width:12mm"></span><span class="b">ঢাকা</span><span class="dot" style="width:12mm"></span>সেনানিবাস।</div>
-  <div class="line">তারিখ<span class="dot" style="width:12mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং। মোবাঃ<span class="dot" style="width:32mm"></span></div>
+<div class="topbar">Leave Card - 3 Copy Add All</div>
+<div class="box">
+  <div class="r2"><input id="no" placeholder="নং"><input id="podobi" placeholder="পদবী"></div>
+  <input id="name" placeholder="নাম">
+  <div class="r2"><input id="gram" placeholder="গ্রাম"><input id="po" placeholder="পোষ্ট"></div>
+  <div class="r2"><input id="thana" placeholder="থানা/উপজেলা"><input id="zela" placeholder="জেলা"></div>
+  <input id="tele" placeholder="টেলিগ্রাম অফিস">
+  <input id="mob" placeholder="মোবাইল">
+  <button class="btn" onclick="window.print()">Print - 1 Page 3 Copy</button>
 </div>
 
-<!-- COPY 2 -->
-<div class="copy">
-  <div class="top">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
-  <div class="title">ছুটির সনদ পত্র</div>
-  <div class="line">নং<span class="dot" style="width:26mm"></span>পদবী<span class="dot" style="width:16mm"></span>নাম<span class="dot" style="width:36mm"></span>ইউনিট<span class="dot" style="width:5mm"></span><span class="b">৪ বীর</span><span class="dot" style="width:10mm"></span></div>
-  <div class="line"><span class="dot" style="width:32mm"></span>কোম্পানী/শাখা<span class="dot" style="width:10mm"></span><span class="b">ঢাকা</span><span class="dot" style="width:7mm"></span>সেনানিবাস। তাহাকে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ</div>
-  <div class="line">হইতে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ পর্যন্ত মোট<span class="dot" style="width:12mm"></span>দিনের সাময়িক/বাৎসরিক/চিত্তবিনোদন/ডাক্তারী ছুটি মঞ্জুর করা হলো।</div>
-  <div class="title" style="font-size:9pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
-  <div class="line">গ্রাম<span class="dot" style="width:34mm"></span>পোষ্ট<span class="dot" style="width:26mm"></span>থানা/উপজেলা<span class="dot" style="width:26mm"></span></div>
-  <div class="line">টেলিগ্রাম অফিস<span class="dot" style="width:34mm"></span>জেলা<span class="dot" style="width:60mm"></span></div>
-  <div class="line">স্থান<span class="dot" style="width:12mm"></span><span class="b">ঢাকা</span><span class="dot" style="width:12mm"></span>সেনানিবাস।</div>
-  <div class="line">তারিখ<span class="dot" style="width:12mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং। মোবাঃ<span class="dot" style="width:32mm"></span></div>
-</div>
+<div class="a4" id="printArea"></div>
 
-<!-- COPY 3 -->
-<div class="copy">
-  <div class="top">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
-  <div class="title">ছুটির সনদ পত্র</div>
-  <div class="line">নং<span class="dot" style="width:26mm"></span>পদবী<span class="dot" style="width:16mm"></span>নাম<span class="dot" style="width:36mm"></span>ইউনিট<span class="dot" style="width:5mm"></span><span class="b">৪ বীর</span><span class="dot" style="width:10mm"></span></div>
-  <div class="line"><span class="dot" style="width:32mm"></span>কোম্পানী/শাখা<span class="dot" style="width:10mm"></span><span class="b">ঢাকা</span><span class="dot" style="width:7mm"></span>সেনানিবাস। তাহাকে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ</div>
-  <div class="line">হইতে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ পর্যন্ত মোট<span class="dot" style="width:12mm"></span>দিনের সাময়িক/বাৎসরিক/চিত্তবিনোদন/ডাক্তারী ছুটি মঞ্জুর করা হলো।</div>
-  <div class="title" style="font-size:9pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
-  <div class="line">গ্রাম<span class="dot" style="width:34mm"></span>পোষ্ট<span class="dot" style="width:26mm"></span>থানা/উপজেলা<span class="dot" style="width:26mm"></span></div>
-  <div class="line">টেলিগ্রাম অফিস<span class="dot" style="width:34mm"></span>জেলা<span class="dot" style="width:60mm"></span></div>
-  <div class="line">স্থান<span class="dot" style="width:12mm"></span><span class="b">ঢাকা</span><span class="dot" style="width:12mm"></span>সেনানিবাস।</div>
-  <div class="line">তারিখ<span class="dot" style="width:12mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং। মোবাঃ<span class="dot" style="width:32mm"></span></div>
-</div>
-
-</div>
+<script>
+function gen(){
+  let d={
+    no:document.getElementById('no').value||'................',
+    pod:document.getElementById('podobi').value||'................',
+    name:document.getElementById('name').value||'................................',
+    gram:document.getElementById('gram').value||'................',
+    po:document.getElementById('po').value||'................',
+    thana:document.getElementById('thana').value||'................',
+    zela:document.getElementById('zela').value||'................',
+    tele:document.getElementById('tele').value||'................',
+    mob:document.getElementById('mob').value||'................'
+  };
+  let one=`
+  <div class="copy">
+    <div class="topL">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
+    <div class="title">ছুটির সনদ পত্র</div>
+    <div class="line">নং<span class="dot" style="width:26mm">${d.no}</span>পদবী<span class="dot" style="width:16mm">${d.pod}</span>নাম<span class="dot" style="width:36mm">${d.name}</span>ইউনিট<span class="dot" style="width:12mm">৪ বীর</span></div>
+    <div class="line"><span class="dot" style="width:32mm"></span>কোম্পানী/শাখা<span class="dot" style="width:10mm">ঢাকা</span>সেনানিবাস। তাহাকে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ</div>
+    <div class="line">হইতে<span class="dot" style="width:7mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং তারিখ পর্যন্ত মোট<span class="dot" style="width:12mm"></span>দিনের সাময়িক/বাৎসরিক/চিত্তবিনোদন/ডাক্তারী ছুটি মঞ্জুর করা হলো।</div>
+    <div class="title" style="font-size:9pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
+    <div class="line">গ্রাম<span class="dot" style="width:32mm">${d.gram}</span>পোষ্ট<span class="dot" style="width:24mm">${d.po}</span>থানা/উপজেলা<span class="dot" style="width:24mm">${d.thana}</span></div>
+    <div class="line">টেলিগ্রাম অফিস<span class="dot" style="width:32mm">${d.tele}</span>জেলা<span class="dot" style="width:40mm">${d.zela}</span></div>
+    <div class="line">স্থান<span class="dot" style="width:12mm">ঢাকা</span>সেনানিবাস।</div>
+    <div class="line">তারিখ<span class="dot" style="width:12mm"></span>/<span class="dot" style="width:7mm"></span>/২০২৬ ইং। মোবাঃ<span class="dot" style="width:30mm">${d.mob}</span></div>
+  </div>`;
+  document.getElementById('printArea').innerHTML=one+one+one;
+}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',gen));
+gen();
+</script>
 </body></html>
