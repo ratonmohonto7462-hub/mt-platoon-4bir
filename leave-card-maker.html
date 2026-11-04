@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leave Card - Sthan Tarikh 2 Enter Niche</title>
+<title>Leave Card - Gap Increased</title>
 <style>
 @page{size:A4;margin:0}
 *{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali'}
@@ -9,10 +9,10 @@ body{margin:0;background:#e5e5e5}
 .r{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .btn{width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:7px;font-weight:900;margin-top:6px}
 .a4{width:210mm;height:297mm;background:#fff;margin:0 auto;display:flex;flex-direction:column;padding:1mm 10mm}
-.copy{width:190mm;height:95mm;min-height:95mm;max-height:95mm;padding:1mm 0 0 0;display:flex;flex-direction:column;justify-content:flex-start;gap:1.2mm;margin-bottom:4mm;border-bottom:0.5px dashed #aaa}
+.copy{width:190mm;height:95mm;min-height:95mm;max-height:95mm;padding:1mm 0 0 0;display:flex;flex-direction:column;justify-content:flex-start;gap:2.2mm;margin-bottom:4mm;border-bottom:0.5px dashed #aaa}
 .copy:last-child{border:none;margin-bottom:0}
 .top{font-size:7.8pt;line-height:9pt;white-space:nowrap;width:190mm;text-align:justify;text-align-last:justify}
-.title{font-size:10.5pt;font-weight:900;text-decoration:underline;text-align:center;margin:0.5mm 0}
+.title{font-size:10.5pt;font-weight:900;text-decoration:underline;text-align:center;margin:0.8mm 0}
 .line{font-size:9.2pt;line-height:12.5pt;white-space:nowrap;display:flex;align-items:center;width:190mm}
 .dot{border-bottom:1px dotted #000;flex-grow:1;margin:0 1.5mm;min-width:5mm;text-align:center;font-weight:700;font-size:8.8pt}
 .b{font-weight:900;flex-shrink:0}
@@ -20,7 +20,7 @@ body{margin:0;background:#e5e5e5}
 .sd10{width:10mm;min-width:10mm;max-width:10mm}
 .sd14{width:14mm;min-width:14mm;max-width:14mm}
 .sd28{width:28mm;min-width:28mm;max-width:28mm}
-.gap2{margin-top:6mm}
+.gap3{margin-top:9.5mm}
 @media print{body{background:#fff} .panel{display:none} .a4{padding:1mm 10mm}}
 </style></head><body>
 
@@ -51,7 +51,7 @@ function render(){
   <div class="title" style="font-size:9pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
   <div class="line"><span class="b">গ্রাম</span>${dot(d.gram)}<span class="b">পোষ্ট</span>${dot(d.po)}<span class="b">থানা/উপজেলা</span>${dot(d.thana)}</div>
   <div class="line"><span class="b">টেলিগ্রাম অফিস</span>${dot(d.tele)}<span class="b">জেলা</span>${dot(d.zela)}</div>
-  <div class="line gap2"><span class="b">স্থান</span><span class="sd sd10"></span><span class="sd sd14">ঢাকা</span><span class="sd sd10"></span><span class="b">সেনানিবাস।</span></div>
+  <div class="line gap3"><span class="b">স্থান</span><span class="sd sd10"></span><span class="sd sd14">ঢাকা</span><span class="sd sd10"></span><span class="b">সেনানিবাস।</span></div>
   <div class="line"><span class="b">তারিখ</span><span class="sd sd10"></span><span class="b">/</span><span class="sd sd10"></span><span class="b">/২০২৬ ইং। মোবাঃ</span><span class="sd sd28">${d.mob}</span></div>
  </div>`;
  document.getElementById('a4').innerHTML=one+one+one;
