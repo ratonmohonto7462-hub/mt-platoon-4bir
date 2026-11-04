@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leave Card Final Fix</title>
+<title>Leave Card - Senanibas Align Eng</title>
 <style>
 @page{size:A4;margin:0}
 *{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali'}
@@ -17,8 +17,9 @@ body{margin:0;background:#e5e5e5}
 .dot{border-bottom:1px dotted #000;flex:1;margin:0 1.3mm;min-width:4mm;text-align:center;font-weight:700;font-size:8.7pt}
 .b{font-weight:900;flex-shrink:0}
 .sd{border-bottom:1px dotted #000;text-align:center;font-weight:700;margin:0 1mm}
-.sd8{width:8mm;min-width:8mm}
-.sd12{width:13mm;min-width:13mm}
+.sd4{width:4mm;min-width:4mm}
+.sd6{width:6mm;min-width:6mm}
+.sd10{width:10mm;min-width:10mm}
 .sd24{width:26mm;min-width:26mm}
 .gap2{margin-top:6.5mm}
 .lbl{font-size:9pt;font-weight:700;color:#444;margin-top:5px}
@@ -26,11 +27,11 @@ body{margin:0;background:#e5e5e5}
 </style></head><body>
 
 <div class="panel">
-<div class="r"><input id="no" value="৪৫২১০২৮" placeholder="নং"><input id="pod" value="সৈনিক"></div>
+<div class="r"><input id="no" value="৪৫২১০২৮"><input id="pod" value="সৈনিক"></div>
 <input id="name" value="রতন চন্দ্র মহন্ত">
-<div class="lbl">কোম্পানী/শাখা - আগের blank ( ........ কোম্পানী/শাখা )</div>
+<div class="lbl">কোম্পানী/শাখা আগের blank</div>
 <input id="firstBox" placeholder="এখানে লিখলে Company এর আগের ........ তে বসবে">
-<div class="r"><input id="comp" value="ঢাকা" placeholder="কোম্পানী/শাখা"><input id="gram" value="বাগপুর"></div>
+<div class="r"><input id="comp" value="ঢাকা"><input id="gram" value="বাগপুর"></div>
 <div class="r"><input id="po" value="উত্তর পানাপুকুর"><input id="thana" value="গংগাচড়া"></div>
 <div class="r"><input id="zela" value="রংপুর"><input id="tele" placeholder="টেলিগ্রাম"></div>
 <input id="mob" value="০১৭০৭-৯১২০৯৪">
@@ -53,8 +54,8 @@ function render(){
  <div class="title" style="font-size:8.8pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
  <div class="line"><span class="b">গ্রাম</span>${dot(d.gram)}<span class="b">পোষ্ট</span>${dot(d.po)}<span class="b">থানা/উপজেলা</span>${dot(d.thana)}</div>
  <div class="line"><span class="b">টেলিগ্রাম অফিস</span>${dot(d.tele)}<span class="b">জেলা</span>${dot(d.zela)}</div>
- <div class="line gap2"><span class="b">স্থান</span><span class="sd sd8"></span><span class="sd sd12">ঢাকা</span><span class="sd sd8"></span><span class="b">সেনানিবাস।</span></div>
- <div class="line"><span class="b">তারিখ</span><span class="sd sd8"></span><span class="b">/</span><span class="sd sd8"></span><span class="b">/২০২৬ ইং। মোবাঃ</span><span class="sd sd24">${d.mob}</span></div>
+ <div class="line gap2"><span class="b">স্থান</span><span class="sd sd4"></span><span class="sd sd10">ঢাকা</span><span class="sd sd4"></span><span class="b">সেনানিবাস।</span></div>
+ <div class="line"><span class="b">তারিখ</span><span class="sd sd6"></span><span class="b">/</span><span class="sd sd6"></span><span class="b">/২০২৬ ইং। মোবাঃ</span><span class="sd sd24">${d.mob}</span></div>
  </div>`;
  document.getElementById('a4').innerHTML=one+one+one;
 }
