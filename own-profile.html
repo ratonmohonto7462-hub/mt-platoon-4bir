@@ -1,56 +1,59 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Own Profile</title></head><body style="margin:0;font-family:Arial;background:#f0f0f0">
-<div style="max-width:400px;margin:20px auto;background:#fff;padding:24px;border-radius:16px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
-<img id="pImg" src="" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid #0e5d3e;background:#ddd">
-<h2 id="pName" style="margin:12px 0 4px">Loading...</h2>
-<p id="pRank" style="color:#666;margin:0"></p>
-<p style="margin-top:16px">BA No: <b id="pBa">-</b></p>
+<div style="max-width:400px;margin:20px auto;background:#fff;padding:24px;border-radius:16px;text-align:center">
+<img id="pImg" src="https://i.imgur.com/8Km9tLL.png" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid #0e5d3e">
+<h2 id="pName">Loading...</h2>
+<p id="pRank" style="color:#666"></p>
+<p>BA No: <b id="pBa">4521328</b></p>
 <p>Blood: <b id="pBlood">-</b></p>
 <p>Unit: <b id="pUnit">-</b></p>
-<button onclick="location.href='./'" style="margin-top:20px;padding:10px 22px;background:#0a1a12;color:#ffcc00;border:none;border-radius:8px;font-weight:900;width:100%">Back</button>
+<button onclick="location.href='/'" style="margin-top:20px;padding:12px;width:100%;background:#0a1a12;color:#ffcc00;border:none;border-radius:10px;font-weight:900">Back</button>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDU2y1dGv0YpM2LdZo6bHf2P1vP5YjXw1Q",
-  authDomain: "mtplatoon-4bir.firebaseapp.com",
-  projectId: "mtplatoon-4bir",
-  storageBucket: "mtplatoon-4bir.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcd"
+  apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",
+  authDomain: "mt-platoon-4bir.firebaseapp.com",
+  projectId: "mt-platoon-4bir",
+  storageBucket: "mt-platoon-4bir.firebasestorage.app",
+  messagingSenderId: "720139134198",
+  appId: "1:720139134198:web:4ed98d6e53a7e741dcb8d7",
+  measurementId: "G-ZDK2DNTBL5"
 };
-
-function toEng(s){
-  s=String(s||""); let bn="০১২৩৪৫৬৭৮৯", en="0123456789";
-  for(let i=0;i<10;i++) s=s.split(bn[i]).join(en[i]);
-  return s.replace(/\D/g,'');
-}
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let sena = toEng(localStorage.getItem('mt_army') || localStorage.getItem('sena_no') || "4521328");
+let raw = localStorage.getItem('mt_army') || localStorage.getItem('sena_no') || "4521328";
+let sena = raw.toString().replace(/[০-৯]/g, d => "০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'');
 document.getElementById('pBa').innerText = sena;
 
-try{
-  const q = query(collection(db, "users"), where("ba_no", "==", sena));
-  const snap = await getDocs(q);
-  if(!snap.empty){
-    let d = snap.docs[0].data();
-    document.getElementById('pName').innerText = d.name || d.fullName || "My Profile";
-    document.getElementById('pRank').innerText = d.rank || "";
-    document.getElementById('pBlood').innerText = d.blood || d.bloodGroup || "-";
-    document.getElementById('pUnit').innerText = d.unit || "MT Platoon";
-    document.getElementById('pImg').src = d.photo || d.pic || d.image || "https://i.imgur.com/8Km9tLL.png";
-  }else{
-    // fallback to localStorage
-    document.getElementById('pName').innerText = localStorage.getItem('userName') || "My Profile";
-    document.getElementById('pImg').src = localStorage.getItem('userPic') || "https://i.imgur.com/8Km9tLL.png";
+async function load(){
+  let data = null;
+  try{ const d = await getDoc(doc(db, "users", sena)); if(d.exists()) data = d.data(); }catch(e){}
+  if(!data){
+    for(let f of ["ba_no","baNo","sena_no","senaNo","armyNo"]){
+      try{
+        let s = await getDocs(query(collection(db, "users"), where(f, "==", sena)));
+        if(!s.empty){ data = s.docs[0].data(); break; }
+        let s2 = await getDocs(query(collection(db, "users"), where(f, "==", Number(sena))));
+        if(!s2.empty){ data = s2.docs[0].data(); break; }
+      }catch(e){}
+    }
   }
-}catch(e){
-  document.getElementById('pName').innerText = localStorage.getItem('userName') || "My Profile";
+  if(data){
+    document.getElementById('pName').innerText = data.name || data.fullName || sena;
+    document.getElementById('pRank').innerText = data.rank || "";
+    document.getElementById('pBlood').innerText = data.blood || data.bloodGroup || "-";
+    document.getElementById('pUnit').innerText = data.unit || "MT Platoon 4 BIR";
+    if(data.photo || data.pic || data.image) document.getElementById('pImg').src = data.photo || data.pic || data.image;
+  }else{
+    document.getElementById('pName').innerText = sena;
+    document.getElementById('pBlood').innerText = "users এ পাওয়া যায়নি";
+  }
 }
+load();
 </script>
 </body></html>
