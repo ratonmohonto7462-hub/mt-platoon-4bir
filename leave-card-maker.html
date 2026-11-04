@@ -1,13 +1,14 @@
 <!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leave Card - Gap More</title>
+<title>Leave Card - Company Add System</title>
 <style>
 @page{size:A4;margin:0}
 *{box-sizing:border-box;font-family:SolaimanLipi,'Noto Sans Bengali'}
 body{margin:0;background:#e5e5e5}
 .panel{max-width:560px;margin:8px auto;background:#fff;padding:10px;border-radius:10px}
-.panel input{width:100%;padding:9px;margin:3px 0;border:1.2px solid #777;border-radius:5px}
+.panel input,.panel select{width:100%;padding:9px;margin:3px 0;border:1.2px solid #777;border-radius:5px}
 .r{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .btn{width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:7px;font-weight:900;margin-top:6px}
+.btn2{padding:8px 10px;background:#0a7;color:#fff;border:none;border-radius:5px;font-weight:700}
 .a4{width:210mm;height:297mm;background:#fff;margin:0 auto;display:flex;flex-direction:column;padding:1mm 10mm}
 .copy{width:190mm;height:95mm;min-height:95mm;max-height:95mm;padding:1mm 0 0 0;display:flex;flex-direction:column;justify-content:flex-start;gap:3.5mm;margin-bottom:4mm;border-bottom:0.5px dashed #aaa}
 .copy:last-child{border:none;margin-bottom:0}
@@ -25,28 +26,33 @@ body{margin:0;background:#e5e5e5}
 </style></head><body>
 
 <div class="panel">
-<div class="r"><input id="no" value="৪৪১১০০৮"><input id="pod" value="সৈনিক"></div>
-<input id="name" value="রতন চন্দ্র মহন্ত">
-<div class="r"><input id="gram" value="বাবপুর"><input id="po" value="উত্তর পানাপুকুর"></div>
-<div class="r"><input id="thana" value="গংগাচড়া"><input id="zela" value="রংপুর"></div>
+<div class="r"><input id="no" value="৪৪১১০০৮" placeholder="নং"><input id="pod" value="সৈনিক" placeholder="পদবী"></div>
+<input id="name" value="রতন চন্দ্র মহন্ত" placeholder="নাম">
+<div class="r"><select id="company"></select><div style="display:flex;gap:4px"><input id="newCompany" placeholder="নতুন কোম্পানী লিখ"><button class="btn2" onclick="addCompany()">Add</button></div></div>
+<div class="r"><input id="gram" value="বাবপুর" placeholder="গ্রাম"><input id="po" value="উত্তর পানাপুকুর" placeholder="পোষ্ট"></div>
+<div class="r"><input id="thana" value="গংগাচড়া" placeholder="থানা"><input id="zela" value="রংপুর" placeholder="জেলা"></div>
 <input id="tele" placeholder="টেলিগ্রাম অফিস">
-<input id="mob" value="০১৭০৭-৯১২০৯৪">
+<input id="mob" value="০১৭০৭-৯১২০৯৪" placeholder="মোবাইল">
 <button class="btn" onclick="window.print()">Save as PDF - ISO A4</button>
 </div>
 
 <div class="a4" id="a4"></div>
 
 <script>
+let companies = JSON.parse(localStorage.getItem('companies')||'["ঢাকা","আলফা","ব্রাভো","চার্লি","ডেলটা"]');
+function loadCompanies(){ const s=document.getElementById('company'); s.innerHTML=''; companies.forEach(c=>{ let o=document.createElement('option'); o.value=c; o.textContent=c+' কোম্পানী'; s.appendChild(o); }); }
+function addCompany(){ let v=document.getElementById('newCompany').value.trim(); if(!v) return; if(!companies.includes(v)){ companies.push(v); localStorage.setItem('companies',JSON.stringify(companies)); loadCompanies(); document.getElementById('company').value=v; } document.getElementById('newCompany').value=''; render(); }
+loadCompanies();
 function render(){
  const V=id=>document.getElementById(id).value.trim();
- const d={no:V('no'),pod:V('pod'),name:V('name'),gram:V('gram'),po:V('po'),thana:V('thana'),zela:V('zela'),tele:V('tele'),mob:V('mob')};
+ const d={no:V('no'),pod:V('pod'),name:V('name'),comp:V('company'),gram:V('gram'),po:V('po'),thana:V('thana'),zela:V('zela'),tele:V('tele'),mob:V('mob')};
  const dot=t=> t?`<span class="dot">${t}</span>`:`<span class="dot"></span>`;
  let one=`
  <div class="copy">
   <div class="top">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
   <div class="title">ছুটির সনদ পত্র</div>
   <div class="line"><span class="b">নং</span>${dot(d.no)}<span class="b">পদবী</span>${dot(d.pod)}<span class="b">নাম</span>${dot(d.name)}<span class="b">ইউনিট</span><span class="dot">৪ বীর</span></div>
-  <div class="line"><span class="dot"></span><span class="b">কোম্পানী/শাখা</span><span class="dot">ঢাকা</span><span class="b">সেনানিবাস। তাহাকে</span><span class="dot"></span><span class="b">/</span><span class="dot"></span><span class="b">/২০২৬ ইং তারিখ</span></div>
+  <div class="line"><span class="dot"></span><span class="b">কোম্পানী/শাখা</span><span class="dot">${d.comp}</span><span class="b">সেনানিবাস। তাহাকে</span><span class="dot"></span><span class="b">/</span><span class="dot"></span><span class="b">/২০২৬ ইং তারিখ</span></div>
   <div class="line"><span class="b">হইতে</span><span class="dot"></span><span class="b">/</span><span class="dot"></span><span class="b">/২০২৬ ইং তারিখ পর্যন্ত মোট</span><span class="dot"></span><span class="b">দিনের ছুটি মঞ্জুর করা হলো।</span></div>
   <div class="title" style="font-size:9pt">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
   <div class="line"><span class="b">গ্রাম</span>${dot(d.gram)}<span class="b">পোষ্ট</span>${dot(d.po)}<span class="b">থানা/উপজেলা</span>${dot(d.thana)}</div>
@@ -56,7 +62,8 @@ function render(){
  </div>`;
  document.getElementById('a4').innerHTML=one+one+one;
 }
-document.querySelectorAll('input').forEach(i=>i.addEventListener('input',render));
+document.querySelectorAll('input,select').forEach(i=>i.addEventListener('input',render));
+document.getElementById('company').addEventListener('change',render);
 render();
 </script>
 </body></html>
