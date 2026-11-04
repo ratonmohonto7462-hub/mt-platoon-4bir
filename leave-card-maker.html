@@ -1,75 +1,69 @@
 <!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leave Card - 3 Copy Full Fit</title>
+<title>Leave Card - 4 BIR</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
-  *{box-sizing:border-box;font-family:'Noto Sans Bengali',SolaimanLipi,Arial}
-  body{margin:0;background:#cfd6d1}
-  .top{background:#0a2214;color:#fff;padding:12px;display:flex;align-items:center;gap:10px}
-  .top a{color:#fff;text-decoration:none;font-size:22px}
-  .wrap{max-width:500px;margin:auto;padding:10px}
-  .inputs{background:#fff;border-radius:14px;padding:12px;display:grid;gap:10px}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  input{padding:11px;border:1.5px solid #ccc;border-radius:10px;width:100%}
-  .printBtn{background:#0e4d2a;color:#ffcc00;border:none;padding:13px;border-radius:10px;font-weight:900;font-size:16px}
+  *{box-sizing:border-box;font-family:'Noto Sans Bengali',SolaimanLipi}
+  body{margin:0;background:#d0d8d0}
+  .header{background:#0a2214;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px}
+  .header a{color:#fff;text-decoration:none;font-size:22px}
+  .wrap{max-width:520px;margin:0 auto;padding:10px}
+  .inputs{background:#fff;border-radius:14px;padding:14px;display:grid;gap:10px}
+  .r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  input{padding:12px;border:1.5px solid #bbb;border-radius:10px;font-size:15px}
+  .btn{background:#0e4d2a;color:#ffcc00;border:none;padding:14px;border-radius:10px;font-weight:900;font-size:16px}
 
-  /* Print Page */
-  .a4{width:210mm;min-height:297mm;background:#fff;margin:12px auto;padding:6mm 10mm;position:relative}
-  .copy{padding:8px 0;font-size:12.5px;line-height:22px;color:#000}
-  .copy b{font-size:13px}
-  .dot{border-bottom:1px dotted #000;min-width:70px;display:inline-block;text-align:center;font-weight:700;padding:0 4px}
-  .dot.w90{width:90px} .dot.w120{width:120px} .dot.w180{width:180px}
-  .cut{border-top:1px dashed #000;margin:6px 0;position:relative;text-align:center}
-  .cut:before{content:"✂ ---------------- X ---------------- X ---------------- ✂";font-size:10px;background:#fff;padding:0 8px;position:relative;top:-7px;letter-spacing:1px}
-  
+  /* PRINT PAGE - তোমার ছবি অনুযায়ী */
+  .page{width:210mm;min-height:145mm;background:#fff;margin:12px auto;padding:8mm 12mm 6mm 12mm;line-height:28px;font-size:14px;color:#000;border-top:2px solid #000;position:relative}
+  .page:before{content:"✂";position:absolute;top:-10px;left:30%;font-size:16px;background:#fff;padding:0 10px}
+  .page:after{content:"✂";position:absolute;top:-10px;right:30%;font-size:16px;background:#fff;padding:0 10px}
+  .topText{font-size:11px;text-align:center;line-height:16px;margin-bottom:6px}
+  .title{text-align:center;font-weight:900;text-decoration:underline;font-size:17px;margin:6px 0 10px 0}
+  .dot{border-bottom:1px dotted #000;min-width:80px;display:inline-block;text-align:center;font-weight:700;padding:0 4px}
+  .dot.n{width:140px} .dot.p{width:110px} .dot.name{width:220px} .dot.comp{width:90px} .dot.date{width:28px}
+  .b{font-weight:700}
+
   @media print{
-    body{background:#fff} .top,.inputs,.printBtn{display:none}
-    .wrap{padding:0;max-width:100%} .a4{margin:0;box-shadow:none;width:100%}
+    body{background:#fff} .header,.inputs{display:none} .wrap{max-width:100%;padding:0}
+    .page{margin:0;width:100%;border:none;box-shadow:none}
   }
-  @media screen and (max-width:600px){.a4{width:100%;min-height:auto}}
 </style></head><body>
-<div class="top"><a href="/">←</a><b>Leave Card - Full Fit 1 Page (3 Copy)</b></div>
+<div class="header"><a href="/">←</a><b>Leave Card - Full Fit 1 Page</b></div>
 <div class="wrap">
   <div class="inputs">
-    <div class="row2"><input id="no" placeholder="নং"><input id="podobi" placeholder="পদবী"></div>
+    <div class="r2"><input id="no" placeholder="নং"><input id="podobi" placeholder="পদবী"></div>
     <input id="name" placeholder="নাম">
-    <div class="row2"><input id="unit" value="4 বীর"><input id="company" value="সদর কোম্পানী"></div>
-    <div class="row2"><input id="hoite" type="date"><input id="porjonto" type="date"></div>
-    <input id="mot" placeholder="মোট দিন">
-    <input id="gram" placeholder="গ্রাম"><div class="row2"><input id="po" placeholder="পোঃ"><input id="thana" placeholder="থানা"></div>
-    <div class="row2"><input id="zela" placeholder="জেলা"><input id="mobile" placeholder="মোবাইল"></div>
-    <button class="printBtn" onclick="window.print()">🖨️ Print - Full Fit 1/1 (3 Copy)</button>
+    <div class="r2"><input id="company" placeholder="কোম্পানী/শাখা (সদর)"><input id="unit" value="4 বীর" readonly></div>
+    <div class="r2"><input id="d1" type="date"><input id="d2" type="date"></div>
+    <div class="r2"><input id="mot" placeholder="মোট দিন"><input id="type" placeholder="ছুটির ধরন (সাময়িক)"></div>
+    <input id="gram" placeholder="গ্রাম">
+    <div class="r2"><input id="po" placeholder="পোষ্ট"><input id="thana" placeholder="থানা/উপজেলা"></div>
+    <div class="r2"><input id="tele" placeholder="টেলিগ্রাম অফিস"><input id="zela" placeholder="জেলা"></div>
+    <div class="r2"><input id="mobile" placeholder="মোবাইল"><input id="tarik" type="date"></div>
+    <button class="btn" onclick="window.print()">🖨️ Print - Full Fit 1/1</button>
   </div>
 
-  <div class="a4" id="print">
-    <!-- COPY 1 -->
-    <div class="copy" id="copy1"></div>
-    <div class="cut"></div>
-    <!-- COPY 2 -->
-    <div class="copy" id="copy2"></div>
-    <div class="cut"></div>
-    <!-- COPY 3 -->
-    <div class="copy" id="copy3"></div>
-    <div class="cut" style="margin-top:20px"></div>
+  <!-- PRINT AREA EXACT LIKE YOUR PHOTO -->
+  <div class="page" id="printArea">
+    <div class="topText">আমি এই মর্মে প্রত্যয়ন করছি যে, যে কোন প্রকার ছুটি থাকাকালীন আমি কোন প্রকার মটর সাইকেলে আরোহন করবো না এবং চালাবো না বলে নিম্নে স্বাক্ষর করলাম।</div>
+    <div class="title">ছুটির সনদ পত্র</div>
+    
+    নং<span class="dot n" id="pNo"></span>পদবী<span class="dot p" id="pPodobi"></span>নাম<span class="dot name" id="pName"></span>ইউনিট<span class="dot" style="width:100px">৪ বীর</span><br>
+    <span class="dot comp" id="pCompany"></span>কোম্পানী/শাখা<span class="dot" style="width:70px">ঢাকা</span>সেনানিবাস। তাহাকে<span class="dot date" id="pD1d"></span>/<span class="dot date" id="pD1m"></span>/২০২৬ ইং তারিখ<br>
+    হইতে<span class="dot date" id="pD2d"></span>/<span class="dot date" id="pD2m"></span>/২০২৬ ইং তারিখ পর্যন্ত মোট<span class="dot" style="width:70px" id="pMot"></span>দিনের <span id="pType">সাময়িক/বাৎসরিক/চিত্তবিনোদন/ডাক্তারী</span> ছুটি মঞ্জুর করা হলো।<br>
+
+    <div class="title" style="margin-top:14px">ছুটি থাকাকালীন তাহার ঠিকানা নিম্নরূপ</div>
+    গ্রাম<span class="dot" style="width:260px" id="pGram"></span>পোষ্ট<span class="dot" style="width:160px" id="pPo"></span>থানা/উপজেলা<span class="dot" style="width:150px" id="pThana"></span><br>
+    টেলিগ্রাম অফিস<span class="dot" style="width:250px" id="pTele"></span>জেলা<span class="dot" style="width:260px" id="pZela"></span><br><br>
+    স্থান<span class="dot" style="width:90px">ঢাকা</span>সেনানিবাস।<br>
+    তারিখ<span class="dot date" id="pTd"></span>/<span class="dot date" id="pTm"></span>/২০২৬ ইং। &nbsp; মোবাঃ<span class="dot" style="width:200px" id="pMobile"></span>
   </div>
 </div>
 
 <script>
-function makeCopy(){
-  let no=document.getElementById('no').value, podobi=document.getElementById('podobi').value, name=document.getElementById('name').value, unit=document.getElementById('unit').value, company=document.getElementById('company').value, hoite=document.getElementById('hoite').value, por=document.getElementById('porjonto').value, mot=document.getElementById('mot').value, gram=document.getElementById('gram').value, po=document.getElementById('po').value, thana=document.getElementById('thana').value, zela=document.getElementById('zela').value, mobile=document.getElementById('mobile').value;
-  let html = `
-  <b>নং <span class="dot w90">${no}</span> পদবী <span class="dot w90">${podobi}</span> নাম <span class="dot w120">${name}</span> ইউনিট <span class="dot w90">${unit}</span> ৪ বীর</b><br>
-  কোম্পানী <span class="dot w120">${company}</span> কে <span class="dot w90">${hoite}</span> হইতে <span class="dot w90">${por}</span> তারিখ পর্যন্ত মোট <span class="dot w90">${mot}</span> দিনের নৈমিত্তিক/অর্জিত/বিনা বেতনে ছুটি মঞ্জুর করা হলো।<br>
-  <b>ছুটি কালীন তার ঠিকানা নিম্নরূপঃ</b><br>
-  গ্রামঃ <span class="dot w120">${gram}</span> পোঃঃ <span class="dot w90">${po}</span> থানাঃ <span class="dot w90">${thana}</span> জেলাঃ <span class="dot w90">${zela}</span> মোবাইলঃ <span class="dot w120">${mobile}</span><br>
-  <div style="display:flex;justify-content:space-between;margin-top:8px">
-  <span>স্বাক্ষরঃ ...................<br>তারিখঃ ......./......./২০২৫ ইং</span>
-  <span style="text-align:right">কমান্ডিং অফিসার<br><b>৪ বীর</b></span>
-  </div>`;
-  document.getElementById('copy1').innerHTML=html;
-  document.getElementById('copy2').innerHTML=html;
-  document.getElementById('copy3').innerHTML=html;
-}
-document.querySelectorAll('input').forEach(i=>i.addEventListener('input',makeCopy));
-makeCopy();
+function upd(id,p){document.getElementById(id).addEventListener('input',e=>{document.getElementById(p).innerText=e.target.value})}
+upd('no','pNo');upd('podobi','pPodobi');upd('name','pName');upd('company','pCompany');upd('mot','pMot');upd('gram','pGram');upd('po','pPo');upd('thana','pThana');upd('tele','pTele');upd('zela','pZela');upd('mobile','pMobile');
+document.getElementById('type').addEventListener('input',e=>{if(e.target.value)document.getElementById('pType').innerText=e.target.value});
+function dateSplit(inp, dId, mId){document.getElementById(inp).addEventListener('change',e=>{let v=e.target.value; if(!v)return; let dt=new Date(v); document.getElementById(dId).innerText=dt.getDate(); document.getElementById(mId).innerText=dt.getMonth()+1; })}
+dateSplit('d1','pD1d','pD1m'); dateSplit('d2','pD2d','pD2m'); dateSplit('tarik','pTd','pTm');
 </script>
 </body></html>
