@@ -8,20 +8,20 @@
 .unit{border:1px solid #000;padding:4px 10px;float:right;font-size:12px}
 .table{border-collapse:collapse;width:93.5%;margin:0 auto;font-size:12px;table-layout:fixed}
 .col-kromik{width:2%}
-.col-name{width:16%}
-.col-hisab{width:2%}
-.col-purboborti{width:6%}
-.col-ssd{width:6%}
-.col-grohon{width:7%}
-.col-khoroch{width:7%}
-.col-obosisto{width:6.5%}
-.col-store{width:6%}
-.col-tanki{width:6%}
-.col-sorejomine{width:6%}
-.col-otirikto{width:6%}
-.col-purber{width:6%}
-.col-sorbomot{width:6%}
-.col-montobbo{width:5%}
+.col-name{width:17.11%}
+.col-hisab{width:2.14%}
+.col-purboborti{width:6.42%}
+.col-ssd{width:6.42%}
+.col-grohon{width:7.49%}
+.col-khoroch{width:7.49%}
+.col-obosisto{width:6.95%}
+.col-store{width:6.42%}
+.col-tanki{width:6.42%}
+.col-sorejomine{width:6.42%}
+.col-otirikto{width:6.42%}
+.col-purber{width:6.42%}
+.col-sorbomot{width:6.42%}
+.col-montobbo{width:5.35%}
 .table th,.table td{border:1px solid #000;padding:3px 1px;text-align:center;white-space:nowrap !important;overflow:hidden}
 .table th{background:#eee}.table td[contenteditable]{background:#fffde7}
 .btnRow{display:flex;gap:10px}.saveBtn{flex:1;background:#122e18;color:#fff;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}.printBtn{flex:1;background:#c8a951;color:#000;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}
@@ -40,6 +40,7 @@
 <div class="btnRow"><button class="saveBtn" onclick="saveData()">💾 SAVE</button><button class="printBtn" onclick="window.print()">🖨️ PRINT</button></div>
 <table class="table" id="polTable">
 <colgroup><col class="col-kromik"><col class="col-name"><col class="col-hisab"><col class="col-purboborti"><col class="col-ssd"><col class="col-grohon"><col class="col-khoroch"><col class="col-obosisto"><col class="col-store"><col class="col-tanki"><col class="col-sorejomine"><col class="col-otirikto"><col class="col-purber"><col class="col-sorbomot"><col class="col-montobbo"></colgroup>
+<tbody id="polBody">
 <tr><th rowspan="2">ক্রমিক</th><th rowspan="2">পিওএল স্টোরের নাম</th><th rowspan="2">হিসাবের একক</th><th rowspan="2">পূর্ববর্তী মাসের জের</th><th rowspan="2">বর্তমান মাসে এসএসডি হতে উত্তোলন</th><th rowspan="2">চলতি মাসে খরচের জন্য গ্রহণ</th><th rowspan="2">বর্তমান মাসে মোট খরচ</th><th rowspan="2">অবশিষ্ট জ্বালানীর পরিমাণ</th><th colspan="2">বর্তমান মজুদ</th><th rowspan="2">সরেজমিনে মজুদ</th><th rowspan="2">বর্তমান মাসে অতিরিক্ত</th><th rowspan="2">পূর্বের অতিরিক্ত আছে</th><th rowspan="2">সর্বমোট অতিরিক্ত</th><th rowspan="2">মন্তব্য</th></tr>
 <tr><th>স্টোর মজুদ</th><th>ট্যাংকি মজুদ</th></tr>
 <tr><td>(ক)</td><td>(খ)</td><td>(গ)</td><td>(ঘ)</td><td>(ঙ)</td><td>(চ)</td><td>(ছ)</td><td>(জ)</td><td>(ঝ)</td><td>(ঞ)</td><td>(ট)</td><td>(ঠ)</td><td>(ড)</td><td>(ঢ)</td><td></td></tr>
@@ -56,6 +57,7 @@
 <tr><td>১১।</td><td style="text-align:left">১৫ ডব্লিউ ৪০</td><td>,,</td><td contenteditable="true">৪১.০০০</td><td contenteditable="true">-</td><td contenteditable="true">৪১.০০০</td><td contenteditable="true">-</td><td contenteditable="true">৪১.০০০</td><td contenteditable="true">৪১.০০০</td><td contenteditable="true">-</td><td contenteditable="true">৪১.০০০</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td></tr>
 <tr><td>১২।</td><td style="text-align:left">২০ ডব্লিউ ৫০</td><td>,,</td><td contenteditable="true">০৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">০৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">০৩.০০০</td><td contenteditable="true">০৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">০৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td></tr>
 <tr><td>১৩।</td><td style="text-align:left">৮০ ডব্লিউ ৯০</td><td>,,</td><td contenteditable="true">৪৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">৪৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">৪৩.০০০</td><td contenteditable="true">৪৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">৪৩.০০০</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td></tr>
+</tbody>
 </table>
 <div><b>পর্ষদের মতামত/সুপারিশ</b><br>পর্ষদ কর্তৃক সরেজমিনে লেজার অনুযায়ী সঠিক পাওয়া গিয়েছে</div>
 <div style="text-align:center"><b>প্রতিস্বাক্ষর</b></div>
@@ -63,7 +65,7 @@
 <div style="text-align:center;font-size:12px;margin-top:10px">সীমিত</div>
 </div>
 <script>
-function saveData(){ localStorage.setItem('support1_pol', document.getElementById('polTable').innerHTML); alert('✅ SAVE হইছে!'); }
-let saved = localStorage.getItem('support1_pol'); if(saved){ document.getElementById('polTable').innerHTML = saved; }
+function saveData(){ localStorage.setItem('support1_pol_v2', document.getElementById('polBody').innerHTML); alert('✅ SAVE হইছে!'); }
+let saved = localStorage.getItem('support1_pol_v2'); if(saved){ document.getElementById('polBody').innerHTML = saved; }
 </script>
 </body></html>
