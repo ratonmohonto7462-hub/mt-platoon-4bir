@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUPPORT 2</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>POL Consumption Statement</title>
 <style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fff;color:#000}.top{background:#122e18;padding:12px;display:flex;align-items:center;gap:10px;color:#fff}.back{font-size:22px;cursor:pointer;background:#1f4a28;padding:6px 12px;border-radius:10px}.wrap{padding:8px;min-height:calc(100vh - 54px);display:flex;flex-direction:column}.head{text-align:center}.head h2{margin:4px 0;font-size:18px;text-decoration:underline;text-underline-offset:4px}.head h3{margin:2px 0;font-size:14px;text-decoration:underline}.tableWrap{overflow-x:auto;width:100%}.table{border-collapse:collapse;width:95%;min-width:900px;margin:0 auto;font-size:13px}.table th,.table td{border:1px solid #000;padding:5px 3px;text-align:center}.table th{background:#eee}.table td[contenteditable]{background:#fffde7}.btnRow{display:flex;gap:10px}.saveBtn{flex:1;background:#122e18;color:#fff;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}.printBtn{flex:1;background:#c8a951;color:#000;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}.addBtn{flex:1;background:#2563eb;color:#fff;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}.searchBox{width:100%;padding:12px;border:2px solid #122e18;border-radius:10px;font-size:14px;margin:8px 0}.monthRow{display:flex;gap:8px}.monthRow select{flex:1;padding:12px;border:2px solid #122e18;border-radius:10px;font-weight:bold}.monthRow button{padding:12px 16px;background:#122e18;color:#fff;border:none;border-radius:10px;font-weight:900}.footer{text-align:center;font-size:12px;margin-top:auto;padding-top:20px}@media print{@page{size:Legal landscape;margin:4mm}.top,.btnRow,.hint,.searchBox,.monthRow{display:none!important}.table{width:95%!important;min-width:0!important;font-size:12px}.table td[contenteditable]{background:#fff}.footer{position:fixed;bottom:4mm;left:0;right:0}}</style></head>
 <body>
-<div class="top"><div class="back" onclick="location.href='../index.html'">←</div><b>📁 SUPPORT 2</b></div>
+<div class="top"><div class="back" onclick="location.href='../index.html'">←</div><b>POL Consumption Statement</b></div>
 <div class="wrap">
 <div class="head"><div style="font-size:12px">সীমিত</div><h2 id="monthTitle" contenteditable="true">পিওএল খরচের বিবরণী জুলাই-২০২৬</h2><h3 contenteditable="true">৪ বীর এমটি</h3></div>
 
-<input id="searchInput" class="searchBox" placeholder="🔍 খুঁজো... যেমন: বিএ নং ০২৬৮৬৬, ক্রমিক ১">
+<input id="searchInput" class="searchBox" placeholder="🔍">
 <div class="monthRow">
 <select id="monthSelect">
 <option value="জুলাই-২০২৬">জুলাই-২০২৬</option>
@@ -15,10 +15,10 @@
 <option value="সেপ্টেম্বর-২০২৬">সেপ্টেম্বর-২০২৬</option>
 <option value="অক্টোবর-২০২৬">অক্টোবর-২০২৬</option>
 </select>
-<button onclick="loadMonth()">🔍 মাস খুঁজো</button>
+<button onclick="loadMonth()">🔍</button>
 </div>
-<p class="hint" style="text-align:center;color:#666;font-size:12px">সংখ্যায় চাপ দিয়ে এডিট করো - অটো হিসাব হবে <span id="syncStatus" style="color:green"></span></p>
-<div class="btnRow"><button class="saveBtn" id="saveBtn">💾 SAVE - Firebase</button><button class="addBtn" onclick="addRow()">+ নতুন গাড়ি</button><button class="printBtn" onclick="window.print()">🖨️ PRINT</button></div>
+<p class="hint" style="text-align:center;color:#666;font-size:12px"><span id="syncStatus" style="color:green"></span></p>
+<div class="btnRow"><button class="saveBtn" id="saveBtn">💾</button><button class="addBtn" onclick="addRow()">+</button><button class="printBtn" onclick="window.print()">🖨️</button></div>
 
 <div class="tableWrap"><table class="table"><tbody id="polBody">
 <tr><th>ক্র/নং</th><th>বিএ নং</th><th>পূর্বের ট্যাংকি ব্যালেন্স</th><th>চলতি মাসে ইস্যু</th><th>চলতি মাসে খরচ</th><th>অবশিষ্ট ট্যাংকি ব্যালেন্স</th><th>কেপিএল</th><th>সময়</th><th>মোট চলতি কিঃমিঃ</th><th>মন্তব্য</th></tr>
@@ -58,9 +58,9 @@ const firebaseConfig={apiKey:"AIzaSyBvthd7-6f209cGgYzUXjoE9Y4uCeSeuCWE4A",authDo
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 let currentMonth="জুলাই-২০২৬";
 function getRef(m){return doc(db,"support_forms","support2_"+m)}
-async function loadMonth(){const m=document.getElementById('monthSelect').value;currentMonth=m;document.getElementById('monthTitle').innerText="পিওএল খরচের বিবরণী "+m;document.getElementById('syncStatus').innerText=" • লোড হইতেছে...";const snap=await getDoc(getRef(m));if(snap.exists()){document.getElementById('polBody').innerHTML=snap.data().html;document.getElementById('syncStatus').innerText=" • "+m+" পাওয়া গেছে ✅";calcAll()}else{document.getElementById('syncStatus').innerText=" • "+m+" এর সেভ নাই"}}
+async function loadMonth(){const m=document.getElementById('monthSelect').value;currentMonth=m;document.getElementById('monthTitle').innerText="পিওএল খরচের বিবরণী "+m;document.getElementById('syncStatus').innerText="";const snap=await getDoc(getRef(m));if(snap.exists()){document.getElementById('polBody').innerHTML=snap.data().html;document.getElementById('syncStatus').innerText=" • "+m+" ✅";calcAll()}else{document.getElementById('syncStatus').innerText=" • "+m+""}}
 window.loadMonth=loadMonth;
-document.getElementById('saveBtn').onclick=async()=>{document.getElementById('syncStatus').innerText=" • সেভ হইতেছে...";await setDoc(getRef(currentMonth),{html:document.getElementById('polBody').innerHTML,updatedAt:Date.now(),month:currentMonth,title:"SUPPORT 2 - "+currentMonth});document.getElementById('syncStatus').innerText=" • ✅ "+currentMonth+" সেভ হইছে!";alert('✅ SAVE হইছে! '+currentMonth)};
+document.getElementById('saveBtn').onclick=async()=>{document.getElementById('syncStatus').innerText="";await setDoc(getRef(currentMonth),{html:document.getElementById('polBody').innerHTML,updatedAt:Date.now(),month:currentMonth,title:"SUPPORT 2 - "+currentMonth});document.getElementById('syncStatus').innerText=" • ✅ "+currentMonth+" ";alert('✅ '+currentMonth)};
 loadMonth();
 </script>
 </body></html>
