@@ -1,1 +1,66 @@
-r
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUPPORT 2</title>
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fff;color:#000}.top{background:#122e18;padding:12px;display:flex;align-items:center;gap:10px;color:#fff}.back{font-size:22px;cursor:pointer;background:#1f4a28;padding:6px 12px;border-radius:10px}.wrap{padding:8px;min-height:calc(100vh - 54px);display:flex;flex-direction:column}.head{text-align:center}.head h2{margin:4px 0;font-size:18px;text-decoration:underline;text-underline-offset:4px}.head h3{margin:2px 0;font-size:14px;text-decoration:underline}.tableWrap{overflow-x:auto;width:100%}.table{border-collapse:collapse;width:95%;min-width:900px;margin:0 auto;font-size:13px}.table th,.table td{border:1px solid #000;padding:5px 3px;text-align:center}.table th{background:#eee}.table td[contenteditable]{background:#fffde7}.btnRow{display:flex;gap:10px}.saveBtn{flex:1;background:#122e18;color:#fff;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}.printBtn{flex:1;background:#c8a951;color:#000;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}.addBtn{flex:1;background:#2563eb;color:#fff;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}.searchBox{width:100%;padding:12px;border:2px solid #122e18;border-radius:10px;font-size:14px;margin:8px 0}.monthRow{display:flex;gap:8px}.monthRow select{flex:1;padding:12px;border:2px solid #122e18;border-radius:10px;font-weight:bold}.monthRow button{padding:12px 16px;background:#122e18;color:#fff;border:none;border-radius:10px;font-weight:900}.footer{text-align:center;font-size:12px;margin-top:auto;padding-top:20px}@media print{@page{size:Legal landscape;margin:4mm}.top,.btnRow,.hint,.searchBox,.monthRow{display:none!important}.table{width:95%!important;min-width:0!important;font-size:12px}.table td[contenteditable]{background:#fff}.footer{position:fixed;bottom:4mm;left:0;right:0}}</style></head>
+<body>
+<div class="top"><div class="back" onclick="location.href='../index.html'">←</div><b>📁 SUPPORT 2</b></div>
+<div class="wrap">
+<div class="head"><div style="font-size:12px">সীমিত</div><h2 id="monthTitle" contenteditable="true">পিওএল খরচের বিবরণী জুলাই-২০২৬</h2><h3 contenteditable="true">৪ বীর এমটি</h3></div>
+
+<input id="searchInput" class="searchBox" placeholder="🔍 খুঁজো... যেমন: বিএ নং ০২৬৮৬৬, ক্রমিক ১">
+<div class="monthRow">
+<select id="monthSelect">
+<option value="জুলাই-২০২৬">জুলাই-২০২৬</option>
+<option value="আগস্ট-২০২৬">আগস্ট-২০২৬</option>
+<option value="জুন-২০২৬">জুন-২০২৬</option>
+<option value="সেপ্টেম্বর-২০২৬">সেপ্টেম্বর-২০২৬</option>
+<option value="অক্টোবর-২০২৬">অক্টোবর-২০২৬</option>
+</select>
+<button onclick="loadMonth()">🔍 মাস খুঁজো</button>
+</div>
+<p class="hint" style="text-align:center;color:#666;font-size:12px">সংখ্যায় চাপ দিয়ে এডিট করো - অটো হিসাব হবে <span id="syncStatus" style="color:green"></span></p>
+<div class="btnRow"><button class="saveBtn" id="saveBtn">💾 SAVE - Firebase</button><button class="addBtn" onclick="addRow()">+ নতুন গাড়ি</button><button class="printBtn" onclick="window.print()">🖨️ PRINT</button></div>
+
+<div class="tableWrap"><table class="table"><tbody id="polBody">
+<tr><th>ক্র/নং</th><th>বিএ নং</th><th>পূর্বের ট্যাংকি ব্যালেন্স</th><th>চলতি মাসে ইস্যু</th><th>চলতি মাসে খরচ</th><th>অবশিষ্ট ট্যাংকি ব্যালেন্স</th><th>কেপিএল</th><th>সময়</th><th>মোট চলতি কিঃমিঃ</th><th>মন্তব্য</th></tr>
+<tr><td>১।</td><td contenteditable="true">০২৬৮৬৬</td><td contenteditable="true">-</td><td contenteditable="true">১৫</td><td contenteditable="true">১৫</td><td contenteditable="true">-</td><td contenteditable="true">৩০</td><td contenteditable="true"></td><td contenteditable="true">৪৫০</td><td contenteditable="true"></td></tr>
+<tr><td>২।</td><td contenteditable="true">০২৬৪৬৪</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">৩০</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true"></td></tr>
+<tr><td>৩।</td><td contenteditable="true">০৩৭৬১৮</td><td contenteditable="true">-</td><td contenteditable="true">১২০</td><td contenteditable="true">৭৬</td><td contenteditable="true">৪২</td><td contenteditable="true">০৯</td><td contenteditable="true"></td><td contenteditable="true">৭০২</td><td contenteditable="true"></td></tr>
+<tr><td>৪।</td><td contenteditable="true">০৩৫০৬৫</td><td contenteditable="true">-</td><td contenteditable="true">১৭৩</td><td contenteditable="true">১৫৯</td><td contenteditable="true">১৪</td><td contenteditable="true">০৭</td><td contenteditable="true"></td><td contenteditable="true">১১১৩</td><td contenteditable="true"></td></tr>
+<tr><td>৫।</td><td contenteditable="true">০৩৪৯৩২</td><td contenteditable="true">-</td><td contenteditable="true">১০৫</td><td contenteditable="true">৯৩</td><td contenteditable="true">১২</td><td contenteditable="true">০৯</td><td contenteditable="true"></td><td contenteditable="true">৮৬৭</td><td contenteditable="true"></td></tr>
+<tr><td>৬।</td><td contenteditable="true">০৩৪৫৮৫</td><td contenteditable="true">-</td><td contenteditable="true">৬৬৪</td><td contenteditable="true">৬০৬</td><td contenteditable="true">২৮</td><td contenteditable="true">৫.৫</td><td contenteditable="true"></td><td contenteditable="true">১৮৬৬</td><td contenteditable="true"></td></tr>
+<tr><td>৭।</td><td contenteditable="true">০৩২৯৭৯</td><td contenteditable="true">-</td><td contenteditable="true">২৬৭</td><td contenteditable="true">২৬৫</td><td contenteditable="true">০২</td><td contenteditable="true">০৭</td><td contenteditable="true"></td><td contenteditable="true">১৬৪৫</td><td contenteditable="true"></td></tr>
+<tr><td>৮।</td><td contenteditable="true">০৩২৯৫৬</td><td contenteditable="true">-</td><td contenteditable="true">১২০</td><td contenteditable="true">১২০</td><td contenteditable="true">-</td><td contenteditable="true">০৬</td><td contenteditable="true"></td><td contenteditable="true">৭২০</td><td contenteditable="true"></td></tr>
+<tr><td>৯।</td><td contenteditable="true">০৩২৯১৪</td><td contenteditable="true">-</td><td contenteditable="true">৯০</td><td contenteditable="true">৯০</td><td contenteditable="true">-</td><td contenteditable="true">০৭</td><td contenteditable="true"></td><td contenteditable="true">৬৬০</td><td contenteditable="true"></td></tr>
+<tr><td>১০।</td><td contenteditable="true">০৩২৬৪৮</td><td contenteditable="true">-</td><td contenteditable="true">১৫২</td><td contenteditable="true">১৪৪</td><td contenteditable="true">০৮</td><td contenteditable="true">০৭</td><td contenteditable="true"></td><td contenteditable="true">১০০৮</td><td contenteditable="true"></td></tr>
+</tbody></table></div>
+
+<div style="display:flex;justify-content:space-between;margin-top:30px;padding:0 20px"><div><b>প্রস্তুতকারী</b><br><br>__________________</div><div><b>পরীক্ষাকারী</b><br><br>__________________</div><div><b>অনুমোদনকারী</b><br><br>__________________</div></div>
+<div class="footer">সীমিত</div>
+</div>
+
+<script>
+function bn2en(s){return s.replace(/[০-৯]/g,function(d){return '০১২৩৪৫৬৭৮৯'.indexOf(d)}).replace(/,/g,'')}
+function en2bn(s){return String(s).replace(/[0-9]/g,function(d){return '০১২৩৪৫৬৭৮৯'[d]})}
+function numVal(t){t=t.trim();if(t===''||t==='-'||t==='–')return 0;var n=parseFloat(bn2en(t));return isNaN(n)?0:n}
+function fmt(n){return en2bn(n.toFixed(0))}
+function calcRow(tr){var c=tr.cells;if(c.length<10)return;var purbo=numVal(c[2].textContent);var issu=numVal(c[3].textContent);var khoroch=numVal(c[4].textContent);var kpl=parseFloat(bn2en(c[6].textContent.trim()))||0;var obosisto=purbo+issu-khoroch;c[5].textContent=obosisto===0?'-':fmt(obosisto);if(khoroch>0&&kpl>0){c[8].textContent=fmt(Math.round(khoroch*kpl))}}
+function calcAll(){document.querySelectorAll('#polBody tr').forEach(function(tr){if(tr.cells.length>=10&&tr.cells[0].textContent.indexOf('।')!==-1)calcRow(tr)})}
+document.getElementById('polBody').addEventListener('input',function(e){var tr=e.target.closest('tr');if(tr)calcRow(tr)});
+function addRow(){var n=document.querySelectorAll('#polBody tr').length;var tr=document.createElement('tr');tr.innerHTML='<td>'+en2bn(n)+'।</td><td contenteditable="true"></td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>';document.getElementById('polBody').appendChild(tr)}
+document.getElementById('searchInput').addEventListener('input',function(){var q=this.value.toLowerCase().trim();document.querySelectorAll('#polBody tr').forEach(function(tr){if(tr.cells.length>=10&&tr.cells[0].textContent.indexOf('।')!==-1){var txt=tr.cells[0].textContent+tr.cells[1].textContent;tr.style.display=(!q||txt.toLowerCase().includes(q))?'':'none'}})})
+calcAll();
+</script>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,doc,setDoc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyBvthd7-6f209cGgYzUXjoE9Y4uCeSeuCWE4A",authDomain:"pol-store-cb405.firebaseapp.com",projectId:"pol-store-cb405",storageBucket:"pol-store-cb405.firebasestorage.app",messagingSenderId:"572668756469",appId:"1:572668756469:web:ae1le74566fa62ad257a4a",measurementId:"G-2085W4V2RL"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+let currentMonth="জুলাই-২০২৬";
+function getRef(m){return doc(db,"support_forms","support2_"+m)}
+async function loadMonth(){const m=document.getElementById('monthSelect').value;currentMonth=m;document.getElementById('monthTitle').innerText="পিওএল খরচের বিবরণী "+m;document.getElementById('syncStatus').innerText=" • লোড হইতেছে...";const snap=await getDoc(getRef(m));if(snap.exists()){document.getElementById('polBody').innerHTML=snap.data().html;document.getElementById('syncStatus').innerText=" • "+m+" পাওয়া গেছে ✅";calcAll()}else{document.getElementById('syncStatus').innerText=" • "+m+" এর সেভ নাই"}}
+window.loadMonth=loadMonth;
+document.getElementById('saveBtn').onclick=async()=>{document.getElementById('syncStatus').innerText=" • সেভ হইতেছে...";await setDoc(getRef(currentMonth),{html:document.getElementById('polBody').innerHTML,updatedAt:Date.now(),month:currentMonth,title:"SUPPORT 2 - "+currentMonth});document.getElementById('syncStatus').innerText=" • ✅ "+currentMonth+" সেভ হইছে!";alert('✅ SAVE হইছে! '+currentMonth)};
+loadMonth();
+</script>
+</body></html>
