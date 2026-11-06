@@ -1,13 +1,1 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Group - Seniority</title>
-<style>body{font-family:Arial;background:#f2f2f2;margin:0}.top{background:#0a1a12;color:#fff;padding:14px;text-align:center}.list{padding:10px}.item{background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;border-left:4px solid #0e5d3e}</style>
-</head><body>
-<div class="top"><b>Group Members - Seniority Wise</b></div>
-<div class="list" id="list"></div>
-<script>
-// তোর Approved Member List - এখানে সেনা নম্বর দিয়ে সর্ট হবে
-let members = JSON.parse(localStorage.getItem('approvedMembers')) || [];
-members.sort((a,b)=> parseInt(a.senaNo) - parseInt(b.senaNo));
-document.getElementById('list').innerHTML = members.length ? members.map((m,i)=> `<div class="item"><span>${i+1}. ${m.senaNo} - ${m.name}</span><span>${m.rank||''}</span></div>`).join('') : '<p style="text-align:center;margin-top:20px">কোনো মেম্বার এখনো Add হয়নি</p>';
-</script>
-</body></html>
+<!DOCTYPE html> <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Group - Seniority</title> <style>body{font-family:Arial;background:#f2f2f2;margin:0}.top{background:#0a1a12;color:#fff;padding:14px;text-align:center}.list{padding:10px}.item{background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;border-left:4px solid #0e5d3e}</style> </head><body> <div class="top"><b>Group Members - Seniority Wise</b></div> <div class="list" id="list"></div> <script> let members = JSON.parse(localStorage.getItem('approvedMembers')) || []; members.sort((a,b)=> Number(a.senaNo) - Number(b.senaNo)); document.getElementById('list').innerHTML = members.length ? members.map((m,i)=> `<div class="item"><span>${i+1}. ${m.senaNo} - ${m.name}</span><span>${m.rank||''}</span></div>`).join('') : '<p style="text-align:center;margin-top:20px">কোনো মেম্বার এখনো Add হয়নি</p>'; </script> </body></html>
