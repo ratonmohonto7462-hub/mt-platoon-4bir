@@ -1,159 +1,61 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Create Profile - MT PLATOON</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fff;color:#111}
-.top{background:#111;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;font-weight:700}
-.wrap{padding:20px;max-width:400px;margin:0 auto}
-label{font-size:13px;color:#555;display:block;margin-top:14px;margin-bottom:4px}
-input,select{width:100%;padding:12px;border:1.5px solid #222;border-radius:10px;font-size:15px}
-.pass-wrap{position:relative}
-.eye{position:absolute;right:12px;top:12px;cursor:pointer;font-size:18px}
-.btn{width:100%;padding:14px;background:#111;color:#fff;border:none;border-radius:30px;margin-top:20px;font-size:16px;font-weight:700;cursor:pointer}
-.btn:disabled{opacity:0.5}
-.msg{padding:10px;border-radius:8px;margin-top:12px;text-align:center;font-size:14px;display:none}
-.msg.ok{background:#dcfce7;color:#166534;display:block}
-.msg.err{background:#fee2e2;color:#991b1b;display:block}
-</style>
-</head>
-<body>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create Profile - MT PLATOON</title>
+<style> *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fff;color:#111} .top{background:#111;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;font-weight:700} .wrap{padding:20px;max-width:400px;margin:0 auto} label{font-size:13px;color:#555;display:block;margin-top:14px;margin-bottom:4px} input,select{width:100%;padding:12px;border:1.5px solid #222;border-radius:10px;font-size:15px} .pass-wrap{position:relative} .eye{position:absolute;right:12px;top:12px;cursor:pointer;font-size:18px} .btn{width:100%;padding:14px;background:#111;color:#fff;border:none;border-radius:30px;margin-top:20px;font-size:16px;font-weight:700;cursor:pointer} .btn:disabled{opacity:0.5} .msg{padding:10px;border-radius:8px;margin-top:12px;text-align:center;font-size:14px;display:none} .msg.ok{background:#dcfce7;color:#166534;display:block} .msg.err{background:#fee2e2;color:#991b1b;display:block}</style>
+</head><body>
 <div class="top"><span>MT PLATOON - CREATE</span><span onclick="location.href='dashboard.html'" style="cursor:pointer">X</span></div>
-<div class="wrap">
-<h2 style="margin:0 0 10px 0">Create Your Profile</h2>
-<p style="font-size:13px;color:#666;margin:0 0 10px 0">Admin Approve করলে Login করতে পারবে!</p>
-
-<label>SENA NO *</label>
-<input id="sena" placeholder="Ex: 160000">
-
-<label>NAME *</label>
-<input id="name" placeholder="Ex: RAKIB">
-
-<label>PODOBI / RANK *</label>
-<select id="podobi">
-<option value="">Select Rank</option>
-<option>সৈনিক</option>
-<option>ল্যান্স কর্পোরাল</option>
-<option>কর্পোরাল</option>
-<option>সার্জেন্ট</option>
-<option>ওয়ারেন্ট অফিসার</option>
-</select>
-
-<label>COMPANY *</label>
-<select id="company">
-<option value="">Select Company</option>
-<option>সদর</option>
-<option>এ কোম্পানি</option>
-<option>বি কোম্পানি</option>
-<option>সি কোম্পানি</option>
-<option>ডি কোম্পানি</option>
-<option>এমটি</option>
-</select>
-
-<label>MOBILE *</label>
-<input id="mobile" placeholder="01XXXXXXXXX" type="tel">
-
-<label>BLOOD GROUP</label>
-<select id="blood">
-<option value="">Select Blood</option>
-<option>A+</option>
-<option>A-</option>
-<option>B+</option>
-<option>B-</option>
-<option>O+</option>
-<option>O-</option>
-<option>AB+</option>
-<option>AB-</option>
-</select>
-
-<label>PASSWORD *</label>
-<div class="pass-wrap">
-<input id="pass" type="password" placeholder="Password দাও">
-<span class="eye" onclick="togglePass('pass')">👁️</span>
-</div>
-
-<label>CONFIRM PASSWORD *</label>
-<div class="pass-wrap">
-<input id="cpass" type="password" placeholder="আবার একই Password দাও">
-<span class="eye" onclick="togglePass('cpass')">👁️</span>
-</div>
-
+<div class="wrap"><h2 style="margin:0 0 10px 0">Create Your Profile</h2><p style="font-size:13px;color:#666;margin:0 0 10px 0">Admin Approve করলে Login করতে পারবে!</p>
+<label>SENA NO *</label><input id="sena" placeholder="Ex: 160000">
+<label>NAME *</label><input id="name" placeholder="Ex: RAKIB">
+<label>PODOBI / RANK *</label><select id="podobi"><option value="">Select Rank</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option><option>ওয়ারেন্ট অফিসার</option></select>
+<label>COMPANY *</label><select id="company"><option value="">Select Company</option><option>সদর</option><option>এ কোম্পানি</option><option>বি কোম্পানি</option><option>সি কোম্পানি</option><option>ডি কোম্পানি</option><option>এমটি</option></select>
+<label>MOBILE *</label><input id="mobile" placeholder="01XXXXXXXXX" type="tel">
+<label>BLOOD GROUP</label><select id="blood"><option value="">Select Blood</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select>
+<label>PASSWORD *</label><div class="pass-wrap"><input id="pass" type="password" placeholder="Password দাও"><span class="eye" onclick="togglePass('pass')">👁️</span></div>
+<label>CONFIRM PASSWORD *</label><div class="pass-wrap"><input id="cpass" type="password" placeholder="আবার একই Password দাও"><span class="eye" onclick="togglePass('cpass')">👁️</span></div>
 <button class="btn" id="btn" onclick="createProfile()">Create Profile & Send Request</button>
-<div id="msg" class="msg"></div>
-<p style="text-align:center;font-size:13px;margin-top:16px">Already have? <b onclick="location.href='dashboard.html'" style="cursor:pointer"><u>Login</u></b></p>
-</div>
+<div id="msg" class="msg"></div><p style="text-align:center;font-size:13px;margin-top:16px">Already have? <b onclick="location.href='dashboard.html'" style="cursor:pointer"><u>Login</u></b></p></div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const API = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
 
-function showMsg(txt, ok){
-  let el = document.getElementById('msg');
-  el.innerText = txt;
-  el.className = ok ? 'msg ok' : 'msg err';
-}
+window.showMsg = function(txt, ok){ let el=document.getElementById('msg'); el.innerText=txt; el.className=ok?'msg ok':'msg err'; }
+window.togglePass = function(id){ let e=document.getElementById(id); e.type=e.type==='password'?'text':'password'; }
+function toEng(str){ let b=["০","১","২","৩","৪","৫","৬","৭","৮","৯"]; let en=["0","1","2","3","4","5","6","7","8","9"]; let s=String(str); for(let i=0;i<10;i++) s=s.split(b[i]).join(en[i]); return s; }
 
-function togglePass(id){
-  let e = document.getElementById(id);
-  e.type = e.type === 'password' ? 'text' : 'password';
-}
-
-function toEng(str){
-  let b=["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
-  let en=["0","1","2","3","4","5","6","7","8","9"];
-  let s=String(str);
-  for(let i=0;i<10;i++) s=s.split(b[i]).join(en[i]);
-  return s;
-}
-
-async function createProfile(){
-  let sena = toEng(document.getElementById('sena').value.trim());
-  let name = document.getElementById('name').value.trim();
-  let podobi = document.getElementById('podobi').value.trim();
-  let company = document.getElementById('company').value.trim();
-  let mobile = toEng(document.getElementById('mobile').value.trim());
-  let blood = document.getElementById('blood').value.trim();
-  let pass = document.getElementById('pass').value.trim();
-  let cpass = document.getElementById('cpass').value.trim();
-  let btn = document.getElementById('btn');
-
-  if(!sena || !name || !podobi || !company || !mobile || !pass || !cpass){
-    showMsg("❌ সব * Field পূরণ করো!", false);
-    return;
-  }
-  if(pass !== cpass){
-    showMsg("❌ Password মিলতেছে না! দুইটা ঘরে একই Password দাও", false);
-    return;
-  }
-  if(pass.length < 4){
-    showMsg("❌ Password কমপক্ষে ৪ সংখ্যার দাও", false);
-    return;
-  }
-
-  btn.disabled = true;
-  btn.innerText = "Sending Request...";
-  showMsg("⏳ Request পাঠানো হচ্ছে...", true);
-
+window.createProfile = async function(){
+  let sena=toEng(document.getElementById('sena').value.trim());
+  let name=document.getElementById('name').value.trim();
+  let podobi=document.getElementById('podobi').value.trim();
+  let company=document.getElementById('company').value.trim();
+  let mobile=toEng(document.getElementById('mobile').value.trim());
+  let blood=document.getElementById('blood').value.trim();
+  let pass=document.getElementById('pass').value.trim();
+  let cpass=document.getElementById('cpass').value.trim();
+  let btn=document.getElementById('btn');
+  if(!sena||!name||!podobi||!company||!mobile||!pass||!cpass){ showMsg("❌ সব * Field পূরণ করো!",false); return; }
+  if(pass!==cpass){ showMsg("❌ Password মিলতেছে না! দুইটা ঘরে একই Password দাও",false); return; }
+  if(pass.length<4){ showMsg("❌ Password কমপক্ষে ৪ সংখ্যার দাও",false); return; }
+  btn.disabled=true; btn.innerText="Sending Request..."; showMsg("⏳ Request পাঠানো হচ্ছে...",true);
   try{
-    let url = `${API}?action=register&sena=${encodeURIComponent(sena)}&name=${encodeURIComponent(name)}&podobi=${encodeURIComponent(podobi)}&company=${encodeURIComponent(company)}&mobile=${encodeURIComponent(mobile)}&blood=${encodeURIComponent(blood)}&pass=${encodeURIComponent(pass)}&t=${Date.now()}`;
-    let res = await fetch(url);
-    let data = await res.json();
-    if(data.success){
-      showMsg("✅ Request পাঠানো হয়েছে! Admin Approve করলে Login করতে পারবে!", true);
-      btn.innerText = "✅ Request Sent!";
-      setTimeout(()=>{ location.href='dashboard.html'; }, 2000);
-    }else{
-      showMsg("❌ "+(data.message||"Error! SENA NO Already আছে!"), false);
-      btn.disabled = false;
-      btn.innerText = "Create Profile & Send Request";
-    }
-  }catch(e){
-    showMsg("❌ Server Error! Internet Check করো! "+e, false);
-    btn.disabled = false;
-    btn.innerText = "Create Profile & Send Request";
-  }
+    // 1. Firebase e check - age theke ache kina
+    const oldDoc = await getDoc(doc(db,"users",sena));
+    if(oldDoc.exists()){ showMsg("❌ এই SENA NO Already আছে!",false); btn.disabled=false; btn.innerText="Create Profile & Send Request"; return; }
+    // 2. Firebase e save - pending
+    await setDoc(doc(db,"users",sena), { sena, name, podobi, company, mobile, blood, pass, status:"pending", createdAt:new Date().toISOString() });
+    // 3. Sheet e save - backup
+    try{
+      let url=`${API}?action=register&sena=${encodeURIComponent(sena)}&name=${encodeURIComponent(name)}&podobi=${encodeURIComponent(podobi)}&company=${encodeURIComponent(company)}&mobile=${encodeURIComponent(mobile)}&blood=${encodeURIComponent(blood)}&pass=${encodeURIComponent(pass)}&t=${Date.now()}`;
+      await fetch(url);
+    }catch(e){ console.log("Sheet fail, Firebase e save hoise",e); }
+    showMsg("✅ Request পাঠানো হয়েছে! Admin Approve করলে Login করতে পারবে!",true);
+    btn.innerText="✅ Request Sent!";
+    setTimeout(()=>{ location.href='dashboard.html'; },2000);
+  }catch(e){ showMsg("❌ Server Error! Internet Check করো! "+e,false); btn.disabled=false; btn.innerText="Create Profile & Send Request"; }
 }
 </script>
-</body>
-</html>
+</body></html>
