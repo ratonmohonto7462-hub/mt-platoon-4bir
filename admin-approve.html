@@ -1,32 +1,86 @@
-<!DOCTYPE html> <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - MT PLATOON</title> <style>body{margin:0;font-family:Arial;background:#f4f4f4} .top{background:#111;color:#fff;padding:14px 20px;display:flex;justify-content:space-between} .wrap{padding:16px;max-width:500px;margin:0 auto} .card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;border-left:5px solid #ff9800;box-shadow:0 2px 6px rgba(0,0,0,0.1)} .btn{padding:8px 14px;border:none;border-radius:20px;font-weight:700;cursor:pointer;margin-right:6px} .btn-a{background:#00c853;color:#fff} .btn-r{background:#ff3d00;color:#fff} #loginBox{height:100vh;display:flex;align-items:center;justify-content:center;background:#0a1a0f} input{width:100%;padding:14px;border:1.5px solid #111;border-radius:10px;margin-top:10px}</style> </head><body> <div id="loginBox"><div style="background:#fff;padding:24px;border-radius:16px;width:90%;max-width:320px"><h2>🔐 Admin Login</h2><input id="apass" type="password" placeholder="Admin Password"><button onclick="checkAdmin()" style="width:100%;padding:14px;background:#111;color:#fff;border:none;border-radius:30px;margin-top:12px;font-weight:700">Login</button><p style="text-align:center;font-size:12px;color:#888">Password: mtadmin123<br>or MT CLK ID</p></div></div> <div id="mainBox" style="display:none"><div class="top"><span>MT PLATOON - ADMIN</span><span onclick="location.href='dashboard.html'" style="cursor:pointer;font-size:22px">X</span></div> <div class="wrap"><h3>⏳ Pending <span id="count" style="background:red;color:#fff;padding:2px 8px;border-radius:10px;font-size:12px">0</span></h3><div id="list">Loading...</div></div></div> <script> 
-const GARAGE_API="https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
-function checkAdmin(){ 
+ <!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - MT PLATOON</title>
+<style>body{margin:0;font-family:Arial;background:#f4f4f4} .top{background:#111;color:#fff;padding:14px 20px;display:flex;justify-content:space-between} .wrap{padding:16px;max-width:500px;margin:0 auto} .card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;border-left:5px solid #ff9800;box-shadow:0 2px 6px rgba(0,0,0,0.1)} .btn{padding:8px 14px;border:none;border-radius:20px;font-weight:700;cursor:pointer;margin-right:6px} .btn-a{background:#00c853;color:#fff} .btn-r{background:#ff3d00;color:#fff} #loginBox{height:100vh;display:flex;align-items:center;justify-content:center;background:#0a1a0f} input{width:100%;padding:14px;border:1.5px solid #111;border-radius:10px;margin-top:10px}</style>
+</head><body>
+<div id="loginBox"><div style="background:#fff;padding:24px;border-radius:16px;width:90%;max-width:320px"><h2>🔐 Admin Login</h2><input id="apass" type="password" placeholder="Admin Password"><button onclick="checkAdmin()" style="width:100%;padding:14px;background:#111;color:#fff;border:none;border-radius:30px;margin-top:12px;font-weight:700">Login</button><p style="text-align:center;font-size:12px;color:#888">Password: mtadmin123<br>or MT CLK ID</p></div></div>
+<div id="mainBox" style="display:none"><div class="top"><span>MT PLATOON - ADMIN (Sheet + Firebase)</span><span onclick="location.href='dashboard.html'" style="cursor:pointer;font-size:22px">X</span></div>
+<div class="wrap"><h3>⏳ Pending <span id="count" style="background:red;color:#fff;padding:2px 8px;border-radius:10px;font-size:12px">0</span></h3><div id="list">Loading...</div></div></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U",
+  authDomain: "mt-messenger-63922.firebaseapp.com",
+  projectId: "mt-messenger-63922",
+  storageBucket: "mt-messenger-63922.firebasestorage.app",
+  messagingSenderId: "184454055809",
+  appId: "1:184454055809:web:4d24320f792d7e86fdca80",
+  measurementId: "G-E1M0WH2RD9"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const GARAGE_API = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
+
+window.checkAdmin = function(){
   let pass = document.getElementById('apass').value;
   let role = localStorage.getItem('mt_role');
   if(pass==="mtadmin123" || role==="MT CLK" || pass==="MT CLK"){
-    document.getElementById('loginBox').style.display="none"; 
-    document.getElementById('mainBox').style.display="block"; 
-    loadData(); 
-  } else alert("⛔ Wrong! Only MT CLK"); 
-} 
-let roleCheck = localStorage.getItem('mt_role');
-if(roleCheck === "MT CLK"){
-  document.getElementById('loginBox').style.display="none"; 
-  document.getElementById('mainBox').style.display="block"; 
+    document.getElementById('loginBox').style.display="none";
+    document.getElementById('mainBox').style.display="block";
+    loadData();
+  } else alert("⛔ Wrong! Only MT CLK");
+}
+if(localStorage.getItem('mt_role')==="MT CLK"){
+  document.getElementById('loginBox').style.display="none";
+  document.getElementById('mainBox').style.display="block";
   loadData();
 }
-function loadData(){ 
-  fetch(GARAGE_API+"?action=getPending&t="+Date.now())
-  .then(r=>r.json()).then(data=>{ 
-    document.getElementById('count').innerText = data.length;
-    let html=""; 
-    data.forEach(row=>{ 
-      html+=`<div class="card"><b>${row.sena} - ${row.name}</b><br>Mobile: ${row.mobile}<br>Rank: ${row.podobi} | Company: ${row.company} | Blood: ${row.blood}<br><b style="color:orange">PENDING</b><br><br><button class="btn btn-a" onclick="approve('${row.sena}')">✓ Approve</button><button class="btn btn-r" onclick="reject('${row.sena}')">X Reject</button></div>`; 
-    }); 
-    if(!html) html="<p style='text-align:center;color:green;padding:20px'>✅ কোনো Pending Request নাই!</p>"; 
-    document.getElementById('list').innerHTML=html; 
+
+async function loadData(){
+  try{
+    // 1. Firebase theke try korbo
+    const q = query(collection(db, "users"), where("status", "==", "pending"));
+    const snap = await getDocs(q);
+    let list = [];
+    snap.forEach(d=>{
+      let r = d.data();
+      list.push({ id: d.id, sena: r.sena || d.id, name: r.name || "", mobile: r.mobile || "", podobi: r.podobi || r.rank || "", company: r.company || "", blood: r.blood || "" });
+    });
+    if(list.length > 0){ renderList(list, "Firebase"); return; }
+    // Firebase e na thakle Sheet theke anbo
+    throw new Error("Firebase empty");
+  }catch(e){
+    console.log("Firebase fail, Sheet theke nicchi", e);
+    fetch(GARAGE_API+"?action=getPending&t="+Date.now())
+    .then(r=>r.json()).then(data=>{ renderList(data, "Sheet"); });
+  }
+}
+
+function renderList(data, source){
+  document.getElementById('count').innerText = data.length;
+  let html="";
+  data.forEach(row=>{
+    html+=`<div class="card"><b>${row.sena} - ${row.name}</b><br>Mobile: ${row.mobile}<br>Rank: ${row.podobi} | Company: ${row.company} | Blood: ${row.blood}<br><b style="color:orange">PENDING - ${source}</b><br><br><button class="btn btn-a" onclick="approve('${row.sena}')">✓ Approve</button><button class="btn btn-r" onclick="reject('${row.sena}')">X Reject</button></div>`;
   });
-} 
-function approve(sena){ if(confirm(sena+" Approve?")){ fetch(GARAGE_API+`?action=approve&sena=${encodeURIComponent(sena)}&t=${Date.now()}`).then(()=>{ alert("✅ Approved!"); loadData(); }); } } 
-function reject(sena){ if(confirm(sena+" Reject?")){ fetch(GARAGE_API+`?action=reject&sena=${encodeURIComponent(sena)}&t=${Date.now()}`).then(()=>{ alert("❌ Rejected!"); loadData(); }); } } 
-</script> </body></html>
+  if(!html) html="<p style='text-align:center;color:green;padding:20px'>✅ কোনো Pending Request নাই!</p>";
+  document.getElementById('list').innerHTML=html;
+}
+
+window.approve = async function(sena){
+  if(!confirm(sena+" Approve?")) return;
+  // Firebase update
+  try{ await updateDoc(doc(db, "users", sena), { status: "approved", approvedAt: new Date().toISOString() }); }catch(e){ console.log("Firebase approve fail", e); }
+  // Sheet update
+  fetch(GARAGE_API+`?action=approve&sena=${encodeURIComponent(sena)}&t=${Date.now()}`).then(()=>{ alert("✅ Approved! (Firebase + Sheet)"); loadData(); });
+}
+
+window.reject = async function(sena){
+  if(!confirm(sena+" Reject?")) return;
+  try{ await updateDoc(doc(db, "users", sena), { status: "rejected" }); }catch(e){ console.log("Firebase reject fail", e); }
+  fetch(GARAGE_API+`?action=reject&sena=${encodeURIComponent(sena)}&t=${Date.now()}`).then(()=>{ alert("❌ Rejected! (Firebase + Sheet)"); loadData(); });
+}
+</script>
+</body></html>
