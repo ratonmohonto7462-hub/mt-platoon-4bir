@@ -13,35 +13,43 @@ body{font-family:Arial;background:#f2f2f2;margin:0}
 </head>
 <body>
 <div class="top"><b>Group Members - Seniority Wise</b></div>
-<div class="list" id="list"></div>
+<div class="list" id="list"><p style="text-align:center;margin-top:20px">Loading...</p></div>
 <script>
-let members = [];
-let keysToTry = ['approvedMembers','approved','members','memberList','approved_members','allMembers'];
+const GARAGE_API = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
 
-for(let k of keysToTry){
-  try{
-    let v = JSON.parse(localStorage.getItem(k) || '[]');
-    if(Array.isArray(v) && v.length){
-      // jodi approved flag thake, sudhu approved gula nibo
-      let approvedOnly = v.filter(m => !('approved' in m) || m.approved === true || m.approved === 'true' || m.status === 'approved');
-      members = members.concat(approvedOnly.length ? approvedOnly : v);
-    }
-  }catch(e){}
+async function load(){
+  let members = [];
+  // Sheet e approved member anar action gula try korbo
+  let actions = ['getApproved','getMembers','getAll','getApprovedMembers'];
+  for(let act of actions){
+    try{
+      let r = await fetch(GARAGE_API + "?action=" + act + "&t=" + Date.now());
+      let data = await r.json();
+      if(Array.isArray(data) && data.length){
+        members = data;
+        break;
+      }
+    }catch(e){}
+  }
+
+  // jodi sob action fail kore, getPending er moto kore getApproved na thakle
+  // tokhon data khali thakbe, Sheet e getApproved action lagbe
+  members = members.filter(m => {
+    let s = String(m.status || m.approved || 'approved').toLowerCase();
+    return s === 'approved' || s === 'true' || s === 'approve' || !m.status;
+  });
+
+  // Seniority = Sena Number, choto number age
+  members.sort((a,b) => Number(a.sena || a.senaNo || 0) - Number(b.sena || b.senaNo || 0));
+
+  document.getElementById('list').innerHTML = members.length ? members.map((m,i)=>{
+    let sena = m.sena || m.senaNo || '';
+    let name = m.name || '';
+    let rank = m.podobi || m.rank || '';
+    return `<div class="item"><span>${i+1}. ${sena} - ${name}</span><span>${rank}</span></div>`;
+  }).join('') : '<p style="text-align:center;margin-top:20px">কোনো মেম্বার এখনো Add হয়নি</p>';
 }
-
-// duplicate senaNo thakle 1 bar rakhbo
-let seen = {};
-members = members.filter(m => {
-  let key = String(m.senaNo || m.name || '');
-  if(seen[key]) return false;
-  seen[key] = true;
-  return true;
-});
-
-// seniority = sena number, choto number age = besi senior
-members.sort((a,b)=> Number(a.senaNo) - Number(b.senaNo));
-
-document.getElementById('list').innerHTML = members.length ? members.map((m,i)=> `<div class="item"><span>${i+1}. ${m.senaNo} - ${m.name}</span><span>${m.rank||''}</span></div>`).join('') : '<p style="text-align:center;margin-top:20px">কোনো মেম্বার এখনো Add হয়নি</p>';
+load();
 </script>
 </body>
 </html>
