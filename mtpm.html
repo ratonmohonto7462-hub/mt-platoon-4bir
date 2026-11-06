@@ -1,0 +1,94 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MTPM</title>
+<style>
+body{margin:0;font-family:Arial;background:#0a2e1f;color:#fff}
+.wrap{max-width:480px;margin:0 auto;height:100vh;display:flex;flex-direction:column;background:#0a2e1f}
+.top{padding:14px 16px 6px;display:flex;justify-content:space-between;align-items:center;background:#0e3a28}
+.top h1{margin:0;color:#ffcc00;font-size:52px;font-weight:900;letter-spacing:1px;line-height:1}
+.top .icons{font-size:22px;display:flex;gap:16px;color:#ffcc00}
+.search{padding:12px 14px}
+.search input{width:100%;padding:13px 16px;border:none;border-radius:25px;background:#9fb3a8;color:#222;font-size:15px;outline:none;box-sizing:border-box}
+.list{flex:1;overflow-y:auto;padding:0 10px}
+.person{display:flex;align-items:center;gap:12px;padding:13px 10px;cursor:pointer;border-radius:14px}
+.person:active{background:rgba(255,255,255,0.08)}
+.av{width:54px;height:54px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0}
+.av.group{background:#ffcc00;color:#111;font-size:22px}
+.info{flex:1;min-width:0}
+.pname{font-weight:800;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.psub{font-size:13px;color:#a8c5b5;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.right{text-align:right;font-size:12px;color:#a8c5b5;flex-shrink:0}
+.tick{color:#ffcc00;font-weight:900}
+.badge{background:#ffcc00;color:#111;font-size:12px;padding:2px 7px;border-radius:10px}
+.bottomNav{display:flex;justify-content:space-around;background:#0e3a28;padding:12px 0 14px;border-radius:22px 22px 0 0}
+.navItem{text-align:center;color:#8fae9e;font-size:12px;cursor:pointer}
+.navItem.active{color:#ffcc00}
+.navItem .ic{font-size:24px}
+/* CHAT VIEW */
+#chatView{display:none;flex-direction:column;flex:1;background:#0a2e1f}
+.chatHead{background:#0e3a28;padding:12px;display:flex;align-items:center;gap:10px;font-weight:800}
+#chatBox{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.msg{background:#fff;color:#111;padding:10px 12px;border-radius:14px;max-width:80%}
+.mine{align-self:flex-end;background:#dcf8c6}
+.other{align-self:flex-start}
+.name{font-size:11px;color:#0e5d3e;font-weight:700}
+.time{font-size:10px;color:#888;text-align:right;margin-top:4px}
+.bottom{display:flex;padding:10px;background:#fff;gap:8px}
+.bottom input{flex:1;padding:12px;border:1.5px solid #ddd;border-radius:25px;outline:none}
+.bottom button{padding:12px 18px;background:#0a1a12;color:#ffcc00;border:none;border-radius:25px;font-weight:900}
+</style>
+</head><body>
+<div class="wrap">
+<!-- TOP -->
+<div class="top"><h1>MTPM</h1><div class="icons"><span>🔍</span><span>📷</span></div></div>
+
+<!-- LIST VIEW -->
+<div id="listView" style="display:flex;flex-direction:column;flex:1">
+<div class="search"><input id="searchInput" placeholder="🔍 Search chats..." oninput="filterList()"></div>
+<div class="list" id="userList"><p style="text-align:center;color:#a8c5b5">Loading...</p></div>
+<!-- BOTTOM NAV -->
+<div class="bottomNav">
+<div class="navItem active" onclick="backToList()"><div class="ic">💬</div>Chats</div>
+<div class="navItem" onclick="alert('Calls পরে আসবে')"><div class="ic">📞</div>Calls</div>
+<div class="navItem" onclick="location.href='group.html'"><div class="ic">👤</div>Contacts</div>
+<div class="navItem" onclick="location.href='own-profile.html'"><div class="ic">⚙️</div>Settings</div>
+</div>
+</div>
+
+<!-- CHAT VIEW -->
+<div id="chatView">
+<div class="chatHead"><span onclick="backToList()" style="cursor:pointer;font-size:22px">←</span><div class="av" id="chatAv" style="width:38px;height:38px;font-size:15px">G</div><span id="chatName">Group</span></div>
+<div id="chatBox"></div>
+<div class="bottom"><input id="msgInput" placeholder="Message লিখো..."><button onclick="sendMsg()">Send</button></div>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+const GARAGE_API = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
+let mySena = (localStorage.getItem('mt_army')||localStorage.getItem('sena_no')||localStorage.getItem('mt_sena')||"").toString();
+let myName = localStorage.getItem('mt_name')||mySena||"Unknown"; let myPodobi = localStorage.getItem('mt_podobi')||"";
+let allUsers=[]; let currentChatId="group"; let unsub=null;
+async function loadUsers(){
+  try{ const q=query(collection(db,"users"), where("status","==","approved")); const snap=await getDocs(q); allUsers=[]; snap.forEach(d=>{ let m=d.data(); if(m.sena!==mySena) allUsers.push({ sena:m.sena||d.id, name:m.name||"", podobi:m.podobi||"", company:m.company||"" }); }); if(allUsers.length===0) throw new Error("empty"); renderList(allUsers); }
+  catch(e){ try{ let r=await fetch(GARAGE_API+"?action=getApproved&t="+Date.now()); let data=await r.json(); allUsers=data.filter(m=>String(m.sena)!==mySena); renderList(allUsers); }catch(e2){ document.getElementById('userList').innerHTML="<p style='text-align:center'>কোনো মেম্বার পাওয়া যায়নি</p>"; } }
+}
+loadUsers();
+if(mySena){ getDoc(doc(db,"users",mySena)).then(s=>{ if(s.exists()){ let d=s.data(); myName=d.name||myName; myPodobi=d.podobi||""; } }); }
+function initials(name){ let p=(name||"").trim().split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return (name||"U").substring(0,2).toUpperCase(); }
+function renderList(list){
+  // Group ta sobar upore - tomar chobir moto OPERATIONS GROUP
+  let html=`<div class="person" onclick="openChat('group','OPERATIONS GROUP')"><div class="av group">👥</div><div class="info"><div class="pname">OPERATIONS GROUP</div><div class="psub">Capt: Mission brief at 0800 — we move out at dawn</div></div><div class="right">08:12<br>🔔</div></div>`;
+  list.sort((a,b)=>Number(a.sena)-Number(b.sena)).forEach(u=>{
+    html+=`<div class="person" onclick="openChat('${u.sena}','${u.name} - ${u.sena}')"><div class="av">${initials(u.name)}</div><div class="info"><div class="pname">${u.name} - ${u.sena}</div><div class="psub">${u.podobi||'Pvt'} • ${u.company||'Coy A'} • Online</div></div><div class="right">08:05 <span class="tick">✓✓</span></div></div>`;
+  });
+  document.getElementById('userList').innerHTML=html;
+}
+window.filterList = function(){ let key=document.getElementById('searchInput').value.toLowerCase(); let f=allUsers.filter(u=>(u.name+" "+u.sena+" "+u.podobi).toLowerCase().includes(key)); renderList(f); }
+window.openChat = function(otherSena, displayName){ if(otherSena==='group'){ currentChatId='group'; } else { let a=[mySena, otherSena].sort(); currentChatId="dm_"+a[0]+"_"+a[1]; } document.getElementById('listView').style.display="none"; document.getElementById('chatView').style.display="flex"; document.getElementById('chatName').innerText=displayName; document.getElementById('chatAv').innerText=initials(displayName); if(unsub) unsub(); const q=query(collection(db,"messages"), where("chatId","==",currentChatId), orderBy("time","asc")); unsub=onSnapshot(q,(snap)=>{ let html=""; snap.forEach(d=>{ let m=d.data(); let isMine=m.sena==mySena; let t=m.time?new Date(m.time).toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'}):""; html+=`<div class="msg ${isMine?'mine':'other'}"><div class="name">${m.name||m.sena}</div><div>${m.text}</div><div class="time">${t}</div></div>`; }); document.getElementById('chatBox').innerHTML=html||"<p style='text-align:center;color:#aaa'>কোনো মেসেজ নাই। প্রথম মেসেজটা পাঠাও!</p>"; let c=document.getElementById('chatBox'); c.scrollTop=c.scrollHeight; }); }
+window.backToList = function(){ if(unsub) unsub(); document.getElementById('chatView').style.display="none"; document.getElementById('listView').style.display="flex"; }
+window.sendMsg = async function(){ let inp=document.getElementById('msgInput'); let text=inp.value.trim(); if(!text) return; inp.value=""; let now=Date.now(); try{ await addDoc(collection(db,"messages"), { chatId: currentChatId, sena: mySena, name: myName, podobi: myPodobi, text, time: now, createdAt: new Date().toISOString() }); }catch(e){ alert("Error: "+e); } try{ fetch(GARAGE_API+`?action=sendMessage&sena=${encodeURIComponent(mySena)}&name=${encodeURIComponent(myName)}&text=${encodeURIComponent(text)}&chatId=${encodeURIComponent(currentChatId)}&t=${now}`); }catch(e){} }
+document.getElementById('msgInput').addEventListener('keypress',e=>{ if(e.key==='Enter') sendMsg(); });
+</script>
+</body></html>
