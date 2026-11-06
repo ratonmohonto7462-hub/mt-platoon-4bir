@@ -11,6 +11,7 @@
 .table th,.table td{border:1px solid #000;padding:5px 3px;text-align:center}
 .table th{background:#eee}
 .table td[contenteditable]{background:#fffde7}
+#totalRow td{background:#ffcc00 !important;font-weight:900;color:#000}
 .btnRow{display:flex;gap:10px}
 .saveBtn{flex:1;background:#122e18;color:#fff;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}
 .printBtn{flex:1;background:#c8a951;color:#000;border:none;padding:14px;border-radius:10px;font-weight:900;margin:12px 0}
@@ -51,6 +52,7 @@
 <tr><td>৮।</td><td contenteditable="true">০৩২৯৫৬</td><td contenteditable="true">-</td><td contenteditable="true">১২০</td><td contenteditable="true">১২০</td><td contenteditable="true">-</td><td contenteditable="true">০৬</td><td contenteditable="true"></td><td contenteditable="true">৭২০</td><td contenteditable="true"></td></tr>
 <tr><td>৯।</td><td contenteditable="true">০৩২৯১৪</td><td contenteditable="true">-</td><td contenteditable="true">৯০</td><td contenteditable="true">৯০</td><td contenteditable="true">-</td><td contenteditable="true">০৭</td><td contenteditable="true"></td><td contenteditable="true">৬৬০</td><td contenteditable="true"></td></tr>
 <tr><td>১০।</td><td contenteditable="true">০৩২৬৪৮</td><td contenteditable="true">-</td><td contenteditable="true">১৫২</td><td contenteditable="true">১৪৪</td><td contenteditable="true">০৮</td><td contenteditable="true">০৭</td><td contenteditable="true"></td><td contenteditable="true">১০০৮</td><td contenteditable="true"></td></tr>
+<tr id="totalRow"><td colspan="2">মোট</td><td>০</td><td>০</td><td>০</td><td>০</td><td>-</td><td>-</td><td>০</td><td></td></tr>
 </tbody></table></div>
 <div class="footer">সীমিত</div>
 </div>
@@ -60,11 +62,49 @@ function en2bn(s){return String(s).replace(/[0-9]/g,function(d){return '০১�
 function numVal(t){t=t.trim();if(t===''||t==='-'||t==='–')return 0;var n=parseFloat(bn2en(t));return isNaN(n)?0:n}
 function fmt(n){return en2bn(n.toFixed(0))}
 function calcRow(tr){var c=tr.cells;if(c.length<10)return;var purbo=numVal(c[2].textContent);var issu=numVal(c[3].textContent);var khoroch=numVal(c[4].textContent);var kpl=parseFloat(bn2en(c[6].textContent.trim()))||0;var obosisto=purbo+issu-khoroch;c[5].textContent=obosisto===0?'-':fmt(obosisto);if(khoroch>0&&kpl>0){c[8].textContent=fmt(Math.round(khoroch*kpl))}}
-function calcAll(){document.querySelectorAll('#polBody tr').forEach(function(tr){if(tr.cells.length>=10&&tr.cells[0].textContent.indexOf('।')!==-1)calcRow(tr)})}
-document.getElementById('polBody').addEventListener('input',function(e){var tr=e.target.closest('tr');if(tr)calcRow(tr)});
-function addRow(){var n=document.querySelectorAll('#polBody tr').length;var tr=document.createElement('tr');tr.innerHTML='<td>'+en2bn(n)+'।</td><td contenteditable="true"></td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>';document.getElementById('polBody').appendChild(tr)}
-function deleteRow(){var rows=document.querySelectorAll('#polBody tr');if(rows.length>2){rows[rows.length-1].remove();}else{alert('আর ডিলিট করা যাইবো না');}}
-document.getElementById('searchInput').addEventListener('input',function(){var q=this.value.toLowerCase().trim();document.querySelectorAll('#polBody tr').forEach(function(tr){if(tr.cells.length>=10&&tr.cells[0].textContent.indexOf('।')!==-1){var txt=tr.cells[0].textContent+tr.cells[1].textContent;tr.style.display=(!q||txt.toLowerCase().includes(q))?'':'none'}})})
+function calcTotal(){
+  var sums=[0,0,0,0,0];
+  document.querySelectorAll('#polBody tr').forEach(function(tr){
+    if(tr.id==='totalRow') return;
+    if(tr.cells.length>=10 && tr.cells[0].textContent.indexOf('।')!==-1){
+      sums[0]+=numVal(tr.cells[2].textContent);
+      sums[1]+=numVal(tr.cells[3].textContent);
+      sums[2]+=numVal(tr.cells[4].textContent);
+      sums[3]+=numVal(tr.cells[5].textContent);
+      sums[4]+=numVal(tr.cells[8].textContent);
+    }
+  });
+  var t=document.getElementById('totalRow');
+  if(t){
+    t.cells[1].textContent = sums[0]===0?'-':fmt(sums[0]);
+    t.cells[2].textContent = sums[1]===0?'-':fmt(sums[1]);
+    t.cells[3].textContent = sums[2]===0?'-':fmt(sums[2]);
+    t.cells[4].textContent = sums[3]===0?'-':fmt(sums[3]);
+    t.cells[7].textContent = sums[4]===0?'-':fmt(sums[4]);
+  }
+}
+function calcAll(){document.querySelectorAll('#polBody tr').forEach(function(tr){if(tr.id==='totalRow')return;if(tr.cells.length>=10&&tr.cells[0].textContent.indexOf('।')!==-1)calcRow(tr)});calcTotal();}
+document.getElementById('polBody').addEventListener('input',function(e){var tr=e.target.closest('tr');if(tr && tr.id!=='totalRow')calcRow(tr);calcTotal();});
+function addRow(){
+  var dataRows=document.querySelectorAll('#polBody tr:not(#totalRow)');
+  var n=dataRows.length;
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td>'+en2bn(n)+'।</td><td contenteditable="true"></td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true">-</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>';
+  var total=document.getElementById('totalRow');
+  document.getElementById('polBody').insertBefore(tr,total);
+  calcTotal();
+}
+function deleteRow(){
+  var rows=document.querySelectorAll('#polBody tr');
+  var dataCount=0;
+  rows.forEach(function(r){if(r.cells.length>=10&&r.cells[0].textContent.indexOf('।')!==-1)dataCount++;});
+  if(dataCount>1){
+    var total=document.getElementById('totalRow');
+    total.previousElementSibling.remove();
+    calcTotal();
+  }else{alert('আর ডিলিট করা যাইবো না');}
+}
+document.getElementById('searchInput').addEventListener('input',function(){var q=this.value.toLowerCase().trim();document.querySelectorAll('#polBody tr').forEach(function(tr){if(tr.id==='totalRow')return;if(tr.cells.length>=10&&tr.cells[0].textContent.indexOf('।')!==-1){var txt=tr.cells[0].textContent+tr.cells[1].textContent;tr.style.display=(!q||txt.toLowerCase().includes(q))?'':'none'}})})
 calcAll();
 </script>
 <script type="module">
@@ -74,7 +114,7 @@ const firebaseConfig={apiKey:"AIzaSyBvthd7-6f209cGgYzUXjoE9Y4uCeSeuCWE4A",authDo
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 let currentMonth="জুলাই-২০২৬";
 function getRef(m){return doc(db,"support_forms","support2_"+m)}
-async function loadMonth(){const m=document.getElementById('monthSelect').value;currentMonth=m;document.getElementById('monthTitle').innerText="পিওএল খরচের বিবরণী "+m;document.getElementById('syncStatus').innerText="";const snap=await getDoc(getRef(m));if(snap.exists()){document.getElementById('polBody').innerHTML=snap.data().html;document.getElementById('syncStatus').innerText=" • "+m+" ✅";calcAll()}else{document.getElementById('syncStatus').innerText=" • "+m+""}}
+async function loadMonth(){const m=document.getElementById('monthSelect').value;currentMonth=m;document.getElementById('monthTitle').innerText="পিওএল খরচের বিবরণী "+m;document.getElementById('syncStatus').innerText="";const snap=await getDoc(getRef(m));if(snap.exists()){document.getElementById('polBody').innerHTML=snap.data().html;document.getElementById('syncStatus').innerText=" • "+m+" ✅";calcAll();}else{document.getElementById('syncStatus').innerText=" • "+m+""}}
 window.loadMonth=loadMonth;
 document.getElementById('saveBtn').onclick=async()=>{document.getElementById('syncStatus').innerText="";await setDoc(getRef(currentMonth),{html:document.getElementById('polBody').innerHTML,updatedAt:Date.now(),month:currentMonth,title:"পিওএল খরচের বিবরণী - "+currentMonth});document.getElementById('syncStatus').innerText=" • ✅ "+currentMonth+" ";alert('✅ '+currentMonth)};
 loadMonth();
