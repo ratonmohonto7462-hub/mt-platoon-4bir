@@ -1,55 +1,46 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Group - Seniority</title>
-<style>
-body{font-family:Arial;background:#f2f2f2;margin:0}
-.top{background:#0a1a12;color:#fff;padding:14px;text-align:center}
-.list{padding:10px}
-.item{background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;border-left:4px solid #0e5d3e}
-</style>
-</head>
-<body>
-<div class="top"><b>Group Members - Seniority Wise</b></div>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Group - Seniority</title>
+<style> body{font-family:Arial;background:#f2f2f2;margin:0} .top{background:#0a1a12;color:#fff;padding:14px;text-align:center} .list{padding:10px} .item{background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;border-left:4px solid #0e5d3e} </style>
+</head><body>
+<div class="top"><b>Group Members - Seniority Wise</b><div style="font-size:11px;opacity:0.7;margin-top:4px" id="src">Firebase + Sheet</div></div>
 <div class="list" id="list"><p style="text-align:center;margin-top:20px">Loading...</p></div>
-<script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const GARAGE_API = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
 
 async function load(){
   let members = [];
-  // Sheet e approved member anar action gula try korbo
+  try{
+    // 1. Firebase theke approved anbo
+    const q = query(collection(db, "users"), where("status", "==", "approved"));
+    const snap = await getDocs(q);
+    snap.forEach(d=>{ let m=d.data(); members.push({ sena: m.sena||d.id, name: m.name||"", podobi: m.podobi||m.rank||"", company: m.company||"", status:"approved" }); });
+    if(members.length > 0){ document.getElementById('src').innerText = "Source: Firebase"; render(members); return; }
+    throw new Error("Firebase empty");
+  }catch(e){ console.log("Firebase fail, Sheet try", e); }
+
+  // 2. Sheet theke try
   let actions = ['getApproved','getMembers','getAll','getApprovedMembers'];
   for(let act of actions){
-    try{
-      let r = await fetch(GARAGE_API + "?action=" + act + "&t=" + Date.now());
-      let data = await r.json();
-      if(Array.isArray(data) && data.length){
-        members = data;
-        break;
-      }
-    }catch(e){}
+    try{ let r = await fetch(GARAGE_API + "?action=" + act + "&t=" + Date.now()); let data = await r.json(); if(Array.isArray(data) && data.length){ members = data; break; } }catch(e){}
   }
+  members = members.filter(m => { let s = String(m.status || m.approved || 'approved').toLowerCase(); return s === 'approved' || s === 'true' || s === 'approve' || !m.status; });
+  document.getElementById('src').innerText = "Source: Sheet";
+  render(members);
+}
 
-  // jodi sob action fail kore, getPending er moto kore getApproved na thakle
-  // tokhon data khali thakbe, Sheet e getApproved action lagbe
-  members = members.filter(m => {
-    let s = String(m.status || m.approved || 'approved').toLowerCase();
-    return s === 'approved' || s === 'true' || s === 'approve' || !m.status;
-  });
-
-  // Seniority = Sena Number, choto number age
+function render(members){
   members.sort((a,b) => Number(a.sena || a.senaNo || 0) - Number(b.sena || b.senaNo || 0));
-
   document.getElementById('list').innerHTML = members.length ? members.map((m,i)=>{
-    let sena = m.sena || m.senaNo || '';
-    let name = m.name || '';
-    let rank = m.podobi || m.rank || '';
+    let sena = m.sena || m.senaNo || ''; let name = m.name || ''; let rank = m.podobi || m.rank || '';
     return `<div class="item"><span>${i+1}. ${sena} - ${name}</span><span>${rank}</span></div>`;
   }).join('') : '<p style="text-align:center;margin-top:20px">কোনো মেম্বার এখনো Add হয়নি</p>';
 }
 load();
 </script>
-</body>
-</html>
+</body></html>
