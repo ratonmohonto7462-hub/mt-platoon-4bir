@@ -1,51 +1,58 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Own Profile</title></head><body style="margin:0;background:#f0f0f0;font-family:Arial">
-
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Own Profile</title></head>
+<body style="margin:0;background:#f0f0f0;font-family:Arial">
 <div style="max-width:420px;margin:20px auto;background:#fff;border-radius:16px;overflow:hidden">
-<div style="background:#0a1a12;color:#ffcc00;text-align:center;padding:14px;font-weight:900">Own Profile</div>
+<div style="background:#0a1a12;color:#ffcc00;text-align:center;padding:14px;font-weight:900">Own Profile <div id="src" style="font-size:11px;color:#fff;opacity:0.7;font-weight:400">Firebase + Sheet</div></div>
 <div style="padding:20px;text-align:center">
 <img id="pImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:120px;height:120px;border-radius:50%;border:4px solid #0e5d3e;object-fit:cover">
-<h2 id="pName">Loading...</h2>
-<p id="pPodobi" style="margin:0;color:#0e5d3e;font-weight:700"></p>
-
+<h2 id="pName">Loading...</h2><p id="pPodobi" style="margin:0;color:#0e5d3e;font-weight:700"></p>
 <div style="text-align:left;background:#fffbe6;padding:14px;border-radius:12px;margin-top:16px;line-height:30px">
-Sena No: <b id="sena"></b><br>
-Podobi: <b id="podobi"></b><br>
-Name: <b id="name"></b><br>
-Company: <b id="company"></b><br>
-Unit: <b id="unit"></b><br>
-Blood: <b id="blood"></b><br>
-Mobile: <b id="mobile"></b>
-</div>
+Sena No: <b id="sena"></b><br> Podobi: <b id="podobi"></b><br> Name: <b id="name"></b><br> Company: <b id="company"></b><br> Unit: <b id="unit"></b><br> Blood: <b id="blood"></b><br> Mobile: <b id="mobile"></b></div>
 <p id="msg" style="color:red;font-size:12px"></p>
-<button onclick="location.href='/'" style="margin-top:16px;width:100%;padding:12px;background:#0a1a12;color:#ffcc00;border:none;border-radius:10px;font-weight:900">Back</button>
-</div>
-</div>
+<button onclick="location.href='dashboard.html'" style="margin-top:16px;width:100%;padding:12px;background:#0a1a12;color:#ffcc00;border:none;border-radius:10px;font-weight:900">Back</button>
+</div></div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const API = "https://script.google.com/macros/s/AKfycbzXeX2zsFVXt8JtADM8m2bZrzFZP9NF2ZSUsOFnUI5j7JML_m_6RdILHrG3gtTsvUXf/exec";
-let sena = (localStorage.getItem('mt_army')||localStorage.getItem('sena_no')||"4521328").toString().replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'');
+const API2 = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
+
+let sena = (localStorage.getItem('mt_army')||localStorage.getItem('sena_no')||localStorage.getItem('mt_sena')||"4521328").toString().replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'');
 document.getElementById('sena').innerText = sena;
 
-fetch(API+"?sena_no="+sena)
-.then(r=>r.json())
-.then(d=>{
-  console.log(d);
-  if(d.error){ document.getElementById('msg').innerText=d.error; document.getElementById('pName').innerText=sena; return; }
+function showData(d){
   document.getElementById('pName').innerText = d.Name || d.name || sena;
-  document.getElementById('sena').innerText = d.Sena_No || d.sena_no || sena;
+  document.getElementById('sena').innerText = d.Sena_No || d.sena_no || d.sena || sena;
   document.getElementById('podobi').innerText = d.Podobi || d.podobi || "-";
   document.getElementById('pPodobi').innerText = d.Podobi || d.podobi || "";
   document.getElementById('name').innerText = d.Name || d.name || "-";
   document.getElementById('company').innerText = d.Company || d.company || "-";
-  document.getElementById('unit').innerText = d.Unit || d.unit || "-";
+  document.getElementById('unit').innerText = d.Unit || d.unit || "MT Platoon";
   document.getElementById('blood').innerText = d.Blood || d.blood || "-";
   document.getElementById('mobile').innerText = d.Mobile || d.mobile || "-";
   let photo = d.Photo || d.photo;
   if(photo) document.getElementById('pImg').src = photo;
-})
-.catch(e=>{
-  document.getElementById('msg').innerText = "API Error: "+e.message;
+}
+
+async function load(){
+  try{
+    const snap = await getDoc(doc(db, "users", sena));
+    if(snap.exists()){ document.getElementById('src').innerText = "Source: Firebase"; showData(snap.data()); return; }
+    throw new Error("Not in Firebase");
+  }catch(e){ console.log("Firebase fail, Sheet try", e); }
+  // Sheet theke
+  try{
+    let r = await fetch(API+"?sena_no="+sena);
+    let d = await r.json();
+    if(d && !d.error){ document.getElementById('src').innerText = "Source: Sheet"; showData(d); return; }
+  }catch(e){}
+  document.getElementById('msg').innerText = "Profile পাওয়া যায়নি। আগে Create Profile করো।";
   document.getElementById('pName').innerText = sena;
-});
+}
+load();
 </script>
 </body></html>
