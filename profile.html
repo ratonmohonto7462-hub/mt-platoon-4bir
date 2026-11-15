@@ -3,24 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Profile - MT Platoon</title>
-<style>
-body{margin:0;background:#0a1a12;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:sans-serif}
-.phone{width:360px;max-width:95vw;background:#0f281a;border:3px solid #1a4d2e;border-radius:28px;padding:15px;box-shadow:0 0 20px rgba(0,0,0,.5);position:relative}
-.borderGold{border:2px solid #c9a85c;border-radius:22px;padding:15px 15px 25px 15px;min-height:600px}
-.badge{text-align:center;margin:10px 0 20px 0}
-.badge span{border:1.5px solid #c9a85c;color:#c9a85c;padding:6px 18px;border-radius:20px;font-size:12px;letter-spacing:1px}
-.circle{width:160px;height:160px;margin:20px auto;border:3px solid #c9a85c;border-radius:50%;background:#143d27;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.circle img{width:100%;height:100%;object-fit:cover}
-.profileText{text-align:center;color:#c9a85c;letter-spacing:4px;margin:15px 0;font-size:14px}
-.row{display:flex;justify-content:space-between;padding:18px 5px;border-bottom:1px solid #5a4a2a2a;border-top:1px solid #3a3a2a22}
-.row:first-child{border-top:1px solid #c9a85c55}
-.label{color:#d6b86a;font-size:14px}
-.value{color:#c7d3b8;font-size:14px;text-transform:uppercase}
-.footer{text-align:center;color:#5a6a4a;font-size:9px;letter-spacing:2px;margin-top:25px}
-.back{color:#c9a85c;text-decoration:none;font-size:14px;display:block;margin-bottom:10px}
-input{width:100%;padding:10px;border-radius:8px;border:1px solid #c9a85c;background:#1a3a2a;color:#fff;margin-top:10px}
-button{width:100%;padding:12px;background:#c9a85c;color:#000;font-weight:bold;border:none;border-radius:8px;margin-top:10px}
-/* Admin না হইলে Change বাটন গায়েব */
+<style> body{margin:0;background:#0a1a12;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:sans-serif} .phone{width:360px;max-width:95vw;background:#0f281a;border:3px solid #1a4d2e;border-radius:28px;padding:15px;box-shadow:0 0 20px rgba(0,0,0,.5);position:relative} .borderGold{border:2px solid #c9a85c;border-radius:22px;padding:15px 15px 25px 15px;min-height:600px} .badge{text-align:center;margin:10px 0 20px 0} .badge span{border:1.5px solid #c9a85c;color:#c9a85c;padding:6px 18px;border-radius:20px;font-size:12px;letter-spacing:1px} .circle{width:160px;height:160px;margin:20px auto;border:3px solid #c9a85c;border-radius:50%;background:#143d27;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden} .circle img{width:100%;height:100%;object-fit:cover} .profileText{text-align:center;color:#c9a85c;letter-spacing:4px;margin:15px 0;font-size:14px} .row{display:flex;justify-content:space-between;padding:18px 5px;border-bottom:1px solid #5a4a2a2a;border-top:1px solid #3a3a2a22} .row:first-child{border-top:1px solid #c9a85c55} .label{color:#d6b86a;font-size:14px} .value{color:#c7d3b8;font-size:14px;text-transform:uppercase} .footer{text-align:center;color:#5a6a4a;font-size:9px;letter-spacing:2px;margin-top:25px} .back{color:#c9a85c;text-decoration:none;font-size:14px;display:block;margin-bottom:10px} input{width:100%;padding:10px;border-radius:8px;border:1px solid #c9a85c;background:#1a3a2a;color:#fff;margin-top:10px} button{width:100%;padding:12px;background:#c9a85c;color:#000;font-weight:bold;border:none;border-radius:8px;margin-top:10px}
 body:not(.is-admin) #changeBtn{ display:none !important; }
 </style>
 </head>
@@ -46,23 +29,20 @@ body:not(.is-admin) #changeBtn{ display:none !important; }
 <div class="footer">SECURE • MILITARY PROFILE • CLASSIFIED</div>
 </div>
 </div>
-<script>
-const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// *** FIX: আগের মত || "4521328" রাখা যাবে না, তাইলে সবাই Admin হয়ে যাবে ***
 function cleanSena(s){ return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,''); }
 const sena = cleanSena(localStorage.getItem("sena_no") || localStorage.getItem("mt_army") || "");
 const isAdmin = (sena === "4521328");
+if(isAdmin){ document.body.classList.add('is-admin'); document.getElementById('badgeText').innerText = "COMMAND - ADMIN"; }
+else { document.body.classList.remove('is-admin'); document.getElementById('badgeText').innerText = "COMMAND VIEW ONLY"; }
 
-if(isAdmin){
-  document.body.classList.add('is-admin');
-  document.getElementById('badgeText').innerText = "COMMAND - ADMIN";
-} else {
-  document.body.classList.remove('is-admin');
-  document.getElementById('badgeText').innerText = "COMMAND VIEW ONLY";
-}
-
-function loadProfile(){
+async function loadProfile(){
   document.getElementById("sena").innerText = localStorage.getItem("sena_no") || "-";
   document.getElementById("name").innerText = localStorage.getItem("name") || "-";
   document.getElementById("podobi").innerText = localStorage.getItem("podobi") || "SOLDIER";
@@ -71,39 +51,35 @@ function loadProfile(){
   document.getElementById("blood").innerText = localStorage.getItem("blood") || "-";
   let savedPic = localStorage.getItem("profile_pic");
   if(savedPic){ document.getElementById("picCircle").innerHTML = '<img src="'+savedPic+'">'; }
-
   if(!sena) return;
-  fetch(API+"?action=getProfile&sena="+sena).then(r=>r.json()).then(p=>{
-    if(p && p.sena){
-      document.getElementById("sena").innerText = p.sena;
-      document.getElementById("name").innerText = p.name;
+  try{
+    const snap = await getDoc(doc(db,"users",sena));
+    if(snap.exists()){
+      let p = snap.data();
+      document.getElementById("sena").innerText = p.sena || sena;
+      document.getElementById("name").innerText = p.name || "-";
       document.getElementById("podobi").innerText = p.podobi || "SOLDIER";
       document.getElementById("company").innerText = p.company || "-";
       document.getElementById("mobile").innerText = p.mobile || "-";
       document.getElementById("blood").innerText = p.blood || "-";
-      if(p.photo){
-        document.getElementById("picCircle").innerHTML = '<img src="'+p.photo+'">';
-        localStorage.setItem("profile_pic", p.photo);
-      }
+      if(p.photo){ document.getElementById("picCircle").innerHTML = '<img src="'+p.photo+'">'; localStorage.setItem("profile_pic", p.photo); }
     }
-  });
+  }catch(e){ console.log("Firebase fail",e); }
 }
 
-function uploadPic(input){
-  // *** শুধু 4521328 Change করতে পারবে ***
+window.uploadPic = function(input){
   if(!isAdmin){ alert('শুধু 4521328 ছবি Change করতে পারবে'); input.value=""; return; }
-  let file = input.files[0];
-  if(!file) return;
+  let file = input.files[0]; if(!file) return;
   let reader = new FileReader();
-  reader.onload = function(e){
+  reader.onload = async function(e){
     localStorage.setItem("profile_pic", e.target.result);
     document.getElementById("picCircle").innerHTML = '<img src="'+e.target.result+'">';
-    // Sheet এও পাঠাই দিলাম যাতে সবার কাছে Update হয়
-    fetch(API+"?action=updatePhoto&sena="+sena+"&photo="+encodeURIComponent(e.target.result)).catch(()=>{});
+    try{ await updateDoc(doc(db,"users",sena), { photo: e.target.result }); }catch(err){ console.log(err); }
     alert('✅ Photo Change হইছে');
-  }
+  };
   reader.readAsDataURL(file);
 }
+
 loadProfile();
 </script>
 </body>
