@@ -20,24 +20,21 @@ body{margin:0;background:#0a1a12;display:flex;justify-content:center;align-items
 .back{color:#c9a85c;text-decoration:none;font-size:14px;display:block;margin-bottom:10px}
 input{width:100%;padding:10px;border-radius:8px;border:1px solid #c9a85c;background:#1a3a2a;color:#fff;margin-top:10px}
 button{width:100%;padding:12px;background:#c9a85c;color:#000;font-weight:bold;border:none;border-radius:8px;margin-top:10px}
+/* Admin না হইলে Change বাটন গায়েব */
+body:not(.is-admin) #changeBtn{ display:none !important; }
 </style>
 </head>
 <body>
 <div class="phone">
 <div class="borderGold">
 <a href="command.html" class="back">← Back to Dashboard</a>
-<div class="badge"><span>COMMAND VIEW ONLY</span></div>
-
-<div class="circle" id="picCircle">
-<div style="font-size:80px">🪖</div>
-</div>
+<div class="badge"><span id="badgeText">PROFILE VIEW ONLY</span></div>
+<div class="circle" id="picCircle"><div style="font-size:80px">🪖</div></div>
 <div style="text-align:center">
 <input type="file" id="picInput" accept="image/*" style="display:none" onchange="uploadPic(this)">
-<button onclick="document.getElementById('picInput').click()" style="width:auto;padding:6px 15px;font-size:12px">Change Photo</button>
+<button id="changeBtn" onclick="document.getElementById('picInput').click()" style="width:auto;padding:6px 15px;font-size:12px">Change Photo</button>
 </div>
-
 <div class="profileText">PROFILE</div>
-
 <div id="rows">
 <div class="row"><span class="label">SENA NO</span><span class="value" id="sena">-</span></div>
 <div class="row"><span class="label">PODOBI (RANK)</span><span class="value" id="podobi">-</span></div>
@@ -46,30 +43,36 @@ button{width:100%;padding:12px;background:#c9a85c;color:#000;font-weight:bold;bo
 <div class="row"><span class="label">MOBILE NUMBER</span><span class="value" id="mobile">-</span></div>
 <div class="row"><span class="label">BLOOD GROUP</span><span class="value" id="blood">-</span></div>
 </div>
-
 <div class="footer">SECURE • MILITARY PROFILE • CLASSIFIED</div>
 </div>
 </div>
-
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzaoyIu0aETzIv0MC94SIJgcJ_nIQgbTLECGig_xhezPEYaGfoi91PLBjUgjAsEevbBzw/exec";
-const sena = localStorage.getItem("sena_no") || "4521328";
+
+// *** FIX: আগের মত || "4521328" রাখা যাবে না, তাইলে সবাই Admin হয়ে যাবে ***
+function cleanSena(s){ return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,''); }
+const sena = cleanSena(localStorage.getItem("sena_no") || localStorage.getItem("mt_army") || "");
+const isAdmin = (sena === "4521328");
+
+if(isAdmin){
+  document.body.classList.add('is-admin');
+  document.getElementById('badgeText').innerText = "COMMAND - ADMIN";
+} else {
+  document.body.classList.remove('is-admin');
+  document.getElementById('badgeText').innerText = "COMMAND VIEW ONLY";
+}
 
 function loadProfile(){
-  // localStorage theke fast load
   document.getElementById("sena").innerText = localStorage.getItem("sena_no") || "-";
   document.getElementById("name").innerText = localStorage.getItem("name") || "-";
   document.getElementById("podobi").innerText = localStorage.getItem("podobi") || "SOLDIER";
   document.getElementById("company").innerText = localStorage.getItem("company") || "-";
   document.getElementById("mobile").innerText = localStorage.getItem("mobile") || "-";
   document.getElementById("blood").innerText = localStorage.getItem("blood") || "-";
-
   let savedPic = localStorage.getItem("profile_pic");
-  if(savedPic){
-    document.getElementById("picCircle").innerHTML = '<img src="'+savedPic+'">';
-  }
+  if(savedPic){ document.getElementById("picCircle").innerHTML = '<img src="'+savedPic+'">'; }
 
-  // Sheet theke real data
+  if(!sena) return;
   fetch(API+"?action=getProfile&sena="+sena).then(r=>r.json()).then(p=>{
     if(p && p.sena){
       document.getElementById("sena").innerText = p.sena;
@@ -87,15 +90,20 @@ function loadProfile(){
 }
 
 function uploadPic(input){
+  // *** শুধু 4521328 Change করতে পারবে ***
+  if(!isAdmin){ alert('শুধু 4521328 ছবি Change করতে পারবে'); input.value=""; return; }
   let file = input.files[0];
+  if(!file) return;
   let reader = new FileReader();
   reader.onload = function(e){
     localStorage.setItem("profile_pic", e.target.result);
     document.getElementById("picCircle").innerHTML = '<img src="'+e.target.result+'">';
+    // Sheet এও পাঠাই দিলাম যাতে সবার কাছে Update হয়
+    fetch(API+"?action=updatePhoto&sena="+sena+"&photo="+encodeURIComponent(e.target.result)).catch(()=>{});
+    alert('✅ Photo Change হইছে');
   }
   reader.readAsDataURL(file);
 }
-
 loadProfile();
 </script>
 </body>
