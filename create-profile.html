@@ -14,19 +14,15 @@
 <label>CONFIRM PASSWORD *</label><div class="pass-wrap"><input id="cpass" type="password" placeholder="আবার একই Password দাও"><span class="eye" onclick="togglePass('cpass')">👁️</span></div>
 <button class="btn" id="btn" onclick="createProfile()">Create Profile & Send Request</button>
 <div id="msg" class="msg"></div><p style="text-align:center;font-size:13px;margin-top:16px">Already have? <b onclick="location.href='dashboard.html'" style="cursor:pointer"><u>Login</u></b></p></div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const API = "https://script.google.com/macros/s/AKfycbwbMbmgWhsPrKJP3trjetl0myV3FbsCfZn1haaMlFpLxuE05gpge1sJdo4-_xyd8K09BQ/exec";
-
 window.showMsg = function(txt, ok){ let el=document.getElementById('msg'); el.innerText=txt; el.className=ok?'msg ok':'msg err'; }
 window.togglePass = function(id){ let e=document.getElementById(id); e.type=e.type==='password'?'text':'password'; }
 function toEng(str){ let b=["০","১","২","৩","৪","৫","৬","৭","৮","৯"]; let en=["0","1","2","3","4","5","6","7","8","9"]; let s=String(str); for(let i=0;i<10;i++) s=s.split(b[i]).join(en[i]); return s; }
-
 window.createProfile = async function(){
   let sena=toEng(document.getElementById('sena').value.trim());
   let name=document.getElementById('name').value.trim();
@@ -42,16 +38,9 @@ window.createProfile = async function(){
   if(pass.length<4){ showMsg("❌ Password কমপক্ষে ৪ সংখ্যার দাও",false); return; }
   btn.disabled=true; btn.innerText="Sending Request..."; showMsg("⏳ Request পাঠানো হচ্ছে...",true);
   try{
-    // 1. Firebase e check - age theke ache kina
     const oldDoc = await getDoc(doc(db,"users",sena));
     if(oldDoc.exists()){ showMsg("❌ এই SENA NO Already আছে!",false); btn.disabled=false; btn.innerText="Create Profile & Send Request"; return; }
-    // 2. Firebase e save - pending
     await setDoc(doc(db,"users",sena), { sena, name, podobi, company, mobile, blood, pass, status:"pending", createdAt:new Date().toISOString() });
-    // 3. Sheet e save - backup
-    try{
-      let url=`${API}?action=register&sena=${encodeURIComponent(sena)}&name=${encodeURIComponent(name)}&podobi=${encodeURIComponent(podobi)}&company=${encodeURIComponent(company)}&mobile=${encodeURIComponent(mobile)}&blood=${encodeURIComponent(blood)}&pass=${encodeURIComponent(pass)}&t=${Date.now()}`;
-      await fetch(url);
-    }catch(e){ console.log("Sheet fail, Firebase e save hoise",e); }
     showMsg("✅ Request পাঠানো হয়েছে! Admin Approve করলে Login করতে পারবে!",true);
     btn.innerText="✅ Request Sent!";
     setTimeout(()=>{ location.href='dashboard.html'; },2000);
