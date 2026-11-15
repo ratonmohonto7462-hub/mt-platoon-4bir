@@ -3,116 +3,117 @@
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Instruction - MT PLATOON 4 BIR</title>
 <style>
-body{margin:0;font-family:Arial;min-height:100vh;background:#e8ecef}
-.top{background:#0f2110;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.top b{font-size:15px;font-weight:900}.backBtn{background:#7d0000;color:white;border:none;padding:7px 12px;border-radius:8px;font-weight:900;font-size:12px}
-.tabs{display:flex;gap:8px;padding:10px;background:#0f2110;position:sticky;top:48px;z-index:9}
-.tabBtn{flex:1;padding:12px;border:none;border-radius:12px;font-weight:900;font-size:14px;background:#2a4a2a;color:#a3c9a3}
-.tabBtn.active{background:white;color:#0f2110}
-.wrap{padding:10px}
-.addBox{background:white;border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px #0001}
-.addBox textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;box-sizing:border-box;font-size:14px;font-weight:600;min-height:80px;resize:vertical}
-.addBox input{width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;margin-bottom:8px;font-size:13px}
-.postBtn{width:100%;padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900;margin-top:8px}
-.printBtn{background:#2d4a28;color:white;border:none;padding:6px 14px;border-radius:20px;font-weight:900;font-size:12px;margin:6px auto;display:block}
-.feedCard{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px #0001}
-.feedHead{display:flex;gap:10px;align-items:center;margin-bottom:8px}
-.avatar{width:42px;height:42px;border-radius:50%;background:#2d4a28;display:flex;align-items:center;justify-content:center;color:#ffcc00;font-size:20px;font-weight:900}
-.feedName{font-weight:900;font-size:14px}.feedTime{font-size:11px;color:#666}
-.feedText{font-size:14px;line-height:1.6;font-weight:600;margin:10px 0;white-space:pre-wrap}
-.feedActions{display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:8px;margin-top:8px;font-size:12px;color:#555}
-.editDel{display:flex;gap:6px;margin-top:8px}
-.eBtn{background:#ffaa00;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px}
-.dBtn{background:#7d0000;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px}
-.viewOnly{font-size:11px;background:#eee;color:#555;padding:6px 10px;border-radius:8px;text-align:center}
-@media print{
- body{background:white} .top,.tabs,.addBox,.printBtn,.editDel,.backBtn{display:none !important}
- .feedCard{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
- .wrap{padding:0}
-}
+ body{margin:0;font-family:Arial;min-height:100vh;background:#e8ecef} .top{background:#0f2110;color:white;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10} .top b{font-size:15px;font-weight:900}.backBtn{background:#7d0000;color:white;border:none;padding:7px 12px;border-radius:8px;font-weight:900;font-size:12px} .tabs{display:flex;gap:8px;padding:10px;background:#0f2110;position:sticky;top:48px;z-index:9} .tabBtn{flex:1;padding:12px;border:none;border-radius:12px;font-weight:900;font-size:14px;background:#2a4a2a;color:#a3c9a3} .tabBtn.active{background:white;color:#0f2110} .wrap{padding:10px} .addBox{background:white;border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px #0001} .addBox textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;box-sizing:border-box;font-size:14px;font-weight:600;min-height:80px;resize:vertical} .addBox input{width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;margin-bottom:8px;font-size:13px} .postBtn{width:100%;padding:12px;background:#0f2110;color:white;border:none;border-radius:12px;font-weight:900;margin-top:8px} .printBtn{background:#2d4a28;color:white;border:none;padding:6px 14px;border-radius:20px;font-weight:900;font-size:12px;margin:6px auto;display:block} .feedCard{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px #0001} .feedHead{display:flex;gap:10px;align-items:center;margin-bottom:8px} .avatar{width:42px;height:42px;border-radius:50%;background:#2d4a28;display:flex;align-items:center;justify-content:center;color:#ffcc00;font-size:20px;font-weight:900} .feedName{font-weight:900;font-size:14px}.feedTime{font-size:11px;color:#666} .feedText{font-size:14px;line-height:1.6;font-weight:600;margin:10px 0;white-space:pre-wrap} .feedActions{display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:8px;margin-top:8px;font-size:12px;color:#555} .editDel{display:flex;gap:6px;margin-top:8px} .eBtn{background:#ffaa00;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px} .dBtn{background:#7d0000;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px} .viewOnly{font-size:11px;background:#eee;color:#555;padding:6px 10px;border-radius:8px;text-align:center}
+ @media print{ body{background:white} .top,.tabs,.addBox,.printBtn,.editDel,.backBtn{display:none !important} .feedCard{box-shadow:none;border:1px solid #ddd;break-inside:avoid} .wrap{padding:0} }
 </style>
 </head>
 <body>
 <div class="top"><b>📝 INSTRUCTION</b><button class="backBtn" onclick="location.href='dashboard.html'">BACK</button></div>
 <div class="tabs">
-<button id="tab1" class="tabBtn active" onclick="switchTab('sthayi')">📌 স্থায়ী আদেশ</button>
-<button id="tab2" class="tabBtn" onclick="switchTab('doinondin')">📋 দৈনন্দিন আদেশ</button>
+ <button id="tab1" class="tabBtn active" onclick="switchTab('sthayi')">📌 স্থায়ী আদেশ</button>
+ <button id="tab2" class="tabBtn" onclick="switchTab('doinondin')">📋 দৈনন্দিন আদেশ</button>
 </div>
 <div class="wrap">
-<div id="formArea" class="addBox">
-<input id="f_title" placeholder="শিরোনাম (যেমন: পিটি প্যারেড)">
-<textarea id="f_text" placeholder="আদেশ লিখুন..."></textarea>
-<button id="mainBtn" class="postBtn" onclick="savePost()">✈️ Post করুন</button>
+ <div id="formArea" class="addBox">
+  <input id="f_title" placeholder="শিরোনাম (যেমন: পিটি প্যারেড)">
+  <textarea id="f_text" placeholder="আদেশ লিখুন..."></textarea>
+  <button id="mainBtn" class="postBtn" onclick="savePost()">✈️ Post করুন</button>
+ </div>
+ <div id="printTitle" style="text-align:center;font-weight:900;font-size:18px;margin:10px 0;">📌 স্থায়ী আদেশ</div>
+ <button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+ <div id="list"></div>
 </div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, orderBy, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<div id="printTitle" style="text-align:center;font-weight:900;font-size:18px;margin:10px 0;">📌 স্থায়ী আদেশ</div>
-<button class="printBtn" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-
-<div id="list"></div>
-</div>
-
-<script>
-let role=(localStorage.getItem('role')||'').toLowerCase();
-let isClk=role==='clk';
+let role = (localStorage.getItem('role')||localStorage.getItem('mt_role')||'').toLowerCase();
+let isClk = role==='clk' || role==='mt clk' || localStorage.getItem('sena_no')==='4521328' || localStorage.getItem('mt_sena')==='4521328';
 let currentTab = localStorage.getItem('inst_tab') || 'sthayi';
-let sthayi = JSON.parse(localStorage.getItem('mt_inst_sthayi_v1')||'[]');
-let doinondin = JSON.parse(localStorage.getItem('mt_inst_doinondin_v1')||'[]');
-let editIndex=-1;
+let editId = null;
+let allPosts = [];
 
 function getTodayStr(){
- let d=new Date(); let months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
- return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} • ${d.toLocaleTimeString('en-BD',{hour:'2-digit',minute:'2-digit'})}`;
+  let d=new Date();
+  let months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} • ${d.toLocaleTimeString('en-BD',{hour:'2-digit',minute:'2-digit'})}`;
 }
-function switchTab(t){
- currentTab=t; localStorage.setItem('inst_tab',t);
- document.getElementById('tab1').classList.toggle('active',t==='sthayi');
- document.getElementById('tab2').classList.toggle('active',t==='doinondin');
- document.getElementById('printTitle').innerText = t==='sthayi' ? '📌 স্থায়ী আদেশ' : '📋 দৈনন্দিন আদেশ';
- editIndex=-1; document.getElementById('mainBtn').innerText='✈️ Post করুন'; document.getElementById('f_title').value=''; document.getElementById('f_text').value='';
- render();
+
+window.switchTab = function(t){
+  currentTab=t; localStorage.setItem('inst_tab',t);
+  document.getElementById('tab1').classList.toggle('active',t==='sthayi');
+  document.getElementById('tab2').classList.toggle('active',t==='doinondin');
+  document.getElementById('printTitle').innerText = t==='sthayi' ? '📌 স্থায়ী আদেশ' : '📋 দৈনন্দিন আদেশ';
+  editId=null; document.getElementById('mainBtn').innerText='✈️ Post করুন';
+  document.getElementById('f_title').value=''; document.getElementById('f_text').value='';
+  render();
 }
-function saveLS(){
- localStorage.setItem('mt_inst_sthayi_v1',JSON.stringify(sthayi));
- localStorage.setItem('mt_inst_doinondin_v1',JSON.stringify(doinondin));
+
+window.savePost = async function(){
+  if(!isClk){alert("⛔ শুধু MT CLK ID থেকে Post করতে পারবে");return;}
+  let title=document.getElementById('f_title').value.trim();
+  let text=document.getElementById('f_text').value.trim();
+  if(!text){alert("আদেশ লিখুন");return;}
+  let post={tab:currentTab, title:title, text:text, time:getTodayStr(), name:'MT CLK', createdAt: serverTimestamp()};
+  try{
+    if(editId===null){ await addDoc(collection(db,"instructions"), post); }
+    else { await updateDoc(doc(db,"instructions",editId), { title, text, time:getTodayStr() }); editId=null; document.getElementById('mainBtn').innerText='✈️ Post করুন'; }
+    document.getElementById('f_title').value=''; document.getElementById('f_text').value='';
+    await loadPosts();
+  }catch(e){ alert("Error: "+e.message); }
 }
-function savePost(){
- if(!isClk){alert("⛔ শুধু MT CLK ID থেকে Post করতে পারবে");return;}
- let title=document.getElementById('f_title').value.trim();
- let text=document.getElementById('f_text').value.trim();
- if(!text){alert("আদেশ লিখুন");return;}
- let post={title:text?title:"",text:text,time:getTodayStr(),name: isClk?'MT CLK':'MT JCO'};
- let arr = currentTab==='sthayi'? sthayi:doinondin;
- if(editIndex==-1){ arr.unshift(post); }
- else{ arr[editIndex]=post; editIndex=-1; document.getElementById('mainBtn').innerText='✈️ Post করুন'; }
- saveLS(); document.getElementById('f_title').value=''; document.getElementById('f_text').value=''; render();
+
+async function loadPosts(){
+  try{
+    const q = query(collection(db,"instructions"), where("tab","==",currentTab), orderBy("createdAt","desc"));
+    const snap = await getDocs(q);
+    allPosts = [];
+    snap.forEach(d=>{ allPosts.push({ id:d.id, ...d.data() }); });
+    // createdAt না থাকা পুরানো ডাটা থাকলে time দিয়ে sort
+    allPosts.sort((a,b)=> (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    render();
+  }catch(e){
+    // orderBy fail হলে শুধু where দিয়ে আনো
+    try{
+      const q2 = query(collection(db,"instructions"), where("tab","==",currentTab));
+      const snap2 = await getDocs(q2);
+      allPosts=[]; snap2.forEach(d=>{ allPosts.push({id:d.id, ...d.data()}); });
+      allPosts.reverse();
+      render();
+    }catch(e2){ document.getElementById('list').innerHTML = "<p style='text-align:center;color:red'>Firebase Error: "+e2.message+"</p>"; }
+  }
 }
+
 function render(){
- let arr = currentTab==='sthayi'? sthayi:doinondin;
- let list=document.getElementById('list'); list.innerHTML='';
- document.getElementById('formArea').style.display = isClk ? 'block' : 'none';
- if(arr.length==0){ list.innerHTML=`<div style="text-align:center;padding:20px;background:white;border-radius:16px;color:#777">কোনো আদেশ নেই</div>`; return;}
- arr.forEach((p,idx)=>{
-   let btns = isClk ? `<div class="editDel"><button class="eBtn" onclick="editPost(${idx})">✏️ Edit</button><button class="dBtn" onclick="deletePost(${idx})">🗑️ Del</button></div>` : `<div class="viewOnly">👁️ View Only - MT PLATOON</div>`;
-   list.innerHTML+=`<div class="feedCard">
-   <div class="feedHead"><div class="avatar">★</div><div><div class="feedName">${p.name} ✓</div><div class="feedTime">${p.time} • MT Platoon</div></div></div>
-   ${p.title?`<div style="font-weight:900;font-size:13px;color:#0f2110;margin-bottom:4px">${p.title}</div>`:''}
-   <div class="feedText">${p.text}</div>
-   <div class="feedActions"><span>👁️ Seen ${Math.floor(Math.random()*40+5)}</span><span>👍 Like</span><span>💬 Comments</span></div>
-   ${btns}
-   </div>`;
- });
+  let list=document.getElementById('list');
+  list.innerHTML='';
+  document.getElementById('formArea').style.display = isClk ? 'block' : 'none';
+  if(allPosts.length==0){ list.innerHTML=`<div style="text-align:center;padding:20px;background:white;border-radius:16px;color:#777">কোনো আদেশ নেই</div>`; return; }
+  allPosts.forEach((p)=>{
+    let btns = isClk ? `<div class="editDel"><button class="eBtn" onclick="editPost('${p.id}')">✏️ Edit</button><button class="dBtn" onclick="deletePost('${p.id}')">🗑️ Del</button></div>` : `<div class="viewOnly">👁️ View Only - MT PLATOON</div>`;
+    list.innerHTML+=`<div class="feedCard"> <div class="feedHead"><div class="avatar">★</div><div><div class="feedName">${p.name||'MT CLK'} ✓</div><div class="feedTime">${p.time||''} • MT Platoon</div></div></div> ${p.title?`<div style="font-weight:900;font-size:13px;color:#0f2110;margin-bottom:4px">${p.title}</div>`:''} <div class="feedText">${p.text}</div> <div class="feedActions"><span>👁️ Seen ${Math.floor(Math.random()*40+5)}</span><span>👍 Like</span><span>💬 Comments</span></div> ${btns} </div>`;
+  });
 }
-function editPost(i){
- if(!isClk){alert("Permission নেই");return;}
- editIndex=i; let arr=currentTab==='sthayi'? sthayi:doinondin; let p=arr[i];
- document.getElementById('f_title').value=p.title; document.getElementById('f_text').value=p.text;
- document.getElementById('mainBtn').innerText='✅ Update করুন'; window.scrollTo(0,0);
+
+window.editPost = function(id){
+  if(!isClk){alert("Permission নেই");return;}
+  let p = allPosts.find(x=>x.id===id); if(!p) return;
+  editId=id;
+  document.getElementById('f_title').value=p.title||'';
+  document.getElementById('f_text').value=p.text||'';
+  document.getElementById('mainBtn').innerText='✅ Update করুন';
+  window.scrollTo(0,0);
 }
-function deletePost(i){
- if(!isClk){alert("Permission নেই");return;}
- if(confirm("Delete করবে?")){ let arr=currentTab==='sthayi'? sthayi:doinondin; arr.splice(i,1); saveLS(); render(); }
+window.deletePost = async function(id){
+  if(!isClk){alert("Permission নেই");return;}
+  if(confirm("Delete করবে?")){ await deleteDoc(doc(db,"instructions",id)); await loadPosts(); }
 }
+
 switchTab(currentTab);
+loadPosts();
 </script>
 </body>
 </html>
