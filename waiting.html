@@ -3,10 +3,46 @@
 <style>body{margin:0;font-family:Arial;background:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.box{max-width:380px;text-align:center}.icon{font-size:70px}.h1{font-size:26px;font-weight:900;margin:18px 0 10px}.p{color:#555;font-size:15px;line-height:1.5}.btn{width:100%;padding:15px;background:#111;color:#fff;border:none;border-radius:30px;font-weight:700;margin-top:24px;cursor:pointer}</style>
 </head><body>
 <div class="box">
-  <div class="icon">⏳</div>
-  <div class="h1">Waiting for Approval</div>
-  <div class="p">আপনার প্রোফাইল Admin এর কাছে পাঠানো হয়েছে।<br>অনুমোদনের পর আপনি Login করতে পারবেন।<br><br>Sena No: <b id="sNo"></b></div>
-  <button class="btn" onclick="location.href='dashboard.html'">Back to Home</button>
+<div class="icon" id="icon">⏳</div>
+<div class="h1" id="title">Waiting for Approval</div>
+<div class="p">আপনার প্রোফাইল Admin এর কাছে পাঠানো হয়েছে।<br>অনুমোদনের পর আপনি Login করতে পারবেন।<br><br>Sena No: <b id="sNo"></b><br><span id="statusText" style="font-size:12px;color:#888">Status: Pending... অটো চেক হচ্ছে</span></div>
+<button class="btn" onclick="location.href='dashboard.html'">Back to Home</button>
 </div>
-<script>document.getElementById('sNo').innerText=localStorage.getItem('sena_no')||''</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let sena = (localStorage.getItem('sena_no')||localStorage.getItem('mt_sena')||localStorage.getItem('mt_army')||"").toString().replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'');
+document.getElementById('sNo').innerText = sena || '';
+
+async function checkStatus(){
+  if(!sena) return;
+  try{
+    const snap = await getDoc(doc(db,"users",sena));
+    if(!snap.exists()){ document.getElementById('statusText').innerText = "Status: Profile পাওয়া যায় নাই"; return; }
+    let st = snap.data().status;
+    if(st === "approved"){
+      document.getElementById('icon').innerText = "✅";
+      document.getElementById('title').innerText = "Approved!";
+      document.getElementById('statusText').innerText = "✅ Approved হইছে, Dashboard এ যাচ্ছি...";
+      // ৩টা key তে save করে দিলাম যাতে আর কোনো পেজে আটকায় না
+      localStorage.setItem('sena_no', sena);
+      localStorage.setItem('mt_sena', sena);
+      localStorage.setItem('mt_army', sena);
+      setTimeout(()=>{ location.href = 'dashboard.html'; }, 1200);
+    } else if(st === "rejected"){
+      document.getElementById('icon').innerText = "❌";
+      document.getElementById('title').innerText = "Rejected";
+      document.getElementById('statusText').innerText = "❌ Admin Reject করছে, আবার Profile তৈরি করো";
+    } else {
+      document.getElementById('statusText').innerText = "Status: Pending... অটো চেক হচ্ছে";
+    }
+  }catch(e){ console.log(e); }
+}
+checkStatus();
+setInterval(checkStatus, 5000);
+</script>
 </body></html>
