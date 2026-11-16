@@ -12,12 +12,13 @@
   .top h2{font-size:20px}
   .sec{background:white;padding:12px;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
   .sec h4{margin-bottom:6px}
-  input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
+  input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
   .btn{width:100%;padding:13px;border:none;border-radius:10px;font-size:16px;font-weight:bold;color:white;background:#22c55e;margin-top:6px}
   .btn2{background:#2563eb}
-  .card{background:#f8fafc;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center}
-  .card b{font-size:15px}.card small{color:#64748b}
-  .del{background:#ef4444;color:white;border:none;padding:6px 10px;border-radius:8px}
+  .card{background:#f8fafc;padding:12px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .card b{font-size:16px}
+  .card small{color:#475569;line-height:1.6;font-size:13px}
+  .del{background:#ef4444;color:white;border:none;padding:8px 11px;border-radius:8px;flex-shrink:0}
   .nav{display:flex;gap:8px;margin-top:12px}
   .nav a{flex:1;text-align:center;text-decoration:none;background:#0f172a;color:white;padding:12px;border-radius:10px;font-size:13px;font-weight:bold}
   .online{color:#22c55e;font-weight:bold;font-size:12px}
@@ -28,7 +29,7 @@
 
 <div class="top">
   <a href="convoy-home.html">⬅</a>
-  <h2>👥 Convoy Group</h2>
+  <h2>👥 কনভয় গ্রুপ</h2>
 </div>
 
 <!-- গ্রুপের নাম -->
@@ -41,43 +42,65 @@
   <p id="groupShow" style="font-weight:bold;margin-top:6px;"></p>
 </div>
 
-<!-- ১ + ২ = একটাই ফর্ম -->
+<!-- ১ নাম্বার - তোর ৮ টা ফিল্ড -->
 <div class="sec">
   <h4>১. মেম্বার + গাড়ি একসাথে অ্যাড করো</h4>
 
-  <span class="label">👤 মেম্বার</span>
-  <input id="mName" type="text" placeholder="মেম্বারের নাম - যেমন: রাকিব">
-  <input id="mPhone" type="text" placeholder="ফোন নাম্বার - যেমন: 017...">
-  <select id="mRole">
-    <option value="লিডার">লিডার</option>
-    <option value="ড্রাইভার" selected>ড্রাইভার</option>
-    <option value="মেম্বার">মেম্বার</option>
+  <span class="label">👤 সদস্যের তথ্য</span>
+  <input id="senaNo" type="text" placeholder="সেনা নং - যেমন: ১২৩৪৫৬৭">
+  <select id="padobi">
+    <option value="">পদবি বাছো</option>
+    <option value="সৈনিক">সৈনিক</option>
+    <option value="ল্যান্স কর্পোরাল">ল্যান্স কর্পোরাল</option>
+    <option value="কর্পোরাল">কর্পোরাল</option>
+    <option value="সার্জেন্ট">সার্জেন্ট</option>
+    <option value="ওয়ারেন্ট অফিসার">ওয়ারেন্ট অফিসার</option>
+    <option value="সিনিয়র ওয়ারেন্ট অফিসার">সিনিয়র ওয়ারেন্ট অফিসার</option>
+    <option value="মাস্টার ওয়ারেন্ট অফিসার">মাস্টার ওয়ারেন্ট অফিসার</option>
+    <option value="লেফটেন্যান্ট">লেফটেন্যান্ট</option>
+    <option value="ক্যাপ্টেন">ক্যাপ্টেন</option>
+    <option value="মেজর">মেজর</option>
+    <option value="ড্রাইভার">ড্রাইভার</option>
   </select>
+  <input id="mName" type="text" placeholder="নাম - যেমন: রতন">
+  <input id="baNo" type="text" placeholder="বি এ নং - যেমন: BA-১২৩৪৫">
+  <input id="mPhone" type="text" placeholder="মোবাইল নম্বর - যেমন: ০১৭৩৭৯১২০৯৪">
 
-  <span class="label">🚛 গাড়ি - ঐ মেম্বারেরই গাড়ি</span>
-  <input id="cName" type="text" placeholder="গাড়ির নাম / নাম্বার প্লেট">
-  <input id="cSerial" type="number" placeholder="সিরিয়াল - কত নাম্বার গাড়ি? ১, ২, ৩">
-  <input id="cColor" type="text" placeholder="গাড়ির কালার - যেমন: সাদা, কালো">
+  <span class="label">🚛 গাড়ির তথ্য</span>
+  <select id="garirProkar">
+    <option value="">গাড়ির প্রকার বাছো</option>
+    <option value="ট্রাক">ট্রাক</option>
+    <option value="পিকআপ">পিকআপ</option>
+    <option value="জিপ">জিপ</option>
+    <option value="বাস">বাস</option>
+    <option value="অ্যাম্বুলেন্স">অ্যাম্বুলেন্স</option>
+    <option value="মোটরসাইকেল">মোটরসাইকেল</option>
+    <option value="অন্যান্য">অন্যান্য</option>
+  </select>
+  <input id="cSerial" type="number" placeholder="সিরিয়াল নং - কত নাম্বার গাড়ি? ১, ২, ৩">
+  <textarea id="montobbo" rows="2" placeholder="মন্তব্য - যেমন: সামনে থাকবো, পানি আছে"></textarea>
 
   <button class="btn" onclick="ekSatheAdd()">+ মেম্বার + গাড়ি অ্যাড করো</button>
 </div>
 
-<!-- ২. লাইভ -->
+<!-- ২ নাম্বার লাইভ -->
 <div class="sec">
   <h4>২. লাইভ - কে কোথায়, স্পিড কত</h4>
   <p id="liveInfo" style="font-size:13px;color:#64748b;">Allow দিলে তোমার স্পিড এখানে দেখা যাইবো।</p>
   <div id="memberList"></div>
   <p id="memberCount" style="font-weight:bold;margin-top:8px;"></p>
+  <button class="btn btn2" onclick="sobDelete()" style="background:#ef4444;">সব ডিলিট করো (পুরানো undefined ঠিক করতে)</button>
 </div>
 
 <div class="nav">
-  <a href="live-map.html">🗺️ Live Map</a>
-  <a href="convoy-message.html">💬 Message</a>
-  <a href="walkie-talkie.html">📻 Walkie</a>
+  <a href="live-map.html">🗺️ লাইভ ম্যাপ</a>
+  <a href="convoy-message.html">💬 মেসেজ</a>
+  <a href="walkie-talkie.html">📻 ওয়াকি</a>
 </div>
 
 <script>
-  var members = JSON.parse(localStorage.getItem('convoyMembers')||'[]');
+  // নতুন ডাটার জন্য নতুন চাবি, পুরানো undefined আর আসবো না
+  var members = JSON.parse(localStorage.getItem('convoyMembersNew')||'[]');
 
   function photoDekhao(e){
     var f=e.target.files[0]; if(!f) return;
@@ -96,30 +119,38 @@
     var ml=document.getElementById('memberList'); ml.innerHTML='';
     members.forEach(function(m,i){
       var div=document.createElement('div'); div.className='card';
-      div.innerHTML='<div><b>'+m.name+' • '+m.role+'</b> • #'+m.serial+'<br><small>'+m.phone+' • '+m.car+' • '+m.color+'<br><span class="online">● অনলাইন</span> • স্পিড: '+(15+i*5)+' km/h</small></div><button class="del" onclick="memberDel('+i+')">X</button>';
+      div.innerHTML='<div><b>'+(m.padobi||'')+' '+(m.name||'')+'</b> • #'+(m.serial||'')+'<br><small>সেনা নং: '+(m.senaNo||'')+'<br>বি এ নং: '+(m.baNo||'')+'<br>গাড়ির প্রকার: '+(m.garirProkar||'')+'<br>মোবাইল: '+(m.phone||'')+'<br>মন্তব্য: '+(m.montobbo||'নাই')+'<br><span class="online">● অনলাইন</span> • স্পিড: '+(15+i*5)+' km/h</small></div><button class="del" onclick="memberDel('+i+')">X</button>';
       ml.appendChild(div);
     });
     document.getElementById('memberCount').innerText="মোট: "+members.length+" জন • "+members.length+" টা গাড়ি";
   }
 
-  // ১ আর ২ একসাথে
   function ekSatheAdd(){
-    var n=document.getElementById('mName').value.trim();
-    var p=document.getElementById('mPhone').value.trim();
-    var r=document.getElementById('mRole').value;
-    var car=document.getElementById('cName').value.trim();
+    var senaNo=document.getElementById('senaNo').value.trim();
+    var padobi=document.getElementById('padobi').value;
+    var name=document.getElementById('mName').value.trim();
+    var baNo=document.getElementById('baNo').value.trim();
+    var phone=document.getElementById('mPhone').value.trim();
+    var garirProkar=document.getElementById('garirProkar').value;
     var serial=document.getElementById('cSerial').value.trim();
-    var color=document.getElementById('cColor').value.trim();
-    if(!n){ alert("নাম দাও দোস্ত"); return; }
-    if(!car){ alert("গাড়ির নাম দাও দোস্ত"); return; }
-    members.push({name:n, phone:p||'নাম্বার নাই', role:r, car:car, serial:serial||members.length+1, color:color||'জানা নাই'});
+    var montobbo=document.getElementById('montobbo').value.trim();
+
+    if(!name){ alert("নাম দাও দোস্ত"); return; }
+    if(!senaNo){ alert("সেনা নং দাও দোস্ত"); return; }
+    if(!padobi){ alert("পদবি বাছো দোস্ত"); return; }
+
+    members.push({senaNo:senaNo, padobi:padobi, name:name, baNo:baNo||'নাই', phone:phone||'নাই', garirProkar:garirProkar||'নাই', serial:serial||members.length+1, montobbo:montobbo||'নাই'});
     members.sort(function(a,b){ return a.serial-b.serial; });
-    localStorage.setItem('convoyMembers', JSON.stringify(members));
-    document.getElementById('mName').value=''; document.getElementById('mPhone').value='';
-    document.getElementById('cName').value=''; document.getElementById('cSerial').value=''; document.getElementById('cColor').value='';
+    localStorage.setItem('convoyMembersNew', JSON.stringify(members));
+
+    document.getElementById('senaNo').value=''; document.getElementById('padobi').value='';
+    document.getElementById('mName').value=''; document.getElementById('baNo').value='';
+    document.getElementById('mPhone').value=''; document.getElementById('garirProkar').value='';
+    document.getElementById('cSerial').value=''; document.getElementById('montobbo').value='';
     showAll();
   }
-  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembers', JSON.stringify(members)); showAll(); }
+  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembersNew', JSON.stringify(members)); showAll(); }
+  function sobDelete(){ if(confirm("সব ডিলিট করমু?")){ members=[]; localStorage.removeItem('convoyMembersNew'); localStorage.removeItem('convoyMembers'); showAll(); } }
   showAll();
 </script>
 </body>
