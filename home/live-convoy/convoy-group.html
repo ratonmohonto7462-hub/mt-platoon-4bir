@@ -21,6 +21,7 @@
   .nav{display:flex;gap:8px;margin-top:12px}
   .nav a{flex:1;text-align:center;text-decoration:none;background:#0f172a;color:white;padding:12px;border-radius:10px;font-size:13px;font-weight:bold}
   .online{color:#22c55e;font-weight:bold;font-size:12px}
+  .label{font-size:13px;font-weight:bold;color:#64748b;margin-top:8px;display:block}
 </style>
 </head>
 <body>
@@ -30,42 +31,40 @@
   <h2>👥 Convoy Group</h2>
 </div>
 
-<!-- ৪. গ্রুপের কাজ -->
+<!-- গ্রুপের নাম -->
 <div class="sec">
-  <h4>৪. গ্রুপের নাম / ছবি</h4>
-  <input id="groupName" type="text" placeholder="গ্রুপের নাম - যেমন: ঢাকা টু চট্টগ্রাম কনভয়">
+  <h4>গ্রুপের নাম / ছবি</h4>
+  <input id="groupName" type="text" placeholder="গ্রুপের নাম - যেমন: ঢাকা টু ঘাটাইল">
   <input id="groupPhoto" type="file" accept="image/*" onchange="photoDekhao(event)">
   <img id="groupImg" style="width:100%;border-radius:10px;display:none;margin-top:6px;">
   <button class="btn btn2" onclick="groupSave()">গ্রুপ সেভ করো</button>
   <p id="groupShow" style="font-weight:bold;margin-top:6px;"></p>
 </div>
 
-<!-- ১. মেম্বার অ্যাড -->
+<!-- ১ + ২ = একটাই ফর্ম -->
 <div class="sec">
-  <h4>১. মেম্বার অ্যাড করা</h4>
+  <h4>১. মেম্বার + গাড়ি একসাথে অ্যাড করো</h4>
+
+  <span class="label">👤 মেম্বার</span>
   <input id="mName" type="text" placeholder="মেম্বারের নাম - যেমন: রাকিব">
   <input id="mPhone" type="text" placeholder="ফোন নাম্বার - যেমন: 017...">
   <select id="mRole">
     <option value="লিডার">লিডার</option>
-    <option value="ড্রাইভার">ড্রাইভার</option>
-    <option value="মেম্বার" selected>মেম্বার</option>
+    <option value="ড্রাইভার" selected>ড্রাইভার</option>
+    <option value="মেম্বার">মেম্বার</option>
   </select>
-  <button class="btn" onclick="memberAdd()">+ মেম্বার অ্যাড করো</button>
-</div>
 
-<!-- ২. গাড়ি অ্যাড -->
-<div class="sec">
-  <h4>২. গাড়ি অ্যাড করা</h4>
+  <span class="label">🚛 গাড়ি - ঐ মেম্বারেরই গাড়ি</span>
   <input id="cName" type="text" placeholder="গাড়ির নাম / নাম্বার প্লেট">
   <input id="cSerial" type="number" placeholder="সিরিয়াল - কত নাম্বার গাড়ি? ১, ২, ৩">
   <input id="cColor" type="text" placeholder="গাড়ির কালার - যেমন: সাদা, কালো">
-  <button class="btn btn2" onclick="carAdd()">+ গাড়ি অ্যাড করো</button>
-  <div id="carList"></div>
+
+  <button class="btn" onclick="ekSatheAdd()">+ মেম্বার + গাড়ি অ্যাড করো</button>
 </div>
 
-<!-- ৩. লাইভ -->
+<!-- ২. লাইভ -->
 <div class="sec">
-  <h4>৩. লাইভ - কে কোথায়, স্পিড কত</h4>
+  <h4>২. লাইভ - কে কোথায়, স্পিড কত</h4>
   <p id="liveInfo" style="font-size:13px;color:#64748b;">Allow দিলে তোমার স্পিড এখানে দেখা যাইবো।</p>
   <div id="memberList"></div>
   <p id="memberCount" style="font-weight:bold;margin-top:8px;"></p>
@@ -79,7 +78,6 @@
 
 <script>
   var members = JSON.parse(localStorage.getItem('convoyMembers')||'[]');
-  var cars = JSON.parse(localStorage.getItem('convoyCars')||'[]');
 
   function photoDekhao(e){
     var f=e.target.files[0]; if(!f) return;
@@ -98,36 +96,30 @@
     var ml=document.getElementById('memberList'); ml.innerHTML='';
     members.forEach(function(m,i){
       var div=document.createElement('div'); div.className='card';
-      div.innerHTML='<div><b>'+m.name+'</b> • '+m.role+'<br><small>'+m.phone+' • <span class="online">● অনলাইন</span> • স্পিড: '+(15+i*5)+' km/h</small></div><button class="del" onclick="memberDel('+i+')">X</button>';
+      div.innerHTML='<div><b>'+m.name+' • '+m.role+'</b> • #'+m.serial+'<br><small>'+m.phone+' • '+m.car+' • '+m.color+'<br><span class="online">● অনলাইন</span> • স্পিড: '+(15+i*5)+' km/h</small></div><button class="del" onclick="memberDel('+i+')">X</button>';
       ml.appendChild(div);
     });
-    document.getElementById('memberCount').innerText="মোট মেম্বার: "+members.length+" জন • মোট গাড়ি: "+cars.length+" টা";
-    var cl=document.getElementById('carList'); cl.innerHTML='';
-    cars.forEach(function(c,i){
-      var d=document.createElement('div'); d.className='card';
-      d.innerHTML='<div><b>#'+c.serial+' - '+c.name+'</b><br><small>কালার: '+c.color+'</small></div><button class="del" onclick="carDel('+i+')">X</button>';
-      cl.appendChild(d);
-    });
+    document.getElementById('memberCount').innerText="মোট: "+members.length+" জন • "+members.length+" টা গাড়ি";
   }
-  function memberAdd(){
-    var n=document.getElementById('mName').value.trim(), p=document.getElementById('mPhone').value.trim(), r=document.getElementById('mRole').value;
+
+  // ১ আর ২ একসাথে
+  function ekSatheAdd(){
+    var n=document.getElementById('mName').value.trim();
+    var p=document.getElementById('mPhone').value.trim();
+    var r=document.getElementById('mRole').value;
+    var car=document.getElementById('cName').value.trim();
+    var serial=document.getElementById('cSerial').value.trim();
+    var color=document.getElementById('cColor').value.trim();
     if(!n){ alert("নাম দাও দোস্ত"); return; }
-    members.push({name:n, phone:p||'নাম্বার নাই', role:r});
+    if(!car){ alert("গাড়ির নাম দাও দোস্ত"); return; }
+    members.push({name:n, phone:p||'নাম্বার নাই', role:r, car:car, serial:serial||members.length+1, color:color||'জানা নাই'});
+    members.sort(function(a,b){ return a.serial-b.serial; });
     localStorage.setItem('convoyMembers', JSON.stringify(members));
     document.getElementById('mName').value=''; document.getElementById('mPhone').value='';
-    showAll();
-  }
-  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembers', JSON.stringify(members)); showAll(); }
-  function carAdd(){
-    var n=document.getElementById('cName').value.trim(), s=document.getElementById('cSerial').value.trim(), col=document.getElementById('cColor').value.trim();
-    if(!n){ alert("গাড়ির নাম / নাম্বার দাও দোস্ত"); return; }
-    cars.push({name:n, serial:s||cars.length+1, color:col||'জানা নাই'});
-    cars.sort(function(a,b){ return a.serial-b.serial; });
-    localStorage.setItem('convoyCars', JSON.stringify(cars));
     document.getElementById('cName').value=''; document.getElementById('cSerial').value=''; document.getElementById('cColor').value='';
     showAll();
   }
-  function carDel(i){ cars.splice(i,1); localStorage.setItem('convoyCars', JSON.stringify(cars)); showAll(); }
+  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembers', JSON.stringify(members)); showAll(); }
   showAll();
 </script>
 </body>
