@@ -1,15 +1,35 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Group - Seniority</title>
-<style> body{font-family:Arial;background:#f2f2f2;margin:0} .top{background:#0a1a12;color:#fff;padding:14px;text-align:center} .list{padding:10px} .item{background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;border-left:4px solid #0e5d3e} </style>
+<style>
+body{font-family:Arial;background:#f2f2f2;margin:0}
+.top{background:#0a1a12;color:#fff;padding:14px;text-align:center}
+.list{padding:10px}
+.item{background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;border-left:4px solid #0e5d3e}
+.delBtn{background:#ff3b30;color:#fff;border:none;padding:6px 12px;border-radius:20px;font-weight:700;cursor:pointer;margin-left:8px}
+</style>
 </head><body>
 <div class="top"><b>Group Members - Seniority Wise</b><div style="font-size:11px;opacity:0.7;margin-top:4px" id="src">Firebase Only</div></div>
 <div class="list" id="list"><p style="text-align:center;margin-top:20px">Loading...</p></div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+import { getFirestore, collection, query, where, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U",
+  authDomain: "mt-messenger-63922.firebaseapp.com",
+  projectId: "mt-messenger-63922",
+  storageBucket: "mt-messenger-63922.firebasestorage.app",
+  messagingSenderId: "184454055809",
+  appId: "1:184454055809:web:4d24320f792d7e86fdca80",
+  measurementId: "G-E1M0WH2RD9"
+};
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// শুধু তুমিই অ্যাডমিন
+const ADMIN_SENA = "4521328";
+let mySena = localStorage.getItem("senaNo") || localStorage.getItem("mt_sena") || localStorage.getItem("sena_no") || localStorage.getItem("sena") || "";
+mySena = String(mySena).trim();
 
 async function load(){
   try{
@@ -34,9 +54,32 @@ function render(members){
     let sena = m.sena || m.senaNo || '';
     let name = m.name || '';
     let rank = m.podobi || m.rank || '';
-    return `<div class="item"><span>${i+1}. ${sena} - ${name}</span><span>${rank}</span></div>`;
+    // শুধু 4521328 এর কাছে ডিলিট বাটন দেখাবে
+    let delBtn = "";
+    if(mySena === ADMIN_SENA){
+      delBtn = `<button class="delBtn" onclick="window.deleteMember('${sena}','${name}')">🗑️ ডিলিট</button>`;
+    }
+    return `<div class="item"><span>${i+1}. ${sena} - ${name}</span><span style="display:flex;align-items:center;gap:6px">${rank} ${delBtn}</span></div>`;
   }).join('') : '<p style="text-align:center;margin-top:20px">কোনো মেম্বার এখনো Add হয়নি</p>';
 }
+
+window.deleteMember = async function(sena, name){
+  if(mySena !== ADMIN_SENA){
+    alert("তুমি ডিলিট করতে পারবা না! শুধু রতন ভাই পারবো।");
+    return;
+  }
+  if(!confirm("তুমি কি সত্যিই " + sena + " - " + name + " কে প্লাটুন থেকে বাদ দিতে চাও?")){
+    return;
+  }
+  try{
+    await deleteDoc(doc(db, "users", String(sena)));
+    alert("✅ ডিলিট হয়ে গেছে!");
+    load();
+  }catch(e){
+    alert("ডিলিট হয় নাই: " + e.message);
+  }
+}
+
 load();
 </script>
 </body></html>
