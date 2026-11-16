@@ -1,183 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Live Map - MT 4 BIR</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Convoy Map</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;overflow:hidden}
-#map{position:fixed;top:0;left:0;width:100%;height:100vh;z-index:1}
-#searchBar{position:fixed;top:12px;left:12px;right:12px;z-index:9999;background:#fff;border-radius:30px;display:flex;align-items:center;padding:6px 6px 6px 14px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
-#searchBar input{flex:1;border:none;outline:none;font-size:17px;padding:8px}
-#searchBar button{background:#1a73e8;color:#fff;border:none;padding:9px 15px;border-radius:20px;font-weight:700}
-#kmCard{position:fixed;bottom:70px;left:12px;right:12px;z-index:9999;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 2px 15px rgba(0,0,0,.35);display:none}
-#kmBig{font-size:21px;font-weight:900}
-#kmSub{font-size:13px;color:#555;margin-top:2px}
-#btnRow{display:flex;gap:8px;margin-top:10px}
-#btnRow button{flex:1;border:none;padding:12px;border-radius:20px;font-weight:800}
-#startBtn{background:#0b6b6b;color:#fff}
-#backBtn{position:fixed;top:70px;left:14px;z-index:9999;background:#0f2e2a;color:#ffcc00;padding:8px 14px;border-radius:20px;border:none;font-weight:900;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-#myLocBtn{position:fixed;right:14px;bottom:140px;z-index:9999;width:52px;height:52px;border-radius:50%;border:none;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.4);font-size:24px}
-#status{position:fixed;top:115px;left:14px;right:14px;z-index:9999;background:#fff;padding:8px 12px;border-radius:12px;font-size:13px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.3);display:none;text-align:center}
-#debug{position:fixed;left:14px;bottom:200px;z-index:9999;background:rgba(0,0,0,.8);color:#fff;padding:8px 10px;border-radius:10px;font-size:11px;line-height:1.5}
-#navBanner{position:fixed;top:0;left:0;right:0;z-index:10000;background:#0b6b6b;color:#fff;padding:14px 16px;display:none;align-items:center;gap:12px}
-#navBanner b{font-size:22px}
-#navBottom{position:fixed;bottom:0;left:0;right:0;z-index:10000;background:#fff;padding:12px 14px;display:none;box-shadow:0 -2px 15px rgba(0,0,0,.3);border-radius:20px 20px 0 0}
-#speedBox{display:flex;justify-content:space-between;align-items:center}
+    * { margin:0; padding:0; box-sizing:border-box; font-family: sans-serif; }
+  body { background:#0f172a; color:white; }
+  #topBar { padding:12px; text-align:center; background:#1e293b; }
+  #topBar h2 { font-size:18px; }
+  #topBar p { font-size:13px; color:#cbd5e1; margin-top:4px; }
+  #map { height: 70vh; width:100%; }
+  #infoBox { padding:14px; background:#1e293b; margin:10px; border-radius:12px; }
+  #infoBox p { font-size:14px; margin:5px 0; }
+  #infoBox b { color:#38bdf8; }
+  #btn { width:100%; padding:14px; background:#22c55e; border:none; border-radius:10px; color:white; font-size:16px; font-weight:bold; margin-top:10px; }
+  #btn:active { background:#16a34a; }
+  .warning { background:#f59e0b !important; color:black !important; padding:10px; border-radius:10px; font-size:13px; margin-top:10px; display:none; }
 </style>
 </head>
 <body>
 
+<div id="topBar">
+  <h2>🎯 Live Convoy Map</h2>
+  <p>Map khullei Location Allow dao</p>
+</div>
+
 <div id="map"></div>
 
-<div id="searchBar">
-<input id="searchInput" placeholder="Search here">
-<button onclick="calcRoute()">🔍</button>
+<div id="infoBox">
+  <p>📍 <b>Tomar Obosthan:</b> <span id="status">Lokeshon khujtesi...</span></p>
+  <p>🧭 <b>Lat Lng:</b> <span id="latlng">-- , --</span></p>
+  <p>📡 <b>Accuracy:</b> <span id="accuracy">--</span></p>
+  <p>✅ <b>Precise:</b> <span id="precise">Check kortesi...</span></p>
+
+  <div id="preciseWarning" class="warning">
+    ⚠️ Tomar Precise Location OFF ache! <br>
+    Settings > Location > Precise Location ON koro, tarpor abar Allow dao. Nahole Gulshan dekhabe.
+  </div>
+
+  <button id="btn" onclick="amarLocationNao()">📍 Amar Location Dekhao</button>
 </div>
 
-<button id="backBtn" onclick="goBackToTracking()">← Back</button>
-<button id="myLocBtn" onclick="myLocation()" title="My Location">🎯</button>
-<div id="status"></div>
-
-<!-- ডিবাগ - ফোন কতটুকু ভুল দিতেছে দেখা যাইবো -->
-<div id="debug">GPS চেক করতেছি...</div>
-
-<div id="kmCard">
-<div id="kmBig"></div>
-<div id="kmSub"></div>
-<div id="btnRow">
-<button id="startBtn" onclick="startNavInSite()">▲ Start</button>
-</div>
-</div>
-
-<div id="navBanner">
-<span style="font-size:30px">↑</span>
-<div><b id="nextTurn"></b><div id="nextDist" style="font-size:14px;opacity:.9"></div></div>
-<button onclick="stopNav()" style="margin-left:auto;background:#fff;color:#0b6b6b;border:none;padding:8px 14px;border-radius:15px;font-weight:900">✕ বন্ধ</button>
-</div>
-
-<div id="navBottom">
-<div id="speedBox">
-<div><b id="remainTime" style="font-size:26px;color:#e65100"></b><div id="remainDist" style="font-size:14px"></div></div>
-<div style="text-align:right"><b id="speed" style="font-size:28px">0</b><div style="font-size:12px">km/h</div></div>
-</div>
-</div>
-
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-let map = L.map('map').setView([23.8103,90.4125],12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-let myLat=null, myLng=null, destLat=0, destLng=0, destName="";
-let routeLine=null, myMarker=null, accuracyCircle=null, destMarker=null, routeCoords=[], watchId=null, gpsWatch=null;
+  // 1. Map surute Dhaka dekhabe
+  var map = L.map('map').setView([23.8103, 90.4125], 12);
 
-function goBackToTracking(){
-  if(window.history.length > 1){ window.history.back(); }
-  else { window.location.href = '../index.html'; }
-}
-function showStatus(txt){
-  let s=document.getElementById('status');
-  s.style.display='block'; s.innerText=txt;
-  setTimeout(()=>{ s.style.display='none'; },5000);
-}
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+  }).addTo(map);
 
-function myLocation(){
-  if(!navigator.geolocation){ showStatus("এই ব্রাউজারে GPS নাই ভাই"); return; }
-  showStatus("📡 লোকেশন খুঁজতেছি...");
-  if(gpsWatch) navigator.geolocation.clearWatch(gpsWatch);
+  var amarMarker = null;
 
-  gpsWatch = navigator.geolocation.watchPosition(p=>{
-    myLat = p.coords.latitude;
-    myLng = p.coords.longitude;
-    let acc = Math.round(p.coords.accuracy);
+  // 2. Asol kaj - Location neowa
+  function amarLocationNao() {
+    document.getElementById('status').innerText = "GPS khujtesi...";
+    document.getElementById('preciseWarning').style.display = "none";
 
-    // ডিবাগে দেখাবো ফোন আসলে কি দিতেছে
-    document.getElementById('debug').innerHTML = "Lat: "+myLat.toFixed(5)+"<br>Lng: "+myLng.toFixed(5)+"<br>Accuracy: "+acc+"m<br>" + (acc>200 ? "⚠️ Precise OFF - IP দিয়া দেখাইতেছে" : "✅ Precise ON - আসল GPS");
-
-    map.setView([myLat,myLng],16);
-    if(myMarker) map.removeLayer(myMarker);
-    if(accuracyCircle) map.removeLayer(accuracyCircle);
-    accuracyCircle = L.circle([myLat,myLng],{radius:p.coords.accuracy,color:'#1a73e8',fillColor:'#1a73e8',fillOpacity:0.15}).addTo(map);
-    myMarker = L.circleMarker([myLat,myLng],{radius:12,color:'#fff',weight:3,fillColor:'#1a73e8',fillOpacity:1}).addTo(map).bindPopup("তুমি এখানে").openPopup();
-
-    if(acc > 200){
-      showStatus("⚠️ Precise Location OFF - উপরে 🔒 চাপ দিয়া Precise ON করো + WiFi অন করো");
-    } else {
-      showStatus("✅ তোমার আসল লোকেশন পাইছি");
+    if (!navigator.geolocation) {
+      document.getElementById('status').innerText = "Tomar phone e GPS nai";
+      return;
     }
-  },()=>{
-    showStatus("লোকেশন অন করো ভাই");
-    document.getElementById('debug').innerHTML = "GPS পাইতেছি না<br>Chrome > 🔒 > Location > Allow<br>Precise ON করো";
-  },{enableHighAccuracy:true, timeout:30000, maximumAge:0});
-}
 
-myLocation();
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        var lat = pos.coords.latitude;
+        var lng = pos.coords.longitude;
+        var acc = Math.round(pos.coords.accuracy);
 
-async function calcRoute(){
-  destName=document.getElementById('searchInput').value;
-  if(!destName) return;
-  if(!myLat){ showStatus("আগে 🎯 চাপ দাও ভাই"); myLocation(); return; }
-  document.getElementById('kmCard').style.display='block';
-  document.getElementById('kmBig').innerText="হিসাব করতেছি...";
-  document.getElementById('kmSub').innerText="";
-  try{
-    let geo=await fetch("https://nominatim.openstreetmap.org/search?format=json&q="+encodeURIComponent(destName+", Bangladesh"));
-    let g=await geo.json(); if(!g[0]){document.getElementById('kmBig').innerText="জায়গা পাইলাম না"; return;}
-    destLat=parseFloat(g[0].lat); destLng=parseFloat(g[0].lon);
-    if(destMarker) map.removeLayer(destMarker);
-    destMarker=L.marker([destLat,destLng]).addTo(map).bindPopup(destName);
-    let r=await fetch(`https://router.project-osrm.org/route/v1/driving/${myLng},${myLat};${destLng},${destLat}?overview=full&geometries=geojson&steps=true`);
-    let data=await r.json(); let route=data.routes[0];
-    let km=route.distance/1000;
-    let mins=Math.round(route.duration/60);
-    let timeText=Math.floor(mins/60)+" hr "+(mins%60)+" min";
-    routeCoords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
-    if(routeLine) map.removeLayer(routeLine);
-    routeLine=L.polyline(routeCoords,{color:'#1a73e8',weight:6}).addTo(map);
-    map.fitBounds(routeLine.getBounds());
-    document.getElementById('kmBig').innerText="🛣️ "+km.toFixed(1)+" km • "+timeText;
-    document.getElementById('kmSub').innerText="তোমার লোকেশন থেকে "+destName+" পর্যন্ত";
-    if(route.legs[0].steps[1]){
-      document.getElementById('nextTurn').innerText = route.legs[0].steps[1].maneuver.instruction || "";
-      document.getElementById('nextDist').innerText = destName;
-    }
-  }catch(e){ document.getElementById('kmBig').innerText="নেট চেক করো ভাই"; }
-}
+        document.getElementById('latlng').innerText = lat.toFixed(6) + " , " + lng.toFixed(6);
+        document.getElementById('accuracy').innerText = acc + " meter";
 
-function startNavInSite(){
-  if(!routeCoords.length){ alert("আগে জায়গা সার্চ করো"); return; }
-  document.getElementById('searchBar').style.display='none';
-  document.getElementById('kmCard').style.display='none';
-  document.getElementById('backBtn').style.display='none';
-  document.getElementById('myLocBtn').style.display='none';
-  document.getElementById('navBanner').style.display='flex';
-  document.getElementById('navBottom').style.display='block';
-  watchId=navigator.geolocation.watchPosition(pos=>{
-    myLat=pos.coords.latitude; myLng=pos.coords.longitude;
-    let speed = pos.coords.speed ? Math.round(pos.coords.speed*3.6) : 0;
-    document.getElementById('speed').innerText=speed;
-    if(myMarker) map.removeLayer(myMarker);
-    myMarker=L.circleMarker([myLat,myLng],{radius:12,color:'#fff',weight:3,fillColor:'#1a73e8',fillOpacity:1}).addTo(map);
-    map.setView([myLat,myLng],16);
-    let d=Math.sqrt(Math.pow(destLat-myLat,2)+Math.pow(destLng-myLng,2))*111;
-    document.getElementById('remainDist').innerText=d.toFixed(1)+" km বাকি • "+destName;
-    let mins=Math.round(d/40*60);
-    document.getElementById('remainTime').innerText=Math.floor(mins/60)+" hr "+(mins%60)+" min";
-    if(d<0.2){ document.getElementById('nextTurn').innerText="🎉 পৌঁছাই গেছো!"; }
-  },{enableHighAccuracy:true});
-}
+        // Accuracy diya bujha jabe Precise ON naki OFF
+        if (acc <= 100) {
+          document.getElementById('precise').innerText = "ON - Ekdom Thik";
+          document.getElementById('precise').style.color = "#22c55e";
+          document.getElementById('status').innerText = "Tumi ekhane acho!";
+        } else {
+          document.getElementById('precise').innerText = "OFF - Vul jayga dekhabe";
+          document.getElementById('precise').style.color = "#f87171";
+          document.getElementById('status').innerText = "Precise OFF, Gulshan dekhabe";
+          document.getElementById('preciseWarning').style.display = "block";
+        }
 
-function stopNav(){
-  if(watchId) navigator.geolocation.clearWatch(watchId);
-  document.getElementById('navBanner').style.display='none';
-  document.getElementById('navBottom').style.display='none';
-  document.getElementById('searchBar').style.display='flex';
-  document.getElementById('kmCard').style.display='block';
-  document.getElementById('backBtn').style.display='block';
-  document.getElementById('myLocBtn').style.display='block';
-}
-document.getElementById('searchInput').addEventListener('change',calcRoute);
+        // Purano marker thakle sorai deo
+        if (amarMarker) map.removeLayer(amarMarker);
+
+        // Notun marker bosao
+        amarMarker = L.marker([lat, lng]).addTo(map);
+        amarMarker.bindPopup("Tumi ekhane acho!").openPopup();
+        map.setView([lat, lng], 16);
+
+      },
+      function(err) {
+        document.getElementById('status').innerText = "Location Allow dao nai!";
+        alert("Dost, Location Allow dao. Allow na dile map tor jayga dekhabe na!");
+      },
+      {
+        enableHighAccuracy: true, // Eitai Precise GPS chay
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
+  }
+
+  // 3. Map khullei auto Allow chabe - Eitai tumi chaisila
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      amarLocationNao();
+    }, 500);
+  });
 </script>
+
 </body>
 </html>
