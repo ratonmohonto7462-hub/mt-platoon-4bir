@@ -4,126 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Live Map - MT 4 BIR</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;overflow:hidden;background:#fff}
-#map{height:100vh;width:100%;z-index:1}
-/* উপরের সার্চ - ছবির মতো */
+body{font-family:Arial;overflow:hidden}
 #topSearch{position:fixed;top:12px;left:12px;right:12px;z-index:9999;background:#fff;border-radius:30px;display:flex;align-items:center;padding:8px 10px 8px 16px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
-#topSearch input{flex:1;border:none;outline:none;font-size:18px;padding:6px}
-#topSearch .close{font-size:22px;padding:0 6px}
-/* চিপস - Restaurants Attractions Hotels */
-#chips{position:fixed;top:64px;left:12px;right:12px;z-index:9999;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
-.chip{background:#fff;padding:9px 14px;border-radius:20px;font-size:15px;font-weight:600;white-space:nowrap;box-shadow:0 1px 5px rgba(0,0,0,.3);border:none;display:flex;gap:6px;align-items:center}
-/* ছবির মতো বাম পাশে ছোট ছবি */
-#miniImg{position:fixed;left:12px;top:48%;z-index:9999;width:120px;height:70px;border-radius:12px;overflow:hidden;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-#miniImg img{width:100%;height:100%;object-fit:cover}
-/* নিচের বড় সাদা বক্স - ছবির মতো */
-#bottomSheet{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#fff;border-radius:22px 22px 0 0;padding:10px 16px 20px;box-shadow:0 -3px 20px rgba(0,0,0,.3);max-height:46vh;overflow-y:auto}
-.handle{width:44px;height:4px;background:#ccc;border-radius:10px;margin:0 auto 12px}
-.topRow{display:flex;justify-content:space-between;align-items:start}
-.placeName{font-size:27px;font-weight:700;line-height:1.1}
-.bangla{font-size:18px;color:#555;margin-top:4px}
-.sub{font-size:15px;color:#555;margin-top:4px}
-.iconBtn{width:40px;height:40px;background:#f1f3f4;border-radius:50%;border:none;font-size:19px;margin-left:8px}
-.actionRow{display:flex;gap:10px;margin:14px 0;overflow-x:auto;scrollbar-width:none}
-.btnDir{background:#0b6b6b;color:#fff;border:none;padding:11px 18px;border-radius:25px;font-size:16px;font-weight:700;white-space:nowrap}
-.btnLight{background:#d6f2f2;color:#0b3d3d;border:none;padding:11px 18px;border-radius:25px;font-size:16px;font-weight:700;white-space:nowrap}
-.desc{background:#f1f5f9;padding:14px;border-radius:16px;font-size:15px;line-height:1.5;color:#333}
-.desc a{color:#0b7a6a;text-decoration:none}
-.stay{margin-top:16px}
-.stay b{font-size:20px}
-.stay p{color:#777;font-size:14px}
-.back{position:fixed;bottom:20px;left:14px;z-index:10000;background:#0f2e2a;color:#ffcc00;padding:9px 14px;border-radius:20px;border:none;font-weight:900}
+#topSearch input{flex:1;border:none;outline:none;font-size:17px;padding:6px}
+#topSearch button{background:#1a73e8;color:#fff;border:none;padding:9px 16px;border-radius:20px;font-weight:700}
+#mapFrame{position:fixed;top:0;left:0;width:100%;height:100vh;border:none}
+#backBtn{position:fixed;bottom:20px;left:14px;z-index:9999;background:#0f2e2a;color:#ffcc00;padding:10px 16px;border-radius:20px;border:none;font-weight:900}
+#myLoc{position:fixed;bottom:20px;right:14px;z-index:9999;background:#fff;width:48px;height:48px;border-radius:50%;border:none;box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:22px}
 </style>
 </head>
 <body>
 
 <div id="topSearch">
-<input id="searchInput" value="Mohammadpur, Dhaka">
-<span class="close" onclick="document.getElementById('searchInput').value=''">✕</span>
+<input id="searchInput" value="Mohammadpur, Dhaka" placeholder="Search Google Maps">
+<button onclick="searchMap()">Search</button>
 </div>
 
-<div id="chips">
-<button class="chip" onclick="searchPlace('Restaurants in Mohammadpur')">🍴 Restaurants</button>
-<button class="chip" onclick="searchPlace('Attractions in Mohammadpur')">🎡 Attractions</button>
-<button class="chip" onclick="searchPlace('Hotels in Mohammadpur')">🛏️ Hotels</button>
-<button class="chip" onclick="searchPlace('Hospital')">🏥 Hospital</button>
-<button class="chip" onclick="searchPlace('Petrol Pump')">⛽ Petrol</button>
-</div>
+<!-- আসল গুগল ম্যাপ -->
+<iframe id="mapFrame" src="https://www.google.com/maps?q=Mohammadpur,Dhaka&z=15&output=embed" allowfullscreen></iframe>
 
-<div id="map"></div>
-
-<div id="miniImg"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=300"></div>
-
-<div id="bottomSheet">
-<div class="handle"></div>
-<div class="topRow">
-<div>
-<div class="placeName" id="placeTxt">Mohammadpur</div>
-<div class="bangla">মোহাম্মদপুর</div>
-<div class="sub">Dhaka • 🚍 30 min</div>
-</div>
-<div style="display:flex">
-<button class="iconBtn">🔖</button>
-<button class="iconBtn">↗️</button>
-<button class="iconBtn" onclick="document.getElementById('bottomSheet').style.display='none'">✕</button>
-</div>
-</div>
-
-<div class="actionRow">
-<button class="btnDir" onclick="getDirections()">➡️ Directions</button>
-<button class="btnLight" onclick="getDirections()">▲ Start</button>
-<button class="btnLight">✨ Ask</button>
-<button class="btnLight">📍 Save</button>
-</div>
-
-<div class="desc" id="descTxt">Mohammadpur is a thana of Dhaka, Bangladesh. Initially Mohammadpur had grown as a residential area, su... <a href="https://en.wikipedia.org/wiki/Mohammadpur_Thana" target="_blank">Wikipedia</a></div>
-
-<div class="stay">
-<b>Where to stay</b>
-<p>Prices for Nov 16 – 17</p>
-<div style="display:flex;gap:10px;margin-top:10px;overflow-x:auto">
-<div style="min-width:140px;background:#f1f5f9;border-radius:12px;padding:10px"><b>Hotel 71</b><br>⭐ 4.2 • ৳2,500</div>
-<div style="min-width:140px;background:#f1f5f9;border-radius:12px;padding:10px"><b>Best Inn</b><br>⭐ 4.0 • ৳1,800</div>
-<div style="min-width:140px;background:#f1f5f9;border-radius:12px;padding:10px"><b>Green Stay</b><br>⭐ 4.5 • ৳3,200</div>
-</div>
-</div>
-</div>
-
-<button class="back" onclick="location.href='../index.html'">← Back</button>
+<button id="backBtn" onclick="location.href='../index.html'">← Back</button>
+<button id="myLoc" onclick="goMyLocation()">📍</button>
 
 <script>
-var map = L.map('map', {zoomControl:false}).setView([23.767, 90.358], 15);
-// ছবির মতো Hybrid - স্যাটেলাইট + রাস্তা + নাম + লাল সবুজ ট্রাফিক লাইন
-var googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {maxZoom:21}).addTo(map);
-
-var searchMarker = null;
-async function searchPlace(q){
-  q = q || document.getElementById('searchInput').value;
+function searchMap(){
+  let q = document.getElementById('searchInput').value;
   if(!q) return;
-  let res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`);
-  let data = await res.json();
-  if(data.length>0){
-    let lat=parseFloat(data[0].lat), lng=parseFloat(data[0].lon);
-    map.setView([lat,lng], 15);
-    if(searchMarker) map.removeLayer(searchMarker);
-    searchMarker = L.marker([lat,lng]).addTo(map).bindPopup(`<b>${data[0].display_name}</b>`).openPopup();
-    let shortName = q.split(',')[0];
-    document.getElementById('placeTxt').innerText = shortName;
-    document.getElementById('bottomSheet').style.display='block';
-    // জায়গার নাম অনুযায়ী বর্ণনা বদলাবে
-    document.getElementById('descTxt').innerHTML = `${shortName} is a thana of Dhaka, Bangladesh. Initially ${shortName} had grown as a residential area, su... <a href="https://en.wikipedia.org/wiki/${shortName}" target="_blank">Wikipedia</a>`;
-    document.getElementById('searchInput').value = q;
-  }
+  // আসল গুগল ম্যাপে খুঁজবে
+  document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&z=15&output=embed";
 }
-document.getElementById('searchInput').addEventListener('change', ()=> searchPlace());
 
-function getDirections(){
-  let q = document.getElementById('searchInput').value || "Mohammadpur, Dhaka";
-  window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}`);
+document.getElementById('searchInput').addEventListener('change', searchMap);
+
+function goMyLocation(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      let lat = pos.coords.latitude;
+      let lng = pos.coords.longitude;
+      // তোমার লাইভ লোকেশনে আসল গুগল ম্যাপ খুলবে
+      document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + lat + "," + lng + "&z=16&output=embed";
+      document.getElementById('searchInput').value = "My Location";
+    });
+  } else {
+    alert("GPS অন করো ভাই");
+  }
 }
 </script>
 </body>
