@@ -1,18 +1,184 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Convoy Group Live Map</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui} body{background:#0f172a;color:#fff;padding-bottom:70px} h1{font-size:15px;padding:10px;background:#162040} #map{height:65vh;width:100%} #list{padding:8px;max-height:30vh;overflow:auto} .row{background:#162040;padding:8px;border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;font-size:12px} .row b{color:#38bdf8} .nav{position:fixed;bottom:0;left:0;right:0;background:#0b1226;display:flex;justify-content:space-around;padding:10px 0;z-index:9999} .nav a{font-size:11px;color:#94a3b8;text-align:center;text-decoration:none} .nav a.mid{background:#3b82f6;color:#fff;padding:8px 16px;border-radius:20px;margin-top:-15px;font-weight:800}</style></head><body>
-<h1>🛰️ Convoy Group - 10 Trucks LIVE MAP</h1>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; overflow:hidden; font-family:sans-serif; }
+  #map { height:100vh; width:100%; z-index:1; }
+
+  /* উপরে সার্চ */
+  #searchBar { position:fixed; top:12px; left:12px; right:12px; display:flex; gap:8px; z-index:1000; }
+  #searchInput { flex:1; padding:13px 14px; border:none; border-radius:12px; font-size:15px; outline:none; box-shadow:0 4px 14px rgba(0,0,0,0.3); }
+  #searchBtn { padding:13px 16px; background:#2563eb; color:white; border:none; border-radius:12px; font-size:15px; font-weight:bold; }
+
+  /* Live Tracking খোলার বাটন */
+  #liveBtn { position:fixed; top:64px; right:12px; padding:10px 14px; background:#0f172a; color:white; border:none; border-radius:10px; font-size:14px; font-weight:bold; z-index:1000; }
+
+  /* নিচে একটাই ঘর */
+  #ektaGhor { position:fixed; bottom:16px; left:12px; right:76px; background:rgba(15,23,42,0.92); color:white; padding:12px; border-radius:12px; font-size:13px; line-height:1.6; z-index:1000; }
+  #ektaGhor b { color:#22c55e; }
+  #ektaGhor .east { color:#38bdf8; }
+  #allowBtn { width:100%; padding:12px; background:#22c55e; border:none; border-radius:10px; color:white; font-size:17px; font-weight:bold; margin-top:8px; }
+  #myLocBtn { position:fixed; bottom:22px; right:14px; width:56px; height:56px; background:white; border:none; border-radius:50%; box-shadow:0 4px 14px rgba(0,0,0,0.35); z-index:1000; display:flex; align-items:center; justify-content:center; font-size:26px; }
+
+  /* পপআপ মেনু */
+  .popup { position:fixed; left:12px; right:12px; bottom:12px; background:white; border-radius:16px; padding:14px; z-index:2000; display:none; max-height:70vh; overflow-y:auto; box-shadow:0 10px 30px rgba(0,0,0,0.4); }
+  .popup h3 { margin-bottom:10px; }
+  .closeBtn { float:right; background:#ef4444; color:white; border:none; width:28px; height:28px; border-radius:50%; font-weight:bold; }
+  .menuBtn { width:100%; padding:14px; margin:5px 0; border:none; border-radius:12px; background:#f1f5f9; font-size:16px; text-align:left; font-weight:bold; }
+  .menuBtn span { float:right; }
+  input, select { width:100%; padding:12px; margin:6px 0; border:1px solid #ddd; border-radius:10px; font-size:15px; }
+  .addBtn { width:100%; padding:13px; background:#22c55e; color:white; border:none; border-radius:10px; font-size:16px; font-weight:bold; margin-top:6px; }
+  .backBtn { width:100%; padding:10px; background:#e2e8f0; border:none; border-radius:10px; margin-top:8px; }
+  .memberCard { background:#f8fafc; padding:10px; border-radius:10px; margin:6px 0; display:flex; justify-content:space-between; align-items:center; }
+  .memberCard b { font-size:15px; }
+  .memberCard small { color:#64748b; }
+  .delBtn { background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; }
+</style>
+</head>
+<body>
+
 <div id="map"></div>
-<div id="list"></div>
-<div class="nav">
-<a href="https://mtplatoon4bir.xyz/home/live-convoy/convoy-home.html">🚚<br>Home</a>
-<a class="mid" href="https://mtplatoon4bir.xyz/home/live-convoy/convoy-group.html">👥<br>Group</a>
-<a href="https://mtplatoon4bir.xyz/home/live-convoy/convoy-message.html">💬<br>Message</a>
+
+<div id="searchBar">
+  <input id="searchInput" type="text" placeholder="জায়গা খুঁজো... যেমন: গুলশান, মিরপুর">
+  <button id="searchBtn" onclick="khujo()">🔍 খুঁজো</button>
 </div>
+
+<button id="liveBtn" onclick="kholo('livePopup')">📍 Live Tracking</button>
+
+<div id="ektaGhor">
+  নর্দিং: <b id="latText">--</b> ° উত্তর<br>
+  ইস্টিং: <b id="lngText" class="east">--</b> ° পূর্ব<br>
+  একুরেসি: <span id="accText">এখনো চালু হয় নাই</span><br>
+  <button id="allowBtn" onclick="amarLocation()">Allow</button>
+</div>
+
+<button id="myLocBtn" onclick="amarLocation()">🎯</button>
+
+<!-- Live Tracking মেনু -->
+<div id="livePopup" class="popup">
+  <button class="closeBtn" onclick="bondho('livePopup')">X</button>
+  <h3>Live Tracking</h3>
+  <button class="menuBtn" onclick="kholo('mapPopup')">🗺️ Live Map <span>›</span></button>
+  <button class="menuBtn" onclick="kholo('convoyPopup')">👥 Convoy Group <span>›</span></button>
+  <button class="menuBtn" onclick="kholo('msgPopup')">💬 Message <span>›</span></button>
+  <button class="menuBtn" onclick="kholo('walkiePopup')">📻 Walkie Talkie <span>›</span></button>
+  <button class="menuBtn" onclick="kholo('statusPopup')">📊 Convoy Status <span>›</span></button>
+</div>
+
+<!-- Convoy Group -->
+<div id="convoyPopup" class="popup">
+  <button class="closeBtn" onclick="bondho('convoyPopup')">X</button>
+  <h3>👥 Convoy Group</h3>
+  <p id="memberCount">মোট মেম্বার: ০ জন</p>
+
+  <input id="mName" type="text" placeholder="মেম্বারের নাম - যেমন: রাকিব">
+  <input id="mPhone" type="text" placeholder="ফোন নাম্বার - যেমন: 017...">
+  <input id="mCar" type="text" placeholder="গাড়ির নাম / নাম্বার - যেমন: ঢাকা মেট্রো-গ ১২৩৪">
+  <select id="mRole">
+    <option value="লিডার">লিডার</option>
+    <option value="ড্রাইভার">ড্রাইভার</option>
+    <option value="মেম্বার" selected>মেম্বার</option>
+  </select>
+  <button class="addBtn" onclick="memberAdd()">+ মেম্বার অ্যাড করো</button>
+
+  <div id="memberList" style="margin-top:10px;"></div>
+  <button class="backBtn" onclick="bondho('convoyPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
+</div>
+
+<!-- বাকি গুলা -->
+<div id="mapPopup" class="popup">
+  <button class="closeBtn" onclick="bondho('mapPopup')">X</button>
+  <h3>🗺️ Live Map</h3><p>তুমি এখন লাইভ ম্যাপে আছো দোস্ত।</p>
+  <button class="backBtn" onclick="bondho('mapPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
+</div>
+<div id="msgPopup" class="popup">
+  <button class="closeBtn" onclick="bondho('msgPopup')">X</button>
+  <h3>💬 Message</h3><p>এখানে গ্রুপে মেসেজ যাবে।</p>
+  <button class="backBtn" onclick="bondho('msgPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
+</div>
+<div id="walkiePopup" class="popup">
+  <button class="closeBtn" onclick="bondho('walkiePopup')">X</button>
+  <h3>📻 Walkie Talkie</h3><p>চাপ দিয়া কথা বলো।</p>
+  <button class="backBtn" onclick="bondho('walkiePopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
+</div>
+<div id="statusPopup" class="popup">
+  <button class="closeBtn" onclick="bondho('statusPopup')">X</button>
+  <h3>📊 Convoy Status</h3><p id="statusText">এখনো কেউ অ্যাড হয় নাই।</p>
+  <button class="backBtn" onclick="bondho('statusPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var map = L.map('map').setView([23.8103, 89.2], 7);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').
-trucks.forEach((pos,i)=>{
- let marker=L.marker(pos).addTo(map).bindPopup(`<b>Truck-${String(i+1).padStart(2,'0')}</b><br>Dhaka → Jessore<br>${50+Math.floor(Math.random()*15)} km/h`);
- l.innerHTML+=`<div class="row"><div><b>Truck-${String(i+1).padStart(2,'0')}</b><br><small>Dhaka → Jessore</small></div><div style="text-align:right;color:#22c55e">● Live<br><small>${50+Math.floor(Math.random()*15)} km/h</small></div></div>`;
-});
+  var map = L.map('map', { zoomControl: false }).setView([23.8103, 90.4125], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+  var amarDot = null, amarCircle = null, searchMarker = null;
+
+  function kholo(id){ document.getElementById(id).style.display='block'; }
+  function bondho(id){ document.getElementById(id).style.display='none'; }
+
+  function amarLocation() {
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      var lat = pos.coords.latitude, lng = pos.coords.longitude, acc = Math.round(pos.coords.accuracy);
+      document.getElementById('latText').innerText = lat.toFixed(6);
+      document.getElementById('lngText').innerText = lng.toFixed(6);
+      document.getElementById('accText').innerText = acc + " মিটার • প্রিসাইস চালু";
+      if (amarDot) map.removeLayer(amarDot);
+      if (amarCircle) map.removeLayer(amarCircle);
+      amarCircle = L.circle([lat, lng], { radius: acc, color:'#3b82f6', fillColor:'#3b82f6', fillOpacity:0.15, weight:1 }).addTo(map);
+      amarDot = L.circleMarker([lat, lng], { radius:9, color:'white', weight:3, fillColor:'#2563eb', fillOpacity:1 }).addTo(map);
+      map.setView([lat, lng], 17);
+    }, function(){ alert("Allow দাও দোস্ত"); }, { enableHighAccuracy:true, timeout:15000, maximumAge:0 });
+  }
+
+  function khujo() {
+    var q = document.getElementById('searchInput').value;
+    if (!q) { alert("জায়গার নাম লেখো দোস্ত"); return; }
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q))
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.length == 0) { alert("পাইলাম না দোস্ত"); return; }
+      var lat = parseFloat(data[0].lat), lon = parseFloat(data[0].lon);
+      if (searchMarker) map.removeLayer(searchMarker);
+      searchMarker = L.marker([lat, lon]).addTo(map);
+      map.setView([lat, lon], 16);
+    });
+  }
+
+  // Convoy Group - মেম্বার অ্যাড
+  var members = JSON.parse(localStorage.getItem('convoyMembers') || '[]');
+  function showMembers(){
+    var list = document.getElementById('memberList');
+    list.innerHTML = '';
+    document.getElementById('memberCount').innerText = "মোট মেম্বার: " + members.length + " জন";
+    document.getElementById('statusText').innerText = members.length + " জন মেম্বার কনভয়ে আছে।";
+    members.forEach(function(m, i){
+      var div = document.createElement('div');
+      div.className = 'memberCard';
+      div.innerHTML = '<div><b>'+m.name+'</b> • '+m.role+'<br><small>'+m.car+' • '+m.phone+'</small></div><button class="delBtn" onclick="memberDel('+i+')">X</button>';
+      list.appendChild(div);
+    });
+  }
+  function memberAdd(){
+    var name = document.getElementById('mName').value.trim();
+    var phone = document.getElementById('mPhone').value.trim();
+    var car = document.getElementById('mCar').value.trim();
+    var role = document.getElementById('mRole').value;
+    if(!name){ alert("নাম দাও দোস্ত"); return; }
+    members.push({name:name, phone:phone||'নাম্বার নাই', car:car||'গাড়ি নাই', role:role});
+    localStorage.setItem('convoyMembers', JSON.stringify(members));
+    document.getElementById('mName').value=''; document.getElementById('mPhone').value=''; document.getElementById('mCar').value='';
+    showMembers();
+  }
+  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembers', JSON.stringify(members)); showMembers(); }
+  showMembers();
+
+  window.addEventListener('load', function(){ setTimeout(function(){ amarLocation(); }, 600); });
 </script>
-</body></html>
+</body>
+</html>
