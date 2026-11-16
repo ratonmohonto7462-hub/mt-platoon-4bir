@@ -9,46 +9,40 @@
     * { margin:0; padding:0; box-sizing:border-box; }
   html, body { height:100%; overflow:hidden; font-family:sans-serif; }
   #map { height:100vh; width:100%; z-index:1; }
-
-  /* উপরে সার্চ */
   #searchBar { position:fixed; top:12px; left:12px; right:12px; display:flex; gap:8px; z-index:1000; }
   #searchInput { flex:1; padding:13px 14px; border:none; border-radius:12px; font-size:15px; outline:none; box-shadow:0 4px 14px rgba(0,0,0,0.3); }
   #searchBtn { padding:13px 16px; background:#2563eb; color:white; border:none; border-radius:12px; font-size:15px; font-weight:bold; }
-
-  /* Live Tracking খোলার বাটন */
   #liveBtn { position:fixed; top:64px; right:12px; padding:10px 14px; background:#0f172a; color:white; border:none; border-radius:10px; font-size:14px; font-weight:bold; z-index:1000; }
-
-  /* নিচে একটাই ঘর */
   #ektaGhor { position:fixed; bottom:16px; left:12px; right:76px; background:rgba(15,23,42,0.92); color:white; padding:12px; border-radius:12px; font-size:13px; line-height:1.6; z-index:1000; }
   #ektaGhor b { color:#22c55e; }
   #ektaGhor .east { color:#38bdf8; }
   #allowBtn { width:100%; padding:12px; background:#22c55e; border:none; border-radius:10px; color:white; font-size:17px; font-weight:bold; margin-top:8px; }
   #myLocBtn { position:fixed; bottom:22px; right:14px; width:56px; height:56px; background:white; border:none; border-radius:50%; box-shadow:0 4px 14px rgba(0,0,0,0.35); z-index:1000; display:flex; align-items:center; justify-content:center; font-size:26px; }
-
-  /* পপআপ মেনু */
-  .popup { position:fixed; left:12px; right:12px; bottom:12px; background:white; border-radius:16px; padding:14px; z-index:2000; display:none; max-height:70vh; overflow-y:auto; box-shadow:0 10px 30px rgba(0,0,0,0.4); }
-  .popup h3 { margin-bottom:10px; }
+  .popup { position:fixed; left:12px; right:12px; bottom:12px; background:white; border-radius:16px; padding:14px; z-index:2000; display:none; max-height:75vh; overflow-y:auto; box-shadow:0 10px 30px rgba(0,0,0,0.4); }
   .closeBtn { float:right; background:#ef4444; color:white; border:none; width:28px; height:28px; border-radius:50%; font-weight:bold; }
   .menuBtn { width:100%; padding:14px; margin:5px 0; border:none; border-radius:12px; background:#f1f5f9; font-size:16px; text-align:left; font-weight:bold; }
   .menuBtn span { float:right; }
   input, select { width:100%; padding:12px; margin:6px 0; border:1px solid #ddd; border-radius:10px; font-size:15px; }
   .addBtn { width:100%; padding:13px; background:#22c55e; color:white; border:none; border-radius:10px; font-size:16px; font-weight:bold; margin-top:6px; }
+  .addBtn2 { width:100%; padding:13px; background:#2563eb; color:white; border:none; border-radius:10px; font-size:16px; font-weight:bold; margin-top:6px; }
   .backBtn { width:100%; padding:10px; background:#e2e8f0; border:none; border-radius:10px; margin-top:8px; }
-  .memberCard { background:#f8fafc; padding:10px; border-radius:10px; margin:6px 0; display:flex; justify-content:space-between; align-items:center; }
-  .memberCard b { font-size:15px; }
-  .memberCard small { color:#64748b; }
+  .card { background:#f8fafc; padding:10px; border-radius:10px; margin:6px 0; display:flex; justify-content:space-between; align-items:center; }
+  .card b { font-size:15px; }
+  .card small { color:#64748b; }
   .delBtn { background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; }
+  .sec { background:#fff7ed; border:1px solid #fed7aa; padding:10px; border-radius:12px; margin-top:10px; }
+  .sec h4 { margin-bottom:4px; }
+  .online { color:#22c55e; font-weight:bold; font-size:12px; }
+  .offline { color:#94a3b8; font-size:12px; }
 </style>
 </head>
 <body>
-
 <div id="map"></div>
 
 <div id="searchBar">
   <input id="searchInput" type="text" placeholder="জায়গা খুঁজো... যেমন: গুলশান, মিরপুর">
   <button id="searchBtn" onclick="khujo()">🔍 খুঁজো</button>
 </div>
-
 <button id="liveBtn" onclick="kholo('livePopup')">📍 Live Tracking</button>
 
 <div id="ektaGhor">
@@ -57,49 +51,72 @@
   একুরেসি: <span id="accText">এখনো চালু হয় নাই</span><br>
   <button id="allowBtn" onclick="amarLocation()">Allow</button>
 </div>
-
 <button id="myLocBtn" onclick="amarLocation()">🎯</button>
 
-<!-- Live Tracking মেনু -->
 <div id="livePopup" class="popup">
   <button class="closeBtn" onclick="bondho('livePopup')">X</button>
   <h3>Live Tracking</h3>
-  <button class="menuBtn" onclick="kholo('mapPopup')">🗺️ Live Map <span>›</span></button>
   <button class="menuBtn" onclick="kholo('convoyPopup')">👥 Convoy Group <span>›</span></button>
   <button class="menuBtn" onclick="kholo('msgPopup')">💬 Message <span>›</span></button>
   <button class="menuBtn" onclick="kholo('walkiePopup')">📻 Walkie Talkie <span>›</span></button>
   <button class="menuBtn" onclick="kholo('statusPopup')">📊 Convoy Status <span>›</span></button>
 </div>
 
-<!-- Convoy Group -->
+<!-- ===== CONVOY GROUP - সব ৪ টা ===== -->
 <div id="convoyPopup" class="popup">
   <button class="closeBtn" onclick="bondho('convoyPopup')">X</button>
   <h3>👥 Convoy Group</h3>
-  <p id="memberCount">মোট মেম্বার: ০ জন</p>
 
-  <input id="mName" type="text" placeholder="মেম্বারের নাম - যেমন: রাকিব">
-  <input id="mPhone" type="text" placeholder="ফোন নাম্বার - যেমন: 017...">
-  <input id="mCar" type="text" placeholder="গাড়ির নাম / নাম্বার - যেমন: ঢাকা মেট্রো-গ ১২৩৪">
-  <select id="mRole">
-    <option value="লিডার">লিডার</option>
-    <option value="ড্রাইভার">ড্রাইভার</option>
-    <option value="মেম্বার" selected>মেম্বার</option>
-  </select>
-  <button class="addBtn" onclick="memberAdd()">+ মেম্বার অ্যাড করো</button>
+  <!-- ৪. গ্রুপের কাজ -->
+  <div class="sec">
+    <h4>৪. গ্রুপের নাম / ছবি</h4>
+    <input id="groupName" type="text" placeholder="গ্রুপের নাম - যেমন: ঢাকা টু চট্টগ্রাম কনভয়">
+    <input id="groupPhoto" type="file" accept="image/*" onchange="photoDekhao(event)">
+    <img id="groupImg" style="width:100%; border-radius:10px; display:none; margin-top:6px;">
+    <button class="addBtn2" onclick="groupSave()">গ্রুপ সেভ করো</button>
+    <p id="groupShow" style="font-weight:bold; margin-top:6px;"></p>
+  </div>
 
-  <div id="memberList" style="margin-top:10px;"></div>
+  <!-- ১. মেম্বার অ্যাড -->
+  <div class="sec" style="background:#f0fdf4; border-color:#bbf7d0;">
+    <h4>১. মেম্বার অ্যাড করা</h4>
+    <input id="mName" type="text" placeholder="মেম্বারের নাম - যেমন: রাকিব">
+    <input id="mPhone" type="text" placeholder="ফোন নাম্বার - যেমন: 017...">
+    <select id="mRole">
+      <option value="লিডার">লিডার</option>
+      <option value="ড্রাইভার">ড্রাইভার</option>
+      <option value="মেম্বার" selected>মেম্বার</option>
+    </select>
+    <button class="addBtn" onclick="memberAdd()">+ মেম্বার অ্যাড করো</button>
+  </div>
+
+  <!-- ২. গাড়ি অ্যাড -->
+  <div class="sec" style="background:#eff6ff; border-color:#bfdbfe;">
+    <h4>২. গাড়ি অ্যাড করা</h4>
+    <input id="cName" type="text" placeholder="গাড়ির নাম / নাম্বার প্লেট - যেমন: ঢাকা মেট্রো-গ ১২৩৪">
+    <input id="cSerial" type="number" placeholder="সিরিয়াল - কত নাম্বার গাড়ি? যেমন: ১, ২, ৩">
+    <input id="cColor" type="text" placeholder="গাড়ির কালার - যেমন: সাদা, কালো">
+    <button class="addBtn2" onclick="carAdd()">+ গাড়ি অ্যাড করো</button>
+    <div id="carList"></div>
+  </div>
+
+  <!-- ৩. লাইভ জিনিস -->
+  <div class="sec" style="background:#fefce8; border-color:#fde68a;">
+    <h4>৩. লাইভ - কে কোথায়, স্পিড কত</h4>
+    <p id="liveInfo">তোমার লোকেশন চালু করলে এখানে স্পিড দেখা যাইবো।</p>
+    <div id="memberList"></div>
+  </div>
+
+  <p id="memberCount" style="margin-top:8px; font-weight:bold;"></p>
   <button class="backBtn" onclick="bondho('convoyPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
 </div>
 
-<!-- বাকি গুলা -->
-<div id="mapPopup" class="popup">
-  <button class="closeBtn" onclick="bondho('mapPopup')">X</button>
-  <h3>🗺️ Live Map</h3><p>তুমি এখন লাইভ ম্যাপে আছো দোস্ত।</p>
-  <button class="backBtn" onclick="bondho('mapPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
-</div>
 <div id="msgPopup" class="popup">
   <button class="closeBtn" onclick="bondho('msgPopup')">X</button>
-  <h3>💬 Message</h3><p>এখানে গ্রুপে মেসেজ যাবে।</p>
+  <h3>💬 Message</h3>
+  <input id="msgInput" type="text" placeholder="মেসেজ লেখো...">
+  <button class="addBtn" onclick="msgSend()">পাঠাও</button>
+  <div id="msgList"></div>
   <button class="backBtn" onclick="bondho('msgPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
 </div>
 <div id="walkiePopup" class="popup">
@@ -109,7 +126,7 @@
 </div>
 <div id="statusPopup" class="popup">
   <button class="closeBtn" onclick="bondho('statusPopup')">X</button>
-  <h3>📊 Convoy Status</h3><p id="statusText">এখনো কেউ অ্যাড হয় নাই।</p>
+  <h3>📊 Convoy Status</h3><p id="statusText"></p>
   <button class="backBtn" onclick="bondho('statusPopup'); kholo('livePopup')">⬅ ফিরে যাও</button>
 </div>
 
@@ -117,67 +134,103 @@
 <script>
   var map = L.map('map', { zoomControl: false }).setView([23.8103, 90.4125], 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-  var amarDot = null, amarCircle = null, searchMarker = null;
-
+  var amarDot=null, amarCircle=null, searchMarker=null;
   function kholo(id){ document.getElementById(id).style.display='block'; }
   function bondho(id){ document.getElementById(id).style.display='none'; }
 
-  function amarLocation() {
-    navigator.geolocation.getCurrentPosition(function(pos) {
-      var lat = pos.coords.latitude, lng = pos.coords.longitude, acc = Math.round(pos.coords.accuracy);
-      document.getElementById('latText').innerText = lat.toFixed(6);
-      document.getElementById('lngText').innerText = lng.toFixed(6);
-      document.getElementById('accText').innerText = acc + " মিটার • প্রিসাইস চালু";
-      if (amarDot) map.removeLayer(amarDot);
-      if (amarCircle) map.removeLayer(amarCircle);
-      amarCircle = L.circle([lat, lng], { radius: acc, color:'#3b82f6', fillColor:'#3b82f6', fillOpacity:0.15, weight:1 }).addTo(map);
-      amarDot = L.circleMarker([lat, lng], { radius:9, color:'white', weight:3, fillColor:'#2563eb', fillOpacity:1 }).addTo(map);
-      map.setView([lat, lng], 17);
-    }, function(){ alert("Allow দাও দোস্ত"); }, { enableHighAccuracy:true, timeout:15000, maximumAge:0 });
+  function amarLocation(){
+    navigator.geolocation.getCurrentPosition(function(pos){
+      var lat=pos.coords.latitude, lng=pos.coords.longitude, acc=Math.round(pos.coords.accuracy);
+      var speed = pos.coords.speed ? Math.round(pos.coords.speed*3.6) : 0;
+      document.getElementById('latText').innerText=lat.toFixed(6);
+      document.getElementById('lngText').innerText=lng.toFixed(6);
+      document.getElementById('accText').innerText=acc+" মিটার • প্রিসাইস চালু";
+      document.getElementById('liveInfo').innerText="তোমার স্পিড: "+speed+" km/h • লোকেশন: "+lat.toFixed(4)+", "+lng.toFixed(4);
+      if(amarDot) map.removeLayer(amarDot);
+      if(amarCircle) map.removeLayer(amarCircle);
+      amarCircle=L.circle([lat,lng],{radius:acc,color:'#3b82f6',fillColor:'#3b82f6',fillOpacity:0.15,weight:1}).addTo(map);
+      amarDot=L.circleMarker([lat,lng],{radius:9,color:'white',weight:3,fillColor:'#2563eb',fillOpacity:1}).addTo(map);
+      map.setView([lat,lng],17);
+    },function(){ alert("Allow দাও দোস্ত"); },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
   }
-
-  function khujo() {
-    var q = document.getElementById('searchInput').value;
-    if (!q) { alert("জায়গার নাম লেখো দোস্ত"); return; }
-    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q))
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if (data.length == 0) { alert("পাইলাম না দোস্ত"); return; }
-      var lat = parseFloat(data[0].lat), lon = parseFloat(data[0].lon);
-      if (searchMarker) map.removeLayer(searchMarker);
-      searchMarker = L.marker([lat, lon]).addTo(map);
-      map.setView([lat, lon], 16);
+  function khujo(){
+    var q=document.getElementById('searchInput').value;
+    if(!q){ alert("জায়গার নাম লেখো দোস্ত"); return; }
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q))
+    .then(function(r){ return r.json(); }).then(function(data){
+      if(data.length==0){ alert("পাইলাম না দোস্ত"); return; }
+      var lat=parseFloat(data[0].lat), lon=parseFloat(data[0].lon);
+      if(searchMarker) map.removeLayer(searchMarker);
+      searchMarker=L.marker([lat,lon]).addTo(map);
+      map.setView([lat,lon],16);
     });
   }
 
-  // Convoy Group - মেম্বার অ্যাড
-  var members = JSON.parse(localStorage.getItem('convoyMembers') || '[]');
-  function showMembers(){
-    var list = document.getElementById('memberList');
-    list.innerHTML = '';
-    document.getElementById('memberCount').innerText = "মোট মেম্বার: " + members.length + " জন";
-    document.getElementById('statusText').innerText = members.length + " জন মেম্বার কনভয়ে আছে।";
-    members.forEach(function(m, i){
-      var div = document.createElement('div');
-      div.className = 'memberCard';
-      div.innerHTML = '<div><b>'+m.name+'</b> • '+m.role+'<br><small>'+m.car+' • '+m.phone+'</small></div><button class="delBtn" onclick="memberDel('+i+')">X</button>';
-      list.appendChild(div);
+  // ডাটা
+  var members = JSON.parse(localStorage.getItem('convoyMembers')||'[]');
+  var cars = JSON.parse(localStorage.getItem('convoyCars')||'[]');
+  var msgs = JSON.parse(localStorage.getItem('convoyMsgs')||'[]');
+
+  function photoDekhao(e){
+    var f=e.target.files[0]; if(!f) return;
+    var r=new FileReader(); r.onload=function(){ var img=document.getElementById('groupImg'); img.src=r.result; img.style.display='block'; localStorage.setItem('groupPhoto', r.result); }; r.readAsDataURL(f);
+  }
+  function groupSave(){
+    var n=document.getElementById('groupName').value.trim();
+    if(n) localStorage.setItem('groupName', n);
+    document.getElementById('groupShow').innerText="গ্রুপ: "+(n||localStorage.getItem('groupName')||'');
+    alert("গ্রুপ সেভ হইছে দোস্ত");
+  }
+  // লোড করার সময় গ্রুপ দেখাও
+  if(localStorage.getItem('groupName')) document.getElementById('groupShow').innerText="গ্রুপ: "+localStorage.getItem('groupName');
+  if(localStorage.getItem('groupPhoto')){ var im=document.getElementById('groupImg'); im.src=localStorage.getItem('groupPhoto'); im.style.display='block'; }
+
+  function showAll(){
+    var ml=document.getElementById('memberList'); ml.innerHTML='';
+    members.forEach(function(m,i){
+      var on = (i%2==0) ? '<span class="online">● অনলাইন</span>' : '<span class="offline">○ অফলাইন</span>';
+      var div=document.createElement('div'); div.className='card';
+      div.innerHTML='<div><b>'+m.name+'</b> • '+m.role+'<br><small>'+m.phone+' • '+on+' • স্পিড: '+(15+i*5)+' km/h</small></div><button class="delBtn" onclick="memberDel('+i+')">X</button>';
+      ml.appendChild(div);
     });
+    document.getElementById('memberCount').innerText="মোট মেম্বার: "+members.length+" জন • মোট গাড়ি: "+cars.length+" টা";
+    document.getElementById('statusText').innerText=members.length+" জন মেম্বার, "+cars.length+" টা গাড়ি কনভয়ে আছে। গ্রুপ: "+(localStorage.getItem('groupName')||'নাম দেওয়া হয় নাই');
+
+    var cl=document.getElementById('carList'); cl.innerHTML='';
+    cars.forEach(function(c,i){
+      var d=document.createElement('div'); d.className='card';
+      d.innerHTML='<div><b>#'+c.serial+' - '+c.name+'</b><br><small>কালার: '+c.color+'</small></div><button class="delBtn" onclick="carDel('+i+')">X</button>';
+      cl.appendChild(d);
+    });
+
+    var mlist=document.getElementById('msgList'); mlist.innerHTML='';
+    msgs.forEach(function(m){ var p=document.createElement('p'); p.style.cssText='background:#f1f5f9;padding:8px;border-radius:8px;margin:5px 0;'; p.innerText=m; mlist.appendChild(p); });
   }
   function memberAdd(){
-    var name = document.getElementById('mName').value.trim();
-    var phone = document.getElementById('mPhone').value.trim();
-    var car = document.getElementById('mCar').value.trim();
-    var role = document.getElementById('mRole').value;
-    if(!name){ alert("নাম দাও দোস্ত"); return; }
-    members.push({name:name, phone:phone||'নাম্বার নাই', car:car||'গাড়ি নাই', role:role});
+    var n=document.getElementById('mName').value.trim(), p=document.getElementById('mPhone').value.trim(), r=document.getElementById('mRole').value;
+    if(!n){ alert("নাম দাও দোস্ত"); return; }
+    members.push({name:n, phone:p||'নাম্বার নাই', role:r});
     localStorage.setItem('convoyMembers', JSON.stringify(members));
-    document.getElementById('mName').value=''; document.getElementById('mPhone').value=''; document.getElementById('mCar').value='';
-    showMembers();
+    document.getElementById('mName').value=''; document.getElementById('mPhone').value='';
+    showAll();
   }
-  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembers', JSON.stringify(members)); showMembers(); }
-  showMembers();
-
+  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembers', JSON.stringify(members)); showAll(); }
+  function carAdd(){
+    var n=document.getElementById('cName').value.trim(), s=document.getElementById('cSerial').value.trim(), col=document.getElementById('cColor').value.trim();
+    if(!n){ alert("গাড়ির নাম / নাম্বার দাও দোস্ত"); return; }
+    cars.push({name:n, serial:s||cars.length+1, color:col||'জানা নাই'});
+    cars.sort(function(a,b){ return a.serial-b.serial; });
+    localStorage.setItem('convoyCars', JSON.stringify(cars));
+    document.getElementById('cName').value=''; document.getElementById('cSerial').value=''; document.getElementById('cColor').value='';
+    showAll();
+  }
+  function carDel(i){ cars.splice(i,1); localStorage.setItem('convoyCars', JSON.stringify(cars)); showAll(); }
+  function msgSend(){
+    var v=document.getElementById('msgInput').value.trim(); if(!v) return;
+    msgs.push(v); localStorage.setItem('convoyMsgs', JSON.stringify(msgs));
+    document.getElementById('msgInput').value=''; showAll();
+  }
+  showAll();
   window.addEventListener('load', function(){ setTimeout(function(){ amarLocation(); }, 600); });
 </script>
 </body>
