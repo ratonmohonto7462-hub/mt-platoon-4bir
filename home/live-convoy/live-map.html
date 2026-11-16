@@ -7,71 +7,103 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial;overflow:hidden}
-#mapWrap{position:fixed;top:0;left:0;width:100%;height:100vh;touch-action:none}
-#mapFrame{width:100%;height:100%;border:none;touch-action:pan-x pan-y}
+#mapFrame{position:fixed;top:0;left:0;width:100%;height:100vh;border:none}
 #searchBar{position:fixed;top:12px;left:12px;right:12px;z-index:9999;background:#fff;border-radius:30px;display:flex;align-items:center;padding:6px 6px 6px 14px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
 #searchBar input{flex:1;border:none;outline:none;font-size:17px;padding:8px}
 #searchBar button{background:#1a73e8;color:#fff;border:none;padding:9px 15px;border-radius:20px;font-weight:700}
-#bottomBar{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#fff;border-radius:20px 20px 0 0;padding:14px 16px 18px;box-shadow:0 -2px 15px rgba(0,0,0,.25);display:none}
-#placeName{font-size:22px;font-weight:700}
-#placeSub{font-size:14px;color:#666;margin-top:2px}
-#dirBtns{display:flex;gap:10px;margin-top:12px}
-#dirBtns button{flex:1;border:none;padding:12px;border-radius:25px;font-weight:800;font-size:15px}
-#goBtn{background:#0b6b6b;color:#fff}
-#appBtn{background:#1a73e8;color:#fff;width:100%;margin-top:10px;border:none;padding:12px;border-radius:25px;font-weight:800;font-size:15px}
-#backBtn{position:fixed;top:70px;left:14px;z-index:10000;background:#0f2e2a;color:#ffcc00;padding:8px 14px;border-radius:20px;border:none;font-weight:900}
+/* কিলোমিটার দেখার কার্ড - তোমার ম্যাপের ভিতরেই */
+#kmCard{position:fixed;bottom:70px;left:12px;right:12px;z-index:9999;background:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 2px 15px rgba(0,0,0,.35);display:none}
+#kmBig{font-size:24px;font-weight:900;color:#e65100}
+#kmSub{font-size:14px;color:#555;margin-top:4px}
+#kmRow{display:flex;gap:8px;margin-top:12px}
+#kmRow button{flex:1;border:none;padding:11px;border-radius:20px;font-weight:800}
+#startBtn{background:#0b6b6b;color:#fff}
+#dirBtn{background:#e0f2f2}
+#backBtn{position:fixed;top:70px;left:14px;z-index:9999;background:#0f2e2a;color:#ffcc00;padding:8px 14px;border-radius:20px;border:none;font-weight:900}
 </style>
 </head>
 <body>
 
 <div id="searchBar">
-<input id="searchInput" placeholder="Search here - যেমন: বনানী">
-<button onclick="searchPlace()">🔍</button>
+<input id="searchInput" placeholder="কোথায় যাবা? যেমন: Rangpur, Banani, Khilgaon" value="Home (Rangpur)">
+<button onclick="calcRoute()">🔍</button>
 </div>
 
 <button id="backBtn" onclick="location.href='../index.html'">← Back</button>
 
-<div id="mapWrap">
-<iframe id="mapFrame" src="https://www.google.com/maps?q=Dhaka&z=13&output=embed" allowfullscreen></iframe>
-</div>
+<iframe id="mapFrame" src="https://www.google.com/maps?q=Dhaka&z=12&output=embed"></iframe>
 
-<div id="bottomBar">
-<div id="placeName">বনানী</div>
-<div id="placeSub">তোমার লোকেশন থেকে</div>
-<div id="dirBtns">
-<button id="goBtn" onclick="showRoute()">➡️ Directions</button>
-<button onclick="openInApp()">📱 Google Maps App এ খুলো - ১ আঙুলে চলবো</button>
+<!-- এইখানে অরিজিনাল ম্যাপে না গিয়াই কিমি দেখবা -->
+<div id="kmCard">
+<div id="kmBig">হিসাব করতেছি...</div>
+<div id="kmSub"></div>
+<div id="kmRow">
+<button id="startBtn" onclick="startNav()">▲ Start</button>
+<button id="dirBtn" onclick="showRouteOnMap()">🗺️ ম্যাপে রোড দেখো</button>
 </div>
-<button id="appBtn" onclick="openInApp()">📱 অ্যাপে খুললে 2 Finger লাগবো না</button>
 </div>
 
 <script>
-let myLoc = "Dhaka";
-let currentPlace = "";
+let myLat = 23.8103, myLng = 90.4125;
+let myLocText = "Dhaka";
+let destName = "Home (Rangpur)";
+let destLat = 0, destLng = 0;
+
 if(navigator.geolocation){
-  navigator.geolocation.getCurrentPosition(pos=>{
-    myLoc = pos.coords.latitude + "," + pos.coords.longitude;
-    document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + myLoc + "&z=15&output=embed";
+  navigator.geolocation.getCurrentPosition(p=>{
+    myLat = p.coords.latitude; myLng = p.coords.longitude;
+    myLocText = myLat + "," + myLng;
+    document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + myLat + "," + myLng + "&z=14&output=embed";
+    calcRoute(); // ঢুকলেই কিমি দেখাবে
   });
 }
-function searchPlace(){
-  let q = document.getElementById('searchInput').value;
-  if(!q) return;
-  currentPlace = q;
-  document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&z=14&output=embed";
-  document.getElementById('placeName').innerText = q;
-  document.getElementById('bottomBar').style.display = 'block';
+
+async function calcRoute(){
+  destName = document.getElementById('searchInput').value || "Rangpur";
+  document.getElementById('kmCard').style.display = 'block';
+  document.getElementById('kmBig').innerText = "হিসাব করতেছি ভাই...";
+  document.getElementById('kmSub').innerText = "";
+
+  try{
+    // ১. জায়গার নাম থেকে লোকেশন বাইর করা
+    let geo = await fetch("https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(destName + ", Bangladesh"));
+    let geoData = await geo.json();
+    if(!geoData[0]){ document.getElementById('kmBig').innerText = "জায়গা পাইলাম না ভাই"; return; }
+    destLat = parseFloat(geoData[0].lat); destLng = parseFloat(geoData[0].lon);
+
+    // ২. রাস্তার আসল কিমি + সময় বাইর করা - অরিজিনাল ম্যাপে না গিয়াই
+    let route = await fetch(`https://router.project-osrm.org/route/v1/driving/${myLng},${myLat};${destLng},${destLat}?overview=false`);
+    let r = await route.json();
+    if(!r.routes || !r.routes[0]){ document.getElementById('kmBig').innerText = "রোড পাইলাম না"; return; }
+    let km = (r.routes[0].distance / 1000).toFixed(1);
+    let mins = Math.round(r.routes[0].duration / 60);
+    let hrs = Math.floor(mins / 60);
+    let minRem = mins % 60;
+    let timeText = hrs > 0 ? hrs + " hr " + minRem + " min" : minRem + " min";
+
+    // ৩. তোমার ম্যাপের ভিতরেই দেখানো
+    document.getElementById('kmBig').innerText = "🛣️ " + km + " km • " + timeText;
+    document.getElementById('kmSub').innerText = "তোমার লোকেশন থেকে " + destName + " পর্যন্ত • রাস্তার আসল হিসাব, অ্যাপে যাওয়া লাগবো না";
+    
+    // ম্যাপেও নীল লাইন দেখানো
+    document.getElementById('mapFrame').src = "https://www.google.com/maps?saddr=" + encodeURIComponent(myLocText) + "&daddr=" + encodeURIComponent(destName) + "&output=embed";
+
+  }catch(e){
+    // নেট স্লো থাকলে সোজা লাইনের হিসাব
+    let d = Math.sqrt(Math.pow(destLat-myLat,2)+Math.pow(destLng-myLng,2))*111;
+    document.getElementById('kmBig').innerText = "🛣️ ~" + d.toFixed(1) + " km (সোজা হিসাব)";
+  }
 }
-function showRoute(){
-  if(!currentPlace) return;
-  document.getElementById('mapFrame').src = "https://www.google.com/maps?saddr=" + encodeURIComponent(myLoc) + "&daddr=" + encodeURIComponent(currentPlace) + "&output=embed";
+
+function showRouteOnMap(){
+  document.getElementById('mapFrame').src = "https://www.google.com/maps?saddr=" + encodeURIComponent(myLocText) + "&daddr=" + encodeURIComponent(destName) + "&output=embed";
 }
-function openInApp(){
-  if(!currentPlace) currentPlace = document.getElementById('searchInput').value || "Banani";
-  // এইটা চাপ দিলে ফোনের আসল গুগল ম্যাপ অ্যাপ খুলবো, ওইখানে ১ আঙুলেই চলে
-  window.open("https://www.google.com/maps/dir/?api=1&origin=" + encodeURIComponent(myLoc) + "&destination=" + encodeURIComponent(currentPlace) + "&travelmode=driving");
+
+function startNav(){
+  window.open("https://www.google.com/maps/dir/?api=1&origin=" + encodeURIComponent(myLocText) + "&destination=" + encodeURIComponent(destName) + "&travelmode=driving");
 }
-document.getElementById('searchInput').addEventListener('change', searchPlace);
+
+document.getElementById('searchInput').addEventListener('change', calcRoute);
 </script>
 </body>
 </html>
