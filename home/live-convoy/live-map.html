@@ -4,115 +4,99 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Live Convoy Map</title>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
 <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family: sans-serif; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:sans-serif; }
   body { background:#0f172a; color:white; }
   #topBar { padding:12px; text-align:center; background:#1e293b; }
   #topBar h2 { font-size:18px; }
   #topBar p { font-size:13px; color:#cbd5e1; margin-top:4px; }
-  #map { height: 70vh; width:100%; }
+  #map { height:62vh; width:100%; }
   #infoBox { padding:14px; background:#1e293b; margin:10px; border-radius:12px; }
   #infoBox p { font-size:14px; margin:5px 0; }
   #infoBox b { color:#38bdf8; }
-  #btn { width:100%; padding:14px; background:#22c55e; border:none; border-radius:10px; color:white; font-size:16px; font-weight:bold; margin-top:10px; }
-  #btn:active { background:#16a34a; }
-  .warning { background:#f59e0b !important; color:black !important; padding:10px; border-radius:10px; font-size:13px; margin-top:10px; display:none; }
+  #allowBtn { width:100%; padding:16px; background:#22c55e; border:none; border-radius:12px; color:white; font-size:18px; font-weight:bold; margin-top:10px; }
+  #preciseBtn { width:100%; padding:14px; background:#f59e0b; border:none; border-radius:12px; color:black; font-size:16px; font-weight:bold; margin-top:10px; display:none; }
+  #mapTap { text-align:center; background:#22c55e; padding:10px; font-weight:bold; font-size:14px; }
 </style>
 </head>
 <body>
 
 <div id="topBar">
-  <h2>🎯 Live Convoy Map</h2>
-  <p>Map khullei Location Allow dao</p>
+  <h2>🎯 লাইভ কনভয় ম্যাপ</h2>
+  <p>ম্যাপে চাপ দাও, Allow দাও, সব চালু হয়ে যাবে</p>
 </div>
 
+<div id="mapTap">👆 ম্যাপে চাপ দাও</div>
 <div id="map"></div>
 
 <div id="infoBox">
-  <p>📍 <b>Tomar Obosthan:</b> <span id="status">Lokeshon khujtesi...</span></p>
-  <p>🧭 <b>Lat Lng:</b> <span id="latlng">-- , --</span></p>
-  <p>📡 <b>Accuracy:</b> <span id="accuracy">--</span></p>
-  <p>✅ <b>Precise:</b> <span id="precise">Check kortesi...</span></p>
+  <p>📍 <b>অবস্থান:</b> <span id="status">এখনো চালু হয় নাই</span></p>
+  <p>🧭 <b>ল্যাট লং:</b> <span id="latlng">-- , --</span></p>
+  <p>📡 <b>একুরেসি:</b> <span id="accuracy">--</span></p>
+  <p>✅ <b>প্রিসাইস:</b> <span id="precise">চেক করতেছি...</span></p>
 
-  <div id="preciseWarning" class="warning">
-    ⚠️ Tomar Precise Location OFF ache! <br>
-    Settings > Location > Precise Location ON koro, tarpor abar Allow dao. Nahole Gulshan dekhabe.
-  </div>
-
-  <button id="btn" onclick="amarLocationNao()">📍 Amar Location Dekhao</button>
+  <button id="allowBtn" onclick="allowDao()">📍 Allow দাও - লোকেশন চালু করো</button>
+  <button id="preciseBtn" onclick="preciseChaluKoro()">⚙️ Precise চালু করো - এখানে চাপ দাও</button>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // 1. Map surute Dhaka dekhabe
   var map = L.map('map').setView([23.8103, 90.4125], 12);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-  }).addTo(map);
-
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
   var amarMarker = null;
 
-  // 2. Asol kaj - Location neowa
-  function amarLocationNao() {
-    document.getElementById('status').innerText = "GPS khujtesi...";
-    document.getElementById('preciseWarning').style.display = "none";
+  // ১. Allow চাপ দিলেই সব চালু
+  function allowDao() {
+    document.getElementById('status').innerText = "জিপিএস খুঁজতেছি...";
 
-    if (!navigator.geolocation) {
-      document.getElementById('status').innerText = "Tomar phone e GPS nai";
-      return;
-    }
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      var lat = pos.coords.latitude;
+      var lng = pos.coords.longitude;
+      var acc = Math.round(pos.coords.accuracy);
 
-    navigator.geolocation.getCurrentPosition(
-      function(pos) {
-        var lat = pos.coords.latitude;
-        var lng = pos.coords.longitude;
-        var acc = Math.round(pos.coords.accuracy);
+      document.getElementById('latlng').innerText = lat.toFixed(6) + " , " + lng.toFixed(6);
+      document.getElementById('accuracy').innerText = acc + " মিটার";
 
-        document.getElementById('latlng').innerText = lat.toFixed(6) + " , " + lng.toFixed(6);
-        document.getElementById('accuracy').innerText = acc + " meter";
-
-        // Accuracy diya bujha jabe Precise ON naki OFF
-        if (acc <= 100) {
-          document.getElementById('precise').innerText = "ON - Ekdom Thik";
-          document.getElementById('precise').style.color = "#22c55e";
-          document.getElementById('status').innerText = "Tumi ekhane acho!";
-        } else {
-          document.getElementById('precise').innerText = "OFF - Vul jayga dekhabe";
-          document.getElementById('precise').style.color = "#f87171";
-          document.getElementById('status').innerText = "Precise OFF, Gulshan dekhabe";
-          document.getElementById('preciseWarning').style.display = "block";
-        }
-
-        // Purano marker thakle sorai deo
+      // ২. Precise চালু আছে কিনা চেক
+      if (acc <= 100) {
+        document.getElementById('precise').innerText = "চালু - একদম ঠিক";
+        document.getElementById('precise').style.color = "#22c55e";
+        document.getElementById('status').innerText = "তুমি এখানে আছো!";
+        document.getElementById('preciseBtn').style.display = "none";
+        document.getElementById('mapTap').innerText = "✅ লোকেশন চালু হয়ে গেছে!";
+        
         if (amarMarker) map.removeLayer(amarMarker);
-
-        // Notun marker bosao
         amarMarker = L.marker([lat, lng]).addTo(map);
-        amarMarker.bindPopup("Tumi ekhane acho!").openPopup();
+        amarMarker.bindPopup("তুমি এখানে আছো!").openPopup();
         map.setView([lat, lng], 16);
-
-      },
-      function(err) {
-        document.getElementById('status').innerText = "Location Allow dao nai!";
-        alert("Dost, Location Allow dao. Allow na dile map tor jayga dekhabe na!");
-      },
-      {
-        enableHighAccuracy: true, // Eitai Precise GPS chay
-        timeout: 15000,
-        maximumAge: 0
+      } else {
+        // Precise বন্ধ আছে
+        document.getElementById('precise').innerText = "বন্ধ - ভুল জায়গা দেখাবে";
+        document.getElementById('precise').style.color = "#f87171";
+        document.getElementById('status').innerText = "প্রিসাইস বন্ধ, গুলশান দেখাবে";
+        document.getElementById('preciseBtn').style.display = "block";
+        document.getElementById('mapTap').innerText = "⚠️ নিচে Precise চালু করো বাটনে চাপ দাও";
       }
-    );
+
+    }, function() {
+      alert("দোস্ত, Allow দাও। Allow না দিলে ম্যাপ চলবো না!");
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
   }
 
-  // 3. Map khullei auto Allow chabe - Eitai tumi chaisila
+  // ৩. Precise বাটনে চাপ দিলেই সেটিংস খুলবে, ওইখানে সুইচ ON করলেই চালু
+  function preciseChaluKoro() {
+    window.location.href = "intent:#Intent;action=android.settings.LOCATION_SOURCE_SETTINGS;end";
+  }
+
+  // ৪. ম্যাপে চাপ দিলেই Allow চাইবে
+  map.on('click', function() {
+    allowDao();
+  });
+
+  // ৫. ম্যাপ খুললেই একবার Allow চাইবে
   window.addEventListener('load', function() {
-    setTimeout(function() {
-      amarLocationNao();
-    }, 500);
+    setTimeout(function() { allowDao(); }, 800);
   });
 </script>
 
