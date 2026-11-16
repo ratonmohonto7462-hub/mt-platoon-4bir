@@ -7,50 +7,78 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial;overflow:hidden}
-#topSearch{position:fixed;top:12px;left:12px;right:12px;z-index:9999;background:#fff;border-radius:30px;display:flex;align-items:center;padding:8px 10px 8px 16px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
-#topSearch input{flex:1;border:none;outline:none;font-size:17px;padding:6px}
-#topSearch button{background:#1a73e8;color:#fff;border:none;padding:9px 16px;border-radius:20px;font-weight:700}
+#top{position:fixed;top:12px;left:12px;right:12px;z-index:9999;background:#fff;border-radius:16px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+#top input{width:100%;border:1px solid #ddd;outline:none;font-size:16px;padding:11px 12px;border-radius:10px;margin-bottom:8px}
+#top input:last-child{margin-bottom:0}
+#btnRow{display:flex;gap:8px;margin-top:8px}
+#btnRow button{flex:1;border:none;padding:11px;border-radius:10px;font-weight:800;font-size:15px}
+#searchBtn{background:#1a73e8;color:#fff}
+#dirBtn{background:#0b6b6b;color:#fff}
 #mapFrame{position:fixed;top:0;left:0;width:100%;height:100vh;border:none}
 #backBtn{position:fixed;bottom:20px;left:14px;z-index:9999;background:#0f2e2a;color:#ffcc00;padding:10px 16px;border-radius:20px;border:none;font-weight:900}
 #myLoc{position:fixed;bottom:20px;right:14px;z-index:9999;background:#fff;width:48px;height:48px;border-radius:50%;border:none;box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:22px}
+#info{position:fixed;bottom:70px;left:12px;right:12px;z-index:9999;background:#fff;padding:10px 12px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.3);font-size:14px;font-weight:700;display:none}
 </style>
 </head>
 <body>
 
-<div id="topSearch">
-<input id="searchInput" value="Mohammadpur, Dhaka" placeholder="Search Google Maps">
-<button onclick="searchMap()">Search</button>
+<div id="top">
+<input id="fromInput" value="📍 My Location - গুলশান" placeholder="From - তোমার লোকেশন">
+<input id="toInput" value="খিলগাঁও" placeholder="To - কোথায় যাবা? যেমন: খিলগাঁও">
+<div id="btnRow">
+<button id="searchBtn" onclick="showPlace()">🔍 দেখো</button>
+<button id="dirBtn" onclick="showRoute()">➡️ রোড ম্যাপ / Directions</button>
+</div>
 </div>
 
-<!-- আসল গুগল ম্যাপ -->
-<iframe id="mapFrame" src="https://www.google.com/maps?q=Mohammadpur,Dhaka&z=15&output=embed" allowfullscreen></iframe>
+<div id="info"></div>
+
+<iframe id="mapFrame" src="https://www.google.com/maps?q=খিলগাঁও,Dhaka&z=14&output=embed" allowfullscreen></iframe>
 
 <button id="backBtn" onclick="location.href='../index.html'">← Back</button>
 <button id="myLoc" onclick="goMyLocation()">📍</button>
 
 <script>
-function searchMap(){
-  let q = document.getElementById('searchInput').value;
-  if(!q) return;
-  // আসল গুগল ম্যাপে খুঁজবে
-  document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&z=15&output=embed";
-}
+let myLat = 23.8103, myLng = 90.4125;
+let myLocationText = "Gulshan, Dhaka";
 
-document.getElementById('searchInput').addEventListener('change', searchMap);
-
+// ঢুকলেই তোমার আসল লোকেশন নিবে
 function goMyLocation(){
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos=>{
-      let lat = pos.coords.latitude;
-      let lng = pos.coords.longitude;
-      // তোমার লাইভ লোকেশনে আসল গুগল ম্যাপ খুলবে
-      document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + lat + "," + lng + "&z=16&output=embed";
-      document.getElementById('searchInput').value = "My Location";
+      myLat = pos.coords.latitude;
+      myLng = pos.coords.longitude;
+      myLocationText = myLat + "," + myLng;
+      document.getElementById('fromInput').value = "📍 My Location";
+      // এখন তোমার লোকেশনে ম্যাপ দেখাবে
+      document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + myLat + "," + myLng + "&z=15&output=embed";
     });
-  } else {
-    alert("GPS অন করো ভাই");
   }
 }
+goMyLocation();
+
+// শুধু জায়গা দেখতে চাইলে
+function showPlace(){
+  let to = document.getElementById('toInput').value;
+  if(!to) return;
+  document.getElementById('mapFrame').src = "https://www.google.com/maps?q=" + encodeURIComponent(to) + "&z=14&output=embed";
+  document.getElementById('info').style.display = 'none';
+}
+
+// আসল কাজ - তোমার লোকেশন থেকে ওই জায়গা পর্যন্ত রোড ম্যাপ
+function showRoute(){
+  let to = document.getElementById('toInput').value;
+  if(!to){ alert("কোথায় যাবা লিখো ভাই, যেমন: খিলগাঁও"); return; }
+  
+  // গুগলের আসল Directions - নীল লাইন সহ রোড ম্যাপ
+  document.getElementById('mapFrame').src = "https://www.google.com/maps?saddr=" + encodeURIComponent(myLocationText) + "&daddr=" + encodeURIComponent(to) + "&output=embed";
+  
+  document.getElementById('info').style.display = 'block';
+  document.getElementById('info').innerHTML = "🛣️ তোমার লোকেশন থেকে <b>" + to + "</b> পর্যন্ত রোড ম্যাপ দেখাইতেছে... নীল লাইনটা ফলো করো ভাই";
+}
+
+// Enter চাপ দিলেই রোড ম্যাপ
+document.getElementById('toInput').addEventListener('change', showRoute);
 </script>
 </body>
 </html>
