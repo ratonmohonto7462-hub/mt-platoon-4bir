@@ -10,65 +10,45 @@
   html, body { height:100%; overflow:hidden; }
   #map { height:100vh; width:100%; z-index:1; }
 
-  /* মাই লোকেশন বাটন - নিচে ডান পাশে */
+  #ektaGhor {
+    position:fixed; bottom:16px; left:12px; right:76px;
+    background:rgba(15,23,42,0.92); color:white;
+    padding:12px; border-radius:12px; font-family:sans-serif;
+    font-size:13px; line-height:1.6; z-index:1000;
+  }
+  #ektaGhor b { color:#22c55e; }
+  #ektaGhor .east { color:#38bdf8; }
+  #allowBtn {
+    width:100%; padding:12px; background:#22c55e; border:none;
+    border-radius:10px; color:white; font-size:17px;
+    font-weight:bold; margin-top:8px;
+  }
   #myLocBtn {
-    position:fixed;
-    bottom:22px;
-    right:16px;
-    width:56px;
-    height:56px;
-    background:white;
-    border:none;
-    border-radius:50%;
-    box-shadow:0 4px 14px rgba(0,0,0,0.35);
-    z-index:1000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:26px;
-    cursor:pointer;
+    position:fixed; bottom:22px; right:14px; width:56px; height:56px;
+    background:white; border:none; border-radius:50%;
+    box-shadow:0 4px 14px rgba(0,0,0,0.35); z-index:1000;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; cursor:pointer;
   }
-  #myLocBtn:active { background:#e0f2fe; }
-
-  /* নিচে ছোট করে নর্দিং / ইস্টিং - চাইলে এইটাও কেটে দিতে পারবা */
-  #smallInfo {
-    position:fixed;
-    bottom:22px;
-    left:12px;
-    background:rgba(15,23,42,0.92);
-    color:white;
-    padding:8px 12px;
-    border-radius:10px;
-    font-family:sans-serif;
-    font-size:12px;
-    line-height:1.5;
-    z-index:1000;
-    display:none;
-  }
-  #smallInfo b { color:#22c55e; }
-  #smallInfo .east { color:#38bdf8; }
 </style>
 </head>
 <body>
 
 <div id="map"></div>
 
-<!-- মাই লোকেশন চিহ্ন -->
-<button id="myLocBtn" onclick="amarLocation()">🎯</button>
-
-<!-- নিচে ছোট করে নর্দিং / ইস্টিং -->
-<div id="smallInfo">
-  ⬆️ নর্দিং: <b id="latText">--</b> ° উত্তর<br>
-  ➡️ ইস্টিং: <b id="lngText" class="east">--</b> ° পূর্ব<br>
-  📡 <span id="accText">--</span>
+<div id="ektaGhor">
+  নর্দিং: <b id="latText">--</b> ° উত্তর<br>
+  ইস্টিং: <b id="lngText" class="east">--</b> ° পূর্ব<br>
+  একুরেসি: <span id="accText">এখনো চালু হয় নাই</span><br>
+  <button id="allowBtn" onclick="amarLocation()">Allow</button>
 </div>
+
+<button id="myLocBtn" onclick="amarLocation()">🎯</button>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
   var map = L.map('map', { zoomControl: false }).setView([23.8103, 90.4125], 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-
-  // আমার লোকেশনের নীল ডট
   var amarDot = null;
   var amarCircle = null;
 
@@ -78,20 +58,15 @@
       var lng = pos.coords.longitude;
       var acc = Math.round(pos.coords.accuracy);
 
-      // নিচে ছোট করে দেখানো
-      document.getElementById('smallInfo').style.display = "block";
       document.getElementById('latText').innerText = lat.toFixed(6);
       document.getElementById('lngText').innerText = lng.toFixed(6);
-      document.getElementById('accText').innerText = acc + " মিটার";
+      document.getElementById('accText').innerText = acc + " মিটার • প্রিসাইস চালু";
 
-      // আগের ডট মুছে নতুন ডট
       if (amarDot) map.removeLayer(amarDot);
       if (amarCircle) map.removeLayer(amarCircle);
 
-      // নীল গোল ডট - গুগল ম্যাপের মতো
       amarCircle = L.circle([lat, lng], { radius: acc, color:'#3b82f6', fillColor:'#3b82f6', fillOpacity:0.15, weight:1 }).addTo(map);
       amarDot = L.circleMarker([lat, lng], { radius:9, color:'white', weight:3, fillColor:'#2563eb', fillOpacity:1 }).addTo(map);
-
       map.setView([lat, lng], 17);
 
     }, function() {
@@ -99,7 +74,6 @@
     }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
   }
 
-  // ম্যাপ খুললেই একবার লোকেশন নিবে
   window.addEventListener('load', function() {
     setTimeout(function() { amarLocation(); }, 600);
   });
