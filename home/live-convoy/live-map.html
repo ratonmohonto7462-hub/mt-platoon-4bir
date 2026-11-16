@@ -3,149 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Live Convoy - MT 4 BIR</title>
+<title>Live Map - MT 4 BIR</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;background:#000;overflow:hidden}
-#top{position:fixed;top:0;left:0;right:0;z-index:9999;background:#0f2e2a;color:#facc15;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:12px;border-bottom:2px solid #ffcc00}
+body{font-family:Arial;overflow:hidden}
 #map{height:100vh;width:100%;z-index:1}
-#status{position:fixed;top:50px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#22c55e;padding:6px 14px;border-radius:20px;z-index:9999;border:1px solid #22c55e;font-size:11px;font-weight:700;text-align:center}
-#list{position:fixed;bottom:75px;left:10px;right:10px;z-index:9999;background:rgba(10,26,18,0.97);border:2px solid #ffcc00;border-radius:14px;padding:10px;max-height:170px;overflow-y:auto}
-#list b{color:#ffcc00;font-size:12px;display:block;margin-bottom:6px}
-.driver{color:#fff;font-size:11px;padding:7px 0;border-bottom:1px solid #1a3d2a;display:flex;justify-content:space-between;align-items:center}
-.driver span:last-child{color:#22c55e;font-weight:700}
-#talkBtn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:13px 26px;border-radius:50px;border:3px solid #fff;font-weight:900;z-index:9999;font-size:13px}
+/* গুগল ম্যাপের মতো সার্চ বার */
+#searchBox{position:fixed;top:12px;left:12px;right:12px;z-index:9999;background:#fff;display:flex;align-items:center;border-radius:25px;padding:6px 6px 6px 14px;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
+#searchBox input{flex:1;border:none;outline:none;font-size:15px;padding:8px}
+#searchBox button{background:#1a73e8;color:#fff;border:none;padding:9px 16px;border-radius:20px;font-weight:700}
+/* নিচের বাটন গুলা */
+#myLoc{position:fixed;bottom:25px;right:15px;z-index:9999;background:#fff;width:48px;height:48px;border-radius:50%;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.3);font-size:22px}
+#layerBtn{position:fixed;bottom:85px;right:15px;z-index:9999;background:#fff;padding:10px 12px;border-radius:20px;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.3);font-weight:800;font-size:12px}
+#backBtn{position:fixed;bottom:25px;left:15px;z-index:9999;background:#0f2e2a;color:#ffcc00;padding:10px 16px;border-radius:20px;border:none;font-weight:900}
 </style>
 </head>
 <body>
-<div id="top">
-<button onclick="location.href='../index.html'" style="background:#1a4d3a;color:#ffcc00;border:none;padding:5px 12px;border-radius:15px;font-weight:900">← Back</button>
-<span>🛰️ CONVOY LIVE - MT 4 BIR</span>
-<span id="count" style="background:#ffcc00;color:#000;padding:3px 8px;border-radius:10px;font-size:10px">0 Trucks</span>
-</div>
-<div id="status">● Locating...</div>
-<div id="map"></div>
-<div id="list">
-<b>🚛 Convoy Members:</b>
-<div id="drivers">Loading...</div>
-<button onclick="clearAllGhost()" style="background:#ffcc00;color:#000;padding:6px;border-radius:8px;font-weight:900;font-size:11px;margin-top:8px;width:100%;border:none">🧹 CLEAR ALL GHOST TRUCKS</button>
-</div>
-<button id="talkBtn">🎙️ HOLD TO TALK</button>
-<script>
-var map = L.map('map', {zoomControl:false}).setView([25.75, 89.25], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'MT 4 BIR'}).addTo(map);
-var markers = {}; var myLat=0, myLng=0;
-function distance(lat1,lon1,lat2,lon2){
-var R=6371; var dLat=(lat2-lat1)*Math.PI/180; var dLon=(lon2-lon1)*Math.PI/180;
-var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
-return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(2);
-}
-</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-const firebaseConfig = {
-apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",
-authDomain: "mt-platoon-4bir.firebaseapp.com",
-projectId: "mt-platoon-4bir",
-storageBucket: "mt-platoon-4bir.firebasestorage.app",
-messagingSenderId: "720139134198",
-appId: "1:720139134198:web:ea8e10926d90bbfddcb8d7"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const convoyId = 'MT-04-CONVOY';
 
-function getDeviceId(){
-  try{
-    let id = localStorage.getItem('mt_truck_fixed_v3');
-    if(id) return id;
-    const raw = navigator.userAgent + screen.width;
-    let h=0; for(let i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i); h=h&h;}
-    id = 'TRUCK-' + Math.abs(h).toString().substring(0,4);
-    localStorage.setItem('mt_truck_fixed_v3', id);
-    return id;
-  }catch(e){
-    return 'TRUCK-' + Math.floor(Math.random()*9000+1000);
+<div id="searchBox">
+<input id="searchInput" placeholder="Search Google Map... যেমন: ঢাকা ক্যান্টনমেন্ট">
+<button onclick="searchPlace()">Search</button>
+</div>
+
+<div id="map"></div>
+
+<button id="layerBtn" onclick="toggleMap()">🛰️ Satellite</button>
+<button id="myLoc" onclick="goMyLocation()">📍</button>
+<button id="backBtn" onclick="location.href='../index.html'">← Back</button>
+
+<script>
+var map = L.map('map', {zoomControl:true}).setView([23.8103, 90.4125], 12);
+
+// গুগল ম্যাপের অরিজিনাল রাস্তার ম্যাপ
+var googleRoad = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {maxZoom: 21}).addTo(map);
+// গুগল স্যাটেলাইট
+var googleSat = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {maxZoom: 21});
+
+var isSat = false;
+function toggleMap(){
+  if(!isSat){
+    map.removeLayer(googleRoad);
+    map.addLayer(googleSat);
+    document.getElementById('layerBtn').innerText = "🗺️ Map";
+    isSat = true;
+  } else {
+    map.removeLayer(googleSat);
+    map.addLayer(googleRoad);
+    document.getElementById('layerBtn').innerText = "🛰️ Satellite";
+    isSat = false;
   }
 }
-const myId = getDeviceId();
-const locRef = collection(db, "convoys", convoyId, "locations");
-const roomRef = collection(db, "convoys", convoyId, "signals");
 
-window.clearAllGhost = async () => {
-  const snap = await getDocs(locRef);
-  snap.forEach(async d=>{
-    if(d.id !== myId){
-      try{ await deleteDoc(doc(locRef, d.id)); }catch(e){}
-    }
-  });
-  alert("Cleared! এখন 1 টা Truck থাকবে");
-};
+var myMarker = null;
+var searchMarker = null;
 
-if(navigator.geolocation){
-navigator.geolocation.watchPosition(async pos=>{
-myLat=pos.coords.latitude; myLng=pos.coords.longitude;
-document.getElementById('status').innerText = `● ${myId} LIVE`;
-try{ await setDoc(doc(locRef, myId), {truckId:myId, lat:myLat, lng:myLng, time:Date.now()}); }catch(e){}
-}, null, {enableHighAccuracy:true});
+function goMyLocation(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos => {
+      let lat = pos.coords.latitude;
+      let lng = pos.coords.longitude;
+      map.setView([lat,lng], 16);
+      if(!myMarker){
+        myMarker = L.marker([lat,lng]).addTo(map).bindPopup("📍 তুমি এখানে").openPopup();
+      } else {
+        myMarker.setLatLng([lat,lng]);
+      }
+    }, ()=> alert("GPS অন করো"));
+  }
 }
 
-onSnapshot(locRef, snap=>{
-var html=''; var count=0; var now=Date.now();
-snap.forEach(async d=>{
-var data=d.data(); if(!data.lat) return;
-if(now - data.time > 300000){
-  try{ await deleteDoc(doc(locRef, d.id)); }catch(e){}
-  return;
+// গুগল ম্যাপের মতো জায়গা খোঁজা
+async function searchPlace(){
+  let q = document.getElementById('searchInput').value;
+  if(!q) return;
+  let res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`);
+  let data = await res.json();
+  if(data.length > 0){
+    let lat = parseFloat(data[0].lat);
+    let lng = parseFloat(data[0].lon);
+    map.setView([lat,lng], 15);
+    if(searchMarker) map.removeLayer(searchMarker);
+    searchMarker = L.marker([lat,lng]).addTo(map).bindPopup(`<b>${data[0].display_name}</b>`).openPopup();
+  } else {
+    alert("জায়গা পাওয়া যায় নাই");
+  }
 }
-count++;
-var isMe = data.truckId===myId;
-var distText = isMe ? '⭐ YOU' : (myLat ? distance(myLat,myLng,data.lat,data.lng)+' km দূরে' : 'Online');
-var color = isMe ? '#ffcc00' : '#22c55e';
-if(!markers[data.truckId]){
-var iconHtml = `<div style="background:${color};color:#000;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;border:3px solid #fff;font-size:16px">${isMe?'⭐':'🚛'}</div>`;
-var icon = L.divIcon({html:iconHtml, iconSize:[38,38], iconAnchor:[19,19]});
-markers[data.truckId]=L.marker([data.lat,data.lng],{icon:icon}).addTo(map).bindPopup(`<b>${data.truckId}</b>`);
-}else{
-markers[data.truckId].setLatLng([data.lat,data.lng]);
-}
-html+=`<div class="driver"><span>${isMe?'⭐ ':'🚛 '}${data.truckId}</span><span>${distText}</span></div>`;
-});
-document.getElementById('drivers').innerHTML = html || 'কেউ নাই';
-document.getElementById('count').innerText = count+' Trucks';
-});
-let localStream=null, pcs={};
-const btn=document.getElementById('talkBtn');
-try{
-localStream=await navigator.mediaDevices.getUserMedia({audio:true});
-localStream.getAudioTracks().forEach(t=>t.enabled=false);
-onSnapshot(roomRef, s=>{
-s.docChanges().forEach(async c=>{
-const d=c.doc.data(); if(d.from===myId) return;
-if(d.type==='join') createPeer(d.from,true);
-if(d.type==='offer') createPeer(d.from,false,d.offer);
-if(d.type==='answer'){try{await pcs[d.from]?.setRemoteDescription(d.answer)}catch{}}
-if(d.type==='ice'){try{await pcs[d.from]?.addIceCandidate(d.candidate)}catch{}}
-});
-});
-await addDoc(roomRef,{type:'join',from:myId,time:Date.now()});
-async function createPeer(pid,init,off=null){
-if(pcs[pid]) return;
-const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
-pcs[pid]=pc;
-localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));
-pc.ontrack=e=>{const a=document.createElement('audio'); a.srcObject=e.streams[0]; a.autoplay=true; document.body.appendChild(a);};
-pc.onicecandidate=e=>{if(e.candidate) addDoc(roomRef,{type:'ice',from:myId,to:pid,candidate:e.candidate});};
-if(init){const o=await pc.createOffer(); await pc.setLocalDescription(o); addDoc(roomRef,{type:'offer',from:myId,to:pid,offer:o});}
-else{await pc.setRemoteDescription(off); const a=await pc.createAnswer(); await pc.setLocalDescription(a); addDoc(roomRef,{type:'answer',from:myId,to:pid,answer:a});}
-}
-function setTalk(s){localStream.getAudioTracks().forEach(t=>t.enabled=s); btn.innerText=s?"🔴 BROADCASTING...":"🎙️ HOLD TO TALK"; btn.style.background=s?"#16a34a":"#ef4444";}
-btn.onmousedown=()=>setTalk(true); btn.onmouseup=()=>setTalk(false);
-btn.ontouchstart=e=>{e.preventDefault(); setTalk(true);}; btn.ontouchend=e=>{e.preventDefault(); setTalk(false);};
-}catch(e){}
+
+// ঢুকলেই আমার লোকেশনে যাবে
+goMyLocation();
 </script>
 </body>
 </html>
