@@ -38,7 +38,7 @@ body{font-family:Arial;overflow:hidden}
 </div>
 
 <button id="backBtn" onclick="goBackToTracking()">← Back</button>
-<button id="myLocBtn" onclick="myLocation(true)" title="My Location">🎯</button>
+<button id="myLocBtn" onclick="myLocation()" title="My Location">🎯</button>
 <div id="status"></div>
 
 <div id="kmCard">
@@ -65,9 +65,8 @@ body{font-family:Arial;overflow:hidden}
 <script>
 let map = L.map('map').setView([23.8103,90.4125],12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-// আগের মতো ঢাকার লোকেশন আর ফিক্সড রাখলাম না ভাই
 let myLat=null, myLng=null, destLat=0, destLng=0, destName="";
-let routeLine=null, myMarker=null, accuracyCircle=null, destMarker=null, routeCoords=[], watchId=null;
+let routeLine=null, myMarker=null, accuracyCircle=null, destMarker=null, routeCoords=[], watchId=null, gpsWatch=null;
 
 function goBackToTracking(){
   if(window.history.length > 1){ window.history.back(); }
@@ -80,38 +79,41 @@ function showStatus(txt){
   setTimeout(()=>{ s.style.display='none'; },4000);
 }
 
-// --- আসল GPS দিয়ে My Location ---
-function myLocation(manual){
+// --- My Location - গুগল ম্যাপের মতো, শুধু লোকেশন অন থাকলেই হবে ---
+function myLocation(){
   if(!navigator.geolocation){ showStatus("এই ব্রাউজারে GPS নাই ভাই"); return; }
-  if(manual) showStatus("📡 তোমার আসল GPS খুঁজতেছি... একটু বাইরে / খোলা জায়গায় থাকো");
-  navigator.geolocation.getCurrentPosition(p=>{
-    myLat=p.coords.latitude; myLng=p.coords.longitude;
-    let acc=p.coords.accuracy;
-    // ভুল লোকেশন আর দেখাবে না, কতটুকু নির্ভুল ওইটাও দেখাবে
-    if(acc > 200){
-      showStatus("⚠️ লোকেশন এখনো নির্ভুল না ("+Math.round(acc)+"m) - GPS অন করো + Precise Location Allow করো");
-    } else {
-      showStatus("✅ তোমার আসল লোকেশন পাইছি - "+Math.round(acc)+"m নির্ভুল");
-    }
+  showStatus("📡 লোকেশন খুঁজতেছি...");
+  if(gpsWatch) navigator.geolocation.clearWatch(gpsWatch);
+
+  gpsWatch = navigator.geolocation.watchPosition(p=>{
+    myLat = p.coords.latitude;
+    myLng = p.coords.longitude;
+    let acc = p.coords.accuracy;
+
+    // প্রথমে যেইটা পাইবো ওইটাই দেখাবো, পরে GPS মিললে নিজে নিজে ঠিক হইবো
     map.setView([myLat,myLng],16);
     if(myMarker) map.removeLayer(myMarker);
     if(accuracyCircle) map.removeLayer(accuracyCircle);
-    // নীল ডট + কতটুকু ভুল হতে পারে ওই গোল দাগ
-    accuracyCircle=L.circle([myLat,myLng],{radius:acc,color:'#1a73e8',fillColor:'#1a73e8',fillOpacity:0.15}).addTo(map);
-    myMarker=L.circleMarker([myLat,myLng],{radius:12,color:'#fff',weight:3,fillColor:'#1a73e8',fillOpacity:1}).addTo(map).bindPopup("তুমি এখানে").openPopup();
-  },(err)=>{
-    if(err.code==1) showStatus("❌ Location Block করা ভাই - ব্রাউজারে 🔒 চাপ দিয়া Location Allow করো");
-    else showStatus("❌ GPS পাইতেছি না - ফোনের Location / GPS অন করো ভাই");
-  },{enableHighAccuracy:true, timeout:15000, maximumAge:0});
+    accuracyCircle = L.circle([myLat,myLng],{radius:acc,color:'#1a73e8',fillColor:'#1a73e8',fillOpacity:0.15}).addTo(map);
+    myMarker = L.circleMarker([myLat,myLng],{radius:12,color:'#fff',weight:3,fillColor:'#1a73e8',fillOpacity:1}).addTo(map).bindPopup("তুমি এখানে").openPopup();
+
+    if(acc > 200){
+      showStatus("📡 লোকেশন খুঁজতেছি... একটু দাঁড়াও, আসল জায়গায় আসতেছে");
+    } else {
+      showStatus("✅ তোমার লোকেশন পাইছি");
+    }
+  },()=>{
+    showStatus("লোকেশন অন করো ভাই");
+  },{enableHighAccuracy:true, timeout:30000, maximumAge:0});
 }
 
-// ঢুকলেই আসল GPS নিবো, আগের ঢাকা দেখাবো না
-myLocation(false);
+// ঢুকলেই লোকেশন নিবো
+myLocation();
 
 async function calcRoute(){
   destName=document.getElementById('searchInput').value;
   if(!destName) return;
-  if(!myLat){ showStatus("আগে 🎯 চাপ দিয়া তোমার লোকেশন নাও ভাই"); myLocation(true); return; }
+  if(!myLat){ showStatus("আগে 🎯 চাপ দাও ভাই"); myLocation(); return; }
   document.getElementById('kmCard').style.display='block';
   document.getElementById('kmBig').innerText="হিসাব করতেছি...";
   document.getElementById('kmSub').innerText="";
