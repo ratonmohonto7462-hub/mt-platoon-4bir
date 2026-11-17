@@ -1,56 +1,60 @@
-<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login</title><style>body{margin:0;font-family:system-ui;background:#0a1a12;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}.box{width:90%;max-width:360px;background:#143d27;padding:25px;border-radius:16px;border:1px solid #2a5a3a}input{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #2a5a3a;background:#0a1a12;color:#fff}button{width:100%;padding:13px;background:#00c853;color:#000;font-weight:800;border:none;border-radius:8px;cursor:pointer}</style></head><body><div class="box"><h3 style="text-align:center">4 BIR - MT PLATOON LOGIN</h3><input id="mobile" placeholder="Mobile Number"><input id="sena_no" placeholder="Sena No - 4521328"><input id="pwd" type="password" placeholder="Password"><button id="loginBtn" onclick="loginUser()">LOGIN</button><p style="text-align:center;font-size:13px;margin-top:12px">Account নাই? <a href="create-profile.html" style="color:#00c853">Create one</a></p></div>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login - MT PLATOON</title>
+<style>body{margin:0;font-family:Arial;background:#0a1a12;color:#fff;padding:20px}.box{max-width:380px;margin:30px auto;background:#143d27;padding:20px;border-radius:15px}input{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:none;box-sizing:border-box}button{width:100%;padding:13px;margin-top:15px;background:#ffcc00;border:none;border-radius:8px;font-weight:900;cursor:pointer}#msg{text-align:center;margin-top:10px;font-size:14px}</style>
+</head><body>
+<div class="box">
+<h2 style="text-align:center">MT PLATOON - LOGIN</h2>
+<input id="sena" placeholder="SENA NO - Ex: 4534981">
+<input id="mobile" placeholder="MOBILE - Ex: 01988546452">
+<input id="pass" type="password" placeholder="PASSWORD - Ex: 4242">
+<button onclick="doLogin()">LOGIN</button>
+<div id="msg"></div>
+<p style="text-align:center;font-size:13px">New? <b onclick="location.href='create-profile.html'" style="cursor:pointer;color:#ffcc00"><u>Create Profile</u></b></p>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.loginUser = async function(){
-  let m=document.getElementById("mobile").value.trim();
-  let s=document.getElementById("sena_no").value.trim();
-  let p=document.getElementById("pwd").value.trim();
-  if(!m||!s||!p){alert("সব ঘর পূরণ করো");return;}
-  document.getElementById("loginBtn").innerText="Checking...";
+function toEng(s){ let b=["০","১","২","৩","৪","৫","৬","৭","৮","৯"]; let en=["0","1","2","3","4","5","6","7","8","9"]; s=String(s||""); for(let i=0;i<10;i++) s=s.split(b[i]).join(en[i]); return s.trim(); }
+
+window.doLogin = async function(){
+  let s = toEng(document.getElementById('sena').value);
+  let m = toEng(document.getElementById('mobile').value);
+  let p = document.getElementById('pass').value.trim();
+  let msg = document.getElementById('msg');
+  if(!s||!m||!p){ msg.innerText="❌ ৩ টাই পূরণ করো!"; return; }
+  msg.innerText="⏳ Checking...";
   try{
-    let u=null, foundIn="";
-    // ১. users collection এ doc id দিয়া খোঁজা
-    let snap=await getDoc(doc(db,"users",s));
-    if(snap.exists()){ u=snap.data(); foundIn="users / doc-id"; }
-    // ২. members collection এ খোঁজা
-    if(!u){ let s2=await getDoc(doc(db,"members",s)); if(s2.exists()){ u=s2.data(); foundIn="members / doc-id"; } }
-    // ৩. users এ sena_no field দিয়া খোঁজা
-    if(!u){ let q=query(collection(db,"users"), where("sena_no","==",s)); let qs=await getDocs(q); if(!qs.empty){ u=qs.docs[0].data(); foundIn="users / sena_no field"; } }
-    // ৪. members এ sena_no field দিয়া খোঁজা
-    if(!u){ let q=query(collection(db,"members"), where("sena_no","==",s)); let qs=await getDocs(q); if(!qs.empty){ u=qs.docs[0].data(); foundIn="members / sena_no field"; } }
+    const snap = await getDoc(doc(db,"users",s));
+    if(!snap.exists()){ msg.innerText="❌ এই SENA NO তে Account নাই! আগে Create করো।"; return; }
+    let u = snap.data();
+    // Firebase এর আসল Field: sena, mobile, pass, status
+    let dbMobile = toEng(u.mobile||"");
+    let dbPass = String(u.pass||u.password||"").trim();
+    let dbStatus = String(u.status||"").toLowerCase().trim();
 
-    if(!u){
-      alert("❌ এই সেনা নং দিয়া কোনো Account পাইলাম না!\nতুমি দিছো: "+s+"\n\nআগে Create one দিয়া Account বানাইতে হইবো।");
-      document.getElementById("loginBtn").innerText="LOGIN"; return;
-    }
+    if(dbMobile !== m){ msg.innerText="❌ Mobile মিলে নাই! Firebase এ আছে: "+dbMobile; return; }
+    if(dbPass !== p){ msg.innerText="❌ Password মিলে নাই! Firebase এ আছে: "+dbPass; return; }
+    if(dbStatus !== "approved"){ msg.innerText="⏳ এখনো Approve হয় নাই! Status: "+u.status; return; }
 
-    // Firebase এ আসলে কি আছে দেখাও - এইটাই আসল রহস্য
-    let dbMobile = u.mobile || u.phone || u.mobileNo || "(খালি)";
-    let dbPass = u.password || u.pass || u.pwd || "(খালি)";
-    let dbStatus = u.status || u.approved || "(status নাই)";
+    // ✅ সব ঠিক - এখন Dashboard এর জন্য Save করো
+    localStorage.setItem("sena_no", s);
+    localStorage.setItem("mt_army", s);
+    localStorage.setItem("name", u.name||"");
+    localStorage.setItem("mt_name", u.name||"");
+    localStorage.setItem("mobile", m);
+    if(s==="4521328") localStorage.setItem("mt_role","ADMIN");
+    else localStorage.setItem("mt_role","Soldier");
+    localStorage.removeItem("pending_sena");
 
-    if(String(dbMobile).trim() !== m){
-      alert("❌ মোবাইল মিলে নাই!\n\nFirebase এ সেভ আছে: "+dbMobile+"\nতুমি দিছো: "+m+"\nপাইছি: "+foundIn+"\n\nমোবাইলটা ঠিক কইরা দাও।");
-      document.getElementById("loginBtn").innerText="LOGIN"; return;
-    }
-    if(String(dbPass).trim() !== p){
-      alert("❌ Password মিলে নাই!\n\nFirebase এ সেভ আছে: "+dbPass+"\nতুমি দিছো: "+p+"\nপাইছি: "+foundIn);
-      document.getElementById("loginBtn").innerText="LOGIN"; return;
-    }
-    if(dbStatus!=="approved" && dbStatus!==true && dbStatus!=="Approved"){
-      alert("⏳ Approve হয় নাই!\nStatus: "+dbStatus+"\n\nAdmin এ গিয়া Approve করো।");
-      document.getElementById("loginBtn").innerText="LOGIN"; return;
-    }
-
-    localStorage.setItem("mobile",m);localStorage.setItem("sena_no",s);localStorage.setItem("mt_army",s);localStorage.setItem("mt_name",u.name||u.fullName||"");localStorage.setItem("mt_profile_login","true");localStorage.setItem("mt_role",u.role||"Soldier");
-    alert("✅ স্বাগতম "+(u.name||"")+"!");
-    window.location.replace("home.html");
-  }catch(e){alert("Error: "+e.message);document.getElementById("loginBtn").innerText="LOGIN";}
+    msg.innerText="✅ Login হইছে! Welcome "+(u.name||"");
+    setTimeout(()=>{ location.href='command-dashboard.html'; }, 800);
+  }catch(e){ msg.innerText="❌ Error: "+e.message; }
 }
 </script></body></html>
