@@ -1,31 +1,16 @@
 <!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dashboard</title>
-<style>body{margin:0;font-family:sans-serif;background:#0a1a12;padding-bottom:80px;color:#fff}.topArmy{background:#0a1a12;padding:12px;text-align:center;font-weight:bold;border-bottom:2px solid #1a4d2e}.loginBox{background:#fff;color:#000;margin:20px;padding:24px;border-radius:16px}.loginBox input{width:100%;border:none;border-bottom:2px solid #111;padding:12px 0;font-size:18px;outline:none;margin:8px 0 18px}.loginBox button{width:100%;background:#111;color:#fff;border:none;padding:16px;border-radius:50px;font-size:20px;font-weight:bold}.cardLink{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:35px 20px;margin:25px 15px;color:#fff;display:flex;align-items:center;justify-content:center;gap:18px;text-align:center}#msg{color:red;text-align:center;margin-top:10px;font-weight:bold;display:none}#ok{color:green;text-align:center;margin-top:10px;font-weight:bold;display:none}</style></head><body>
+<style>body{margin:0;font-family:sans-serif;background:#0a1a12;padding-bottom:80px;color:#fff}.topArmy{background:#0a1a12;padding:12px;text-align:center;font-weight:bold;border-bottom:2px solid #1a4d2e}.cardLink{background:#1a4d2e;border:2px solid #facc15;border-radius:16px;padding:35px 20px;margin:25px 15px;color:#fff;display:flex;align-items:center;justify-content:center;gap:18px;text-align:center}.btn2{background:#fff;color:#000;padding:12px 20px;border-radius:30px;font-weight:bold;border:none;cursor:pointer;margin:6px}</style></head><body>
 <div class="topArmy">4 BIR - MT PLATOON | Dashboard</div>
-<div id="loginPart" style="display:none"><div class="loginBox"><h1>Log into Your MT<br>Garage Account</h1><input id="sena" placeholder="Army Number"><input id="mobile" placeholder="Mobile"><input id="pass" type="password" placeholder="Password"><button onclick="doLogin()" id="btn">Login</button><div id="msg"></div><div id="ok"></div><div style="text-align:center;margin-top:14px"><a href="create-profile.html" style="color:#111;font-weight:bold">Create one</a></div><div style="text-align:center;color:green;font-size:12px;margin-top:12px">Version: NEW APP - 95106bb74</div></div></div>
-<div id="dashPart" style="display:none"><div id="welcomeBox" style="background:#00c853;color:#000;padding:10px;text-align:center;font-weight:800"></div><a href="group.html" style="text-decoration:none"><div class="cardLink"><div style="font-size:55px">💬</div><div><h2 style="margin:0">GROUP CHAT</h2><small>Tap to Open Chat</small></div></div></a></div>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<div id="welcomeBox" style="background:#00c853;color:#000;padding:10px;text-align:center;font-weight:800"></div>
+<a href="group.html" style="text-decoration:none"><div class="cardLink"><div style="font-size:55px">💬</div><div><h2 style="margin:0">GROUP CHAT</h2><small>Tap to Open Chat</small></div></div></a>
+<div style="text-align:center">
+<button class="btn2" onclick="location.href='admin.html'">🔐 Admin Approve</button>
+<button class="btn2" onclick="logout()">🚪 Logout</button>
+</div>
+<div style="text-align:center;color:#aaa;font-size:12px;margin-top:20px">Version: NEW APP - 95106bb74</div>
 <script>
-var firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:95106bb74fab8444fdca80", measurementId: "G-PTEBJFVKZF" };
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-var db=firebase.firestore();
-var senaNo=localStorage.getItem("sena_no")||localStorage.getItem("mt_army");
-if(senaNo){document.getElementById('dashPart').style.display='block';document.getElementById('welcomeBox').innerText="✅ Welcome, "+senaNo+" | "+(localStorage.getItem("mt_name")||"");}else{document.getElementById('loginPart').style.display='block';}
-async function doLogin(){
- var sena=document.getElementById('sena').value.trim();var mobile=document.getElementById('mobile').value.trim();var pass=document.getElementById('pass').value.trim();
- var msg=document.getElementById('msg'),ok=document.getElementById('ok'),btn=document.getElementById('btn');
- msg.style.display='none';ok.style.display='none';
- if(!sena||!mobile||!pass){msg.style.display='block';msg.innerText='সব ঘর পূরণ করো';return;}
- btn.innerText='Checking...';btn.disabled=true;
- try{var d=await db.collection('users').doc(sena).get();
- if(!d.exists){msg.style.display='block';msg.innerText='Account নাই। আগে Create one চাপো';btn.innerText='Login';btn.disabled=false;return;}
- var f=d.data();
- if(String(f.mobile||'').trim()!==mobile){msg.style.display='block';msg.innerText='Mobile ভুল';btn.innerText='Login';btn.disabled=false;return;}
- if(String(f.pass||'').trim()!==pass){msg.style.display='block';msg.innerText='Password ভুল';btn.innerText='Login';btn.disabled=false;return;}
- if(String(f.status||'').toLowerCase()!=='approved'){msg.style.display='block';msg.innerText='Approved হয় নাই';btn.innerText='Login';btn.disabled=false;return;}
- ok.style.display='block';ok.innerText='Login হইছে!';
- localStorage.setItem('sena_no',sena);localStorage.setItem('mt_army',sena);localStorage.setItem('mt_name',f.name||'');
- setTimeout(()=>{location.reload();},500);
- }catch(e){msg.style.display='block';msg.innerText='Error: '+e.message;btn.innerText='Login';btn.disabled=false;}
-}
+var senaNo = localStorage.getItem("sena_no") || localStorage.getItem("mt_army");
+if(!senaNo){ location.href='index.html'; }
+else{ document.getElementById('welcomeBox').innerText = "✅ Welcome, " + senaNo + " | " + (localStorage.getItem("mt_name")||""); }
+function logout(){ localStorage.clear(); location.href='index.html'; }
 </script></body></html>
