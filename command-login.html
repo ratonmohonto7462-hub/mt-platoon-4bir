@@ -19,7 +19,6 @@ a{color:#111;font-weight:bold}
 </head>
 <body>
 <h1>Log into Your MT<br>Garage Account</h1>
-
 <label>Army Number</label>
 <input id="sena" placeholder="Enter Army Number" inputmode="numeric" autocomplete="off">
 <label>Mobile Number</label>
@@ -34,17 +33,15 @@ a{color:#111;font-weight:bold}
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
-// ===== FIREBASE THIK RAKHA - HAT DEWA HOY NAI =====
 var firebaseConfig = {
-  apiKey: "AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",
-  authDomain: "mt-platoon-4bir.firebaseapp.com",
-  projectId: "mt-platoon-4bir",
-  storageBucket: "mt-platoon-4bir.firebasestorage.app",
-  messagingSenderId: "720139134198",
-  appId: "1:720139134198:web:ea8e10926d90bbfddcb8d7",
-  measurementId: "G-1B1Y32W1FH"
+  apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U",
+  authDomain: "mt-messenger-63922.firebaseapp.com",
+  projectId: "mt-messenger-63922",
+  storageBucket: "mt-messenger-63922.firebasestorage.app",
+  messagingSenderId: "184454055809",
+  appId: "1:184454055809:web:4d24320f792d7e86fdca80",
+  measurementId: "G-E1M0WH2RD9"
 };
-// ================================================
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
@@ -59,31 +56,24 @@ async function doLogin(){
   if(!sena || !mobile || !pass){ msg.style.display='block'; msg.innerText='সব ঘর পূরণ করো'; return; }
   btn.innerText='Checking...'; btn.disabled = true;
   try{
-    var found = null;
-    try{ var s1 = await db.collection('users').where('sena','==',sena).get(); if(!s1.empty) found = s1.docs[0].data(); }catch(e){}
-    if(!found){ try{ var d1 = await db.collection('users').doc(sena).get(); if(d1.exists) found = d1.data(); }catch(e){} }
-    if(!found){ try{ var s2 = await db.collection('profiles').where('sena','==',sena).get(); if(!s2.empty) found = s2.docs[0].data(); }catch(e){} }
-    if(!found){ try{ var d2 = await db.collection('profiles').doc(sena).get(); if(d2.exists) found = d2.data(); }catch(e){} }
-    if(!found){ msg.style.display='block'; msg.innerText='Account নাই। আগে Create one চাপো'; btn.innerText='Login'; btn.disabled=false; return; }
-    var dbMobile = String(found.mobile || found.phone || found.mobileNumber || '').trim();
-    var dbPass = String(found.pass || found.password || '').trim();
+    var d = await db.collection('users').doc(sena).get();
+    if(!d.exists){ msg.style.display='block'; msg.innerText='Account নাই। আগে Create one চাপো'; btn.innerText='Login'; btn.disabled=false; return; }
+    var found = d.data();
+    var dbMobile = String(found.mobile || '').trim();
+    var dbPass = String(found.pass || '').trim();
     if(dbMobile !== mobile){ msg.style.display='block'; msg.innerText='Mobile Number ভুল'; btn.innerText='Login'; btn.disabled=false; return; }
     if(dbPass !== pass){ msg.style.display='block'; msg.innerText='Password ভুল'; btn.innerText='Login'; btn.disabled=false; return; }
-    var st = String(found.status || 'approved').toLowerCase();
-    if(st !== 'approved'){ msg.style.display='block'; msg.innerText='এখনো Approved হয় নাই, MT CLK কে কও। Status: '+st; btn.innerText='Login'; btn.disabled=false; return; }
+    if(String(found.status||'').toLowerCase() !== 'approved'){ msg.style.display='block'; msg.innerText='এখনো Approved হয় নাই'; btn.innerText='Login'; btn.disabled=false; return; }
     ok.style.display='block'; ok.innerText='Login হইছে! Dashboard এ যাইতেছি...';
     localStorage.setItem('sena_no', sena);
     localStorage.setItem('mt_army', sena);
-    localStorage.setItem('mt_name', found.name || found.fullName || '');
+    localStorage.setItem('mt_name', found.name || '');
     localStorage.setItem('mt_mobile', mobile);
     localStorage.setItem('mt_role', 'USER');
     localStorage.setItem('index_ok', 'yes');
     localStorage.setItem('mt_login', 'yes');
     setTimeout(function(){ location.href='dashboard.html'; }, 500);
-  }catch(e){
-    msg.style.display='block'; msg.innerText='Error: '+e.message;
-    btn.innerText='Login'; btn.disabled=false;
-  }
+  }catch(e){ msg.style.display='block'; msg.innerText='Error: '+e.message; btn.innerText='Login'; btn.disabled=false; }
 }
 </script>
 </body>
