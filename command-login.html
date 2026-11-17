@@ -14,33 +14,34 @@ button{width:100%;background:#111;color:#fff;border:none;padding:18px;border-rad
 a{color:#111;font-weight:bold}
 .center{text-align:center;margin-top:20px;font-size:17px}
 #msg{color:red;text-align:center;margin-top:12px;font-weight:bold;display:none}
+#ok{color:green;text-align:center;margin-top:12px;font-weight:bold;display:none}
 </style>
 </head>
 <body>
 <h1>Log into Your MT<br>Garage Account</h1>
 
 <label>Army Number</label>
-<input id="sena" placeholder="Enter Army Number" inputmode="numeric">
+<input id="sena" placeholder="Enter Army Number" inputmode="numeric" autocomplete="off">
 <label>Mobile Number</label>
-<input id="mobile" placeholder="01XXXXXXXXX" inputmode="numeric">
+<input id="mobile" placeholder="01XXXXXXXXX" inputmode="numeric" autocomplete="off">
 <label>Password</label>
-<input id="pass" type="password" placeholder="••••••••">
+<input id="pass" type="password" placeholder="••••••••" autocomplete="off">
 <button onclick="doLogin()" id="btn">Login</button>
 <div id="msg"></div>
+<div id="ok"></div>
 <div class="center">Don't have an account?<br><a href="create-profile.html">Create one</a></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
-// ⚠️ এই 5 লাইন তোমার পুরানো ফাইল থেকে কপি কইরা এখানে বসাও
-// তোমার পুরানো ফাইলে firebaseConfig যেইটা আছে ঐটাই বসাও
 var firebaseConfig = {
-  apiKey: "তোমার পুরানো ফাইলের apiKey",
+  apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U",
   authDomain: "mt-messenger-63922.firebaseapp.com",
   projectId: "mt-messenger-63922",
-  storageBucket: "mt-messenger-63922.appspot.com",
-  messagingSenderId: "তোমার পুরানো ফাইলের টা",
-  appId: "তোমার পুরানো ফাইলের টা"
+  storageBucket: "mt-messenger-63922.firebasestorage.app",
+  messagingSenderId: "184454055809",
+  appId: "1:184454055809:web:4d24320f792d7e86fdca80",
+  measurementId: "G-E1M0WH2RD9"
 };
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
@@ -50,34 +51,39 @@ async function doLogin(){
   var mobile = document.getElementById('mobile').value.trim();
   var pass = document.getElementById('pass').value.trim();
   var msg = document.getElementById('msg');
+  var ok = document.getElementById('ok');
   var btn = document.getElementById('btn');
+  msg.style.display='none'; ok.style.display='none';
   if(!sena || !mobile || !pass){ msg.style.display='block'; msg.innerText='সব ঘর পূরণ করো'; return; }
-  btn.innerText='Checking...';
+  btn.innerText='Checking...'; btn.disabled = true;
   try{
-    var doc = await db.collection('users').doc(sena).get();
-    if(!doc.exists){
-      msg.style.display='block'; msg.innerText='Account নাই। আগে Create one চাপো';
-      btn.innerText='Login'; return;
+    var found = null;
+    try{ var s1 = await db.collection('users').where('sena','==',sena).get(); if(!s1.empty) found = s1.docs[0].data(); }catch(e){}
+    if(!found){ try{ var d1 = await db.collection('users').doc(sena).get(); if(d1.exists) found = d1.data(); }catch(e){} }
+    if(!found){ try{ var s2 = await db.collection('profiles').where('sena','==',sena).get(); if(!s2.empty) found = s2.docs[0].data(); }catch(e){} }
+    if(!found){ try{ var d2 = await db.collection('profiles').doc(sena).get(); if(d2.exists) found = d2.data(); }catch(e){} }
+    if(!found){
+      try{ var local = JSON.parse(localStorage.getItem('mt_users') || '[]'); var f = local.find(x => String(x.sena)==sena); if(f) found = f; }catch(e){}
     }
-    var u = doc.data();
-    // Firebase এ field নাম sena / mobile / pass - এইটা মিলাইলাম
-    var dbMobile = String(u.mobile || u.phone || '');
-    var dbPass = String(u.pass || u.password || '');
-    if(dbMobile !== mobile){ msg.style.display='block'; msg.innerText='Mobile Number ভুল'; btn.innerText='Login'; return; }
-    if(dbPass !== pass){ msg.style.display='block'; msg.innerText='Password ভুল'; btn.innerText='Login'; return; }
-    if(u.status && u.status !== 'approved'){ msg.style.display='block'; msg.innerText='এখনো Approved হয় নাই, MT CLK কে কও'; btn.innerText='Login'; return; }
-
-    // ✅ Login হইছে - এখন Dashboard / Home চিনবো
+    if(!found){ msg.style.display='block'; msg.innerText='Account নাই। আগে Create one চাপো'; btn.innerText='Login'; btn.disabled=false; return; }
+    var dbMobile = String(found.mobile || found.phone || found.mobileNumber || '').trim();
+    var dbPass = String(found.pass || found.password || '').trim();
+    if(dbMobile !== mobile){ msg.style.display='block'; msg.innerText='Mobile Number ভুল'; btn.innerText='Login'; btn.disabled=false; return; }
+    if(dbPass !== pass){ msg.style.display='block'; msg.innerText='Password ভুল'; btn.innerText='Login'; btn.disabled=false; return; }
+    var st = String(found.status || 'approved').toLowerCase();
+    if(st !== 'approved'){ msg.style.display='block'; msg.innerText='এখনো Approved হয় নাই, MT CLK কে কও। Status: '+st; btn.innerText='Login'; btn.disabled=false; return; }
+    ok.style.display='block'; ok.innerText='Login হইছে! Dashboard এ যাইতেছি...';
     localStorage.setItem('sena_no', sena);
     localStorage.setItem('mt_army', sena);
-    localStorage.setItem('mt_name', u.name || '');
+    localStorage.setItem('mt_name', found.name || found.fullName || '');
     localStorage.setItem('mt_mobile', mobile);
     localStorage.setItem('mt_role', 'USER');
     localStorage.setItem('index_ok', 'yes');
-    location.href = 'dashboard.html';
+    localStorage.setItem('mt_login', 'yes');
+    setTimeout(function(){ location.href='dashboard.html'; }, 500);
   }catch(e){
     msg.style.display='block'; msg.innerText='Error: '+e.message;
-    btn.innerText='Login';
+    btn.innerText='Login'; btn.disabled=false;
   }
 }
 </script>
