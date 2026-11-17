@@ -3,155 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Convoy Group</title>
+<title>কনভয় গ্রুপ - ঢাকা টু ঘাটাইল</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:sans-serif;background:#f1f5f9;padding:12px;padding-bottom:30px}
-  .top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .top a{text-decoration:none;font-size:22px;color:#0f172a}
-  .top h2{font-size:20px}
-  .sec{background:white;padding:12px;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-  .sec h4{margin-bottom:6px}
-  input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
-  .btn{width:100%;padding:13px;border:none;border-radius:10px;font-size:16px;font-weight:bold;color:white;background:#22c55e;margin-top:6px}
-  .btn2{background:#2563eb}
-  .card{background:#f8fafc;padding:12px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-  .card b{font-size:16px}
-  .card small{color:#475569;line-height:1.6;font-size:13px}
-  .del{background:#ef4444;color:white;border:none;padding:8px 11px;border-radius:8px;flex-shrink:0}
-  .nav{display:flex;gap:8px;margin-top:12px}
-  .nav a{flex:1;text-align:center;text-decoration:none;background:#0f172a;color:white;padding:12px;border-radius:10px;font-size:13px;font-weight:bold}
-  .online{color:#22c55e;font-weight:bold;font-size:12px}
-  .label{font-size:13px;font-weight:bold;color:#64748b;margin-top:8px;display:block}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;background:#f1f5f9;padding:12px}
+.card{background:white;padding:14px;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px;font-size:15px}
+button{width:100%;padding:13px;border:none;border-radius:10px;font-weight:bold;font-size:16px;margin-top:8px;cursor:pointer}
+.blue{background:#2563eb;color:white}.green{background:#16a34a;color:white}
+.member{background:#f8fafc;padding:12px;border-radius:12px;margin-top:10px;position:relative}
+.member b{font-size:18px}.del{position:absolute;right:10px;top:10px;background:#dc2626;color:white;border:none;width:36px;height:36px;border-radius:8px;font-size:18px}
+.online{color:#16a34a;font-weight:bold}
 </style>
 </head>
 <body>
+<a href="index.html">←</a> <b style="font-size:22px">👥 কনভয় গ্রুপ</b>
 
-<div class="top">
-  <a href="convoy-home.html">⬅</a>
-  <h2>👥 কনভয় গ্রুপ</h2>
+<div class="card">
+<b>গ্রুপের নাম / ছবি</b>
+<input id="groupName" placeholder="গ্রুপের নাম - যেমন: ঢাকা টু ঘাটাইল" value="ঢাকা টু ঘাটাইল">
+<input id="groupCode" value="PLATOON-4" placeholder="গ্রুপ কোড - PLATOON-4">
+<button class="blue" onclick="saveGroup()">গ্রুপ সেভ করো</button>
+<p style="margin-top:8px">গ্রুপ: <b id="groupShow">ঢাকা টু ঘাটাইল</b> | কোড: <b>PLATOON-4</b></p>
 </div>
 
-<!-- গ্রুপের নাম -->
-<div class="sec">
-  <h4>গ্রুপের নাম / ছবি</h4>
-  <input id="groupName" type="text" placeholder="গ্রুপের নাম - যেমন: ঢাকা টু ঘাটাইল">
-  <input id="groupPhoto" type="file" accept="image/*" onchange="photoDekhao(event)">
-  <img id="groupImg" style="width:100%;border-radius:10px;display:none;margin-top:6px;">
-  <button class="btn btn2" onclick="groupSave()">গ্রুপ সেভ করো</button>
-  <p id="groupShow" style="font-weight:bold;margin-top:6px;"></p>
+<div class="card">
+<b>১. মেম্বার + গাড়ি একসাথে অ্যাড করো</b>
+<p style="margin-top:6px;color:#2563eb;font-weight:bold">👤 সদস্যের তথ্য</p>
+<input id="senaNo" placeholder="সেনা নং - যেমন: ১২৩৪৫৬৭">
+<select id="podobi"><option>পদবি বাছো</option><option>সৈনিক</option><option>ল্যান্স কর্পোরাল</option><option>কর্পোরাল</option><option>সার্জেন্ট</option><option>ওয়ারেন্ট অফিসার</option><option>লেফটেন্যান্ট</option><option>ক্যাপ্টেন</option></select>
+<input id="nam" placeholder="নাম - যেমন: রতন">
+<input id="baNo" placeholder="বি এ নং - যেমন: BA-১২৩৪৫">
+<input id="mobile" placeholder="মোবাইল নম্বর - যেমন: ০১৭৩৭৯১২০৯৪">
+<p style="margin-top:10px;color:#b45309;font-weight:bold">🚛 গাড়ির তথ্য</p>
+<select id="gariProkar"><option>গাড়ির প্রকার বাছো</option><option>পিকআপ</option><option>ট্রাক</option><option>জিপ</option><option>বাস</option><option>অ্যাম্বুলেন্স</option></select>
+<input id="serial" type="number" placeholder="সিরিয়াল নং - কত নাম্বার গাড়ি? ১, ২, ৩">
+<textarea id="montobbo" placeholder="মন্তব্য - যেমন: সামনে থাকবো, পানি আছে"></textarea>
+<button class="green" onclick="addMember()">+ মেম্বার + গাড়ি অ্যাড করো</button>
 </div>
 
-<!-- ১ নাম্বার - তোর ৮ টা ফিল্ড -->
-<div class="sec">
-  <h4>১. মেম্বার + গাড়ি একসাথে অ্যাড করো</h4>
-
-  <span class="label">👤 সদস্যের তথ্য</span>
-  <input id="senaNo" type="text" placeholder="সেনা নং - যেমন: ১২৩৪৫৬৭">
-  <select id="padobi">
-    <option value="">পদবি বাছো</option>
-    <option value="সৈনিক">সৈনিক</option>
-    <option value="ল্যান্স কর্পোরাল">ল্যান্স কর্পোরাল</option>
-    <option value="কর্পোরাল">কর্পোরাল</option>
-    <option value="সার্জেন্ট">সার্জেন্ট</option>
-    <option value="ওয়ারেন্ট অফিসার">ওয়ারেন্ট অফিসার</option>
-    <option value="সিনিয়র ওয়ারেন্ট অফিসার">সিনিয়র ওয়ারেন্ট অফিসার</option>
-    <option value="মাস্টার ওয়ারেন্ট অফিসার">মাস্টার ওয়ারেন্ট অফিসার</option>
-    <option value="লেফটেন্যান্ট">লেফটেন্যান্ট</option>
-    <option value="ক্যাপ্টেন">ক্যাপ্টেন</option>
-    <option value="মেজর">মেজর</option>
-    <option value="ড্রাইভার">ড্রাইভার</option>
-  </select>
-  <input id="mName" type="text" placeholder="নাম - যেমন: রতন">
-  <input id="baNo" type="text" placeholder="বি এ নং - যেমন: BA-১২৩৪৫">
-  <input id="mPhone" type="text" placeholder="মোবাইল নম্বর - যেমন: ০১৭৩৭৯১২০৯৪">
-
-  <span class="label">🚛 গাড়ির তথ্য</span>
-  <select id="garirProkar">
-    <option value="">গাড়ির প্রকার বাছো</option>
-    <option value="ট্রাক">ট্রাক</option>
-    <option value="পিকআপ">পিকআপ</option>
-    <option value="জিপ">জিপ</option>
-    <option value="বাস">বাস</option>
-    <option value="অ্যাম্বুলেন্স">অ্যাম্বুলেন্স</option>
-    <option value="মোটরসাইকেল">মোটরসাইকেল</option>
-    <option value="অন্যান্য">অন্যান্য</option>
-  </select>
-  <input id="cSerial" type="number" placeholder="সিরিয়াল নং - কত নাম্বার গাড়ি? ১, ২, ৩">
-  <textarea id="montobbo" rows="2" placeholder="মন্তব্য - যেমন: সামনে থাকবো, পানি আছে"></textarea>
-
-  <button class="btn" onclick="ekSatheAdd()">+ মেম্বার + গাড়ি অ্যাড করো</button>
+<div class="card">
+<b>২. লাইভ - কে কোথায়, স্পিড কত</b>
+<p style="color:#64748b;margin-top:4px">Allow দিলে তোমার স্পিড এখানে দেখা যাইবো।</p>
+<div id="list"></div>
 </div>
 
-<!-- ২ নাম্বার লাইভ -->
-<div class="sec">
-  <h4>২. লাইভ - কে কোথায়, স্পিড কত</h4>
-  <p id="liveInfo" style="font-size:13px;color:#64748b;">Allow দিলে তোমার স্পিড এখানে দেখা যাইবো।</p>
-  <div id="memberList"></div>
-  <p id="memberCount" style="font-weight:bold;margin-top:8px;"></p>
-  <button class="btn btn2" onclick="sobDelete()" style="background:#ef4444;">সব ডিলিট করো (পুরানো undefined ঠিক করতে)</button>
-</div>
+<a href="live-map.html"><button class="blue">🗺️ লাইভ ম্যাপ দেখো - সবাই সবারটা</button></a>
 
-<div class="nav">
-  <a href="live-map.html">🗺️ লাইভ ম্যাপ</a>
-  <a href="convoy-message.html">💬 মেসেজ</a>
-  <a href="walkie-talkie.html">📻 ওয়াকি</a>
-</div>
-
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
-  // নতুন ডাটার জন্য নতুন চাবি, পুরানো undefined আর আসবো না
-  var members = JSON.parse(localStorage.getItem('convoyMembersNew')||'[]');
+// ===== তোমার Firebase =====
+var firebaseConfig = {
+  apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
+  authDomain: "convoy-live-group.firebaseapp.com",
+  databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "convoy-live-group",
+  storageBucket: "convoy-live-group.firebasestorage.app",
+  messagingSenderId: "705067687114",
+  appId: "1:705067687114:web:37468ab2617dd0915b2833"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+// ===========================
 
-  function photoDekhao(e){
-    var f=e.target.files[0]; if(!f) return;
-    var r=new FileReader(); r.onload=function(){ var img=document.getElementById('groupImg'); img.src=r.result; img.style.display='block'; localStorage.setItem('groupPhoto', r.result); }; r.readAsDataURL(f);
-  }
-  function groupSave(){
-    var n=document.getElementById('groupName').value.trim();
-    if(n) localStorage.setItem('groupName', n);
-    document.getElementById('groupShow').innerText="গ্রুপ: "+(n||localStorage.getItem('groupName')||'');
-    alert("গ্রুপ সেভ হইছে দোস্ত");
-  }
-  if(localStorage.getItem('groupName')) document.getElementById('groupShow').innerText="গ্রুপ: "+localStorage.getItem('groupName');
-  if(localStorage.getItem('groupPhoto')){ var im=document.getElementById('groupImg'); im.src=localStorage.getItem('groupPhoto'); im.style.display='block'; }
+var GROUP_CODE = "PLATOON-4";
 
-  function showAll(){
-    var ml=document.getElementById('memberList'); ml.innerHTML='';
-    members.forEach(function(m,i){
-      var div=document.createElement('div'); div.className='card';
-      div.innerHTML='<div><b>'+(m.padobi||'')+' '+(m.name||'')+'</b> • #'+(m.serial||'')+'<br><small>সেনা নং: '+(m.senaNo||'')+'<br>বি এ নং: '+(m.baNo||'')+'<br>গাড়ির প্রকার: '+(m.garirProkar||'')+'<br>মোবাইল: '+(m.phone||'')+'<br>মন্তব্য: '+(m.montobbo||'নাই')+'<br><span class="online">● অনলাইন</span> • স্পিড: '+(15+i*5)+' km/h</small></div><button class="del" onclick="memberDel('+i+')">X</button>';
-      ml.appendChild(div);
+function saveGroup(){
+  GROUP_CODE = document.getElementById('groupCode').value.trim().toUpperCase() || "PLATOON-4";
+  document.getElementById('groupShow').innerText = document.getElementById('groupName').value;
+  alert("গ্রুপ সেভ হইছে! কোড: "+GROUP_CODE);
+  loadMembers();
+}
+
+function addMember(){
+  var senaNo = document.getElementById('senaNo').value.trim();
+  var podobi = document.getElementById('podobi').value;
+  var nam = document.getElementById('nam').value.trim();
+  var baNo = document.getElementById('baNo').value.trim();
+  var mobile = document.getElementById('mobile').value.trim();
+  var gari = document.getElementById('gariProkar').value;
+  var serial = document.getElementById('serial').value.trim();
+  var montobbo = document.getElementById('montobbo').value.trim();
+  if(!senaNo || !nam || !serial){ alert("সেনা নং, নাম, সিরিয়াল দাও দোস্ত"); return; }
+  // Firebase এ সেভ - এইটাই আসল, লাইভ ম্যাপ এইখান থেকে নাম নিবো
+  db.ref('convoy/'+GROUP_CODE+'/members/'+senaNo).set({
+    senaNo: senaNo, podobi: podobi, name: podobi+" "+nam, fullName: nam,
+    baNo: baNo, mobile: mobile, gari: gari, serial: parseInt(serial), montobbo: montobbo
+  }).then(function(){
+    alert("হইছে! "+nam+" অ্যাড হইছে, এখন লাইভ ম্যাপেও নাম দেখবো");
+    document.getElementById('senaNo').value=""; document.getElementById('nam').value="";
+    document.getElementById('serial').value="";
+  });
+}
+
+function loadMembers(){
+  // মেম্বার লিস্ট Firebase থেকে লাইভ শোনো
+  db.ref('convoy/'+GROUP_CODE+'/members').on('value', function(snap){
+    var members = snap.val() || {};
+    var locRef = db.ref('convoy/'+GROUP_CODE+'/locations');
+    locRef.once('value', function(lsnap){
+      var locs = lsnap.val() || {};
+      var html = "";
+      Object.values(members).sort(function(a,b){return a.serial-b.serial}).forEach(function(m){
+        var loc = locs[m.senaNo];
+        var speed = loc ? loc.speed : 0;
+        var online = loc ? "● অনলাইন" : "○ অফলাইন";
+        html += '<div class="member"><button class="del" onclick="delMember(\''+m.senaNo+'\')">X</button>'
+        + '<b>'+m.name+' • #'+m.serial+'</b><br>'
+        + 'সেনা নং: '+m.senaNo+'<br>বি এ নং: '+m.baNo+'<br>গাড়ির প্রকার: '+m.gari+'<br>মোবাইল: '+m.mobile+'<br>মন্তব্য: '+m.montobbo+'<br>'
+        + '<span class="online">'+online+' • স্পিড: '+speed+' km/h</span></div>';
+      });
+      document.getElementById('list').innerHTML = html || "এখনো কেউ অ্যাড হয় নাই";
     });
-    document.getElementById('memberCount').innerText="মোট: "+members.length+" জন • "+members.length+" টা গাড়ি";
-  }
-
-  function ekSatheAdd(){
-    var senaNo=document.getElementById('senaNo').value.trim();
-    var padobi=document.getElementById('padobi').value;
-    var name=document.getElementById('mName').value.trim();
-    var baNo=document.getElementById('baNo').value.trim();
-    var phone=document.getElementById('mPhone').value.trim();
-    var garirProkar=document.getElementById('garirProkar').value;
-    var serial=document.getElementById('cSerial').value.trim();
-    var montobbo=document.getElementById('montobbo').value.trim();
-
-    if(!name){ alert("নাম দাও দোস্ত"); return; }
-    if(!senaNo){ alert("সেনা নং দাও দোস্ত"); return; }
-    if(!padobi){ alert("পদবি বাছো দোস্ত"); return; }
-
-    members.push({senaNo:senaNo, padobi:padobi, name:name, baNo:baNo||'নাই', phone:phone||'নাই', garirProkar:garirProkar||'নাই', serial:serial||members.length+1, montobbo:montobbo||'নাই'});
-    members.sort(function(a,b){ return a.serial-b.serial; });
-    localStorage.setItem('convoyMembersNew', JSON.stringify(members));
-
-    document.getElementById('senaNo').value=''; document.getElementById('padobi').value='';
-    document.getElementById('mName').value=''; document.getElementById('baNo').value='';
-    document.getElementById('mPhone').value=''; document.getElementById('garirProkar').value='';
-    document.getElementById('cSerial').value=''; document.getElementById('montobbo').value='';
-    showAll();
-  }
-  function memberDel(i){ members.splice(i,1); localStorage.setItem('convoyMembersNew', JSON.stringify(members)); showAll(); }
-  function sobDelete(){ if(confirm("সব ডিলিট করমু?")){ members=[]; localStorage.removeItem('convoyMembersNew'); localStorage.removeItem('convoyMembers'); showAll(); } }
-  showAll();
+  });
+}
+function delMember(senaNo){
+  if(confirm("ডিলিট করবো?")) db.ref('convoy/'+GROUP_CODE+'/members/'+senaNo).remove();
+}
+loadMembers();
 </script>
 </body>
 </html>
