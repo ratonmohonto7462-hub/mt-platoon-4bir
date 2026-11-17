@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Map - Sobai Sobare Dekhbe</title>
+<title>Live Map</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;font-family:sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;font-family:sans-serif}
 #map{height:100vh;width:100%}
 #topBar{position:fixed;top:12px;left:12px;right:12px;background:white;padding:10px;border-radius:12px;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,0.3)}
 #topBar input{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin-top:6px}
@@ -17,24 +16,33 @@ html,body{height:100%;font-family:sans-serif}
 #info{position:fixed;bottom:16px;left:12px;right:12px;background:rgba(15,23,42,0.92);color:white;padding:12px;border-radius:12px;font-size:13px;z-index:1000}
 .numIcon{background:#2563eb;color:white;border:2px solid white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:bold}
 .leadIcon{background:#dc2626;color:white;border:2px solid white;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:bold}
+#addBox{position:fixed;bottom:90px;left:12px;right:12px;background:white;padding:10px;border-radius:12px;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,0.3);display:none}
+#addBox input{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;margin-top:5px}
 </style>
 </head>
 <body>
 <div id="map"></div>
 <div id="topBar">
   <b>🚛 গ্রুপ কোড দাও</b>
-  <input id="groupCode" placeholder="যেমন: PLATOON-4" value="PLATOON-4">
-  <input id="amarSenaNo" placeholder="তোমার সেনা নং">
+  <input id="groupCode" value="PLATOON-4">
+  <input id="amarSenaNo" placeholder="তোমার সেনা নং - যেমন 4521177">
   <button onclick="joinGroup()">✅ গ্রুপে ঢুকো</button>
+  <button onclick="document.getElementById('addBox').style.display='block'" style="background:#16a34a;margin-top:6px">➕ আমার নাম / সিরিয়াল ঠিক করো</button>
 </div>
-<div id="convoyBar"><b>কনভয় - <span id="totalText">0 জন অনলাইন</span></b><div id="chipList"></div></div>
+<div id="convoyBar"><b>কনভয় - <span id="totalText">0 জন</span></b><div id="chipList"></div></div>
+<div id="addBox">
+  <b>নিজের পরিচয় দাও (একবারই)</b>
+  <input id="myName" placeholder="নাম - যেমন সৈনিক রতন">
+  <input id="mySerial" type="number" placeholder="সিরিয়াল - যেমন 1 / 2 / 3">
+  <input id="myGari" placeholder="গাড়ি - যেমন পিকআপ">
+  <button onclick="saveMyInfo()" style="width:100%;padding:11px;background:#16a34a;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:6px">💾 সেভ করো</button>
+</div>
 <div id="info">নর্দিং: <b id="latText">--</b> | ইস্টিং: <b id="lngText">--</b><br><span id="statusText">গ্রুপে ঢুকো দোস্ত</span></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
-// ===== তোমার Firebase - convoy-live-group - SOTHIK LINK =====
 var firebaseConfig = {
   apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
   authDomain: "convoy-live-group.firebaseapp.com",
@@ -46,45 +54,49 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
-// =============================================================
-
 var map = L.map('map').setView([23.8103,90.4125],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-var markers={};
-var groupCode="", amarSenaNo="";
+var markers={}, groupCode="", amarSenaNo="", membersMap={};
 
 function joinGroup(){
   groupCode=document.getElementById('groupCode').value.trim().toUpperCase();
   amarSenaNo=document.getElementById('amarSenaNo').value.trim();
-  if(!groupCode||!amarSenaNo){ alert("গ্রুপ কোড আর সেনা নং দাও"); return; }
+  if(!groupCode||!amarSenaNo){alert("গ্রুপ আর সেনা নং দাও");return;}
   document.getElementById('statusText').innerText="গ্রুপে ঢুকছো: "+groupCode+" | লাইভ চালু...";
-
+  // মেম্বারদের নাম শোনো
+  db.ref('convoy/'+groupCode+'/members').on('value',function(s){ membersMap=s.val()||{}; });
   db.ref('convoy/'+groupCode+'/locations').on('value', function(snap){
     var data=snap.val()||{};
-    var count=Object.keys(data).length;
-    document.getElementById('totalText').innerText=count+" জন অনলাইন";
+    document.getElementById('totalText').innerText=Object.keys(data).length+" জন অনলাইন";
     var chipDiv=document.getElementById('chipList'); chipDiv.innerHTML="";
-    for(var k in markers){ map.removeLayer(markers[k]); }
-    markers={};
+    for(var k in markers){ map.removeLayer(markers[k]); } markers={};
     var points=[];
     Object.values(data).forEach(function(u){
+      var info = membersMap[u.senaNo] || u;
+      var sName = info.name || u.name || "সৈনিক";
+      var sSerial = info.serial || u.serial || 99;
       points.push([u.lat,u.lng]);
-      var chip=document.createElement('span');
-      chip.className='chip';
-      chip.innerText="#"+u.serial+" "+u.name+" ●";
-      chipDiv.appendChild(chip);
-      var iconHtml='<div class="'+(u.serial==1?'leadIcon':'numIcon')+'">'+u.serial+'</div>';
+      var chip=document.createElement('span'); chip.className='chip';
+      chip.innerText="#"+sSerial+" "+sName+" ●"; chipDiv.appendChild(chip);
+      var iconHtml='<div class="'+(sSerial==1?'leadIcon':'numIcon')+'">'+sSerial+'</div>';
       var icon=L.divIcon({html:iconHtml,className:'',iconSize:[34,34],iconAnchor:[17,17]});
       var mk=L.marker([u.lat,u.lng],{icon:icon}).addTo(map);
-      mk.bindPopup("<b>#"+u.serial+" "+u.name+"</b><br>সেনা নং: "+u.senaNo+"<br>গাড়ি: "+u.gari+"<br>স্পিড: "+u.speed+" km/h<br>আপডেট: "+u.time);
+      mk.bindPopup("<b>#"+sSerial+" "+sName+"</b><br>সেনা নং: "+u.senaNo+"<br>গাড়ি: "+(info.gari||u.gari)+"");
       markers[u.senaNo]=mk;
     });
     if(points.length>1){ L.polyline(points,{color:'#2563eb',weight:4,dashArray:'8,6'}).addTo(map); }
   });
-  setInterval(amarLocationPathao, 5000);
-  amarLocationPathao();
+  setInterval(amarLocationPathao, 5000); amarLocationPathao();
 }
-
+function saveMyInfo(){
+  var n=document.getElementById('myName').value.trim();
+  var s=document.getElementById('mySerial').value.trim();
+  var g=document.getElementById('myGari').value.trim()||"পিকআপ";
+  if(!n||!s){alert("নাম আর সিরিয়াল দাও");return;}
+  db.ref('convoy/'+groupCode+'/members/'+amarSenaNo).set({name:n, serial:parseInt(s), gari:g, senaNo:amarSenaNo});
+  alert("হইছে দোস্ত! এখন থেকে তোমার নাম ঠিক দেখাইবো");
+  document.getElementById('addBox').style.display='none';
+}
 function amarLocationPathao(){
   if(!groupCode) return;
   navigator.geolocation.getCurrentPosition(function(pos){
@@ -92,12 +104,7 @@ function amarLocationPathao(){
     var speed=pos.coords.speed?Math.round(pos.coords.speed*3.6):0;
     document.getElementById('latText').innerText=lat.toFixed(6);
     document.getElementById('lngText').innerText=lng.toFixed(6);
-    var members=JSON.parse(localStorage.getItem('convoyMembersNew')||'[]');
-    var ami=members.find(function(m){ return m.senaNo==amarSenaNo; })||{name:"সৈনিক",serial:99,garirProkar:"পিকআপ"};
-    db.ref('convoy/'+groupCode+'/locations/'+amarSenaNo).set({
-      senaNo:amarSenaNo, name:ami.name, serial:ami.serial, gari:ami.garirProkar,
-      lat:lat, lng:lng, speed:speed, time:new Date().toLocaleTimeString('bn-BD')
-    });
+    db.ref('convoy/'+groupCode+'/locations/'+amarSenaNo).set({senaNo:amarSenaNo, lat:lat, lng:lng, speed:speed, time:new Date().toLocaleTimeString('bn-BD')});
   },function(){},{enableHighAccuracy:true});
 }
 </script>
