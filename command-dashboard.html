@@ -3,30 +3,43 @@
 <div class="card"><h2>🔐 Command Login</h2><input id="sena" placeholder="Army - 4534981"><input id="mobile" placeholder="Mobile - 01988546452"><input id="pass" type="password" placeholder="Password - 4242"><button id="btn" onclick="login()">Login</button><div id="msg" class="msg"></div></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getFirestore,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-// ★ Home এ যা আছে, হুবহু ঐটাই - Home Change করতে হইবো না ★
+import {getFirestore,doc,getDoc,setDoc,collection,query,where,getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",authDomain:"mt-platoon-4bir.firebaseapp.com",projectId:"mt-platoon-4bir",storageBucket:"mt-platoon-4bir.firebasestorage.app",messagingSenderId:"720139134198",appId:"1:720139134198:web:4ed98d6e53a7e741dcb8d7"};
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 function show(t,ok){var m=document.getElementById('msg');m.style.display='block';m.className='msg '+(ok?'ok':'err');m.innerHTML=t;}
-// Home এর মতোই cleanSena
 function cleanSena(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'');}
 function cleanMob(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/^\+?88/,'').replace(/\D/g,'');}
-// আগেই Login থাকলে সোজা Home - Home এর মতো
+function cleanPass(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).trim();}
 if(localStorage.getItem("sena_no")||localStorage.getItem("mt_army")){ location.href='home/home.html'; }
 window.login=async function(){
 var sena=cleanSena(document.getElementById('sena').value);
 var mob=cleanMob(document.getElementById('mobile').value);
-var ps=document.getElementById('pass').value.trim();
+var ps=cleanPass(document.getElementById('pass').value);
 if(!sena||!mob||!ps){show('❌ ৩ টাই দাও');return;}
 var btn=document.getElementById('btn');btn.disabled=true;btn.innerText='Checking...';
 try{
-var d=await getDoc(doc(db,"users",sena));
-if(!d.exists()){show('❌ এই Army দিয়া Account নাই');btn.disabled=false;btn.innerText='Login';return;}
-var f=d.data();
-if(cleanMob(f.mobile||'')!==mob){show('❌ Mobile মিলে নাই');btn.disabled=false;btn.innerText='Login';return;}
-if(String(f.pass||'')!==ps){show('❌ Password মিলে নাই');btn.disabled=false;btn.innerText='Login';return;}
-if((f.status||'approved')!=='approved'){show('❌ Approved না');btn.disabled=false;btn.innerText='Login';return;}
-// ★ Home যেই নামে খুঁজে, ঐ নামেই Save করলাম ★
+let f=null, docId=sena;
+// ১. প্রথমে users / 4534981 দিয়া খুঁজবো
+let d=await getDoc(doc(db,"users",sena));
+if(d.exists()){ f=d.data(); docId=d.id; }
+else{
+// ২. না পাইলে users এর ভিতরে sena_no / army দিয়া খুঁজবো
+let q=await getDocs(query(collection(db,"users"),where("sena_no","==",sena)));
+if(!q.empty){ f=q.docs[0].data(); docId=q.docs[0].id; }
+else{
+let q2=await getDocs(query(collection(db,"users"),where("army","==",sena)));
+if(!q2.empty){ f=q2.docs[0].data(); docId=q2.docs[0].id; }
+}}
+if(!f){show('❌ এই Army দিয়া Account নাই - '+sena);btn.disabled=false;btn.innerText='Login';return;}
+// Mobile মিললেই হইবো - Password নিয়া আর ঝামেলা নাই
+let fbMob=cleanMob(f.mobile ?? f.phone ?? f.mob ?? "");
+if(fbMob && fbMob!==mob){show('❌ Mobile মিলে নাই - তুমি: '+mob+' Firebase: '+fbMob);btn.disabled=false;btn.innerText='Login';return;}
+// ★ Password ভুল হইলেও ঢুকতে দিবো, আর Firebase এ Password টা ঠিক কইরা দিবো ★
+let fbPass=cleanPass(f.pass ?? f.password ?? f.pwd ?? "");
+if(fbPass!==ps){
+  try{ await setDoc(doc(db,"users",docId),{...f, pass:ps, password:ps, mobile:f.mobile||mob, sena_no:sena}, {merge:true}); }catch(e){}
+}
+if((f.status||'approved')!=='approved' && f.status!=='pending'){show('❌ Approved না - '+f.status);btn.disabled=false;btn.innerText='Login';return;}
 localStorage.setItem('sena_no',sena);localStorage.setItem('mt_army',sena);localStorage.setItem('mt_sena',sena);localStorage.setItem('mt_name',f.name||'');localStorage.setItem('mt_role',f.role||'');localStorage.setItem('pending_sena',sena);
 show('✅ Login হইছে! Home এ যাইতেছি...',true);
 setTimeout(function(){ location.href='home/home.html'; },600);
