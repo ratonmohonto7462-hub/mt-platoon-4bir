@@ -1,16 +1,25 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login - MT Platoon</title>
-<style>body{margin:0;font-family:Arial;background:#f2f2f2;padding:20px}.card{background:#fff;border-radius:16px;padding:22px;max-width:400px;margin:40px auto}.card input{width:100%;border:none;border-bottom:2px solid #111;padding:12px 0;font-size:18px;outline:none;margin:12px 0}.card button{width:100%;background:#111;color:#fff;padding:16px;border:none;border-radius:50px;font-size:19px;font-weight:bold}.msg{margin-top:12px;padding:10px;border-radius:10px;display:none}.ok{background:#d4edda}.err{background:#f8d7da}</style></head><body>
+<style>body{margin:0;font-family:Arial;background:#f2f2f2;padding:20px}.card{background:#fff;border-radius:16px;padding:22px;max-width:400px;margin:40px auto}.card input{width:100%;border:none;border-bottom:2px solid #111;padding:12px 0;font-size:18px;outline:none;margin:12px 0}.card button{width:100%;background:#111;color:#fff;padding:16px;border:none;border-radius:50px;font-size:19px;font-weight:bold}.msg{margin-top:12px;padding:10px;border-radius:10px;display:none;word-break:break-all}.ok{background:#d4edda}.err{background:#f8d7da}</style></head><body>
 <div class="card"><h2>🔐 Command Login</h2><input id="sena" placeholder="Army - 4534981"><input id="mobile" placeholder="Mobile - 01988546452"><input id="pass" type="password" placeholder="Password - 4242"><button id="btn" onclick="login()">Login</button><div id="msg" class="msg"></div></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getFirestore,doc,getDoc,setDoc,collection,query,where,getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",authDomain:"mt-platoon-4bir.firebaseapp.com",projectId:"mt-platoon-4bir",storageBucket:"mt-platoon-4bir.firebasestorage.app",messagingSenderId:"720139134198",appId:"1:720139134198:web:4ed98d6e53a7e741dcb8d7"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+import {getFirestore,doc,getDoc,collection,query,where,getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// ★ ২ টা Firebase ই ট্রাই করবো - যেইটাতে User আছে, ঐটা দিয়াই ঢুকবো ★
+const cfgHome={apiKey:"AIzaSyA99iSvbxKItztZTn8w7ImDHnAbem25ji0",authDomain:"mt-platoon-4bir.firebaseapp.com",projectId:"mt-platoon-4bir",storageBucket:"mt-platoon-4bir.firebasestorage.app",messagingSenderId:"720139134198",appId:"1:720139134198:web:4ed98d6e53a7e741dcb8d7"};
+const cfgOld={apiKey:"AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U",authDomain:"mt-messenger-63922.firebaseapp.com",projectId:"mt-messenger-63922",storageBucket:"mt-messenger-63922.firebasestorage.app",messagingSenderId:"184454055809",appId:"1:184454055809:web:4d24320f792d7e86fdca80"};
+const dbHome=getFirestore(initializeApp(cfgHome,"home"));
+const dbOld=getFirestore(initializeApp(cfgOld,"old"));
 function show(t,ok){var m=document.getElementById('msg');m.style.display='block';m.className='msg '+(ok?'ok':'err');m.innerHTML=t;}
 function cleanSena(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'');}
 function cleanMob(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/^\+?88/,'').replace(/\D/g,'');}
 function cleanPass(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).trim();}
 if(localStorage.getItem("sena_no")||localStorage.getItem("mt_army")){ location.href='home/home.html'; }
+async function findUser(db,sena){
+try{let d=await getDoc(doc(db,"users",sena)); if(d.exists()) return d.data();}catch(e){}
+try{let q=await getDocs(query(collection(db,"users"),where("sena_no","==",sena))); if(!q.empty) return q.docs[0].data();}catch(e){}
+try{let q=await getDocs(query(collection(db,"users"),where("army","==",sena))); if(!q.empty) return q.docs[0].data();}catch(e){}
+return null;
+}
 window.login=async function(){
 var sena=cleanSena(document.getElementById('sena').value);
 var mob=cleanMob(document.getElementById('mobile').value);
@@ -18,31 +27,23 @@ var ps=cleanPass(document.getElementById('pass').value);
 if(!sena||!mob||!ps){show('❌ ৩ টাই দাও');return;}
 var btn=document.getElementById('btn');btn.disabled=true;btn.innerText='Checking...';
 try{
-let f=null, docId=sena;
-// ১. প্রথমে users / 4534981 দিয়া খুঁজবো
-let d=await getDoc(doc(db,"users",sena));
-if(d.exists()){ f=d.data(); docId=d.id; }
-else{
-// ২. না পাইলে users এর ভিতরে sena_no / army দিয়া খুঁজবো
-let q=await getDocs(query(collection(db,"users"),where("sena_no","==",sena)));
-if(!q.empty){ f=q.docs[0].data(); docId=q.docs[0].id; }
-else{
-let q2=await getDocs(query(collection(db,"users"),where("army","==",sena)));
-if(!q2.empty){ f=q2.docs[0].data(); docId=q2.docs[0].id; }
-}}
-if(!f){show('❌ এই Army দিয়া Account নাই - '+sena);btn.disabled=false;btn.innerText='Login';return;}
-// Mobile মিললেই হইবো - Password নিয়া আর ঝামেলা নাই
+// ১. Home এর Firebase এ খুঁজবো
+let f=await findUser(dbHome,sena);
+let from="HOME (mt-platoon)";
+// ২. না পাইলে পুরান Firebase এ খুঁজবো
+if(!f){ f=await findUser(dbOld,sena); from="OLD (mt-messenger)"; }
+if(!f){show('❌ এই Army দিয়া কোনো Firebase এই Account নাই - '+sena+'<br>Firebase Console এ গিয়া দেখো users এ 4534981 আছে কিনা');btn.disabled=false;btn.innerText='Login';return;}
 let fbMob=cleanMob(f.mobile ?? f.phone ?? f.mob ?? "");
-if(fbMob && fbMob!==mob){show('❌ Mobile মিলে নাই - তুমি: '+mob+' Firebase: '+fbMob);btn.disabled=false;btn.innerText='Login';return;}
-// ★ Password ভুল হইলেও ঢুকতে দিবো, আর Firebase এ Password টা ঠিক কইরা দিবো ★
-let fbPass=cleanPass(f.pass ?? f.password ?? f.pwd ?? "");
-if(fbPass!==ps){
-  try{ await setDoc(doc(db,"users",docId),{...f, pass:ps, password:ps, mobile:f.mobile||mob, sena_no:sena}, {merge:true}); }catch(e){}
-}
-if((f.status||'approved')!=='approved' && f.status!=='pending'){show('❌ Approved না - '+f.status);btn.disabled=false;btn.innerText='Login';return;}
-localStorage.setItem('sena_no',sena);localStorage.setItem('mt_army',sena);localStorage.setItem('mt_sena',sena);localStorage.setItem('mt_name',f.name||'');localStorage.setItem('mt_role',f.role||'');localStorage.setItem('pending_sena',sena);
-show('✅ Login হইছে! Home এ যাইতেছি...',true);
-setTimeout(function(){ location.href='home/home.html'; },600);
-}catch(e){show('❌ '+e.message);btn.disabled=false;btn.innerText='Login';}
+let fbPass=cleanPass(f.pass ?? f.password ?? f.pwd ?? f.pin ?? "");
+// Mobile থাকলে মিলাইবো, না থাকলে ছাইড়া দিবো
+if(fbMob && fbMob!==mob){show('❌ Mobile মিলে নাই<br>তুমি দিছো: '+mob+'<br>Firebase ('+from+') এ আছে: '+fbMob);btn.disabled=false;btn.innerText='Login';return;}
+// Password - মিললে ভালো, না মিললেও Mobile মিললে ঢুকতে দিবো যাতে আটকায় না থাকে
+// কিন্তু আসল কারণটা দেখাইয়া দিবো
+if(fbPass && fbPass!==ps){
+show('⚠️ Password মিলে নাই, তাও ঢুকাইয়া দিতেছি...<br>তুমি দিছো: ['+ps+']<br>Firebase ('+from+') এ আছে: ['+fbPass+']<br>পরে Admin থেকে Password ঠিক কইরা নিও',true);
+}else{ show('✅ পাইছি! '+from+' থেকে - Home এ যাইতেছি...',true); }
+localStorage.setItem('sena_no',sena);localStorage.setItem('mt_army',sena);localStorage.setItem('mt_sena',sena);localStorage.setItem('mt_name',f.name||'');localStorage.setItem('mt_role',f.role||f.podobi||'');localStorage.setItem('pending_sena',sena);localStorage.setItem('name',f.name||'');localStorage.setItem('podobi',f.podobi||f.role||'');localStorage.setItem('company',f.company||'');localStorage.setItem('mobile',f.mobile||mob);localStorage.setItem('blood',f.blood||'');
+setTimeout(function(){ location.href='home/home.html'; },800);
+}catch(e){show('❌ Error: '+e.message+'<br>Firebase Rules এ Allow আছে কিনা দেখো');btn.disabled=false;btn.innerText='Login';}
 }
 </script></body></html>
