@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Group - Seniority</title>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Group - Seniority</title>
 <style>
 body{font-family:Arial;background:#f2f2f2;margin:0}
 .top{background:#0a1a12;color:#fff;padding:14px;text-align:center}
@@ -14,21 +18,54 @@ body{font-family:Arial;background:#f2f2f2;margin:0}
 .badge{display:inline-block;background:#fff3cd;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;margin-top:3px}
 .delBtn{background:#ff3b30;color:#fff;border:none;padding:6px 12px;border-radius:20px;font-weight:700;cursor:pointer;margin-left:8px}
 </style>
-</head><body>
+</head>
+<body>
 <div class="top"><b>Group Members - Seniority Wise</b><div style="font-size:11px;opacity:0.7;margin-top:4px" id="src">Firebase Only</div></div>
 <div class="list" id="list"><p style="text-align:center;margin-top:20px">Loading...</p></div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, query, where, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:95106bb74fab8444fdca80", measurementId: "G-PTEBJFVKZF" };
+const firebaseConfig = {
+  apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U",
+  authDomain: "mt-messenger-63922.firebaseapp.com",
+  projectId: "mt-messenger-63922",
+  storageBucket: "mt-messenger-63922.firebasestorage.app",
+  messagingSenderId: "184454055809",
+  appId: "1:184454055809:web:95106bb74fab8444fdca80",
+  measurementId: "G-PTEBJFVKZF"
+};
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 const ADMIN_SENA = "4521328";
-let mySena = localStorage.getItem("senaNo") || localStorage.getItem("mt_sena") || localStorage.getItem("sena_no") || localStorage.getItem("sena") || "";
-mySena = String(mySena).trim();
+
+// --- ঠিক করা অংশ: যেই নামেই সেভ থাকুক, ৩২৮-রে চিনবো ---
+let mySena = "";
+function findSena(){
+  const keys = ["senaNo","mt_sena","sena_no","sena","sena_no_login","userSena","loggedSena","mt_user_sena","user_id"];
+  for(let k of keys){
+    let v = localStorage.getItem(k) || sessionStorage.getItem(k) || "";
+    if(v && v.includes("4521328")) return "4521328";
+    if(v && /^\d{7}$/.test(v.trim())) return v.trim();
+  }
+  // যদি JSON আকারে সেভ থাকে, সেটাও খুঁজবো
+  for(let k of Object.keys(localStorage)){
+    let v = localStorage.getItem(k) || "";
+    if(v.includes("4521328")) return "4521328";
+    try{
+      let j = JSON.parse(v);
+      if(j && j.sena) return String(j.sena).trim();
+      if(j && j.senaNo) return String(j.senaNo).trim();
+    }catch(e){}
+  }
+  for(let k of Object.keys(sessionStorage)){
+    let v = sessionStorage.getItem(k) || "";
+    if(v.includes("4521328")) return "4521328";
+  }
+  return "";
+}
+mySena = String(findSena()).trim();
 
 async function load(){
   try{
@@ -41,7 +78,9 @@ async function load(){
     });
     document.getElementById('src').innerText = "Source: Firebase - " + members.length + " Members";
     render(members);
-  }catch(e){ document.getElementById('list').innerHTML = "<p style='text-align:center;color:red'>Firebase Error: "+e.message+"</p>"; }
+  }catch(e){
+    document.getElementById('list').innerHTML = "<p style='text-align:center;color:red'>Firebase Error: "+e.message+"</p>";
+  }
 }
 
 function render(members){
@@ -54,7 +93,9 @@ function render(members){
     let detail = [m.company, m.unit].filter(x=>x).join(' • ');
     let bloodHtml = m.blood ? `<span class="badge">🩸 ${m.blood}</span>` : '';
     let delBtn = "";
-    if(mySena === ADMIN_SENA){ delBtn = `<button class="delBtn" onclick="window.deleteMember('${sena}','${name}')">🗑️ ডিলিট</button>`; }
+    if(mySena === ADMIN_SENA){
+      delBtn = `<button class="delBtn" onclick="window.deleteMember('${sena}','${name}')">🗑️ ডিলিট</button>`;
+    }
     return `<div class="item">
       <div class="left">${picHtml}
         <div class="info"><b>${i+1}. ${sena} - ${name}</b><br><small>${rank} ${detail ? '| '+detail : ''}</small><br>${bloodHtml}</div>
@@ -65,10 +106,22 @@ function render(members){
 }
 
 window.deleteMember = async function(sena, name){
-  if(mySena !== ADMIN_SENA){ alert("তুমি ডিলিট করতে পারবা না! শুধু রতন ভাই পারবো।"); return; }
-  if(!confirm("তুমি কি সত্যিই " + sena + " - " + name + " কে প্লাটুন থেকে বাদ দিতে চাও?")){ return; }
-  try{ await deleteDoc(doc(db, "users", String(sena))); alert("✅ ডিলিট হয়ে গেছে!"); load(); }catch(e){ alert("ডিলিট হয় নাই: " + e.message); }
+  if(mySena !== ADMIN_SENA){
+    alert("তুমি ডিলিট করতে পারবা না! শুধু রতন ভাই পারবো।");
+    return;
+  }
+  if(!confirm("তুমি কি সত্যিই " + sena + " - " + name + " কে প্লাটুন থেকে বাদ দিতে চাও?")){
+    return;
+  }
+  try{
+    await deleteDoc(doc(db, "users", String(sena)));
+    alert("✅ ডিলিট হয়ে গেছে!");
+    load();
+  }catch(e){
+    alert("ডিলিট হয় নাই: " + e.message);
+  }
 }
 load();
 </script>
-</body></html>
+</body>
+</html>
