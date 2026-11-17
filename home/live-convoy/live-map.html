@@ -3,145 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Map</title>
+<title>Live Map - Sobai Sobare Dekhbe</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%;overflow:hidden;font-family:sans-serif}
-  #map{height:100vh;width:100%;z-index:1}
-  #searchBar{position:fixed;top:12px;left:12px;right:12px;display:flex;gap:8px;z-index:1000}
-  #searchInput{flex:1;padding:13px 14px;border:none;border-radius:12px;font-size:15px;outline:none;box-shadow:0 4px 14px rgba(0,0,0,0.3)}
-  #searchBtn{padding:13px 16px;background:#2563eb;color:white;border:none;border-radius:12px;font-size:15px;font-weight:bold}
-  #ektaGhor{position:fixed;bottom:16px;left:12px;right:76px;background:rgba(15,23,42,0.92);color:white;padding:12px;border-radius:12px;font-size:13px;line-height:1.6;z-index:1000}
-  #ektaGhor b{color:#22c55e}
-  #ektaGhor .east{color:#38bdf8}
-  #allowBtn{width:100%;padding:12px;background:#22c55e;border:none;border-radius:10px;color:white;font-size:17px;font-weight:bold;margin-top:8px}
-  #myLocBtn{position:fixed;bottom:22px;right:14px;width:56px;height:56px;background:white;border:none;border-radius:50%;box-shadow:0 4px 14px rgba(0,0,0,0.35);z-index:1000;display:flex;align-items:center;justify-content:center;font-size:26px}
-  /* উপরে কনভয় লিস্ট */
-  #convoyBar{position:fixed;top:64px;left:12px;right:12px;background:white;padding:10px;border-radius:12px;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,0.25);max-height:130px;overflow-y:auto}
-  #convoyBar b{font-size:14px}
-  .chip{display:inline-block;background:#f1f5f9;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;margin:3px 2px;cursor:pointer}
-  .chip.active{background:#22c55e;color:white}
-  .numIcon{background:#2563eb;color:white;border:2px solid white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,0.4)}
-  .leadIcon{background:#dc2626;color:white;border:2px solid white;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:sans-serif}
+#map{height:100vh;width:100%}
+#topBar{position:fixed;top:12px;left:12px;right:12px;background:white;padding:10px;border-radius:12px;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,0.3)}
+#topBar input{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin-top:6px}
+#topBar button{width:100%;padding:11px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:6px}
+#convoyBar{position:fixed;top:165px;left:12px;right:12px;background:white;padding:10px;border-radius:12px;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,0.25)}
+.chip{display:inline-block;background:#dcfce7;color:#166534;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;margin:3px 2px}
+#info{position:fixed;bottom:16px;left:12px;right:12px;background:rgba(15,23,42,0.92);color:white;padding:12px;border-radius:12px;font-size:13px;z-index:1000}
+.numIcon{background:#2563eb;color:white;border:2px solid white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.leadIcon{background:#dc2626;color:white;border:2px solid white;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:bold}
 </style>
 </head>
 <body>
 <div id="map"></div>
-
-<div id="searchBar">
-  <input id="searchInput" type="text" placeholder="জায়গা খুঁজো... যেমন: গুলশান, মিরপুর">
-  <button id="searchBtn" onclick="khujo()">🔍 খুঁজো</button>
+<div id="topBar">
+  <b>🚛 গ্রুপ কোড দাও</b>
+  <input id="groupCode" placeholder="যেমন: PLATOON-4" value="PLATOON-4">
+  <input id="amarSenaNo" placeholder="তোমার সেনা নং">
+  <button onclick="joinGroup()">✅ গ্রুপে ঢুকো</button>
 </div>
-
-<!-- ম্যাপের উপরে কনভয় মেম্বার -->
-<div id="convoyBar">
-  <b>🚛 কনভয় - <span id="totalText"></span></b>
-  <div id="chipList"></div>
-</div>
-
-<div id="ektaGhor">
-  নর্দিং: <b id="latText">--</b> ° উত্তর<br>
-  ইস্টিং: <b id="lngText" class="east">--</b> ° পূর্ব<br>
-  একুরেসি: <span id="accText">এখনো চালু হয় নাই</span><br>
-  <button id="allowBtn" onclick="amarLocation()">Allow</button>
-</div>
-<button id="myLocBtn" onclick="amarLocation()">🎯</button>
+<div id="convoyBar"><b>কনভয় - <span id="totalText">0 জন অনলাইন</span></b><div id="chipList"></div></div>
+<div id="info">নর্দিং: <b id="latText">--</b> | ইস্টিং: <b id="lngText">--</b><br><span id="statusText">গ্রুপে ঢুকো দোস্ত</span></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
-  var map = L.map('map', {zoomControl:false}).setView([23.8103, 90.4125], 14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-  var amarDot=null, amarCircle=null, searchMarker=null;
-  var convoyMarkers=[];
-  var convoyLine=null;
+// ===== তোমার Firebase - convoy-live-group - SOTHIK LINK =====
+var firebaseConfig = {
+  apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
+  authDomain: "convoy-live-group.firebaseapp.com",
+  databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "convoy-live-group",
+  storageBucket: "convoy-live-group.firebasestorage.app",
+  messagingSenderId: "705067687114",
+  appId: "1:705067687114:web:37468ab2617dd0915b2833"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+// =============================================================
 
-  // কনভয় গ্রুপ থেকে মেম্বার নেওয়া - একই চাবি
-  var members = JSON.parse(localStorage.getItem('convoyMembersNew')||'[]');
-  document.getElementById('totalText').innerText = members.length + " জন";
+var map = L.map('map').setView([23.8103,90.4125],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+var markers={};
+var groupCode="", amarSenaNo="";
 
-  // চিপ লিস্ট - উপরে নাম দেখাইবো
-  var chipDiv = document.getElementById('chipList');
-  members.forEach(function(m,i){
-    var s=document.createElement('span');
-    s.className='chip';
-    s.innerText = "#"+m.serial+" "+m.padobi+" "+m.name;
-    s.onclick=function(){ map.setView([23.8103 + i*0.004, 90.4125 + i*0.004], 16); };
-    chipDiv.appendChild(s);
-  });
+function joinGroup(){
+  groupCode=document.getElementById('groupCode').value.trim().toUpperCase();
+  amarSenaNo=document.getElementById('amarSenaNo').value.trim();
+  if(!groupCode||!amarSenaNo){ alert("গ্রুপ কোড আর সেনা নং দাও"); return; }
+  document.getElementById('statusText').innerText="গ্রুপে ঢুকছো: "+groupCode+" | লাইভ চালু...";
 
-  // ম্যাপে মেম্বার দেখানো
-  function convoyDekhao(myLat, myLng){
-    // পুরানো মার্কার মুছে ফেলো
-    convoyMarkers.forEach(function(mk){ map.removeLayer(mk); });
-    convoyMarkers=[];
-    if(convoyLine) map.removeLayer(convoyLine);
-
+  db.ref('convoy/'+groupCode+'/locations').on('value', function(snap){
+    var data=snap.val()||{};
+    var count=Object.keys(data).length;
+    document.getElementById('totalText').innerText=count+" জন অনলাইন";
+    var chipDiv=document.getElementById('chipList'); chipDiv.innerHTML="";
+    for(var k in markers){ map.removeLayer(markers[k]); }
+    markers={};
     var points=[];
-    // তোমার লোকেশন না থাকলে ঢাকা ধরবো
-    var baseLat = myLat || 23.8103;
-    var baseLng = myLng || 90.4125;
-
-    members.forEach(function(m,i){
-      // লাইভে প্রতিটা গাড়ি একটার পিছে আরেকটা থাকবো - ৩০০ মিটার পিছে
-      var lat = baseLat - (i * 0.0025);
-      var lng = baseLng - (i * 0.0025);
-      points.push([lat,lng]);
-
-      var iconHtml = '<div class="'+(i==0?'leadIcon':'numIcon')+'">'+m.serial+'</div>';
-      var icon = L.divIcon({html:iconHtml, className:'', iconSize:[34,34], iconAnchor:[17,17]});
-
-      var marker = L.marker([lat,lng], {icon:icon}).addTo(map);
-      marker.bindPopup("<b>#"+m.serial+" "+m.padobi+" "+m.name+"</b><br>সেনা নং: "+m.senaNo+"<br>বি এ নং: "+m.baNo+"<br>গাড়ির প্রকার: "+m.garirProkar+"<br>মোবাইল: "+m.phone+"<br>মন্তব্য: "+m.montobbo+"<br>● অনলাইন • স্পিড: "+(15+i*5)+" km/h");
-      convoyMarkers.push(marker);
+    Object.values(data).forEach(function(u){
+      points.push([u.lat,u.lng]);
+      var chip=document.createElement('span');
+      chip.className='chip';
+      chip.innerText="#"+u.serial+" "+u.name+" ●";
+      chipDiv.appendChild(chip);
+      var iconHtml='<div class="'+(u.serial==1?'leadIcon':'numIcon')+'">'+u.serial+'</div>';
+      var icon=L.divIcon({html:iconHtml,className:'',iconSize:[34,34],iconAnchor:[17,17]});
+      var mk=L.marker([u.lat,u.lng],{icon:icon}).addTo(map);
+      mk.bindPopup("<b>#"+u.serial+" "+u.name+"</b><br>সেনা নং: "+u.senaNo+"<br>গাড়ি: "+u.gari+"<br>স্পিড: "+u.speed+" km/h<br>আপডেট: "+u.time);
+      markers[u.senaNo]=mk;
     });
+    if(points.length>1){ L.polyline(points,{color:'#2563eb',weight:4,dashArray:'8,6'}).addTo(map); }
+  });
+  setInterval(amarLocationPathao, 5000);
+  amarLocationPathao();
+}
 
-    // সব গাড়ি একটা লাইন দিয়া জোড়া - কনভয় লাইন
-    if(points.length>1){
-      convoyLine = L.polyline(points, {color:'#2563eb', weight:4, dashArray:'8, 6'}).addTo(map);
-      map.fitBounds(convoyLine.getBounds(), {padding:[60,60]});
-    }
-  }
-
-  // প্রথমে মেম্বার দেখাও
-  convoyDekhao();
-
-  function amarLocation(){
-    navigator.geolocation.getCurrentPosition(function(pos){
-      var lat=pos.coords.latitude, lng=pos.coords.longitude, acc=Math.round(pos.coords.accuracy);
-      var speed = pos.coords.speed ? Math.round(pos.coords.speed*3.6) : 0;
-      document.getElementById('latText').innerText=lat.toFixed(6);
-      document.getElementById('lngText').innerText=lng.toFixed(6);
-      document.getElementById('accText').innerText=acc+" মিটার • স্পিড: "+speed+" km/h";
-      if(amarDot) map.removeLayer(amarDot);
-      if(amarCircle) map.removeLayer(amarCircle);
-      amarCircle=L.circle([lat,lng],{radius:acc,color:'#3b82f6',fillColor:'#3b82f6',fillOpacity:0.15,weight:1}).addTo(map);
-      amarDot=L.circleMarker([lat,lng],{radius:9,color:'white',weight:3,fillColor:'#2563eb',fillOpacity:1}).addTo(map);
-      // তোমার লোকেশনকে #১ ধরেই বাকিদের পিছনে বসাই দিলাম
-      convoyDekhao(lat, lng);
-    },function(){ alert("Allow দাও দোস্ত"); },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
-  }
-
-  function khujo(){
-    var q=document.getElementById('searchInput').value;
-    if(!q){ alert("জায়গার নাম লেখো দোস্ত"); return; }
-    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q))
-    .then(function(r){ return r.json(); }).then(function(data){
-      if(data.length==0){ alert("পাইলাম না দোস্ত"); return; }
-      var lat=parseFloat(data[0].lat), lon=parseFloat(data[0].lon);
-      if(searchMarker) map.removeLayer(searchMarker);
-      searchMarker=L.marker([lat,lon]).addTo(map);
-      map.setView([lat,lon],16);
+function amarLocationPathao(){
+  if(!groupCode) return;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat=pos.coords.latitude, lng=pos.coords.longitude;
+    var speed=pos.coords.speed?Math.round(pos.coords.speed*3.6):0;
+    document.getElementById('latText').innerText=lat.toFixed(6);
+    document.getElementById('lngText').innerText=lng.toFixed(6);
+    var members=JSON.parse(localStorage.getItem('convoyMembersNew')||'[]');
+    var ami=members.find(function(m){ return m.senaNo==amarSenaNo; })||{name:"সৈনিক",serial:99,garirProkar:"পিকআপ"};
+    db.ref('convoy/'+groupCode+'/locations/'+amarSenaNo).set({
+      senaNo:amarSenaNo, name:ami.name, serial:ami.serial, gari:ami.garirProkar,
+      lat:lat, lng:lng, speed:speed, time:new Date().toLocaleTimeString('bn-BD')
     });
-  }
-
-  // ৫ সেকেন্ড পর পর রিফ্রেশ - কেউ নতুন অ্যাড হইলে ম্যাপে চইলা আসবো
-  setInterval(function(){
-    var fresh = JSON.parse(localStorage.getItem('convoyMembersNew')||'[]');
-    if(fresh.length !== members.length){ location.reload(); }
-  }, 5000);
-
-  window.addEventListener('load', function(){ setTimeout(function(){ amarLocation(); }, 600); });
+  },function(){},{enableHighAccuracy:true});
+}
 </script>
 </body>
 </html>
