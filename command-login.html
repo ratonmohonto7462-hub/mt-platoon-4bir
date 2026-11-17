@@ -2,10 +2,11 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
 window.loginUser = async function(){
   let m=document.getElementById("mobile").value.trim();
   let s=document.getElementById("sena_no").value.trim();
@@ -13,13 +14,41 @@ window.loginUser = async function(){
   if(!m||!s||!p){alert("সব ঘর পূরণ করো");return;}
   document.getElementById("loginBtn").innerText="Checking...";
   try{
+    let u=null, foundIn="";
+    // ১. users collection এ doc id দিয়া খোঁজা
     let snap=await getDoc(doc(db,"users",s));
-    if(!snap.exists()){alert("❌ Account নাই! আগে Create one চাপো");document.getElementById("loginBtn").innerText="LOGIN";return;}
-    let u=snap.data();
-    if(u.mobile!==m){alert("❌ মোবাইল মিলে নাই!\nAccount এর মোবাইল: "+u.mobile+"\nতুমি দিছো: "+m);document.getElementById("loginBtn").innerText="LOGIN";return;}
-    if(u.password!==p){alert("❌ Password ভুল!");document.getElementById("loginBtn").innerText="LOGIN";return;}
-    if(u.status!=="approved"){alert("⏳ অ্যাডমিন এখনো Approve করে নাই। Status: "+u.status);document.getElementById("loginBtn").innerText="LOGIN";return;}
-    localStorage.setItem("mobile",m);localStorage.setItem("sena_no",s);localStorage.setItem("mt_army",s);localStorage.setItem("mt_name",u.name||"");localStorage.setItem("mt_profile_login","true");localStorage.setItem("mt_role",u.role||"Soldier");
+    if(snap.exists()){ u=snap.data(); foundIn="users / doc-id"; }
+    // ২. members collection এ খোঁজা
+    if(!u){ let s2=await getDoc(doc(db,"members",s)); if(s2.exists()){ u=s2.data(); foundIn="members / doc-id"; } }
+    // ৩. users এ sena_no field দিয়া খোঁজা
+    if(!u){ let q=query(collection(db,"users"), where("sena_no","==",s)); let qs=await getDocs(q); if(!qs.empty){ u=qs.docs[0].data(); foundIn="users / sena_no field"; } }
+    // ৪. members এ sena_no field দিয়া খোঁজা
+    if(!u){ let q=query(collection(db,"members"), where("sena_no","==",s)); let qs=await getDocs(q); if(!qs.empty){ u=qs.docs[0].data(); foundIn="members / sena_no field"; } }
+
+    if(!u){
+      alert("❌ এই সেনা নং দিয়া কোনো Account পাইলাম না!\nতুমি দিছো: "+s+"\n\nআগে Create one দিয়া Account বানাইতে হইবো।");
+      document.getElementById("loginBtn").innerText="LOGIN"; return;
+    }
+
+    // Firebase এ আসলে কি আছে দেখাও - এইটাই আসল রহস্য
+    let dbMobile = u.mobile || u.phone || u.mobileNo || "(খালি)";
+    let dbPass = u.password || u.pass || u.pwd || "(খালি)";
+    let dbStatus = u.status || u.approved || "(status নাই)";
+
+    if(String(dbMobile).trim() !== m){
+      alert("❌ মোবাইল মিলে নাই!\n\nFirebase এ সেভ আছে: "+dbMobile+"\nতুমি দিছো: "+m+"\nপাইছি: "+foundIn+"\n\nমোবাইলটা ঠিক কইরা দাও।");
+      document.getElementById("loginBtn").innerText="LOGIN"; return;
+    }
+    if(String(dbPass).trim() !== p){
+      alert("❌ Password মিলে নাই!\n\nFirebase এ সেভ আছে: "+dbPass+"\nতুমি দিছো: "+p+"\nপাইছি: "+foundIn);
+      document.getElementById("loginBtn").innerText="LOGIN"; return;
+    }
+    if(dbStatus!=="approved" && dbStatus!==true && dbStatus!=="Approved"){
+      alert("⏳ Approve হয় নাই!\nStatus: "+dbStatus+"\n\nAdmin এ গিয়া Approve করো।");
+      document.getElementById("loginBtn").innerText="LOGIN"; return;
+    }
+
+    localStorage.setItem("mobile",m);localStorage.setItem("sena_no",s);localStorage.setItem("mt_army",s);localStorage.setItem("mt_name",u.name||u.fullName||"");localStorage.setItem("mt_profile_login","true");localStorage.setItem("mt_role",u.role||"Soldier");
     alert("✅ স্বাগতম "+(u.name||"")+"!");
     window.location.replace("home.html");
   }catch(e){alert("Error: "+e.message);document.getElementById("loginBtn").innerText="LOGIN";}
