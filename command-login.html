@@ -1,1 +1,27 @@
-l<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login</title><style>body{margin:0;font-family:system-ui;background:#0a1a12;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}.box{width:90%;max-width:360px;background:#143d27;padding:25px;border-radius:16px;border:1px solid #2a5a3a}input{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #2a5a3a;background:#0a1a12;color:#fff}button{width:100%;padding:13px;background:#00c853;color:#000;font-weight:800;border:none;border-radius:8px;cursor:pointer}</style></head><body><div class="box"><h3 style="text-align:center">4 BIR - MT PLATOON LOGIN</h3><input id="mobile" placeholder="Mobile Number"><input id="sena_no" placeholder="Sena No - 4521328"><input id="pwd" type="password" placeholder="Password"><button onclick="loginUser()">LOGIN</button></div><script>function loginUser(){let m=document.getElementById("mobile").value.trim();let s=document.getElementById("sena_no").value.trim();let p=document.getElementById("pwd").value.trim();if(!m||!s||!p){alert("সব ঘর পূরণ করো");return;}localStorage.setItem("mobile",m);localStorage.setItem("sena_no",s);localStorage.setItem("mt_army",s);localStorage.setItem("mt_profile_login","true");window.location.replace("home.html");}</script></body></html>
+<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login</title><style>body{margin:0;font-family:system-ui;background:#0a1a12;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}.box{width:90%;max-width:360px;background:#143d27;padding:25px;border-radius:16px;border:1px solid #2a5a3a}input{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #2a5a3a;background:#0a1a12;color:#fff}button{width:100%;padding:13px;background:#00c853;color:#000;font-weight:800;border:none;border-radius:8px;cursor:pointer}</style></head><body><div class="box"><h3 style="text-align:center">4 BIR - MT PLATOON LOGIN</h3><input id="mobile" placeholder="Mobile Number"><input id="sena_no" placeholder="Sena No - 4521328"><input id="pwd" type="password" placeholder="Password"><button id="loginBtn" onclick="loginUser()">LOGIN</button><p style="text-align:center;font-size:13px;margin-top:12px">Account নাই? <a href="create-profile.html" style="color:#00c853">Create one</a></p></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+window.loginUser = async function(){
+  let m=document.getElementById("mobile").value.trim();
+  let s=document.getElementById("sena_no").value.trim();
+  let p=document.getElementById("pwd").value.trim();
+  if(!m||!s||!p){alert("সব ঘর পূরণ করো");return;}
+  document.getElementById("loginBtn").innerText="Checking...";
+  try{
+    let snap=await getDoc(doc(db,"users",s));
+    if(!snap.exists()){alert("❌ Account নাই! আগে Create one চাপো");document.getElementById("loginBtn").innerText="LOGIN";return;}
+    let u=snap.data();
+    if(u.mobile!==m){alert("❌ মোবাইল মিলে নাই!\nAccount এর মোবাইল: "+u.mobile+"\nতুমি দিছো: "+m);document.getElementById("loginBtn").innerText="LOGIN";return;}
+    if(u.password!==p){alert("❌ Password ভুল!");document.getElementById("loginBtn").innerText="LOGIN";return;}
+    if(u.status!=="approved"){alert("⏳ অ্যাডমিন এখনো Approve করে নাই। Status: "+u.status);document.getElementById("loginBtn").innerText="LOGIN";return;}
+    localStorage.setItem("mobile",m);localStorage.setItem("sena_no",s);localStorage.setItem("mt_army",s);localStorage.setItem("mt_name",u.name||"");localStorage.setItem("mt_profile_login","true");localStorage.setItem("mt_role",u.role||"Soldier");
+    alert("✅ স্বাগতম "+(u.name||"")+"!");
+    window.location.replace("home.html");
+  }catch(e){alert("Error: "+e.message);document.getElementById("loginBtn").innerText="LOGIN";}
+}
+</script></body></html>
