@@ -1,1 +1,76 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>Create Profile</title> <style>body{margin:0;font-family:sans-serif;background:#fff;padding:24px}input,select{width:100%;border:none;border-bottom:2px solid #111;padding:12px 0;font-size:18px;outline:none;margin:8px 0 18px;background:transparent}button{width:100%;background:#111;color:#fff;border:none;padding:16px;border-radius:50px;font-size:20px;font-weight:bold;cursor:pointer}.picBox{text-align:center;margin:10px 0 20px}.picBox img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #111;background:#eee}.picBtn{display:inline-block;background:#eee;padding:10px 20px;border-radius:30px;font-weight:bold;cursor:pointer;margin-top:8px}#msg{color:red;text-align:center;margin-top:10px;font-weight:bold;display:none}#ok{color:green;text-align:center;margin-top:10px;font-weight:bold;display:none}</style></head><body> <h1>Create Profile</h1> <div class="picBox"> <img id="preview" src="https://via.placeholder.com/120?text=Photo"> <br><label class="picBtn" for="photo">📸 ছবি Add করো</label> <input type="file" id="photo" accept="image/*" style="display:none"> <div style="font-size:12px;color:#888;margin-top:5px">ছবি দিলে সবাই দেখতে পারবো</div> </div> <input id="sena" placeholder="Army Number" inputmode="numeric"> <input id="name" placeholder="Name"> <input id="mobile" placeholder="Mobile" inputmode="numeric"> <input id="pass" type="password" placeholder="Password"> <input id="company" placeholder="Company - যেমন: A Coy, B Coy"> <input id="unit" placeholder="Unit - যেমন: 4 BIR"> <select id="blood"><option value="">Blood Group - Select করো</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select> <button onclick="createAcc()" id="btn">Create Account</button> <div id="msg"></div><div id="ok"></div> <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script> <script> var firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" }; if(!firebase.apps.length) firebase.initializeApp(firebaseConfig); var db=firebase.firestore(); var photoBase64 = ""; document.getElementById('photo').addEventListener('change', function(e){ var file = e.target.files[0]; if(!file) return; var reader = new FileReader(); reader.onload = function(ev){ var img = new Image(); img.onload = function(){ var canvas = document.createElement('canvas'); var max = 300; var w=img.width, h=img.height; if(w>h){ if(w>max){h=h*max/w; w=max;} } else { if(h>max){w=w*max/h; h=max;} } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); photoBase64 = canvas.toDataURL('image/jpeg', 0.7); document.getElementById('preview').src = photoBase64; }; img.src = ev.target.result; }; reader.readAsDataURL(file); }); async function createAcc(){ var sena=document.getElementById('sena').value.trim(); var name=document.getElementById('name').value.trim(); var mobile=document.getElementById('mobile').value.trim(); var pass=document.getElementById('pass').value.trim(); var company=document.getElementById('company').value.trim(); var unit=document.getElementById('unit').value.trim(); var blood=document.getElementById('blood').value; var msg=document.getElementById('msg'), ok=document.getElementById('ok'), btn=document.getElementById('btn'); msg.style.display='none'; ok.style.display='none'; if(!sena||!name||!mobile||!pass){msg.style.display='block';msg.innerText='Army, Name, Mobile, Password লাগবোই';return;} btn.innerText='Creating...'; btn.disabled=true; try{ await db.collection('users').doc(sena).set({ sena:sena, name:name, mobile:mobile, pass:pass, company:company, unit:unit, blood:blood, photo: photoBase64, podobi:"", status:'approved', createdAt: new Date().toISOString() }); ok.style.display='block'; ok.innerText='✅ Profile হইছে! Pic সহ Save হইছে!'; setTimeout(()=>{location.href='dashboard.html';},800); }catch(e){msg.style.display='block';msg.innerText='Error: '+e.message; btn.innerText='Create Account'; btn.disabled=false;} } </script></body></html>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>Create Profile</title>
+<style>body{margin:0;font-family:sans-serif;background:#fff;padding:24px}input,select{width:100%;border:none;border-bottom:2px solid #111;padding:12px 0;font-size:18px;outline:none;margin:8px 0 18px;background:transparent}button{width:100%;background:#111;color:#fff;border:none;padding:16px;border-radius:50px;font-size:20px;font-weight:bold;cursor:pointer}.picBox{text-align:center;margin:10px 0 20px}.picBox img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #111;background:#eee}.picBtn{display:inline-block;background:#eee;padding:10px 20px;border-radius:30px;font-weight:bold;cursor:pointer;margin-top:8px}#msg{color:red;text-align:center;margin-top:10px;font-weight:bold;display:none}#ok{color:green;text-align:center;margin-top:10px;font-weight:bold;display:none}</style></head><body>
+<h1>Create Profile</h1>
+<div class="picBox">
+<img id="preview" src="https://via.placeholder.com/120?text=Photo">
+<br><label class="picBtn" for="photo">📸 ছবি Add করো</label>
+<input type="file" id="photo" accept="image/*" style="display:none">
+<div style="font-size:12px;color:#888;margin-top:5px">ছবি দিলে সবাই দেখতে পারবো</div>
+</div>
+<input id="sena" placeholder="Army Number" inputmode="numeric">
+<input id="name" placeholder="Name">
+<input id="podobi" placeholder="Podobi - যেমন: Sainik, Corporal">
+<input id="mobile" placeholder="Mobile" inputmode="numeric">
+<input id="pass" type="password" placeholder="Password">
+<input id="company" placeholder="Company - যেমন: A Coy, B Coy">
+<input id="unit" placeholder="Unit - যেমন: 4 BIR">
+<select id="blood"><option value="">Blood Group - Select করো</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select>
+<button onclick="createAcc()" id="btn">Create Account</button>
+<div id="msg"></div><div id="ok"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+var firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDomain: "mt-messenger-63922.firebaseapp.com", projectId: "mt-messenger-63922", storageBucket: "mt-messenger-63922.firebasestorage.app", messagingSenderId: "184454055809", appId: "1:184454055809:web:4d24320f792d7e86fdca80", measurementId: "G-E1M0WH2RD9" };
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+var db=firebase.firestore();
+var photoBase64 = "";
+document.getElementById('photo').addEventListener('change', function(e){ var file = e.target.files[0]; if(!file) return; var reader = new FileReader(); reader.onload = function(ev){ var img = new Image(); img.onload = function(){ var canvas = document.createElement('canvas'); var max = 300; var w=img.width, h=img.height; if(w>h){ if(w>max){h=h*max/w; w=max;} } else { if(h>max){w=w*max/h; h=max;} } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); photoBase64 = canvas.toDataURL('image/jpeg', 0.7); document.getElementById('preview').src = photoBase64; }; img.src = ev.target.result; }; reader.readAsDataURL(file); });
+
+// FIX: বাংলা সংখ্যা -> ইংরেজি, +88 বাদ
+function cleanNum(s){ return String(s||"").replace(/[০-৯]/g,function(d){return "০১২৩৪৫৬৭৮৯".indexOf(d)}).replace(/^\+?88/,'').replace(/\D/g,''); }
+function cleanPass(s){ return String(s||"").replace(/[০-৯]/g,function(d){return "০১২৩৪৫৬৭৮৯".indexOf(d)}).trim(); }
+
+async function createAcc(){
+ var sena=cleanNum(document.getElementById('sena').value);
+ var name=document.getElementById('name').value.trim();
+ var podobi=document.getElementById('podobi').value.trim();
+ var mobile=cleanNum(document.getElementById('mobile').value);
+ var pass=cleanPass(document.getElementById('pass').value);
+ var company=document.getElementById('company').value.trim();
+ var unit=document.getElementById('unit').value.trim();
+ var blood=document.getElementById('blood').value;
+ var msg=document.getElementById('msg'), ok=document.getElementById('ok'), btn=document.getElementById('btn');
+ msg.style.display='none'; ok.style.display='none';
+ if(!sena||!name||!mobile||!pass){msg.style.display='block';msg.innerText='Army, Name, Mobile, Password লাগবোই';return;}
+ btn.innerText='Creating...'; btn.disabled=true;
+ try{
+  await db.collection('users').doc(sena).set({
+   sena:sena,
+   sena_no:sena,
+   army:sena,
+   army_no:sena,
+   name:name,
+   Name:name,
+   mobile:mobile,
+   Mobile:mobile,
+   pass:pass,
+   password:pass,
+   Password:pass,
+   company:company,
+   Company:company,
+   unit:unit,
+   blood:blood,
+   Blood:blood,
+   photo: photoBase64,
+   podobi:podobi,
+   rank:podobi,
+   role:podobi,
+   status:'approved',
+   createdAt: new Date().toISOString()
+  });
+  ok.style.display='block'; ok.innerText='✅ Profile হইছে! Pic সহ Save হইছে!';
+  setTimeout(()=>{location.href='index.html';},800);
+ }catch(e){msg.style.display='block';msg.innerText='Error: '+e.message; btn.innerText='Create Account'; btn.disabled=false;}
+}
+</script></body></html>
