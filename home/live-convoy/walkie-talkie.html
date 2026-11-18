@@ -8,22 +8,10 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh}
 #top{background:#0f2e2a;color:#facc15;padding:10px;width:100%;text-align:center;font-weight:800;position:fixed;top:0}
-#talkBox{
-  display:none;
-  position:fixed;top:60px;left:50%;transform:translateX(-50%);
-  background:#000;color:#ef4444;
-  border:3px solid #facc15;
-  padding:10px 22px;border-radius:10px;
-  font-weight:900;font-size:22px;text-align:center;line-height:1.2;z-index:999;
-}
+#talkBox{display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#000;color:#ef4444;border:3px solid #facc15;padding:10px 22px;border-radius:10px;font-weight:900;font-size:22px;text-align:center;line-height:1.2;z-index:999}
 #talkBox.talking{border-color:#22c55e;box-shadow:0 0 25px #22c55e}
 #status{margin-top:60px;color:#22c55e;font-weight:700;text-align:center;padding:0 15px}
-#btn{
-  margin-top:30px;width:200px;height:200px;border-radius:50%;
-  border:6px solid #facc15;
-  background:#000;object-fit:cover;
-  box-shadow:0 0 30px #00000080;cursor:pointer;user-select:none;touch-action:none
-}
+#btn{margin-top:30px;width:200px;height:200px;border-radius:50%;border:6px solid #facc15;background:#000;object-fit:cover;box-shadow:0 0 30px #00000080;cursor:pointer;user-select:none;touch-action:none}
 #btn.talking{border-color:#22c55e;box-shadow:0 0 40px #22c55e;transform:scale(0.92)}
 #users{margin-top:20px;color:#aaa;font-size:13px}
 </style>
@@ -36,21 +24,13 @@ body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-directio
 <div id="talkBox">MT<br>WALKIE</div>
 <div id="status">● CONNECTING...</div>
 
-<!-- 1 নম্বর - আসল ওয়াকিটকি, PNG সেভ লাগবে না -->
-<img id="btn" src="https://img.icons8.com/color/240/walkie-talkie.png" alt="walkie">
+<!-- চেঞ্জ করা হইছে - এখন তোমার লোগো -->
+<img id="btn" src="logo.png" alt="4 BIR MT Logo">
 
 <div id="users">Channel: CONVOY-01</div>
 <div id="audioBox"></div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
-  authDomain: "convoy-live-group.firebaseapp.com",
-  databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "convoy-live-group",
-  storageBucket: "convoy-live-group.firebasestorage.app",
-  messagingSenderId: "705067687114",
-  appId: "1:705067687114:web:6c0687162a3604cc5b2833"
-};
+const firebaseConfig = { apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc", authDomain: "convoy-live-group.firebaseapp.com", databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "convoy-live-group", storageBucket: "convoy-live-group.firebasestorage.app", messagingSenderId: "705067687114", appId: "1:705067687114:web:6c0687162a3604cc5b2833" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 let myArmy = localStorage.getItem('mt_login') || '4521328';
@@ -60,29 +40,28 @@ const usersEl = document.getElementById('users');
 const talkBox = document.getElementById('talkBox');
 let peer, localStream, calls = [];
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-  localStream = stream;
-  statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
-  peer = new Peer('mt-'+myArmy);
-  peer.on('open', ()=>{
-    statusEl.innerText = "● LIVE - "+myArmy+" | READY TO TALK";
-    db.ref('walkie/CONVOY-01/'+myArmy).set({army:myArmy, online:true});
-  });
-  peer.on('call', call=>{
-    call.answer(localStream);
-    call.on('stream', s=>{
-      let a = document.createElement('audio');
-      a.srcObject = s; a.autoplay = true; a.play();
-      document.getElementById('audioBox').appendChild(a);
-    });
-  });
+localStream = stream;
+statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
+peer = new Peer('mt-'+myArmy);
+peer.on('open', ()=>{
+statusEl.innerText = "● LIVE - "+myArmy+" | READY TO TALK";
+db.ref('walkie/CONVOY-01/'+myArmy).set({army:myArmy, online:true});
+});
+peer.on('call', call=>{
+call.answer(localStream);
+call.on('stream', s=>{
+let a = document.createElement('audio'); a.srcObject = s; a.autoplay = true; a.play();
+document.getElementById('audioBox').appendChild(a);
+});
+});
 }).catch(()=>{
-  statusEl.innerText = "● MIC PERMISSION DEN - ALLOW MIC";
-  statusEl.style.color = "red";
+statusEl.innerText = "● MIC PERMISSION DEN - ALLOW MIC";
+statusEl.style.color = "red";
 });
 db.ref('walkie/CONVOY-01').on('value', snap=>{
-  let data = snap.val() || {};
-  let list = Object.keys(data);
-  usersEl.innerText = list.length + " Trucks Online - Channel: CONVOY-01 | " + list.join(', ');
+let data = snap.val() || {};
+let list = Object.keys(data);
+usersEl.innerText = list.length + " Trucks Online - Channel: CONVOY-01 | " + list.join(', ');
 });
 let isTalking = false;
 btn.addEventListener('touchstart', startTalk);
@@ -90,37 +69,37 @@ btn.addEventListener('mousedown', startTalk);
 btn.addEventListener('touchend', stopTalk);
 btn.addEventListener('mouseup', stopTalk);
 function startTalk(e){
-  e.preventDefault();
-  if(isTalking || !peer || !localStream) return;
-  isTalking = true;
-  btn.classList.add('talking');
-  talkBox.style.display = 'block';
-  talkBox.classList.add('talking');
-  statusEl.innerText = "● BROADCASTING TO ALL TRUCKS...";
-  statusEl.style.color = "#facc15";
-  db.ref('walkie/CONVOY-01').once('value', snap=>{
-    let users = snap.val() || {};
-    for(let army in users){
-      if(army != myArmy){
-        let call = peer.call('mt-'+army, localStream);
-        if(call) calls.push(call);
-      }
-    }
-  });
-  db.ref('walkie/CONVOY-01/status').set({talking:true, by:myArmy, time:Date.now()});
+e.preventDefault();
+if(isTalking || !peer || !localStream) return;
+isTalking = true;
+btn.classList.add('talking');
+talkBox.style.display = 'block';
+talkBox.classList.add('talking');
+statusEl.innerText = "● BROADCASTING TO ALL TRUCKS...";
+statusEl.style.color = "#facc15";
+db.ref('walkie/CONVOY-01').once('value', snap=>{
+let users = snap.val() || {};
+for(let army in users){
+if(army != myArmy){
+let call = peer.call('mt-'+army, localStream);
+if(call) calls.push(call);
+}
+}
+});
+db.ref('walkie/CONVOY-01/status').set({talking:true, by:myArmy, time:Date.now()});
 }
 function stopTalk(e){
-  if(e) e.preventDefault();
-  if(!isTalking) return;
-  isTalking = false;
-  btn.classList.remove('talking');
-  talkBox.style.display = 'none';
-  talkBox.classList.remove('talking');
-  statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
-  statusEl.style.color = "#22c55e";
-  calls.forEach(c=>{ try{c.close()}catch(e){} });
-  calls = [];
-  db.ref('walkie/CONVOY-01/status').set({talking:false, by:myArmy, time:Date.now()});
+if(e) e.preventDefault();
+if(!isTalking) return;
+isTalking = false;
+btn.classList.remove('talking');
+talkBox.style.display = 'none';
+talkBox.classList.remove('talking');
+statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
+statusEl.style.color = "#22c55e";
+calls.forEach(c=>{ try{c.close()}catch(e){} });
+calls = [];
+db.ref('walkie/CONVOY-01/status').set({talking:false, by:myArmy, time:Date.now()});
 }
 </script>
 </body>
