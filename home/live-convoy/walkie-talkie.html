@@ -8,8 +8,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh}
 #top{background:#0f2e2a;color:#facc15;padding:10px;width:100%;text-align:center;font-weight:800;position:fixed;top:0}
-
-/* === নতুন - চাপ দিলে উপরে MT WALKIE ঘরটা === */
 #talkBox{
   display:none;
   position:fixed;top:60px;left:50%;transform:translateX(-50%);
@@ -19,18 +17,14 @@ body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-directio
   font-weight:900;font-size:22px;text-align:center;line-height:1.2;z-index:999;
 }
 #talkBox.talking{border-color:#22c55e;box-shadow:0 0 25px #22c55e}
-
 #status{margin-top:60px;color:#22c55e;font-weight:700;text-align:center;padding:0 15px}
-
-/* === নতুন - লাল বাটনের বদলে ওয়াকিটকির ছবি === */
 #btn{
   margin-top:30px;width:200px;height:200px;border-radius:50%;
-  border:6px solid #facc15; /* আগে সাদা ছিলো, এখন হলুদ */
+  border:6px solid #facc15;
   background:#000;object-fit:cover;
   box-shadow:0 0 30px #00000080;cursor:pointer;user-select:none;touch-action:none
 }
 #btn.talking{border-color:#22c55e;box-shadow:0 0 40px #22c55e;transform:scale(0.92)}
-
 #users{margin-top:20px;color:#aaa;font-size:13px}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -39,19 +33,15 @@ body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-directio
 </head>
 <body>
 <div id="top">📻 MT PLATOON 4 BIR - WALKIE TALKIE</div>
-
-<!-- নতুন - চাপ দিলে এইটা দেখাবে -->
 <div id="talkBox">MT<br>WALKIE</div>
-
 <div id="status">● CONNECTING...</div>
 
-<!-- আগে ছিলো <button> এখন <img> - id একই btn রাখছি যাতে JS না ভাঙে -->
-<img id="btn" src="walkie.png" alt="walkie">
+<!-- PNG সেভ লাগবে না, লিংক দিয়া ছবি আসবে -->
+<img id="btn" src="https://cdn-icons-png.flaticon.com/512/10826/10826123.png" alt="walkie">
 
 <div id="users">Channel: CONVOY-01</div>
 <div id="audioBox"></div>
 <script>
-// === 1. তোমার আসল Firebase - Demo টা বাদ দেওয়া হইছে ===
 const firebaseConfig = {
   apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
   authDomain: "convoy-live-group.firebaseapp.com",
@@ -63,14 +53,12 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-// === 2. লগইন করা সেনাকে চিনো ===
 let myArmy = localStorage.getItem('mt_login') || '4521328';
 const statusEl = document.getElementById('status');
 const btn = document.getElementById('btn');
 const usersEl = document.getElementById('users');
 const talkBox = document.getElementById('talkBox');
 let peer, localStream, calls = [];
-// === 3. অটো জয়েন - ম্যাপে ঢুকলেই জয়েন ===
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
   localStream = stream;
   statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
@@ -79,7 +67,6 @@ navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
     statusEl.innerText = "● LIVE - "+myArmy+" | READY TO TALK";
     db.ref('walkie/CONVOY-01/'+myArmy).set({army:myArmy, online:true});
   });
-  // কেউ কথা বললে শোনো
   peer.on('call', call=>{
     call.answer(localStream);
     call.on('stream', s=>{
@@ -92,13 +79,11 @@ navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
   statusEl.innerText = "● MIC PERMISSION DEN - ALLOW MIC";
   statusEl.style.color = "red";
 });
-// কারা অনলাইন আছে দেখাও
 db.ref('walkie/CONVOY-01').on('value', snap=>{
   let data = snap.val() || {};
   let list = Object.keys(data);
   usersEl.innerText = list.length + " Trucks Online - Channel: CONVOY-01 | " + list.join(', ');
 });
-// === 4. আসল ভয়েস - PUSH TO TALK ===
 let isTalking = false;
 btn.addEventListener('touchstart', startTalk);
 btn.addEventListener('mousedown', startTalk);
@@ -108,7 +93,6 @@ function startTalk(e){
   e.preventDefault();
   if(isTalking || !peer || !localStream) return;
   isTalking = true;
-  // === নতুন - ছবি সবুজ + উপরে MT WALKIE ===
   btn.classList.add('talking');
   talkBox.style.display = 'block';
   talkBox.classList.add('talking');
@@ -123,14 +107,12 @@ function startTalk(e){
       }
     }
   });
-  // Firebase এও স্ট্যাটাস পাঠাও
   db.ref('walkie/CONVOY-01/status').set({talking:true, by:myArmy, time:Date.now()});
 }
 function stopTalk(e){
   if(e) e.preventDefault();
   if(!isTalking) return;
   isTalking = false;
-  // === নতুন - আবার হলুদ + MT WALKIE লুকাও ===
   btn.classList.remove('talking');
   talkBox.style.display = 'none';
   talkBox.classList.remove('talking');
