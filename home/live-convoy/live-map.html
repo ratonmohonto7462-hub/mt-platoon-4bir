@@ -8,43 +8,41 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;font-family:sans-serif}
 #map{height:100vh;width:100%}
-#topBar{position:fixed;top:12px;left:12px;right:12px;background:white;padding:14px;border-radius:14px;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,0.3)}
-#topBar input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px;font-size:15px}
-#topBar button{width:100%;padding:13px;background:#2563eb;color:white;border:none;border-radius:10px;font-weight:bold;margin-top:8px;font-size:16px}
-#convoyBar{position:fixed;top:185px;left:12px;right:12px;background:white;padding:10px;border-radius:12px;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,0.25)}
-.chip{display:inline-block;background:#dcfce7;color:#166534;padding:6px 10px;border-radius:20px;font-size:13px;font-weight:bold;margin:3px 2px}
-#info{position:fixed;bottom:110px;left:12px;right:12px;background:rgba(15,23,42,0.92);color:white;padding:12px;border-radius:12px;font-size:13px;z-index:1000}
+/* উপরের বক্স - একদম ছোট */
+#topBar{position:fixed;top:8px;left:8px;right:8px;background:white;padding:10px 12px;border-radius:12px;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,0.25)}
+#topBar b{font-size:15px}
+#topBar p{font-size:11px;color:#64748b;margin-top:2px}
+#topBar input{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;margin-top:6px;font-size:13px}
+#topBar button{width:100%;padding:10px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:6px;font-size:14px}
+/* কনভয় বক্স - ছোট পিল, উপরে এক লাইন */
+#convoyBar{position:fixed;top:8px;left:8px;right:8px;background:white;padding:7px 10px;border-radius:20px;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,0.2);display:none;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{display:inline-block;background:#dcfce7;color:#166534;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:bold;margin:0 2px}
+#info{display:none}
+/* WALKIE - শুধু গোল বাটন, বড় বক্স নাই */
+#walkieBtn{position:fixed;bottom:18px;right:16px;z-index:1001;width:72px;height:72px;border-radius:50%;background:radial-gradient(#ef4444,#991b1b);border:4px solid #fff;color:#fff;font-weight:900;font-size:11px;box-shadow:0 4px 14px rgba(0,0,0,0.4);touch-action:none;line-height:1.2}
+#walkieBtn:active{background:radial-gradient(#22c55e,#166534)}
+#walkieDot{position:fixed;bottom:82px;right:16px;z-index:1001;background:rgba(0,0,0,0.7);color:#facc15;font-size:11px;padding:4px 8px;border-radius:12px;display:none}
 .numIcon{background:#2563eb;color:white;border:2px solid white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px}
 .leadIcon{background:#dc2626;color:white;border:2px solid white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:bold}
-/* === WALKIE TALKIE BUTTON - ম্যাপের উপরেই === */
-#walkieBar{position:fixed;bottom:12px;left:12px;right:12px;z-index:1001;background:#0f2e2a;border-radius:14px;padding:10px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
-#walkieStatus{color:#facc15;font-size:13px;font-weight:bold}
-#walkieBtn{width:78px;height:78px;border-radius:50%;background:radial-gradient(#ef4444,#991b1b);border:4px solid #fff;color:#fff;font-weight:900;font-size:12px;touch-action:none;flex-shrink:0}
-#walkieBtn:active{background:radial-gradient(#22c55e,#166534)}
 </style>
 </head>
 <body>
 <div id="map"></div>
-<div id="topBar">
-<b style="font-size:18px">🚛 কনভয় লাইভ</b>
-<p style="color:#64748b;font-size:13px;margin-top:4px">শুধু তোমার সেনা নং দাও, বাকি সব অটো আসবো</p>
-<input id="groupCode" value="PLATOON-4" readonly style="background:#f1f5f9;color:#64748b">
-<input id="amarSenaNo" placeholder="তোমার সেনা নং দাও - যেমন 4521328" inputmode="numeric">
-<button onclick="joinGroup()">✅ লগইন করে লাইভ দেখো</button>
-<p id="welcome" style="text-align:center;font-weight:bold;color:#16a34a;margin-top:8px"></p>
-</div>
-<div id="convoyBar"><b>কনভয় - <span id="totalText">0 জন অনলাইন</span></b><div id="chipList"></div></div>
-<div id="info">নর্দিং: <b id="latText">--</b> | ইস্টিং: <b id="lngText">--</b><br><span id="statusText">সেনা নং দিয়ে লগইন করো</span></div>
 
-<!-- === WALKIE TALKIE - ম্যাপের ভিতরেই === -->
-<div id="walkieBar">
-  <div>
-    <div style="color:#fff;font-weight:800">📻 WALKIE TALKIE</div>
-    <div id="walkieStatus">● লগইন করলে অটো জয়েন হবে</div>
-    <div style="color:#aaa;font-size:11px" id="walkieUsers">Channel: PLATOON-4</div>
-  </div>
-  <button id="walkieBtn">🔴<br>PUSH<br>TALK</button>
+<div id="topBar">
+<b>🚛 কনভয় লাইভ</b>
+<p>শুধু তোমার সেনা নং দাও</p>
+<input id="amarSenaNo" placeholder="সেনা নং - যেমন 4521328" inputmode="numeric">
+<button onclick="joinGroup()">✅ লগইন</button>
+<p id="welcome" style="text-align:center;font-weight:bold;color:#16a34a;margin-top:5px"></p>
 </div>
+
+<div id="convoyBar"><b>কনভয় - <span id="totalText">0 জন</span></b> <span id="chipList"></span></div>
+<div id="info"></div>
+
+<!-- শুধু এই বাটনটাই থাকবে -->
+<div id="walkieDot">● WALKIE JOINED</div>
+<button id="walkieBtn">🔴<br>PUSH<br>TALK</button>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -65,11 +63,8 @@ var db = firebase.database();
 var map = L.map('map').setView([23.8103,90.4125],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
 var markers={}, polylines=[], groupCode="PLATOON-4", amarSenaNo="", membersMap={}, amarInfo=null;
-
-// === WALKIE VARIABLES ===
 var peer=null, localStream=null, walkieCalls=[];
 var walkieBtn=document.getElementById('walkieBtn');
-var walkieStatus=document.getElementById('walkieStatus');
 
 function joinGroup(){
   amarSenaNo=document.getElementById('amarSenaNo').value.trim();
@@ -78,18 +73,16 @@ function joinGroup(){
     var me = snap.val();
     if(!me){ alert("তোমার সেনা নং পাই নাই দোস্ত! অ্যাডমিন (জুয়েল) রে কও তোমারে অ্যাড করতে।"); return; }
     amarInfo = me;
-    document.getElementById('welcome').innerText = "আসসালামু আলাইকুম, "+me.name+" • #"+me.serial;
-    document.getElementById('statusText').innerText = "লগইন হইছে: "+me.name+" | লাইভ চালু...";
+    // লগইন হইলেই উপরের বড় বক্স গায়েব, শুধু ছোট পিল থাকবে
     document.getElementById('topBar').style.display='none';
-    document.getElementById('convoyBar').style.top='12px';
-
-    // === অটো ওয়াকিটকি জয়েন - লগইন করলেই ===
+    document.getElementById('convoyBar').style.display='block';
+    document.getElementById('walkieDot').style.display='block';
+    document.getElementById('walkieDot').innerText = "● "+me.name+" | WALKIE JOINED";
     startWalkie();
-
     db.ref('convoy/'+groupCode+'/members').on('value',function(s){ membersMap=s.val()||{}; });
     db.ref('convoy/'+groupCode+'/locations').on('value', function(snap2){
       var data=snap2.val()||{};
-      document.getElementById('totalText').innerText=Object.keys(data).length+" জন অনলাইন";
+      document.getElementById('totalText').innerText=Object.keys(data).length+" জন";
       var chipDiv=document.getElementById('chipList'); chipDiv.innerHTML="";
       for(var k in markers){ map.removeLayer(markers[k]); } markers={};
       polylines.forEach(function(p){ map.removeLayer(p); }); polylines=[];
@@ -98,7 +91,7 @@ function joinGroup(){
         var info = membersMap[u.senaNo] || {};
         var sName = info.name || "সৈনিক"; var sSerial = info.serial || 99; var sGari = info.gari || "";
         points.push([u.lat,u.lng]);
-        var chip=document.createElement('span'); chip.className='chip'; chip.innerText="#"+sSerial+" "+sName+" ●"; chipDiv.appendChild(chip);
+        var chip=document.createElement('span'); chip.className='chip'; chip.innerText="#"+sSerial+" "+sName; chipDiv.appendChild(chip);
         var isMe = (u.senaNo==amarSenaNo);
         var iconHtml='<div class="'+(sSerial==1?'leadIcon':'numIcon')+'" style="'+(isMe?'background:#16a34a;':"")+'">'+sSerial+'</div>';
         var icon=L.divIcon({html:iconHtml,className:'',iconSize:[36,36],iconAnchor:[18,18]});
@@ -112,54 +105,34 @@ function joinGroup(){
     setInterval(amarLocationPathao, 5000); amarLocationPathao();
   });
 }
-
 function amarLocationPathao(){
   if(!amarSenaNo || !amarInfo) return;
   navigator.geolocation.getCurrentPosition(function(pos){
     var lat=pos.coords.latitude, lng=pos.coords.longitude;
     var speed=pos.coords.speed?Math.round(pos.coords.speed*3.6):0;
-    document.getElementById('latText').innerText=lat.toFixed(6);
-    document.getElementById('lngText').innerText=lng.toFixed(6);
     db.ref('convoy/'+groupCode+'/locations/'+amarSenaNo).set({ senaNo:amarSenaNo, lat:lat, lng:lng, speed:speed, time:new Date().toLocaleTimeString('bn-BD') });
-  },function(){ alert("লোকেশন Allow দাও দোস্ত, নাইলে দেখা যাইবো না"); },{enableHighAccuracy:true});
+  },function(){},{enableHighAccuracy:true});
 }
-
-// === WALKIE TALKIE FUNCTION - অটো জয়েন ===
 function startWalkie(){
-  walkieStatus.innerText = "● MIC চাইতেছে...";
   navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
     localStream = stream;
     peer = new Peer('mt-'+amarSenaNo);
-    peer.on('open', function(){
-      walkieStatus.innerText = "● WALKIE JOINED - "+amarSenaNo+" | READY";
-      db.ref('walkie/'+groupCode+'/'+amarSenaNo).set({army:amarSenaNo, online:true});
-    });
+    peer.on('open', function(){ db.ref('walkie/'+groupCode+'/'+amarSenaNo).set({army:amarSenaNo, online:true}); });
     peer.on('call', function(call){
       call.answer(localStream);
-      call.on('stream', function(s){
-        var a=document.createElement('audio'); a.srcObject=s; a.autoplay=true; a.play();
-      });
+      call.on('stream', function(s){ var a=document.createElement('audio'); a.srcObject=s; a.autoplay=true; a.play(); });
     });
-    // কারা ওয়াকিটকিতে আছে
-    db.ref('walkie/'+groupCode).on('value', function(snap){
-      var d=snap.val()||{}; var list=Object.keys(d).filter(k=>k!='status');
-      document.getElementById('walkieUsers').innerText = list.length+" Trucks in Walkie - "+list.join(', ');
-    });
-  }).catch(function(){
-    walkieStatus.innerText = "● MIC ALLOW করো - না হলে কথা যাবে না";
-  });
+  }).catch(function(){ document.getElementById('walkieDot').innerText="● MIC ALLOW করো"; });
 }
-
 var isTalking=false;
 walkieBtn.addEventListener('touchstart', startTalk);
 walkieBtn.addEventListener('mousedown', startTalk);
 walkieBtn.addEventListener('touchend', stopTalk);
 walkieBtn.addEventListener('mouseup', stopTalk);
-
 function startTalk(e){
   e.preventDefault();
   if(isTalking || !peer || !localStream){ if(!localStream) alert('আগে লগইন করো + Mic Allow করো'); return; }
-  isTalking=true; walkieBtn.innerHTML="🟢<br>TALKING"; walkieStatus.innerText="● BROADCASTING TO ALL...";
+  isTalking=true; walkieBtn.innerHTML="🟢<br>TALKING"; walkieBtn.style.background="radial-gradient(#22c55e,#166534)";
   db.ref('walkie/'+groupCode).once('value', function(snap){
     var users=snap.val()||{};
     for(var a in users){ if(a!='status' && a!=amarSenaNo){ var c=peer.call('mt-'+a, localStream); if(c) walkieCalls.push(c); } }
@@ -168,7 +141,7 @@ function startTalk(e){
 function stopTalk(e){
   if(e) e.preventDefault();
   if(!isTalking) return;
-  isTalking=false; walkieBtn.innerHTML="🔴<br>PUSH<br>TALK"; walkieStatus.innerText="● WALKIE JOINED - "+amarSenaNo+" | READY";
+  isTalking=false; walkieBtn.innerHTML="🔴<br>PUSH<br>TALK"; walkieBtn.style.background="radial-gradient(#ef4444,#991b1b)";
   walkieCalls.forEach(function(c){ try{c.close()}catch(e){} }); walkieCalls=[];
 }
 </script>
