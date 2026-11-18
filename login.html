@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MT Platoon - Login</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#0f1a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.box{background:#fff;width:100%;max-width:380px;border-radius:20px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.logo{text-align:center;font-size:48px}
+h2{text-align:center;margin:6px 0 2px}
+p{text-align:center;color:#666;margin:0 0 16px;font-size:13px}
+label{font-size:13px;color:#333;font-weight:bold}
+input{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;font-size:17px;outline:none;margin:6px 0 14px}
+input:focus{border-color:#1a7a1a}
+button{width:100%;background:#1a7a1a;color:#fff;padding:15px;border:none;border-radius:50px;font-size:18px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
+.msg{margin-top:12px;padding:10px;border-radius:10px;display:none;word-break:break-all;font-size:14px}
+.ok{background:#d4edda}.err{background:#f8d7da}
+.debug{font-size:11px;color:#777;margin-top:10px;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="logo">🪖</div>
+<h2>এমটি প্লাটুন</h2>
+<p>কমান্ড লগইন - ৪ বীর</p>
+<label>সেনা নম্বর</label>
+<input id="sena" placeholder="যেমন - ৪৫২১৩২৭" inputmode="numeric">
+<label>মোবাইল</label>
+<input id="mobile" placeholder="যেমন - ০১৭৩৭৯১২০৯৫" inputmode="numeric">
+<label>পাসওয়ার্ড</label>
+<input id="pass" type="password" placeholder="যেমন - ১২৩৪৫৬">
+<button id="btn" onclick="login()">লগইন করো</button>
+<div id="msg" class="msg"></div>
+<div id="debug" class="debug"></div>
+</div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {getFirestore,doc,getDoc,collection,query,where,getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U",
+  authDomain: "mt-messenger-63922.firebaseapp.com",
+  projectId: "mt-messenger-63922",
+  storageBucket: "mt-messenger-63922.firebasestorage.app",
+  messagingSenderId: "184454055809",
+  appId: "1:184454055809:web:4d24320f792d7e86fdca80",
+  measurementId: "G-E1M0WH2RD9"
+};
+const db = getFirestore(initializeApp(firebaseConfig));
+function show(t,ok){var m=document.getElementById('msg');m.style.display='block';m.className='msg '+(ok?'ok':'err');m.innerHTML=t;}
+function cleanSena(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,'');}
+function cleanMob(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/^\+?88/,'').replace(/\D/g,'');}
+function cleanPass(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).trim();}
+function doLogin(sena,f){
+  localStorage.setItem('sena_no',sena);
+  localStorage.setItem('mt_army',sena);
+  localStorage.setItem('mt_sena',sena);
+  localStorage.setItem('mt_name',f.name||f.Name||'');
+  localStorage.setItem('mt_role',f.role||f.podobi||f.Podobi||'');
+  localStorage.setItem('pending_sena',sena);
+  localStorage.setItem('name',f.name||f.Name||'');
+  localStorage.setItem('podobi',f.podobi||f.Podobi||f.role||'');
+  localStorage.setItem('company',f.company||f.Company||'');
+  localStorage.setItem('mobile',f.mobile||f.Mobile||'');
+  localStorage.setItem('blood',f.blood||f.Blood||'');
+  show('✅ হইছে! ড্যাশবোর্ডে যাইতেছি...',true);
+  setTimeout(function(){ location.href='/dashboard?sena='+sena; },600);
+}
+window.login=async function(){
+  var sena=cleanSena(document.getElementById('sena').value);
+  var mob=cleanMob(document.getElementById('mobile').value);
+  var ps=cleanPass(document.getElementById('pass').value);
+  if(!sena||!ps){show('❌ সেনা আর পাস দাও');return;}
+  var btn=document.getElementById('btn');btn.disabled=true;btn.innerText='দেখতেছি...';
+  document.getElementById('debug').innerText='তুমি দিছো - Sena:'+sena+' Mob:'+mob+' Pass:'+ps;
+  async function findUser(){
+    try{let d=await getDoc(doc(db,"users",sena)); if(d.exists()) return d.data();}catch(e){ document.getElementById('debug').innerText+=' | Error: '+e.message; }
+    try{let q=await getDocs(query(collection(db,"users"),where("sena_no","==",sena))); if(!q.empty) return q.docs[0].data();}catch(e){ document.getElementById('debug').innerText+=' | Query Error: '+e.message; }
+    return null;
+  }
+  try{
+    let f=await findUser();
+    if(!f){ show('❌ ফায়ারবেজে হিসাব পাই নাই - '+sena); btn.disabled=false; btn.innerText='লগইন করো'; return; }
+    let fbPass=cleanPass(f.pass??f.password??f.Password??"");
+    if(fbPass && fbPass!==ps){ show('❌ পাস ভুল - ফায়ারবেজে আছে: '+fbPass); btn.disabled=false; btn.innerText='লগইন করো'; return; }
+    doLogin(sena,f); return;
+  }catch(e){ show('❌ Error: '+e.message); btn.disabled=false; btn.innerText='লগইন করো'; }
+}
+</script>
+</body>
+</html>
