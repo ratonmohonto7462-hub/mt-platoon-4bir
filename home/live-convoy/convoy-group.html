@@ -16,7 +16,8 @@ button{width:100%;padding:13px;border:none;border-radius:10px;font-weight:bold;f
 </style>
 </head>
 <body>
-<a href="index.html">←</a> <b style="font-size:22px">👥 কনভয় গ্রুপ</b>
+<a href="index.html">←</a>
+<b style="font-size:22px">👥 কনভয় গ্রুপ</b>
 
 <div class="card">
 <b>গ্রুপের নাম / ছবি</b>
@@ -53,72 +54,84 @@ button{width:100%;padding:13px;border:none;border-radius:10px;font-weight:bold;f
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
 // ===== তোমার Firebase =====
-var firebaseConfig = {
-  apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
-  authDomain: "convoy-live-group.firebaseapp.com",
-  databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "convoy-live-group",
-  storageBucket: "convoy-live-group.firebasestorage.app",
-  messagingSenderId: "705067687114",
-  appId: "1:705067687114:web:37468ab2617dd0915b2833"
-};
+var firebaseConfig = { apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc", authDomain: "convoy-live-group.firebaseapp.com", databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "convoy-live-group", storageBucket: "convoy-live-group.firebasestorage.app", messagingSenderId: "705067687114", appId: "1:705067687114:web:6c0687162a3604cc5b2833" };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 // ===========================
-
 var GROUP_CODE = "PLATOON-4";
+var WALKIE_CONVOY = "CONVOY-01";
 
 function saveGroup(){
-  GROUP_CODE = document.getElementById('groupCode').value.trim().toUpperCase() || "PLATOON-4";
-  document.getElementById('groupShow').innerText = document.getElementById('groupName').value;
-  alert("গ্রুপ সেভ হইছে! কোড: "+GROUP_CODE);
-  loadMembers();
+GROUP_CODE = document.getElementById('groupCode').value.trim().toUpperCase() || "PLATOON-4";
+document.getElementById('groupShow').innerText = document.getElementById('groupName').value;
+alert("গ্রুপ সেভ হইছে! কোড: "+GROUP_CODE);
+loadMembers();
 }
 
 function addMember(){
-  var senaNo = document.getElementById('senaNo').value.trim();
-  var podobi = document.getElementById('podobi').value;
-  var nam = document.getElementById('nam').value.trim();
-  var baNo = document.getElementById('baNo').value.trim();
-  var mobile = document.getElementById('mobile').value.trim();
-  var gari = document.getElementById('gariProkar').value;
-  var serial = document.getElementById('serial').value.trim();
-  var montobbo = document.getElementById('montobbo').value.trim();
-  if(!senaNo || !nam || !serial){ alert("সেনা নং, নাম, সিরিয়াল দাও দোস্ত"); return; }
-  // Firebase এ সেভ - এইটাই আসল, লাইভ ম্যাপ এইখান থেকে নাম নিবো
-  db.ref('convoy/'+GROUP_CODE+'/members/'+senaNo).set({
-    senaNo: senaNo, podobi: podobi, name: podobi+" "+nam, fullName: nam,
-    baNo: baNo, mobile: mobile, gari: gari, serial: parseInt(serial), montobbo: montobbo
-  }).then(function(){
-    alert("হইছে! "+nam+" অ্যাড হইছে, এখন লাইভ ম্যাপেও নাম দেখবো");
-    document.getElementById('senaNo').value=""; document.getElementById('nam').value="";
-    document.getElementById('serial').value="";
-  });
+var senaNo = document.getElementById('senaNo').value.trim();
+var podobi = document.getElementById('podobi').value;
+var nam = document.getElementById('nam').value.trim();
+var baNo = document.getElementById('baNo').value.trim();
+var mobile = document.getElementById('mobile').value.trim();
+var gari = document.getElementById('gariProkar').value;
+var serial = document.getElementById('serial').value.trim();
+var montobbo = document.getElementById('montobbo').value.trim();
+if(!senaNo || !nam || !serial){ alert("সেনা নং, নাম, সিরিয়াল দাও দোস্ত"); return; }
+
+// ১. কনভয় গ্রুপে সেভ - লাইভ ম্যাপ এইখান থেকে নাম নিবো
+db.ref('convoy/'+GROUP_CODE+'/members/'+senaNo).set({
+senaNo: senaNo,
+podobi: podobi,
+name: podobi+" "+nam,
+fullName: nam,
+baNo: baNo,
+mobile: mobile,
+gari: gari,
+serial: parseInt(serial),
+montobbo: montobbo
+}).then(function(){
+// ২. FIX - ওয়াকিটকির CONVOY-01 এও Add করে দাও, নাইলে ওয়াকিটকিতে ঢুকতে পারবে না
+return db.ref('walkie/'+WALKIE_CONVOY+'/'+senaNo).set({army: senaNo, online: true, name: nam});
+}).then(function(){
+alert("হইছে! "+nam+" অ্যাড হইছে, এখন লাইভ ম্যাপেও + CONVOY ওয়াকিটকিতেও ঢুকতে পারবে");
+document.getElementById('senaNo').value="";
+document.getElementById('nam').value="";
+document.getElementById('serial').value="";
+document.getElementById('baNo').value="";
+document.getElementById('mobile').value="";
+document.getElementById('montobbo').value="";
+}).catch(function(err){ alert("ভুল হইছে: "+err.message); });
 }
 
 function loadMembers(){
-  // মেম্বার লিস্ট Firebase থেকে লাইভ শোনো
-  db.ref('convoy/'+GROUP_CODE+'/members').on('value', function(snap){
-    var members = snap.val() || {};
-    var locRef = db.ref('convoy/'+GROUP_CODE+'/locations');
-    locRef.once('value', function(lsnap){
-      var locs = lsnap.val() || {};
-      var html = "";
-      Object.values(members).sort(function(a,b){return a.serial-b.serial}).forEach(function(m){
-        var loc = locs[m.senaNo];
-        var speed = loc ? loc.speed : 0;
-        var online = loc ? "● অনলাইন" : "○ অফলাইন";
-        html += '<div class="member"><button class="del" onclick="delMember(\''+m.senaNo+'\')">X</button>'
-        + '<b>'+m.name+' • #'+m.serial+'</b><br>'
-        + 'সেনা নং: '+m.senaNo+'<br>বি এ নং: '+m.baNo+'<br>গাড়ির প্রকার: '+m.gari+'<br>মোবাইল: '+m.mobile+'<br>মন্তব্য: '+m.montobbo+'<br>'
-        + '<span class="online">'+online+' • স্পিড: '+speed+' km/h</span></div>';
-      });
-      document.getElementById('list').innerHTML = html || "এখনো কেউ অ্যাড হয় নাই";
-    });
-  });
+db.ref('convoy/'+GROUP_CODE+'/members').on('value', function(snap){
+var members = snap.val() || {};
+var locRef = db.ref('convoy/'+GROUP_CODE+'/locations');
+locRef.once('value', function(lsnap){
+var locs = lsnap.val() || {};
+var html = "";
+Object.values(members).sort(function(a,b){return a.serial-b.serial}).forEach(function(m){
+var loc = locs[m.senaNo];
+var speed = loc ? loc.speed : 0;
+var online = loc ? "● অনলাইন" : "○ অফলাইন";
+html += '<div class="member"><button class="del" onclick="delMember(\''+m.senaNo+'\')">X</button>' +
+'<b>'+m.name+' • #'+m.serial+'</b><br>' +
+'সেনা নং: '+m.senaNo+'<br>বি এ নং: '+m.baNo+'<br>গাড়ির প্রকার: '+m.gari+'<br>মোবাইল: '+m.mobile+'<br>মন্তব্য: '+m.montobbo+'<br>' +
+'<span class="online">'+online+' • স্পিড: '+speed+' km/h</span></div>';
+});
+document.getElementById('list').innerHTML = html || "এখনো কেউ অ্যাড হয় নাই";
+});
+});
 }
+
 function delMember(senaNo){
-  if(confirm("ডিলিট করবো?")) db.ref('convoy/'+GROUP_CODE+'/members/'+senaNo).remove();
+if(confirm("ডিলিট করবো?")){
+// দুই জায়গা থেকেই ডিলিট
+db.ref('convoy/'+GROUP_CODE+'/members/'+senaNo).remove();
+db.ref('walkie/'+WALKIE_CONVOY+'/'+senaNo).remove();
+db.ref('convoy/'+GROUP_CODE+'/locations/'+senaNo).remove();
+}
 }
 loadMembers();
 </script>
