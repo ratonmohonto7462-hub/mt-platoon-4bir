@@ -42,15 +42,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-var firebaseConfig = {
-  apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
-  authDomain: "convoy-live-group.firebaseapp.com",
-  databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "convoy-live-group",
-  storageBucket: "convoy-live-group.firebasestorage.app",
-  messagingSenderId: "705067687114",
-  appId: "1:705067687114:web:6c0687162a3604cc5b2833"
-};
+var firebaseConfig = { apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc", authDomain: "convoy-live-group.firebaseapp.com", databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "convoy-live-group", storageBucket: "convoy-live-group.firebasestorage.app", messagingSenderId: "705067687114", appId: "1:705067687114:web:6c0687162a3604cc5b2833" };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 var map = L.map('map').setView([23.8103,90.4125],13);
@@ -59,94 +51,128 @@ var markers={}, polylines=[], groupCode="PLATOON-4", amarSenaNo="", membersMap={
 var peer=null, localStream=null, walkieCalls=[];
 var walkieBtn=document.getElementById('walkieBtn');
 var alreadyJoined=false;
+// FIX: ওয়াকিটকির চ্যানেল ২টা ফিক্স করে দিলাম
+var WALKIE_CONVOY = "CONVOY-01";
+var WALKIE_ALL = "ALL";
 
-// === FIX: রিফ্রেশ দিলেও মনে রাখবে ===
 function joinGroup(passedSena){
-  if(alreadyJoined) return;
-  amarSenaNo = (passedSena || document.getElementById('amarSenaNo').value || "").toString().trim();
-  if(!amarSenaNo){alert("সেনা নং দাও দোস্ত");return;}
-  localStorage.setItem('mt_sena_no', amarSenaNo);
-  db.ref('convoy/'+groupCode+'/members/'+amarSenaNo).once('value', function(snap){
-    var me = snap.val();
-    if(!me){ alert("তোমার সেনা নং পাই নাই দোস্ত! অ্যাডমিন (জুয়েল) রে কও তোমারে অ্যাড করতে।"); localStorage.removeItem('mt_sena_no'); return; }
-    alreadyJoined=true;
-    amarInfo = me;
-    document.getElementById('topBar').style.display='none';
-    document.getElementById('convoyBar').style.display='block';
-    document.getElementById('walkieDot').style.display='block';
-    document.getElementById('walkieDot').innerText = "● "+me.name+" | WALKIE JOINED";
-    startWalkie();
-    db.ref('convoy/'+groupCode+'/members').on('value',function(s){ membersMap=s.val()||{}; });
-    db.ref('convoy/'+groupCode+'/locations').on('value', function(snap2){
-      var data=snap2.val()||{};
-      document.getElementById('totalText').innerText=Object.keys(data).length+" জন";
-      var chipDiv=document.getElementById('chipList'); chipDiv.innerHTML="";
-      for(var k in markers){ map.removeLayer(markers[k]); } markers={};
-      polylines.forEach(function(p){ map.removeLayer(p); }); polylines=[];
-      var points=[];
-      Object.values(data).forEach(function(u){
-        var info = membersMap[u.senaNo] || {};
-        var sName = info.name || "সৈনিক"; var sSerial = info.serial || 99; var sGari = info.gari || "";
-        points.push([u.lat,u.lng]);
-        var chip=document.createElement('span'); chip.className='chip'; chip.innerText="#"+sSerial+" "+sName; chipDiv.appendChild(chip);
-        var isMe = (u.senaNo==amarSenaNo);
-        var iconHtml='<div class="'+(sSerial==1?'leadIcon':'numIcon')+'" style="'+(isMe?'background:#16a34a;':"")+'">'+sSerial+'</div>';
-        var icon=L.divIcon({html:iconHtml,className:'',iconSize:[36,36],iconAnchor:[18,18]});
-        var mk=L.marker([u.lat,u.lng],{icon:icon}).addTo(map);
-        mk.bindPopup("<b>#"+sSerial+" "+sName+"</b>"+(isMe?" (তুমি)":"")+"<br>সেনা নং: "+u.senaNo+"<br>গাড়ি: "+sGari+"<br>স্পিড: "+u.speed+" km/h<br>আপডেট: "+u.time);
-        markers[u.senaNo]=mk;
-      });
-      if(points.length>1){ var pl=L.polyline(points,{color:'#2563eb',weight:4,dashArray:'8,6'}).addTo(map); polylines.push(pl); }
-      if(data[amarSenaNo]){ map.setView([data[amarSenaNo].lat, data[amarSenaNo].lng], 15); }
-    });
-    setInterval(amarLocationPathao, 5000); amarLocationPathao();
-  });
+if(alreadyJoined) return;
+amarSenaNo = (passedSena || document.getElementById('amarSenaNo').value || "").toString().trim();
+if(!amarSenaNo){alert("সেনা নং দাও দোস্ত");return;}
+localStorage.setItem('mt_sena_no', amarSenaNo);
+db.ref('convoy/'+groupCode+'/members/'+amarSenaNo).once('value', function(snap){
+var me = snap.val();
+if(!me){ alert("তোমার সেনা নং পাই নাই দোস্ত! অ্যাডমিন (জুয়েল) রে কও তোমারে অ্যাড করতে।"); localStorage.removeItem('mt_sena_no'); return; }
+alreadyJoined=true;
+amarInfo = me;
+document.getElementById('topBar').style.display='none';
+document.getElementById('convoyBar').style.display='block';
+document.getElementById('walkieDot').style.display='block';
+document.getElementById('walkieDot').innerText = "● "+me.name+" | WALKIE JOINED";
+startWalkie();
+db.ref('convoy/'+groupCode+'/members').on('value',function(s){ membersMap=s.val()||{}; });
+db.ref('convoy/'+groupCode+'/locations').on('value', function(snap2){
+var data=snap2.val()||{};
+document.getElementById('totalText').innerText=Object.keys(data).length+" জন";
+var chipDiv=document.getElementById('chipList');
+chipDiv.innerHTML="";
+for(var k in markers){ map.removeLayer(markers[k]); }
+markers={};
+polylines.forEach(function(p){ map.removeLayer(p); });
+polylines=[];
+var points=[];
+Object.values(data).forEach(function(u){
+var info = membersMap[u.senaNo] || {};
+var sName = info.name || "সৈনিক";
+var sSerial = info.serial || 99;
+var sGari = info.gari || "";
+points.push([u.lat,u.lng]);
+var chip=document.createElement('span');
+chip.className='chip';
+chip.innerText="#"+sSerial+" "+sName;
+chipDiv.appendChild(chip);
+var isMe = (u.senaNo==amarSenaNo);
+var iconHtml='<div class="'+(sSerial==1?'leadIcon':'numIcon')+'" style="'+(isMe?'background:#16a34a;':"")+'">'+sSerial+'</div>';
+var icon=L.divIcon({html:iconHtml,className:'',iconSize:[36,36],iconAnchor:[18,18]});
+var mk=L.marker([u.lat,u.lng],{icon:icon}).addTo(map);
+mk.bindPopup("<b>#"+sSerial+" "+sName+"</b>"+(isMe?" (তুমি)":"")+"<br>সেনা নং: "+u.senaNo+"<br>গাড়ি: "+sGari+"<br>স্পিড: "+u.speed+" km/h<br>আপডেট: "+u.time);
+markers[u.senaNo]=mk;
+});
+if(points.length>1){ var pl=L.polyline(points,{color:'#2563eb',weight:4,dashArray:'8,6'}).addTo(map); polylines.push(pl); }
+if(data[amarSenaNo]){ map.setView([data[amarSenaNo].lat, data[amarSenaNo].lng], 15); }
+});
+setInterval(amarLocationPathao, 5000);
+amarLocationPathao();
+});
 }
+
 function amarLocationPathao(){
-  if(!amarSenaNo || !amarInfo) return;
-  navigator.geolocation.getCurrentPosition(function(pos){
-    var lat=pos.coords.latitude, lng=pos.coords.longitude;
-    var speed=pos.coords.speed?Math.round(pos.coords.speed*3.6):0;
-    db.ref('convoy/'+groupCode+'/locations/'+amarSenaNo).set({ senaNo:amarSenaNo, lat:lat, lng:lng, speed:speed, time:new Date().toLocaleTimeString('bn-BD') });
-  },function(){},{enableHighAccuracy:true});
+if(!amarSenaNo || !amarInfo) return;
+navigator.geolocation.getCurrentPosition(function(pos){
+var lat=pos.coords.latitude, lng=pos.coords.longitude;
+var speed=pos.coords.speed?Math.round(pos.coords.speed*3.6):0;
+db.ref('convoy/'+groupCode+'/locations/'+amarSenaNo).set({ senaNo:amarSenaNo, lat:lat, lng:lng, speed:speed, time:new Date().toLocaleTimeString('bn-BD') });
+},function(){},{enableHighAccuracy:true});
 }
+
+// FIX: ওয়াকিটকি এখন CONVOY-01 এর সাথে মিলায় দিলাম
 function startWalkie(){
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-    localStream = stream;
-    peer = new Peer('mt-'+amarSenaNo);
-    peer.on('open', function(){ db.ref('walkie/'+groupCode+'/'+amarSenaNo).set({army:amarSenaNo, online:true}); });
-    peer.on('call', function(call){
-      call.answer(localStream);
-      call.on('stream', function(s){ var a=document.createElement('audio'); a.srcObject=s; a.autoplay=true; a.play(); });
-    });
-  }).catch(function(){ document.getElementById('walkieDot').innerText="● MIC ALLOW করো"; });
+navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+localStream = stream;
+// Peer ID ওয়াকিটকি ফাইলের সাথে হুবহু মিলায় দিলাম
+peer = new Peer('mt-'+amarSenaNo+'-'+WALKIE_CONVOY);
+peer.on('open', function(){
+// কনভয় মেম্বার হইলে CONVOY-01 + ALL ২টাতেই জয়েন
+db.ref('walkie/'+WALKIE_CONVOY+'/'+amarSenaNo).set({army:amarSenaNo, online:true});
+db.ref('walkie/'+WALKIE_ALL+'/'+amarSenaNo).set({army:amarSenaNo, online:true});
+});
+peer.on('call', function(call){
+call.answer(localStream);
+call.on('stream', function(s){
+var a=document.createElement('audio'); a.srcObject=s; a.autoplay=true; a.play();
+});
+});
+}).catch(function(){ document.getElementById('walkieDot').innerText="● MIC ALLOW করো"; });
 }
+
 var isTalking=false;
 walkieBtn.addEventListener('touchstart', startTalk);
 walkieBtn.addEventListener('mousedown', startTalk);
 walkieBtn.addEventListener('touchend', stopTalk);
 walkieBtn.addEventListener('mouseup', stopTalk);
+
 function startTalk(e){
-  e.preventDefault();
-  if(isTalking || !peer || !localStream){ if(!localStream) alert('আগে লগইন করো + Mic Allow করো'); return; }
-  isTalking=true; walkieBtn.innerHTML="🟢<br>TALKING"; walkieBtn.style.background="radial-gradient(#22c55e,#166534)";
-  db.ref('walkie/'+groupCode).once('value', function(snap){
-    var users=snap.val()||{};
-    for(var a in users){ if(a!='status' && a!=amarSenaNo){ var c=peer.call('mt-'+a, localStream); if(c) walkieCalls.push(c); } }
-  });
+e.preventDefault();
+if(isTalking || !peer || !localStream){ if(!localStream) alert('আগে লগইন করো + Mic Allow করো'); return; }
+isTalking=true;
+walkieBtn.innerHTML="🟢<br>TALKING";
+walkieBtn.style.background="radial-gradient(#22c55e,#166534)";
+// FIX: ম্যাপ থেকে চাপ দিলে CONVOY-01 এর সবাই শুনবে
+db.ref('walkie/'+WALKIE_CONVOY).once('value', function(snap){
+var users=snap.val()||{};
+for(var a in users){
+if(a!='status' && a!=amarSenaNo){
+var c=peer.call('mt-'+a+'-'+WALKIE_CONVOY, localStream);
+if(c) walkieCalls.push(c);
 }
-function stopTalk(e){
-  if(e) e.preventDefault();
-  if(!isTalking) return;
-  isTalking=false; walkieBtn.innerHTML="🔴<br>PUSH<br>TALK"; walkieBtn.style.background="radial-gradient(#ef4444,#991b1b)";
-  walkieCalls.forEach(function(c){ try{c.close()}catch(e){} }); walkieCalls=[];
+}
+});
 }
 
-// === অটো জয়েন - পেজ লোড হইলেই ===
+function stopTalk(e){
+if(e) e.preventDefault();
+if(!isTalking) return;
+isTalking=false;
+walkieBtn.innerHTML="🔴<br>PUSH<br>TALK";
+walkieBtn.style.background="radial-gradient(#ef4444,#991b1b)";
+walkieCalls.forEach(function(c){ try{c.close()}catch(e){} });
+walkieCalls=[];
+}
+
 var savedSena = localStorage.getItem('mt_sena_no');
 if(savedSena){
-  document.getElementById('amarSenaNo').value = savedSena;
-  setTimeout(function(){ joinGroup(savedSena); }, 600);
+document.getElementById('amarSenaNo').value = savedSena;
+setTimeout(function(){ joinGroup(savedSena); }, 600);
 }
 </script>
 </body>
