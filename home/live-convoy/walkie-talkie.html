@@ -14,8 +14,6 @@ body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-directio
 #btn{margin:20px 0;width:210px;height:210px;border-radius:50%;border:6px solid #facc15;background:#000;object-fit:cover;cursor:pointer;user-select:none;touch-action:none}
 #btn.talking{border-color:#22c55e;box-shadow:0 0 40px #22c55e;transform:scale(0.92)}
 #users{color:#aaa;font-size:13px;margin-bottom:10px}
-
-/* ১টা লাল লাইন - মাঝখানে স্থির থাকবে, খালি লাফাবে */
 #waveWrap{width:100%;position:fixed;bottom:0;left:0;background:#000}
 #wave{width:100%;height:90px;display:block}
 </style>
@@ -26,127 +24,187 @@ body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-directio
 <body>
 <div id="top">📻 MT PLATOON 4 BIR - WALKIE TALKIE</div>
 <div id="talkBox">MT<br>WALKIE</div>
-
 <div id="status">● CONNECTING...</div>
 <img id="btn" src="logo.png" alt="4 BIR MT Logo">
 <div id="users">Channel: CONVOY-01</div>
 <div id="audioBox"></div>
-
-<!-- ১টা লাল লাইন -->
 <div id="waveWrap"><canvas id="wave"></canvas></div>
-
 <script>
 const firebaseConfig = { apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc", authDomain: "convoy-live-group.firebaseapp.com", databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "convoy-live-group", storageBucket: "convoy-live-group.firebasestorage.app", messagingSenderId: "705067687114", appId: "1:705067687114:web:6c0687162a3604cc5b2833" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-let myArmy = localStorage.getItem('mt_login') || '4521328';
+
+// === FIX 1: যেই নম্বর দিয়া প্রোফাইলে লগইন করবা, ওই নম্বরই আসবে ===
+// 1. লিংক থেকে ?sena=4534981 থাকলে ওইটাই সবচেয়ে আগে
+// 2. তারপর localStorage এর mt_login
+// 3. তারপর mt_sena_no
+// আগের মত 4521328 ফিক্সড রাখা যাবে না
+function getSenaFromUrl(){
+  try{
+    let p = new URLSearchParams(window.location.search);
+    let s = p.get('sena') || p.get('army') || p.get('id') || "";
+    return s.trim();
+  }catch(e){ return ""; }
+}
+let urlSena = getSenaFromUrl();
+let myArmy = urlSena || localStorage.getItem('mt_login') || localStorage.getItem('mt_sena_no') || "";
+myArmy = String(myArmy).trim();
+// যদি 981 এর মত ছোট লেখে, তাইলে পুরা নম্বর বানায় নাও - প্রোফাইল লিস্ট থেকে মিলায় নিবো
+if(myArmy && myArmy.length < 7){
+  // 981 -> 4534981 খুঁজার জন্য পরে Firebase থেকে মিলাবো, আপাতত এইভাবেই রাখলাম
+}
+
+if(urlSena){
+  localStorage.setItem('mt_login', myArmy);
+  localStorage.setItem('mt_sena_no', myArmy);
+}
+
+if(!myArmy){
+  document.getElementById('status').innerText = "● আগে প্রোফাইলে লগইন করো";
+  document.getElementById('status').style.color = "red";
+}
+
 const statusEl = document.getElementById('status');
 const btn = document.getElementById('btn');
 const usersEl = document.getElementById('users');
 const talkBox = document.getElementById('talkBox');
 let peer, localStream, calls = [];
 let audioCtx, analyser, dataArray;
-
 const canvas = document.getElementById('wave');
 const ctx = canvas.getContext('2d');
 function resize(){ canvas.width = window.innerWidth*2; canvas.height = 90*2; }
 window.addEventListener('resize', resize); resize();
-
 function drawLine(){
   requestAnimationFrame(drawLine);
   ctx.clearRect(0,0,canvas.width,canvas.height);
   let mid = canvas.height/2;
-  // সাউন্ডের জোর
   let vol = 0;
   if(analyser && dataArray){
     analyser.getByteTimeDomainData(dataArray);
-    let sum=0; for(let i=0;i<dataArray.length;i++){ let v=(dataArray[i]-128)/128; sum+=v*v; }
+    let sum=0;
+    for(let i=0;i<dataArray.length;i++){ let v=(dataArray[i]-128)/128; sum+=v*v; }
     vol = Math.sqrt(sum/dataArray.length)*3;
     if(vol>1) vol=1;
   }
-  ctx.beginPath();
-  ctx.strokeStyle = '#ff0000';
-  ctx.lineWidth = 4;
-  // একটাই লাইন, বাম থেকে ডানে যাবে, মাঝখানে স্থির
+  ctx.beginPath(); ctx.strokeStyle = '#ff0000'; ctx.lineWidth = 4;
   for(let x=0;x<=canvas.width;x+=8){
-    // কথা না বললে সোজা লাইন, বললে লাফাবে
     let y = mid + Math.sin(x*0.02 + Date.now()*0.01)*vol*mid*0.8 + (Math.random()-0.5)*vol*30;
     if(x==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
   }
   ctx.stroke();
-  // মাঝখানে পাতলা সাদা দাগ
-  ctx.fillStyle='rgba(255,255,255,0.15)';
-  ctx.fillRect(0,mid-1,canvas.width,2);
+  ctx.fillStyle='rgba(255,255,255,0.15)'; ctx.fillRect(0,mid-1,canvas.width,2);
 }
 drawLine();
 
-navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-localStream = stream;
-audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-let src = audioCtx.createMediaStreamSource(stream);
-analyser = audioCtx.createAnalyser();
-analyser.fftSize = 1024;
-src.connect(analyser);
-dataArray = new Uint8Array(analyser.fftSize);
-statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
-peer = new Peer('mt-'+myArmy);
-peer.on('open', ()=>{
-statusEl.innerText = "● LIVE - "+myArmy+" | READY TO TALK";
-db.ref('walkie/CONVOY-01/'+myArmy).set({army:myArmy, online:true});
-});
-peer.on('call', call=>{
-call.answer(localStream);
-call.on('stream', s=>{
-let a = document.createElement('audio'); a.srcObject = s; a.autoplay = true; a.play();
-document.getElementById('audioBox').appendChild(a);
-});
-});
-}).catch(()=>{
-statusEl.innerText = "● MIC PERMISSION DEN - ALLOW MIC";
-statusEl.style.color = "red";
-});
+// === FIX 2: প্রোফাইলের Group Members লিস্ট থেকে নাম মিলায় নেওয়া ===
+// তোমার ছবির লিস্টটা convoy/PLATOON-4/members এ আছে, ওইখান থেকে নাম আনবো
+// আর যদি কেউ 981 লেখে, তাইলে 4534981 বানায় দিবো
+let myDisplayName = myArmy;
+function resolveProfile(){
+  if(!myArmy) return;
+  db.ref('convoy/PLATOON-4/members').once('value', snap=>{
+    let members = snap.val() || {};
+    // 1. পুরা নম্বর দিয়া মিললো কিনা
+    if(members[myArmy]){
+      let m = members[myArmy];
+      myDisplayName = m.fullName || m.name || myArmy;
+      updateStatus();
+      return;
+    }
+    // 2. শেষ 3 ডিজিট দিয়া মিললো কিনা - 981 -> 4534981
+    if(myArmy.length <= 3){
+      for(let k in members){
+        if(String(k).endsWith(myArmy)){
+          myArmy = k;
+          localStorage.setItem('mt_login', myArmy);
+          localStorage.setItem('mt_sena_no', myArmy);
+          myDisplayName = members[k].fullName || members[k].name || myArmy;
+          updateStatus();
+          // Peer আবার বানাতে হবে কারণ নম্বর বদলাইছে
+          if(peer) { try{peer.destroy()}catch(e){} }
+          startPeer();
+          return;
+        }
+      }
+    }
+  });
+}
+function updateStatus(){
+  statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
+}
+
+if(myArmy){
+  resolveProfile();
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    localStream = stream;
+    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    let src = audioCtx.createMediaStreamSource(stream);
+    analyser = audioCtx.createAnalyser(); analyser.fftSize = 1024;
+    src.connect(analyser); dataArray = new Uint8Array(analyser.fftSize);
+    updateStatus();
+    startPeer();
+  }).catch(()=>{
+    statusEl.innerText = "● MIC PERMISSION DEN - ALLOW MIC";
+    statusEl.style.color = "red";
+  });
+}
+
+function startPeer(){
+  if(!myArmy || !localStream) return;
+  // লাইভ ম্যাপের সাথে মিলায় দিলাম - mt-4534981-CONVOY-01
+  peer = new Peer('mt-'+myArmy+'-CONVOY-01');
+  peer.on('open', ()=>{
+    statusEl.innerText = "● LIVE - "+myArmy+" | READY TO TALK";
+    db.ref('walkie/CONVOY-01/'+myArmy).set({army:myArmy, online:true, name: myDisplayName});
+    db.ref('walkie/ALL/'+myArmy).set({army:myArmy, online:true, name: myDisplayName});
+  });
+  peer.on('call', call=>{
+    call.answer(localStream);
+    call.on('stream', s=>{
+      let a = document.createElement('audio'); a.srcObject = s; a.autoplay = true; a.play();
+      document.getElementById('audioBox').appendChild(a);
+    });
+  });
+}
+
+// === FIX 3: status রে আর মানুষ ধরবে না ===
 db.ref('walkie/CONVOY-01').on('value', snap=>{
-let data = snap.val() || {};
-let list = Object.keys(data);
-usersEl.innerText = list.length + " Trucks Online - Channel: CONVOY-01 | " + list.join(', ');
+  let data = snap.val() || {};
+  let list = Object.keys(data).filter(k=>k!=='status');
+  usersEl.innerText = list.length + " Trucks Online - Channel: CONVOY-01 | " + list.join(', ');
 });
+
 let isTalking = false;
 btn.addEventListener('touchstart', startTalk);
 btn.addEventListener('mousedown', startTalk);
 btn.addEventListener('touchend', stopTalk);
 btn.addEventListener('mouseup', stopTalk);
+
 function startTalk(e){
-e.preventDefault();
-if(isTalking || !peer || !localStream) return;
-isTalking = true;
-btn.classList.add('talking');
-talkBox.style.display = 'block';
-talkBox.classList.add('talking');
-statusEl.innerText = "● BROADCASTING TO ALL TRUCKS...";
-statusEl.style.color = "#facc15";
-db.ref('walkie/CONVOY-01').once('value', snap=>{
-let users = snap.val() || {};
-for(let army in users){
-if(army != myArmy){
-let call = peer.call('mt-'+army, localStream);
-if(call) calls.push(call);
-}
-}
-});
-db.ref('walkie/CONVOY-01/status').set({talking:true, by:myArmy, time:Date.now()});
+  e.preventDefault();
+  if(isTalking || !peer || !localStream) return;
+  isTalking = true;
+  btn.classList.add('talking'); talkBox.style.display = 'block'; talkBox.classList.add('talking');
+  statusEl.innerText = "● BROADCASTING TO ALL TRUCKS..."; statusEl.style.color = "#facc15";
+  db.ref('walkie/CONVOY-01').once('value', snap=>{
+    let users = snap.val() || {};
+    for(let army in users){
+      if(army !== 'status' && army != myArmy){
+        let call = peer.call('mt-'+army+'-CONVOY-01', localStream);
+        if(call) calls.push(call);
+      }
+    }
+  });
+  db.ref('walkie/CONVOY-01/status').set({talking:true, by:myArmy, time:Date.now()});
 }
 function stopTalk(e){
-if(e) e.preventDefault();
-if(!isTalking) return;
-isTalking = false;
-btn.classList.remove('talking');
-talkBox.style.display = 'none';
-talkBox.classList.remove('talking');
-statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
-statusEl.style.color = "#22c55e";
-calls.forEach(c=>{ try{c.close()}catch(e){} });
-calls = [];
-db.ref('walkie/CONVOY-01/status').set({talking:false, by:myArmy, time:Date.now()});
+  if(e) e.preventDefault();
+  if(!isTalking) return;
+  isTalking = false;
+  btn.classList.remove('talking'); talkBox.style.display = 'none'; talkBox.classList.remove('talking');
+  statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")"; statusEl.style.color = "#22c55e";
+  calls.forEach(c=>{ try{c.close()}catch(e){} }); calls = [];
+  db.ref('walkie/CONVOY-01/status').set({talking:false, by:myArmy, time:Date.now()});
 }
 </script>
 </body>
