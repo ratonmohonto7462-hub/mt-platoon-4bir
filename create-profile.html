@@ -12,12 +12,12 @@
 <input id="podobi" placeholder="Podobi - যেমন: Sainik, Corporal">
 <input id="mobile" placeholder="Mobile" inputmode="numeric">
 <input id="pass" type="password" placeholder="Password">
+<input id="cpass" type="password" placeholder="Confirm Password - আবার Password দাও">
 <input id="company" placeholder="Company - যেমন: A Coy, B Coy">
 <input id="unit" placeholder="Unit - যেমন: 4 BIR">
 <select id="blood"><option value="">Blood Group - Select করো</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select>
 <button onclick="createAcc()" id="btn">Create Account</button>
 <div id="msg"></div><div id="ok"></div>
-
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
@@ -25,52 +25,58 @@ var firebaseConfig = { apiKey: "AIzaSyDee9QiF2Dq3yGBgLhymFC7zrbWfo0PB2U", authDo
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 var db=firebase.firestore();
 var photoBase64 = "";
-document.getElementById('photo').addEventListener('change', function(e){ var file = e.target.files[0]; if(!file) return; var reader = new FileReader(); reader.onload = function(ev){ var img = new Image(); img.onload = function(){ var canvas = document.createElement('canvas'); var max = 300; var w=img.width, h=img.height; if(w>h){ if(w>max){h=h*max/w; w=max;} } else { if(h>max){w=w*max/h; h=max;} } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); photoBase64 = canvas.toDataURL('image/jpeg', 0.7); document.getElementById('preview').src = photoBase64; }; img.src = ev.target.result; }; reader.readAsDataURL(file); });
-
-// FIX: বাংলা সংখ্যা -> ইংরেজি, +88 বাদ
+document.getElementById('photo').addEventListener('change', function(e){
+var file = e.target.files[0]; if(!file) return;
+var reader = new FileReader();
+reader.onload = function(ev){
+var img = new Image();
+img.onload = function(){
+var canvas = document.createElement('canvas');
+var max = 300; var w=img.width, h=img.height;
+if(w>h){ if(w>max){h=h*max/w; w=max;} } else { if(h>max){w=w*max/h; h=max;} }
+canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h);
+photoBase64 = canvas.toDataURL('image/jpeg', 0.7);
+document.getElementById('preview').src = photoBase64;
+};
+img.src = ev.target.result;
+};
+reader.readAsDataURL(file);
+});
 function cleanNum(s){ return String(s||"").replace(/[০-৯]/g,function(d){return "০১২৩৪৫৬৭৮৯".indexOf(d)}).replace(/^\+?88/,'').replace(/\D/g,''); }
 function cleanPass(s){ return String(s||"").replace(/[০-৯]/g,function(d){return "০১২৩৪৫৬৭৮৯".indexOf(d)}).trim(); }
-
 async function createAcc(){
- var sena=cleanNum(document.getElementById('sena').value);
- var name=document.getElementById('name').value.trim();
- var podobi=document.getElementById('podobi').value.trim();
- var mobile=cleanNum(document.getElementById('mobile').value);
- var pass=cleanPass(document.getElementById('pass').value);
- var company=document.getElementById('company').value.trim();
- var unit=document.getElementById('unit').value.trim();
- var blood=document.getElementById('blood').value;
- var msg=document.getElementById('msg'), ok=document.getElementById('ok'), btn=document.getElementById('btn');
- msg.style.display='none'; ok.style.display='none';
- if(!sena||!name||!mobile||!pass){msg.style.display='block';msg.innerText='Army, Name, Mobile, Password লাগবোই';return;}
- btn.innerText='Creating...'; btn.disabled=true;
- try{
-  await db.collection('users').doc(sena).set({
-   sena:sena,
-   sena_no:sena,
-   army:sena,
-   army_no:sena,
-   name:name,
-   Name:name,
-   mobile:mobile,
-   Mobile:mobile,
-   pass:pass,
-   password:pass,
-   Password:pass,
-   company:company,
-   Company:company,
-   unit:unit,
-   blood:blood,
-   Blood:blood,
-   photo: photoBase64,
-   podobi:podobi,
-   rank:podobi,
-   role:podobi,
-   status:'approved',
-   createdAt: new Date().toISOString()
-  });
-  ok.style.display='block'; ok.innerText='✅ Profile হইছে! Pic সহ Save হইছে!';
-  setTimeout(()=>{location.href='index.html';},800);
- }catch(e){msg.style.display='block';msg.innerText='Error: '+e.message; btn.innerText='Create Account'; btn.disabled=false;}
+var sena=cleanNum(document.getElementById('sena').value);
+var name=document.getElementById('name').value.trim();
+var podobi=document.getElementById('podobi').value.trim();
+var mobile=cleanNum(document.getElementById('mobile').value);
+var pass=cleanPass(document.getElementById('pass').value);
+var cpass=cleanPass(document.getElementById('cpass').value);
+var company=document.getElementById('company').value.trim();
+var unit=document.getElementById('unit').value.trim();
+var blood=document.getElementById('blood').value;
+var msg=document.getElementById('msg'), ok=document.getElementById('ok'), btn=document.getElementById('btn');
+msg.style.display='none'; ok.style.display='none';
+if(!sena||!name||!mobile||!pass){msg.style.display='block';msg.innerText='Army, Name, Mobile, Password লাগবোই';return;}
+if(!cpass){msg.style.display='block';msg.innerText='Confirm Password দাও';return;}
+if(pass!==cpass){msg.style.display='block';msg.innerText='❌ Password ২টা মিলে নাই! আবার দেখো';return;}
+if(pass.length<4){msg.style.display='block';msg.innerText='Password কমপক্ষে ৪ সংখ্যার দাও';return;}
+btn.innerText='Creating...'; btn.disabled=true;
+try{
+await db.collection('users').doc(sena).set({
+sena:sena, sena_no:sena, army:sena, army_no:sena,
+name:name, Name:name,
+mobile:mobile, Mobile:mobile,
+pass:pass, password:pass, Password:pass,
+company:company, Company:company,
+unit:unit, blood:blood, Blood:blood,
+photo: photoBase64,
+podobi:podobi, rank:podobi, role:podobi,
+status:'pending',
+createdAt: new Date().toISOString()
+});
+ok.style.display='block';
+ok.innerText='⏳ Profile Pending এ গেছে! MT CLK Approve করলে ঢুকতে পারবা।';
+setTimeout(()=>{location.href='index.html';},1500);
+}catch(e){msg.style.display='block';msg.innerText='Error: '+e.message; btn.innerText='Create Account'; btn.disabled=false;}
 }
 </script></body></html>
