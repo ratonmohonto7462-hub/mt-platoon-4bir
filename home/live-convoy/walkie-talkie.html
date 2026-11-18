@@ -6,19 +6,18 @@
 <title>Walkie Talkie - MT Platoon 4 BIR</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;height:100vh;overflow:hidden}
+body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;overflow:hidden}
 #top{background:#0f2e2a;color:#facc15;padding:10px;width:100%;text-align:center;font-weight:800;position:fixed;top:0;z-index:10}
-#talkBox{display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#000;color:#ef4444;border:3px solid #facc15;padding:10px 22px;border-radius:10px;font-weight:900;font-size:22px;text-align:center;line-height:1.2;z-index:999}
+#talkBox{display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#000;color:#ef4444;border:3px solid #facc15;padding:8px 20px;border-radius:10px;font-weight:900;font-size:20px;text-align:center;line-height:1.2;z-index:999}
 #talkBox.talking{border-color:#22c55e;box-shadow:0 0 25px #22c55e}
-#status{margin-top:60px;color:#22c55e;font-weight:700;text-align:center;padding:0 15px}
-#btn{margin-top:20px;width:200px;height:200px;border-radius:50%;border:6px solid #facc15;background:#000;object-fit:cover;box-shadow:0 0 30px #00000080;cursor:pointer;user-select:none;touch-action:none;flex-shrink:0}
+#status{color:#22c55e;font-weight:700;text-align:center;padding:0 15px;font-size:14px}
+#btn{margin:20px 0;width:210px;height:210px;border-radius:50%;border:6px solid #facc15;background:#000;object-fit:cover;cursor:pointer;user-select:none;touch-action:none}
 #btn.talking{border-color:#22c55e;box-shadow:0 0 40px #22c55e;transform:scale(0.92)}
-#users{margin-top:15px;color:#aaa;font-size:13px}
+#users{color:#aaa;font-size:13px;margin-bottom:10px}
 
-/* নিচের দাগ - Waveform */
-#waveWrap{width:100%;margin-top:auto;padding-bottom:10px}
-#wave{width:100%;height:110px;display:block}
-#timeBar{width:100%;height:20px;display:flex;justify-content:space-around;color:#777;font-size:11px;border-top:1px solid #333;padding-top:3px}
+/* ১টা লাল লাইন - মাঝখানে স্থির থাকবে, খালি লাফাবে */
+#waveWrap{width:100%;position:fixed;bottom:0;left:0;background:#000}
+#wave{width:100%;height:90px;display:block}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -27,17 +26,14 @@ body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-directio
 <body>
 <div id="top">📻 MT PLATOON 4 BIR - WALKIE TALKIE</div>
 <div id="talkBox">MT<br>WALKIE</div>
-<div id="status">● CONNECTING...</div>
 
+<div id="status">● CONNECTING...</div>
 <img id="btn" src="logo.png" alt="4 BIR MT Logo">
 <div id="users">Channel: CONVOY-01</div>
 <div id="audioBox"></div>
 
-<!-- সাউন্ড অনুযায়ী উঠা-নামা করা দাগ -->
-<div id="waveWrap">
-  <canvas id="wave"></canvas>
-  <div id="timeBar"><span>00:00</span><span>00:02</span><span>00:04</span><span>00:06</span><span>00:08</span></div>
-</div>
+<!-- ১টা লাল লাইন -->
+<div id="waveWrap"><canvas id="wave"></canvas></div>
 
 <script>
 const firebaseConfig = { apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc", authDomain: "convoy-live-group.firebaseapp.com", databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "convoy-live-group", storageBucket: "convoy-live-group.firebasestorage.app", messagingSenderId: "705067687114", appId: "1:705067687114:web:6c0687162a3604cc5b2833" };
@@ -51,51 +47,47 @@ const talkBox = document.getElementById('talkBox');
 let peer, localStream, calls = [];
 let audioCtx, analyser, dataArray;
 
-// --- WAVEFORM DRAW ---
 const canvas = document.getElementById('wave');
 const ctx = canvas.getContext('2d');
-function resize(){ canvas.width = canvas.offsetWidth * 2; canvas.height = canvas.offsetHeight * 2; }
+function resize(){ canvas.width = window.innerWidth*2; canvas.height = 90*2; }
 window.addEventListener('resize', resize); resize();
-let bars = new Array(70).fill(5);
-function drawWave(){
-  requestAnimationFrame(drawWave);
+
+function drawLine(){
+  requestAnimationFrame(drawLine);
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  let barW = canvas.width / bars.length;
-  // সাউন্ড থেকে লেভেল নেওয়া
-  let level = 5;
+  let mid = canvas.height/2;
+  // সাউন্ডের জোর
+  let vol = 0;
   if(analyser && dataArray){
-    analyser.getByteFrequencyData(dataArray);
-    let sum = 0; for(let i=0;i<20;i++) sum += dataArray[i];
-    level = 5 + (sum/20/255)*90;
+    analyser.getByteTimeDomainData(dataArray);
+    let sum=0; for(let i=0;i<dataArray.length;i++){ let v=(dataArray[i]-128)/128; sum+=v*v; }
+    vol = Math.sqrt(sum/dataArray.length)*3;
+    if(vol>1) vol=1;
   }
-  // নতুন বার সামনে আনা
-  bars.push(level + Math.random()*10);
-  if(bars.length>70) bars.shift();
-  bars.forEach((h,i)=>{
-    let x = i*barW;
-    let hh = (h + Math.sin(Date.now()/150 + i)*3) * 2;
-    if(hh<6) hh=6;
-    // Pink -> Blue gradient তোমার ছবির মতো
-    let grad = ctx.createLinearGradient(0, canvas.height/2 - hh, 0, canvas.height/2 + hh);
-    grad.addColorStop(0,'#ff2d95'); grad.addColorStop(0.5,'#a855f7'); grad.addColorStop(1,'#3b82f6');
-    ctx.fillStyle = grad;
-    let cw = barW*0.45;
-    ctx.fillRect(x + barW/2 - cw/2, canvas.height/2 - hh, cw, hh*2);
-  });
-  // মাঝখানের সাদা লাইন
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.fillRect(canvas.width-2, 0, 2, canvas.height);
+  ctx.beginPath();
+  ctx.strokeStyle = '#ff0000';
+  ctx.lineWidth = 4;
+  // একটাই লাইন, বাম থেকে ডানে যাবে, মাঝখানে স্থির
+  for(let x=0;x<=canvas.width;x+=8){
+    // কথা না বললে সোজা লাইন, বললে লাফাবে
+    let y = mid + Math.sin(x*0.02 + Date.now()*0.01)*vol*mid*0.8 + (Math.random()-0.5)*vol*30;
+    if(x==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  // মাঝখানে পাতলা সাদা দাগ
+  ctx.fillStyle='rgba(255,255,255,0.15)';
+  ctx.fillRect(0,mid-1,canvas.width,2);
 }
-drawWave();
+drawLine();
 
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
 localStream = stream;
 audioCtx = new (window.AudioContext||window.webkitAudioContext)();
 let src = audioCtx.createMediaStreamSource(stream);
 analyser = audioCtx.createAnalyser();
-analyser.fftSize = 256;
+analyser.fftSize = 1024;
 src.connect(analyser);
-dataArray = new Uint8Array(analyser.frequencyBinCount);
+dataArray = new Uint8Array(analyser.fftSize);
 statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
 peer = new Peer('mt-'+myArmy);
 peer.on('open', ()=>{
