@@ -8,9 +8,29 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh}
 #top{background:#0f2e2a;color:#facc15;padding:10px;width:100%;text-align:center;font-weight:800;position:fixed;top:0}
+
+/* === নতুন - চাপ দিলে উপরে MT WALKIE ঘরটা === */
+#talkBox{
+  display:none;
+  position:fixed;top:60px;left:50%;transform:translateX(-50%);
+  background:#000;color:#ef4444;
+  border:3px solid #facc15;
+  padding:10px 22px;border-radius:10px;
+  font-weight:900;font-size:22px;text-align:center;line-height:1.2;z-index:999;
+}
+#talkBox.talking{border-color:#22c55e;box-shadow:0 0 25px #22c55e}
+
 #status{margin-top:60px;color:#22c55e;font-weight:700;text-align:center;padding:0 15px}
-#btn{margin-top:30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(#ef4444,#991b1b);border:6px solid #fff;font-size:22px;font-weight:900;color:#fff;box-shadow:0 0 30px #ef444480;cursor:pointer;user-select:none;touch-action:none}
-#btn:active{background:radial-gradient(#22c55e,#166534);box-shadow:0 0 40px #22c55e}
+
+/* === নতুন - লাল বাটনের বদলে ওয়াকিটকির ছবি === */
+#btn{
+  margin-top:30px;width:200px;height:200px;border-radius:50%;
+  border:6px solid #facc15; /* আগে সাদা ছিলো, এখন হলুদ */
+  background:#000;object-fit:cover;
+  box-shadow:0 0 30px #00000080;cursor:pointer;user-select:none;touch-action:none
+}
+#btn.talking{border-color:#22c55e;box-shadow:0 0 40px #22c55e;transform:scale(0.92)}
+
 #users{margin-top:20px;color:#aaa;font-size:13px}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -19,11 +39,17 @@ body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-directio
 </head>
 <body>
 <div id="top">📻 MT PLATOON 4 BIR - WALKIE TALKIE</div>
+
+<!-- নতুন - চাপ দিলে এইটা দেখাবে -->
+<div id="talkBox">MT<br>WALKIE</div>
+
 <div id="status">● CONNECTING...</div>
-<button id="btn">🔴<br>PUSH TO<br>TALK</button>
+
+<!-- আগে ছিলো <button> এখন <img> - id একই btn রাখছি যাতে JS না ভাঙে -->
+<img id="btn" src="walkie.png" alt="walkie">
+
 <div id="users">Channel: CONVOY-01</div>
 <div id="audioBox"></div>
-
 <script>
 // === 1. তোমার আসল Firebase - Demo টা বাদ দেওয়া হইছে ===
 const firebaseConfig = {
@@ -37,15 +63,13 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-
 // === 2. লগইন করা সেনাকে চিনো ===
 let myArmy = localStorage.getItem('mt_login') || '4521328';
 const statusEl = document.getElementById('status');
 const btn = document.getElementById('btn');
 const usersEl = document.getElementById('users');
-
+const talkBox = document.getElementById('talkBox');
 let peer, localStream, calls = [];
-
 // === 3. অটো জয়েন - ম্যাপে ঢুকলেই জয়েন ===
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
   localStream = stream;
@@ -68,26 +92,26 @@ navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
   statusEl.innerText = "● MIC PERMISSION DEN - ALLOW MIC";
   statusEl.style.color = "red";
 });
-
 // কারা অনলাইন আছে দেখাও
 db.ref('walkie/CONVOY-01').on('value', snap=>{
   let data = snap.val() || {};
   let list = Object.keys(data);
   usersEl.innerText = list.length + " Trucks Online - Channel: CONVOY-01 | " + list.join(', ');
 });
-
 // === 4. আসল ভয়েস - PUSH TO TALK ===
 let isTalking = false;
 btn.addEventListener('touchstart', startTalk);
 btn.addEventListener('mousedown', startTalk);
 btn.addEventListener('touchend', stopTalk);
 btn.addEventListener('mouseup', stopTalk);
-
 function startTalk(e){
   e.preventDefault();
   if(isTalking || !peer || !localStream) return;
   isTalking = true;
-  btn.innerHTML = "🟢<br>TALKING...";
+  // === নতুন - ছবি সবুজ + উপরে MT WALKIE ===
+  btn.classList.add('talking');
+  talkBox.style.display = 'block';
+  talkBox.classList.add('talking');
   statusEl.innerText = "● BROADCASTING TO ALL TRUCKS...";
   statusEl.style.color = "#facc15";
   db.ref('walkie/CONVOY-01').once('value', snap=>{
@@ -102,12 +126,14 @@ function startTalk(e){
   // Firebase এও স্ট্যাটাস পাঠাও
   db.ref('walkie/CONVOY-01/status').set({talking:true, by:myArmy, time:Date.now()});
 }
-
 function stopTalk(e){
   if(e) e.preventDefault();
   if(!isTalking) return;
   isTalking = false;
-  btn.innerHTML = "🔴<br>PUSH TO<br>TALK";
+  // === নতুন - আবার হলুদ + MT WALKIE লুকাও ===
+  btn.classList.remove('talking');
+  talkBox.style.display = 'none';
+  talkBox.classList.remove('talking');
   statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
   statusEl.style.color = "#22c55e";
   calls.forEach(c=>{ try{c.close()}catch(e){} });
