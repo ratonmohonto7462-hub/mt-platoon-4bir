@@ -8,44 +8,76 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh}
 #top{background:#0f2e2a;color:#facc15;padding:10px;width:100%;text-align:center;font-weight:800;position:fixed;top:0}
-#status{margin-top:60px;color:#22c55e;font-weight:700}
-#btn{margin-top:30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(#ef4444,#991b1b);border:6px solid #fff;font-size:22px;font-weight:900;color:#fff;box-shadow:0 0 30px #ef444480;cursor:pointer;user-select:none}
+#status{margin-top:60px;color:#22c55e;font-weight:700;text-align:center;padding:0 15px}
+#btn{margin-top:30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(#ef4444,#991b1b);border:6px solid #fff;font-size:22px;font-weight:900;color:#fff;box-shadow:0 0 30px #ef444480;cursor:pointer;user-select:none;touch-action:none}
 #btn:active{background:radial-gradient(#22c55e,#166534);box-shadow:0 0 40px #22c55e}
 #users{margin-top:20px;color:#aaa;font-size:13px}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
 <body>
 <div id="top">📻 MT PLATOON 4 BIR - WALKIE TALKIE</div>
 <div id="status">● CONNECTING...</div>
 <button id="btn">🔴<br>PUSH TO<br>TALK</button>
-<div id="users">10 Trucks Online - Channel: CONVOY-01</div>
+<div id="users">Channel: CONVOY-01</div>
+<div id="audioBox"></div>
 
 <script>
-// === 1. Firebase Config (তোরটা দিয়ে Replace করবি পরে, এখন Demo DB দিলাম) ===
+// === 1. তোমার আসল Firebase - Demo টা বাদ দেওয়া হইছে ===
 const firebaseConfig = {
-  databaseURL: "https://mt-platoon-demo-default-rtdb.firebaseio.com"
+  apiKey: "AIzaSyBsHN7OzzutZqbYyeHM4e0hzjkI-77gXVc",
+  authDomain: "convoy-live-group.firebaseapp.com",
+  databaseURL: "https://convoy-live-group-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "convoy-live-group",
+  storageBucket: "convoy-live-group.firebasestorage.app",
+  messagingSenderId: "705067687114",
+  appId: "1:705067687114:web:6c0687162a3604cc5b2833"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// === 2. Audio Setup ===
-let localStream;
-let isTalking = false;
+// === 2. লগইন করা সেনাকে চিনো ===
+let myArmy = localStorage.getItem('mt_login') || '4521328';
 const statusEl = document.getElementById('status');
 const btn = document.getElementById('btn');
+const usersEl = document.getElementById('users');
 
+let peer, localStream, calls = [];
+
+// === 3. অটো জয়েন - ম্যাপে ঢুকলেই জয়েন ===
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
   localStream = stream;
-  statusEl.innerText = "● LIVE - READY TO TALK";
-  statusEl.style.color = "#22c55e";
+  statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
+  peer = new Peer('mt-'+myArmy);
+  peer.on('open', ()=>{
+    statusEl.innerText = "● LIVE - "+myArmy+" | READY TO TALK";
+    db.ref('walkie/CONVOY-01/'+myArmy).set({army:myArmy, online:true});
+  });
+  // কেউ কথা বললে শোনো
+  peer.on('call', call=>{
+    call.answer(localStream);
+    call.on('stream', s=>{
+      let a = document.createElement('audio');
+      a.srcObject = s; a.autoplay = true; a.play();
+      document.getElementById('audioBox').appendChild(a);
+    });
+  });
 }).catch(()=>{
   statusEl.innerText = "● MIC PERMISSION DEN - ALLOW MIC";
   statusEl.style.color = "red";
 });
 
-// === 3. Push To Talk Logic ===
+// কারা অনলাইন আছে দেখাও
+db.ref('walkie/CONVOY-01').on('value', snap=>{
+  let data = snap.val() || {};
+  let list = Object.keys(data);
+  usersEl.innerText = list.length + " Trucks Online - Channel: CONVOY-01 | " + list.join(', ');
+});
+
+// === 4. আসল ভয়েস - PUSH TO TALK ===
+let isTalking = false;
 btn.addEventListener('touchstart', startTalk);
 btn.addEventListener('mousedown', startTalk);
 btn.addEventListener('touchend', stopTalk);
@@ -53,39 +85,35 @@ btn.addEventListener('mouseup', stopTalk);
 
 function startTalk(e){
   e.preventDefault();
-  if(isTalking) return;
+  if(isTalking || !peer || !localStream) return;
   isTalking = true;
   btn.innerHTML = "🟢<br>TALKING...";
-  statusEl.innerText = "● BROADCASTING TO 10 TRUCKS...";
-  // এখানে Audio Broadcast হবে Firebase দিয়ে
-  db.ref('walkie/CONVOY-01/status').set({talking:true,time:Date.now()});
+  statusEl.innerText = "● BROADCASTING TO ALL TRUCKS...";
+  statusEl.style.color = "#facc15";
+  db.ref('walkie/CONVOY-01').once('value', snap=>{
+    let users = snap.val() || {};
+    for(let army in users){
+      if(army != myArmy){
+        let call = peer.call('mt-'+army, localStream);
+        if(call) calls.push(call);
+      }
+    }
+  });
+  // Firebase এও স্ট্যাটাস পাঠাও
+  db.ref('walkie/CONVOY-01/status').set({talking:true, by:myArmy, time:Date.now()});
 }
 
 function stopTalk(e){
-  e.preventDefault();
+  if(e) e.preventDefault();
+  if(!isTalking) return;
   isTalking = false;
   btn.innerHTML = "🔴<br>PUSH TO<br>TALK";
-  statusEl.innerText = "● LIVE - READY TO TALK";
-  db.ref('walkie/CONVOY-01/status').set({talking:false,time:Date.now()});
+  statusEl.innerText = "● LIVE - READY TO TALK ("+myArmy+")";
+  statusEl.style.color = "#22c55e";
+  calls.forEach(c=>{ try{c.close()}catch(e){} });
+  calls = [];
+  db.ref('walkie/CONVOY-01/status').set({talking:false, by:myArmy, time:Date.now()});
 }
-
-// === 4. Listen Others ===
-db.ref('walkie/CONVOY-01/status').on('value', snap=>{
-  let data = snap.val();
-  if(data && data.talking){
-    if(!isTalking){
-      statusEl.innerText = "● SOMEONE IS TALKING - LISTEN...";
-      statusEl.style.color = "#facc15";
-      // Beep sound
-      new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg').play().catch(()=>{});
-    }
-  } else {
-    if(!isTalking){
-      statusEl.innerText = "● LIVE - READY TO TALK";
-      statusEl.style.color = "#22c55e";
-    }
-  }
-});
 </script>
 </body>
 </html>
