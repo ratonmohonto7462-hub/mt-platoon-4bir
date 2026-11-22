@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PARTS</title>
 <style>
-body{background:#0f2417;color:#fff;padding:12px;font-family:sans-serif}
+body{background:#1a1a1a;color:#fff;padding:12px;font-family:sans-serif;margin:0}
 *{ -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none !important; user-select:none !important; }
-.back-btn{ position:sticky !important; top:10px; z-index:999; background:#d4af37;border:0;padding:8px 14px;border-radius:8px;font-weight:700 }
-h2{color:#d4af37}
-h3{color:#d4af37;margin-top:25px;border-bottom:1px solid #2e5a3a;padding-bottom:5px}
-.item{background:#1a3524;border:1px solid #2e5a3a;border-radius:12px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
-.num{background:#d4af37;color:#000;font-weight:700;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.stock{background:#2e7d32;padding:3px 10px;border-radius:20px;font-size:12px}
+.back-btn{position:sticky !important;top:10px;z-index:999;background:#d4af37;border:0;padding:8px 14px;border-radius:8px;font-weight:700}
+h2{color:#fff;margin:15px 0 5px 5px}
+/* উপরের বড় ছবির কার্ড - তোমার ছবির মতো */
+.top-card{position:relative;border-radius:20px;overflow:hidden;margin:12px 0;height:220px;background:#333}
+.top-card img{width:100%;height:100%;object-fit:cover}
+.top-card .name{position:absolute;left:0;right:0;bottom:0;padding:40px 15px 12px;background:linear-gradient(transparent,rgba(0,0,0,0.85))}
+.top-card .name b{font-size:20px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-card .name span{font-size:13px;color:#ccc}
+/* নিচের সিরিয়াল কার্ড - Downloads / Videos এর মতো */
+.item{background:#262626;border-radius:15px;padding:14px;margin:10px 0;display:flex;align-items:center;gap:14px}
+.item .icon{font-size:24px}
+.item b{font-size:17px;display:block}
+.item span{font-size:13px;color:#aaa}
 </style></head>
 <body>
 <button class="back-btn" onclick="location.href='dashboard.html'">⬅ BACK</button>
-<h2>PARTS - SERIAL LIST</h2>
+<h2>PARTS</h2>
 
-<h3>1. 【entity-JEEP¦canonical_name=JEEP】 - BORO PARTS</h3>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">1</span><span>ENGINE</span></div><span class="stock">Stock: 5 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">2</span><span>GEAR BOX</span></div><span class="stock">Stock: 3 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">3</span><span>RADIATOR</span></div><span class="stock">Stock: 4 ta</span></div>
+<!-- 1 নম্বর - উপরের বড় ছবি -->
+<div class="top-card">
+  <img src="engine.jpg">
+  <div class="name"><b>ENGINE</b><span>【entity-Jeep¦canonical_name=Jeep】 - Engine Parts</span></div>
+</div>
 
-<h3>2. PICKUP - BORO PARTS</h3>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">1</span><span>ENGINE</span></div><span class="stock">Stock: 2 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">2</span><span>CABIN</span></div><span class="stock">Stock: 1 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">3</span><span>GEAR BOX</span></div><span class="stock">Stock: 6 ta</span></div>
+<!-- 2 নম্বর - তার নিচে সেম আরেকটা -->
+<div class="top-card">
+  <img src="gearbox.jpg">
+  <div class="name"><b>GEAR BOX</b><span>【entity-Jeep¦canonical_name=Jeep】 - Gear Box</span></div>
+</div>
 
-<h3>3. 3 TON - BORO PARTS</h3>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">1</span><span>ENGINE</span></div><span class="stock">Stock: 4 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">2</span><span>BRAKE</span></div><span class="stock">Stock: 8 ta</span></div>
+<!-- 3 নম্বর -->
+<div class="top-card">
+  <img src="radiator.jpg">
+  <div class="name"><b>RADIATOR</b><span>【entity-Jeep¦canonical_name=Jeep】 - Radiator</span></div>
+</div>
 
-<h3>4. BUS - BORO PARTS</h3>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">1</span><span>ENGINE</span></div><span class="stock">Stock: 2 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">2</span><span>RADIATOR</span></div><span class="stock">Stock: 3 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">3</span><span>CABIN</span></div><span class="stock">Stock: 1 ta</span></div>
-
-<h3>5. BIKE - BORO PARTS</h3>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">1</span><span>ENGINE</span></div><span class="stock">Stock: 7 ta</span></div>
-<div class="item"><div style="display:flex;gap:10px;align-items:center"><span class="num">2</span><span>WHEEL</span></div><span class="stock">Stock: 10 ta</span></div>
+<h2 style="margin-top:25px">Categories</h2>
+<div class="item"><div class="icon">⬇️</div><div><b>Downloads</b><span>14 MB</span></div></div>
+<div class="item"><div class="icon">🎬</div><div><b>Videos</b><span>3.2 GB</span></div></div>
+<div class="item"><div class="icon">📄</div><div><b>Documents</b><span>496 MB</span></div></div>
 
 </body></html>
