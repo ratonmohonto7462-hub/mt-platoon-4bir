@@ -24,13 +24,18 @@ body{background:#1a1a1a;color:#fff;padding:12px;font-family:sans-serif;margin:0}
 <button class="save" onclick="savePart()">💾 Save to Cloudinary</button>
 <p id="msg" style="text-align:center;font-size:12px"></p>
 </div>
-
 <script>
 const CLOUD_NAME = "f4yy8dqu";
 const PRESET = "mt_platoon";
 
-let mtRoleRaw = localStorage.getItem("mt_role") || "";
-if(!mtRoleRaw.toUpperCase().includes("MT CLK")){
+// --- Role চেক ঠিক করা ---
+// সব জায়গা থেকে Role খুঁজবো
+let mtRoleRaw = localStorage.getItem("mt_role") || localStorage.getItem("role") || localStorage.getItem("mtRole") || localStorage.getItem("user_role") || "";
+let roleUp = mtRoleRaw.toUpperCase();
+
+// যদি Role পাওয়া যায় আর ওইটা MT CLK না হয়, তাইলে আটকাও
+// Role একদমই না পাইলে আটকাইও না, নাইলে আবার Index এ চলে যাইবো
+if(mtRoleRaw !== "" && !roleUp.includes("MT CLK")){
   alert('⛔ Only MT CLK');
   location.href='parts.html';
 }
@@ -48,23 +53,17 @@ async function savePart(){
   let desc = document.getElementById('p_desc').value.trim();
   let file = document.getElementById('p_file').files[0];
   if(!name || !file){ alert('নাম + ছবি লাগবে!'); return; }
-
   document.getElementById('msg').innerText = '⏳ Uploading to Cloudinary...';
   try{
-    // 1. ছবি Cloudinary তে পাঠাও
     let form = new FormData();
     form.append("file", file);
     form.append("upload_preset", PRESET);
-
     let res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {method:"POST", body:form});
     let data = await res.json();
-
     if(!data.secure_url){
       document.getElementById('msg').innerText = '❌ Upload হয় নাই, আবার চেষ্টা করো';
       return;
     }
-
-    // 2. নাম + বিবরণ + ছবির লিংক ফোনে Save করো
     let oldList = JSON.parse(localStorage.getItem("parts") || "[]");
     oldList.unshift({
       name: name,
@@ -73,10 +72,8 @@ async function savePart(){
       createdAt: new Date().toISOString()
     });
     localStorage.setItem("parts", JSON.stringify(oldList));
-
     document.getElementById('msg').innerText = '✅ Saved!';
     setTimeout(()=> location.href='parts.html', 800);
-
   }catch(e){
     document.getElementById('msg').innerText = '❌ ' + e.message;
   }
