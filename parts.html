@@ -1,31 +1,19 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PARTS</title>
-<style>
-body{background:#1a1a1a;color:#fff;padding:12px;font-family:sans-serif;margin:0}
-*{ -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none !important; user-select:none !important; }
-.back-btn{position:sticky !important;top:10px;z-index:999;background:#d4af37;border:0;padding:8px 14px;border-radius:8px;font-weight:700}
-.top-card{position:relative;border-radius:20px;overflow:hidden;margin:12px 0;height:220px;background:#333;display:flex;align-items:flex-end}
-.top-card img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
-.top-card .name{position:relative;z-index:2;width:100%;padding:40px 15px 12px;background:linear-gradient(transparent,rgba(0,0,0,0.9))}
-.top-card .name b{font-size:22px;display:block}
-.top-card .name span{font-size:13px;color:#ccc}
-</style></head>
-<body>
-<button class="back-btn" onclick="location.href='dashboard.html'">⬅ BACK</button>
-
-<div class="top-card">
-  <img src="engine.jpg" onerror="this.style.display='none'">
-  <div class="name"><b>GEAR BOX</b><span>Jeep - Gear Box</span></div>
-</div>
-
-<div class="top-card">
-  <img src="radiator.jpg" onerror="this.style.display='none'">
-  <div class="name"><b>RADIATOR</b><span>Jeep - Radiator</span></div>
-</div>
-
-<div class="top-card">
-  <img src="piston.jpg" onerror="this.style.display='none'">
-  <div class="name"><b>PISTON</b><span>Jeep - Piston</span></div>
-</div>
-
-</body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PARTS</title><style>body{background:#1a1a1a;color:#fff;padding:12px;font-family:sans-serif;margin:0}*{ -webkit-tap-highlight-color:transparent;user-select:none}.back-btn{position:sticky !important;top:10px;z-index:999;background:#d4af37;border:0;padding:8px 14px;border-radius:8px;font-weight:700}.top-row{display:flex;gap:8px;position:sticky;top:10px;z-index:999}.add-btn{flex:1;background:#25D366;border:0;padding:8px 14px;border-radius:8px;font-weight:900;color:#000}.search{margin:12px 0;background:#222;border:1px solid #d4af37;border-radius:20px;padding:11px 14px;display:flex;gap:8px}.search input{flex:1;background:transparent;border:none;color:#fff;outline:none}.top-card{position:relative;border-radius:20px;overflow:hidden;margin:12px 0;height:220px;background:#333;display:flex;align-items:flex-end}.top-card img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1}.top-card .name{position:relative;z-index:2;width:100%;padding:40px 15px 12px;background:linear-gradient(transparent,rgba(0,0,0,0.9))}.top-card .name b{font-size:22px;display:block}.top-card .name span{font-size:13px;color:#ccc}.del{position:absolute;top:8px;right:8px;z-index:3;background:rgba(0,0,0,0.7);color:#ff6666;border:1px solid #ff4444;border-radius:8px;padding:6px 10px;font-weight:900}</style></head><body>
+<div class="top-row"><button class="back-btn" onclick="location.href='dashboard.html'">⬅ BACK</button><button id="addTopBtn" class="add-btn" onclick="location.href='parts-add.html'" style="display:none">+ ADD PARTS</button></div>
+<div class="search">🔍 <input id="s" placeholder="Search Parts..." oninput="render()"></div>
+<div id="list"><p style="text-align:center;padding:40px;color:#d4af37">⏳ Loading...</p></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg = { apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU", authDomain: "mt-platoon-c408a.firebaseapp.com", projectId: "mt-platoon-c408a", storageBucket: "mt-platoon-c408a.firebasestorage.app", messagingSenderId: "431652749602", appId: "1:431652749602:web:891152974fae7d0895657b" };
+const db = getFirestore(initializeApp(cfg));
+let mtRoleRaw = localStorage.getItem("mt_role") || localStorage.getItem("role") || "";
+if(!mtRoleRaw) location.href='index.html';
+let CAN_EDIT = mtRoleRaw.toUpperCase().includes("MT CLK") && !mtRoleRaw.toUpperCase().includes("COMMAND");
+if(CAN_EDIT) document.getElementById('addTopBtn').style.display='block';
+let data=[];
+async function load(){ let snap = await getDocs(collection(db,"parts")); data=[]; snap.forEach(d=>data.push({id:d.id,...d.data()})); render(); }
+window.render = function(){ let q=document.getElementById('s').value.toLowerCase(); let h=''; data.forEach(o=>{ if(q && !(o.name+' '+o.desc).toLowerCase().includes(q)) return; let delBtn = CAN_EDIT ? `<button class="del" onclick="delPart('${o.id}')">🗑️</button>` : ''; h+=`<div class="top-card">${delBtn}<img src="${o.imageUrl}" onerror="this.style.display='none'"><div class="name"><b>${o.name}</b><span>${o.desc||''}</span></div></div>`; }); document.getElementById('list').innerHTML = h || '<p style="text-align:center;padding:40px">No Parts Yet</p>'; }
+window.delPart = async function(id){ if(!confirm('Delete করবা?'))return; await deleteDoc(doc(db,"parts",id)); location.reload(); }
+load();
+</script></body></html>
