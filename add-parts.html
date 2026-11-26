@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADD PARTS</title>
+<style>
+body{background:#1a1a1a;color:#fff;padding:12px;font-family:sans-serif;margin:0}
+.back-btn{background:#d4af37;border:0;padding:8px 14px;border-radius:8px;font-weight:700}
+.box{background:#222;border:1px solid #d4af37;border-radius:14px;padding:14px;margin-top:12px}
+.box input{width:100%;padding:11px;margin:6px 0;border-radius:8px;border:1px solid #444;background:#111;color:#fff;box-sizing:border-box}
+.save{width:100%;padding:12px;background:#25D366;border:0;border-radius:10px;font-weight:900;margin-top:10px}
+#preview{width:100%;height:220px;object-fit:cover;border-radius:14px;display:none;margin-top:10px}
+</style>
+</head>
+<body>
+<button class="back-btn" onclick="location.href='parts.html'">⬅ BACK</button>
+<div class="box">
+<h3 style="margin:0;color:#d4af37">➕ ADD PARTS PHOTO</h3>
+<input id="p_name" placeholder="নাম * যেমন GEAR BOX">
+<input id="p_desc" placeholder="বিবরণ যেমন Jeep - Gear Box">
+<input type="file" id="p_file" accept="image/*">
+<img id="preview">
+<button class="save" onclick="savePart()">💾 Save to Cloudinary</button>
+<p id="msg" style="text-align:center;font-size:12px"></p>
+</div>
+
+<script>
+const CLOUD_NAME = "f4yy8dqu";
+const PRESET = "mt_platoon";
+
+let mtRoleRaw = localStorage.getItem("mt_role") || "";
+if(!mtRoleRaw.toUpperCase().includes("MT CLK")){
+  alert('⛔ Only MT CLK');
+  location.href='parts.html';
+}
+
+document.getElementById('p_file').addEventListener('change', e=>{
+  let f = e.target.files[0];
+  if(f){
+    document.getElementById('preview').src = URL.createObjectURL(f);
+    document.getElementById('preview').style.display = 'block';
+  }
+});
+
+async function savePart(){
+  let name = document.getElementById('p_name').value.trim();
+  let desc = document.getElementById('p_desc').value.trim();
+  let file = document.getElementById('p_file').files[0];
+  if(!name || !file){ alert('নাম + ছবি লাগবে!'); return; }
+
+  document.getElementById('msg').innerText = '⏳ Uploading to Cloudinary...';
+  try{
+    // 1. ছবি Cloudinary তে পাঠাও
+    let form = new FormData();
+    form.append("file", file);
+    form.append("upload_preset", PRESET);
+
+    let res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {method:"POST", body:form});
+    let data = await res.json();
+
+    if(!data.secure_url){
+      document.getElementById('msg').innerText = '❌ Upload হয় নাই, আবার চেষ্টা করো';
+      return;
+    }
+
+    // 2. নাম + বিবরণ + ছবির লিংক ফোনে Save করো
+    let oldList = JSON.parse(localStorage.getItem("parts") || "[]");
+    oldList.unshift({
+      name: name,
+      desc: desc,
+      imageUrl: data.secure_url,
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem("parts", JSON.stringify(oldList));
+
+    document.getElementById('msg').innerText = '✅ Saved!';
+    setTimeout(()=> location.href='parts.html', 800);
+
+  }catch(e){
+    document.getElementById('msg').innerText = '❌ ' + e.message;
+  }
+}
+</script>
+</body>
+</html>
