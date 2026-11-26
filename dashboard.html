@@ -6,14 +6,11 @@ import { getFirestore as getDutyFS, collection as colDuty, getDocs as getDutyDoc
 const dutyCfg = { apiKey: "AIzaSyA20sb3YtRdC8DitkUThITrfg3c8kNDdHU", authDomain: "mt-platoon-c408a.firebaseapp.com", projectId: "mt-platoon-c408a", storageBucket: "mt-platoon-c408a.firebasestorage.app", messagingSenderId: "431652749602", appId: "1:431652749602:web:891152974fae7d0895657b" };
 const dutyDB = getDutyFS(initDuty(dutyCfg, "dutyApp"));
 async function loadOnDuty(){
-  try{
-    var now = new Date(); var h = now.getHours(); var isDay = (h >= 6 && h < 18);
-    var dmy = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();
-    var colName = isDay ? "dibaDuty" : "ratriRoster";
-    var snap = await getDutyDocs(qDuty(colDuty(dutyDB, colName), whereDuty("date","==",dmy)));
-    alert("OnDuty Test: " + colName + " " + dmy + " Count=" + snap.size);
-    document.getElementById("onDutyCount").innerText = snap.size;
-  }catch(e){ alert("OnDuty Error: " + e.message); }
+  var now = new Date(); var h = now.getHours(); var isDay = (h >= 6 && h < 18);
+  var dmy = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();
+  var colName = isDay ? "dibaDuty" : "ratriRoster";
+  var snap = await getDutyDocs(qDuty(colDuty(dutyDB, colName), whereDuty("date","==",dmy)));
+  document.getElementById("onDutyCount").innerText = snap.size;
 }
 loadOnDuty();
 </script>
