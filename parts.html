@@ -19,61 +19,51 @@ body{background:#1a1a1a;color:#fff;padding:12px;font-family:sans-serif;margin:0}
 </style>
 </head>
 <body>
-
 <div class="top">
 <button class="back-btn" onclick="location.href='index.html'">⬅ BACK</button>
-<button class="add-btn" onclick="goAdd()">+ ADD PARTS</button>
+<button class="add-btn" id="addBtn" onclick="location.href='add-parts.html'">+ ADD PARTS</button>
 </div>
-
 <input class="search" id="search" placeholder="🔍   Search Parts..." oninput="renderParts()">
-
 <div id="list"></div>
-
 <script>
-function goAdd(){
-  // MT CLK ছাড়া Add করতে পারবে না
-  let role = (localStorage.getItem("mt_role") || "").toUpperCase();
-  if(!role.includes("MT CLK")){
-    alert('⛔ Only MT CLK can add');
-    return;
-  }
-  location.href = 'add-parts.html';
+// Role চেক - সব জায়গা থেকে খুঁজবো
+function getRole(){
+  let r = localStorage.getItem("mt_role") || localStorage.getItem("role") || localStorage.getItem("mtRole") || localStorage.getItem("user_role") || "";
+  return r.toUpperCase();
+}
+function isMTCLK(){
+  let r = getRole();
+  // COMMAND / MT CLK থাকলে MT CLK, শুধু COMMAND থাকলে না
+  return r.includes("MT CLK") || r.includes("MTCLK");
 }
 
 function renderParts(){
   let q = document.getElementById('search').value.toLowerCase();
   let list = JSON.parse(localStorage.getItem("parts") || "[]");
   let box = document.getElementById('list');
+  let showDel = isMTCLK();
+
+  // COMMAND হলে ADD বাটন লুকাও
+  document.getElementById('addBtn').style.display = showDel ? "block" : "none";
 
   let filtered = list.filter(p => (p.name + " " + (p.desc||"")).toLowerCase().includes(q));
-
-  if(filtered.length === 0){
-    box.innerHTML = '<div class="empty">No Parts Yet</div>';
-    return;
-  }
-
+  if(filtered.length === 0){ box.innerHTML = '<div class="empty">No Parts Yet</div>'; return; }
   let h = "";
-  filtered.forEach((p, i) => {
-    // আসল index খুঁজে বের করা, যাতে Delete ঠিকমতো কাজ করে
+  filtered.forEach((p) => {
     let realIndex = list.indexOf(p);
-    h += `<div class="card">
-      <img src="${p.imageUrl}">
-      <h3>${p.name}</h3>
-      <p>${p.desc || ""}</p>
-      <button class="del" onclick="delPart(${realIndex})">🗑️ Delete</button>
-    </div>`;
+    let delBtn = showDel ? `<button class="del" onclick="delPart(${realIndex})">🗑️ Delete</button>` : "";
+    h += `<div class="card"><img src="${p.imageUrl}"><h3>${p.name}</h3><p>${p.desc || ""}</p>${delBtn}</div>`;
   });
   box.innerHTML = h;
 }
-
 function delPart(i){
+  if(!isMTCLK()){ alert("⛔ Only MT CLK can delete"); return; }
   if(!confirm("Delete করবা?")) return;
   let list = JSON.parse(localStorage.getItem("parts") || "[]");
   list.splice(i, 1);
   localStorage.setItem("parts", JSON.stringify(list));
   renderParts();
 }
-
 renderParts();
 </script>
 </body>
